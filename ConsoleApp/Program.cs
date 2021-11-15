@@ -79,5 +79,20 @@ Console.WriteLine(CoolVar1 | CoolVar2);
 Console.WriteLine(CoolVar1 << CoolVar2); //10<<3;
 Console.WriteLine(CoolVar1 >> CoolVar2); //10<<3;
 
+//assign
 
+int aa = 8;
+int bb = 2;
+
+aa = aa + bb;
+aa += bb;
+Console.WriteLine(aa);
+
+//temp;
+aa = 10;
+bb = 5;
+int temp = aa;
+aa = bb;
+bb = temp;
+Console.WriteLine($"aa: {aa}, bb: {bb}");
 
