@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 class Arge {
     
@@ -10,5 +12,17 @@ class Arge {
           cycle+=1;
         }
         return cycle;
+    }
+}
+public class Kata
+{
+    public static IEnumerable<string> OpenOrSenior(int[][] data)
+    {
+        string[] output = new string [data.Length];
+        for (int index = 0; index < data.Length; index++)
+        {
+            output[index] = data[index][0] >= 55 && data[index][1] > 7 ? "Senior" : "Open";
+        }
+        return output;
     }
 }
