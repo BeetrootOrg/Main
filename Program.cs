@@ -32,6 +32,11 @@ Console.WriteLine("The result for 2*pi*x will be {0}", thirdEquation);
 double fourthEquation = Math.Max(testX, testY);
 Console.WriteLine("The result for max(x, y) will be {0}", fourthEquation);
 
+int test1 = 50;
+int test2 = 55;
+(test1, test2) = (test2, test1);
+Console.WriteLine("New values for test1 is {0} and for test2 is {1}", test1, test2);
+
 int currentDayInYear = DateTime.Now.DayOfYear;
 int daysToNewYear = DateTime.IsLeapYear(DateTime.Now.Year) ? 366 - currentDayInYear : 365 - currentDayInYear;
 
