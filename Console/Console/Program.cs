@@ -43,3 +43,30 @@ Console.WriteLine($"Not bool1: {!bool1}");
 Console.WriteLine($"Not bool12: {!bool2}");
 Console.WriteLine($"XOR: {bool1^bool2}");
 
+//math compare
+int first = 1;
+int second = 2;
+int third = 1;
+Console.WriteLine($"First>second:{first>second}");
+Console.WriteLine($"First<second:{first < second}");
+Console.WriteLine($"First==third:{first == third}");
+Console.WriteLine($"First!=third:{first != third}");
+Console.WriteLine($"First!=second:{first != second}");
+Console.WriteLine($"First>=second:{first >= second}");
+Console.WriteLine($"First>=third:{first >= third}");
+
+//bool complex
+var bool3 = true;
+var bool4 = false;
+var bool5 = false;
+Console.WriteLine($"AND(bool):{bool3& bool4&bool5}");
+Console.WriteLine($"AND(bool):{bool3 | bool4 | bool5}");
+
+//int bool logic
+int var1 = 10;
+int var2 = 3;
+
+Console.WriteLine(var1 & var2);
+Console.WriteLine(var2 | var1);
+Console.WriteLine(var2 << var1);
+Console.WriteLine (var1 >> var2);
