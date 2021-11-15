@@ -39,10 +39,39 @@ Console.WriteLine($"{result1}, {result2}, {incr}");
 var bool1 = true;
 var bool2 = false;
 Console.WriteLine($"AND: {bool1 && bool2}");
+Console.WriteLine($"AND (bool): {bool1 & bool2}");
 Console.WriteLine($"OR: {bool1 || bool2}");
+Console.WriteLine($"OR (bool): {bool1 | bool2}");
 Console.WriteLine($"EQUAL: {bool1 == bool2}");
 Console.WriteLine($"NOT bool1: {!bool1}");
 Console.WriteLine($"NOT bool2: {!bool2}");
 Console.WriteLine($"XOR: {bool1 ^ bool2}");
 
 // math equality & comparison
+int first = 1;
+int second = 2;
+int third = 1;
+Console.WriteLine($"first > second: {first > second}");
+Console.WriteLine($"first < second: {first < second}");
+Console.WriteLine($"first == third: {first == third}");
+Console.WriteLine($"first != third: {first != third}");
+Console.WriteLine($"first != second: {first != second}");
+Console.WriteLine($"first >= third: {first >= third}");
+Console.WriteLine($"first >= second: {first >= second}");
+
+// bool complex logic
+var bool3 = true;
+var bool4 = false;
+var bool5 = false;
+Console.WriteLine($"AND (bool): {bool3 & bool4 & bool5}");
+Console.WriteLine($"OR (bool): {bool3 | bool4 | bool5}");
+
+// int bool logic
+int coolVar1 = 10; // in bin = 1010
+int coolVar2 = 3;  // in bin = 0011
+                   // and    = 0010 -> 2
+                   // or     = 1011 -> 11
+Console.WriteLine(coolVar1 & coolVar2);
+Console.WriteLine(coolVar1 | coolVar2);
+Console.WriteLine(coolVar1 << coolVar2); // 10 << 3; 00001010 << 3; 01010000
+Console.WriteLine(coolVar1 >> coolVar2); // 10 >> 3; 00001010 >> 3; 00000001
