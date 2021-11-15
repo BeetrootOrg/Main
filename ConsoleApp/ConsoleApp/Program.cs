@@ -25,4 +25,14 @@ Console.WriteLine(x * x * x + 2 * x * x + 5 * x + 6);
 decimal y = 3.6m;
 Console.WriteLine(y * y * y + 2 * y * y + 5 * y + 6);
 
+// the same with Math
+double z = 4;
+Console.WriteLine(Math.Pow(z, 3) + 2 * Math.Pow(z, 2) + 5 * z + 6);
+
 // increment/decrement
+int incr = 5;
+int result1 = incr++; // first - return value, second - increment; result1 == 5; incr == 6
+int result2 = ++incr; // first - increment, second - return value; result2 == 7; incr == 7
+Console.WriteLine($"{result1}, {result2}, {incr}");
+
+// bool logic
