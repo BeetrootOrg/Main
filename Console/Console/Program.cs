@@ -70,3 +70,22 @@ Console.WriteLine(var1 & var2);
 Console.WriteLine(var2 | var1);
 Console.WriteLine(var2 << var1);
 Console.WriteLine (var1 >> var2);
+
+//asign
+int aa = 8;
+int bb = 2;
+
+aa = aa + bb;
+aa += bb;
+aa *= bb;
+aa %= bb;
+Console.WriteLine(aa);
+
+//temp
+aa = 5;
+bb = 10;
+int temp = aa;
+aa = bb;
+bb = temp;
+Console.WriteLine(aa);
+Console.WriteLine(bb);
