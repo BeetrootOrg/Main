@@ -6,9 +6,8 @@ Random rnd = new Random();
 //-6*x^3+5*x^2-10*x+15
 int p = rnd.Next(0,100);
 int f = rnd.Next(0, 100);
-
-
 double result1 , result2, result3, result4;
+
 result1 = -6 * Math.Pow(p, 3) + 5 * Math.Pow(p, 2) - 10 * p + 15;
 Console.WriteLine($"При p={p}:");
 Console.WriteLine($"\n-6*p^3+5*p^2-10*p+15={result1}");
