@@ -35,3 +35,11 @@ if (boolVar)
     Console.WriteLine($"{365 - currentYearDayNumber} days left to New Year (without current day)");
     Console.WriteLine($"{currentYearDayNumber} days passed from New Year");
 }
+
+//Replace var values
+int a = 5;
+int b = 8;
+a += b;
+b = a - b;
+a -= b;
+Console.WriteLine($"New a = {a} and new b = {b}");
