@@ -1,91 +1,42 @@
-﻿byte aLonLongName = 5;
-Console.WriteLine(aLonLongName);
+﻿
+//Optional - define maual imput of parameters
+Console.WriteLine("Input x as double");
+var value1 = Console.ReadLine();
+Console.WriteLine("Input y as double");
+var value2 = Console.ReadLine();
 
-byte a = 3;
-byte b = 4;
-int c = a + b;
-Console.WriteLine(c);
+//First part: define few diferent types of values and do simple operations
+int v1 = 10;
+float v2 = 2.34f;
+double v3 = 0.346236746;
+decimal v4 = 5.2143m;
+Console.WriteLine($"Sum int/float {v1 + v2}");
+Console.WriteLine($"Divide decimal/int {v4 / v1}");
+Console.WriteLine($"Multiple float/double {v2 * v3}");
 
-int mul = a / b;
-Console.WriteLine(mul);
+//Try to convert string input to a double, to prevert a app fail
+try
+{
+    //Convert parameters and define formulas
+    double x = Convert.ToDouble(value1);
+    double y = Convert.ToDouble(value2);
+    double formula1 = -6 * Math.Pow(x, 3) + 5 * Math.Pow(x, 2) - 10 * x + 15;
+    double formula2 = Math.Abs(x) * Math.Sin(x);
+    double formula3 = 2 * Math.PI * x;
+    double formula4 = Math.Max(x, y);
+    Console.WriteLine($"Formula - 1(-6*x^3+5*x^2-10*x+15): {formula1} ");
+    Console.WriteLine($"Formula - 2(abs(x)*sin(x)): {formula2} ");
+    Console.WriteLine($"Formula - 3(2*pi*x): {formula3} ");
+    Console.WriteLine($"Formula - 4(max(x, y)): {formula4} ");
+}
+catch //Exception catch
+{
+    Console.WriteLine($" X or Y have a not a double value ");
+}
 
-int i = 42;
-int j = 90;
-Console.WriteLine(j/i);
-Console.WriteLine(j%i);
-
-//x^3+2*x^2+5*x+6
-double x = 3.6;
-Console.WriteLine(x * x * x + 2 * (x * x) + 5 * x + 6);
-
-decimal y = 3.6m;
-Console.WriteLine(y * y * y + 2 * (y * y) + 5 * y + 6);
-
-//same with Math
-double z = 4;
-Console.WriteLine(Math.Pow(z, 3) + 2 * Math.Pow(z, 2) + 5 * z + 6);
-
-
-//increment/decrement
-
-int incr = 5;
-int result1 = incr++;
-int result2 = ++incr;
-Console.WriteLine($"{result1} {result2} {incr}");
-
-// bool logic
-var bool1 = true;
-var bool2 = false;
-Console.WriteLine($"AND: {bool1&&bool2}");
-Console.WriteLine($"OR: {bool1 || bool2}");
-Console.WriteLine($"Equal: {bool1 == bool2}");
-Console.WriteLine($"Not bool1: {!bool1}");
-Console.WriteLine($"Not bool12: {!bool2}");
-Console.WriteLine($"XOR: {bool1^bool2}");
-
-//math compare
-int first = 1;
-int second = 2;
-int third = 1;
-Console.WriteLine($"First>second:{first>second}");
-Console.WriteLine($"First<second:{first < second}");
-Console.WriteLine($"First==third:{first == third}");
-Console.WriteLine($"First!=third:{first != third}");
-Console.WriteLine($"First!=second:{first != second}");
-Console.WriteLine($"First>=second:{first >= second}");
-Console.WriteLine($"First>=third:{first >= third}");
-
-//bool complex
-var bool3 = true;
-var bool4 = false;
-var bool5 = false;
-Console.WriteLine($"AND(bool):{bool3& bool4&bool5}");
-Console.WriteLine($"AND(bool):{bool3 | bool4 | bool5}");
-
-//int bool logic
-int var1 = 10;
-int var2 = 3;
-
-Console.WriteLine(var1 & var2);
-Console.WriteLine(var2 | var1);
-Console.WriteLine(var2 << var1);
-Console.WriteLine (var1 >> var2);
-
-//asign
-int aa = 8;
-int bb = 2;
-
-aa = aa + bb;
-aa += bb;
-aa *= bb;
-aa %= bb;
-Console.WriteLine(aa);
-
-//temp
-aa = 5;
-bb = 10;
-int temp = aa;
-aa = bb;
-bb = temp;
-Console.WriteLine(aa);
-Console.WriteLine(bb);
+//Additional block - operations with date
+var dateNow = DateTime.Now;
+TimeSpan daysToNewYear = (Convert.ToDateTime(DateTime.Now.Year.ToString() + "-12-31") - dateNow.Date);
+TimeSpan daysFromNewYear = dateNow.Date - Convert.ToDateTime(DateTime.Now.Year.ToString() + "-01-01");
+Console.WriteLine($"Days to New Year : {daysToNewYear.Days}");
+Console.WriteLine($"Days from New Year : {daysFromNewYear.Days}");
