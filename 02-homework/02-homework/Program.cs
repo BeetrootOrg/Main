@@ -1,5 +1,5 @@
 ﻿// HOMEWORK C# INTRO
-// string
+// string = UNICODE symbols
 string homeWork = "HOMEWORK C# INTRO";
 Console.WriteLine(homeWork);
 // bool = true or false
@@ -22,6 +22,19 @@ short n1 = 1;
 short n2 = 102;
 Console.WriteLine(n1);
 Console.WriteLine(n2);
+// ushort = 0 - 65535
+ushort uShort1 = 456;
+ushort uShort2 = 22568;
+Console.WriteLine(uShort1);
+Console.WriteLine(uShort2);
+// int -2147483648 - 2147483647
+int i1 = 10;
+int i2 = 0b101;
+int i3 = 0xFF;
+Console.WriteLine($"{i1}, { i2}, { i3}");
+
+
+
 
 
 
