@@ -1,6 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
-try
+﻿try
 {
     Console.WriteLine("Please, enter the value for X:");
     double xValue = Convert.ToDouble(Console.ReadLine());
