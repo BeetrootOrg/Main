@@ -38,3 +38,8 @@ second += first;
 first = second - first;
 second -= first;
 Console.WriteLine($"first={first},second={second}");
+
+//Write to console how many days left to New Year and how many days passed from New Year. Result in console should look like this:
+DateTime date = DateTime.Now;
+Console.WriteLine($"{(DateTime.IsLeapYear(date.Year) ? 366 - date.DayOfYear + 1 : 365 - date.DayOfYear + 1)} days left to New Year");
+Console.WriteLine($"{date.DayOfYear} days passed from New Year");

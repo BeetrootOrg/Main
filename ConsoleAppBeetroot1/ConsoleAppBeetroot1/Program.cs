@@ -93,5 +93,3 @@ bb = temp;//asint 10
 Console.WriteLine(aa);
 Console.WriteLine(bb);
 
-
-
