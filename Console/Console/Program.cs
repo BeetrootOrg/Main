@@ -5,10 +5,21 @@ while (true)
 {
 try
 {
-    Console.WriteLine("Input natural X");
-    var X = Convert.ToInt32(Console.ReadLine());
-    Console.WriteLine("Input natural Y");
-    var Y = Convert.ToInt32(Console.ReadLine());
+        bool XP;
+        int X;
+        int Y;
+        do
+        {
+            Console.WriteLine("Input integer X");
+
+            XP = int.TryParse(Console.ReadLine(), out X);
+        } while (!XP);
+        do
+        {
+            Console.WriteLine("Input integer Y");            
+            XP = int.TryParse(Console.ReadLine(), out Y);
+        } while (!XP);
+
     if (X != Y)
     {
         int max = Math.Max(X, Y);
