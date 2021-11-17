@@ -66,17 +66,33 @@ for (int i = 9; i >= 0; --i)
     Console.WriteLine(i);
 }
 
-int incr = 0;
-while (incr < 10)
-{
-    Console.WriteLine(incr);
-    ++incr;
-}
-
-incr = -1;
+Console.WriteLine("Pre increment");
+int incr = -1;
 while (++incr < 10)
 {
     Console.WriteLine(incr);
 }
 
+incr = -1;
+while (incr++ < 10)
+{
+    Console.WriteLine(incr);
+}
 
+Console.WriteLine("do while");
+incr = -1;
+do
+{
+    Console.WriteLine(incr);
+} while (++incr < 10);
+
+Console.WriteLine("Diff");
+incr = 10;
+while (incr++ < 10)
+{
+    Console.WriteLine(incr);
+}
+do
+{
+    Console.WriteLine(incr);
+} while (++incr < 10);
