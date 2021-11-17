@@ -19,7 +19,7 @@ namespace ConsoleApp
             //2
             Console.WriteLine(-Math.Abs(x));
             //3
-            Console.WriteLine(Math.Sqrt(x) * Math.Sqrt(x) == x) ;
+            Console.WriteLine(Math.Round(Math.Sqrt(x)) == Math.Sqrt(x));
 
         }
     }
