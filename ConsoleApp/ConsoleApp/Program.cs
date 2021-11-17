@@ -180,3 +180,23 @@ int num = int.Parse(strNum);
 num = Convert.ToInt32(strNum); // the same as above
 Console.WriteLine($"{num}^2={num * num}");
 Console.WriteLine($"{num}^2.5={Math.Pow(num, 2.5)}");
+
+Console.WriteLine("Write number, please:");
+strNum = Console.ReadLine();
+bool success = int.TryParse(strNum, out num);
+Console.WriteLine(success ? $"It is number {num}" : "It is not number");
+
+
+Console.WriteLine("Write number, please:");
+strNum = Console.ReadLine();
+success = int.TryParse(strNum, out int num1);
+Console.WriteLine(success ? $"It is number {num1}" : "It is not number");
+
+do
+{
+    Console.WriteLine("Write number, pleeeeeease:");
+    strNum = Console.ReadLine();
+    success = int.TryParse(strNum, out num);
+} while (!success);
+
+Console.WriteLine($"It is number {num}");
