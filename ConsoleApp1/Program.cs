@@ -55,3 +55,28 @@ int e = a switch
 
 };
 Console.WriteLine(d);
+
+for (int i = 0; i < 10; ++i)
+{
+    Console.WriteLine(i);
+}
+
+for (int i = 9; i >= 0; --i)
+{
+    Console.WriteLine(i);
+}
+
+int incr = 0;
+while (incr < 10)
+{
+    Console.WriteLine(incr);
+    ++incr;
+}
+
+incr = -1;
+while (++incr < 10)
+{
+    Console.WriteLine(incr);
+}
+
+
