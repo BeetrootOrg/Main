@@ -1,5 +1,7 @@
 ﻿// HOMEWORK C# INTRO
 // string = UNICODE symbols
+using _02_homework;
+
 string homeWork = "HOMEWORK C# INTRO";
 Console.WriteLine(homeWork);
 // bool = true or false
@@ -135,3 +137,6 @@ aa = bb; //assign 5
 bb = temp; //assign 10
 Console.WriteLine(aa);
 Console.WriteLine(bb);
+
+var dateService = new DateService();
+
