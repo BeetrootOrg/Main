@@ -73,3 +73,11 @@ for (int i = 9; i>= 0; --i)
 {
     Console.WriteLine(i);
 }
+int incr = 0;
+
+
+while (incr<10)
+{
+    Console.WriteLine(incr);
+    ++incr;
+}
