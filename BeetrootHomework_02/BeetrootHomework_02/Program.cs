@@ -68,3 +68,12 @@ static decimal Sqrt(decimal x)
 DateTime newYear = new DateTime(2022, 01, 01);
 TimeSpan diff = newYear - DateTime.Now;
 Console.WriteLine($"До Нового Года осталось: {diff.Days} дней");
+
+
+//Switch two numbers without third
+int a = 3;
+int b = 8;
+
+Console.WriteLine($"{a}, {b}");
+(a, b) = (b, a);
+Console.WriteLine($"{a}, {b}");
