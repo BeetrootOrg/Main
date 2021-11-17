@@ -169,3 +169,22 @@ num = Convert.ToInt32(strNum);
 Console.WriteLine($"{num}^2 = {num*num}");
 Console.WriteLine($"{num}^2.5 = {Math.Pow(num,2.5)}");
 
+Console.WriteLine("Write number:");
+strNum = Console.ReadLine();
+bool success = int.TryParse(strNum, out num);
+Console.WriteLine(success?$"it is num {num}" : "It is not number");
+
+
+Console.WriteLine("Write number:");
+strNum = Console.ReadLine();
+ success = int.TryParse(strNum, out int num1);
+Console.WriteLine(success ? $"it is num {num1}" : "It is not number");
+
+do
+{
+    Console.WriteLine("Write number, pleeeeeease:");
+    strNum = Console.ReadLine();
+    success = int.TryParse(strNum, out num);
+} while (success);
+
+Console.WriteLine($"It is number {num}");
