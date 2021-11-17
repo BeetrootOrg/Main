@@ -122,4 +122,22 @@ for(;incr<15;++incr)
 for(int i, j=20;incr<20;)
 {
     Console.WriteLine(++incr);
-        }
+}
+
+for(int i =0; i<20; ++i)
+{
+    if (i%2==1)
+    { 
+        Console.WriteLine(i);
+    }
+}
+
+for (int i = 0; i < 20; i+=2)
+{
+    Console.WriteLine(i);
+}
+
+for (int i = 0; i < 20; ++i)
+{
+    Console.WriteLine(i*2+1);
+}
