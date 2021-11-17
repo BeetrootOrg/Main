@@ -54,3 +54,15 @@ int e = a switch
 };
 
 Console.WriteLine(e);
+
+for(int i = 0; i < 10; ++i)
+{
+    Console.WriteLine(i);
+}
+
+int x = 0;
+while (x < 10)
+{
+    Console.WriteLine(x);
+    ++x;
+}
