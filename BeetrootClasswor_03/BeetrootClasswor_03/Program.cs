@@ -94,3 +94,32 @@ do
 {
     Console.WriteLine(incr);
 }while (++incr < 10);
+
+
+//BREAK & CONTINUE
+Console.WriteLine("\nContinue");
+for (int i = 0; i < 10; ++i)
+{
+    if (i == 5) continue;
+    Console.WriteLine(i);
+}
+
+Console.WriteLine("\nBreak");
+for (int i = 0; i < 10; ++i)
+{
+    if (i == 5) break;
+    Console.WriteLine(i);
+}
+
+//CONSOLE
+
+Console.WriteLine("Write your Name:");
+string? name = Console.ReadLine();
+Console.WriteLine(name);
+
+
+Console.WriteLine("Write number, please:");
+string strNum = Console.ReadLine();
+bool success = int.TryParse(strNum, out int num);
+num = int.Parse(strNum);
+Console.WriteLine(success ? $"It is number {num}" : "It is not a number");
