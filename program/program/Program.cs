@@ -156,3 +156,16 @@ for (int i = 0; i < 10; ++i)
     if (i == 5) break;
     Console.WriteLine(i);
 }
+
+Console.WriteLine("Write your name:");
+string? name = Console.ReadLine();
+Console.WriteLine($"Hello, {name}");
+
+
+Console.WriteLine("Write number:");
+string? strNum = Console.ReadLine();
+int num = int.Parse(strNum);
+num = Convert.ToInt32(strNum);
+Console.WriteLine($"{num}^2 = {num*num}");
+Console.WriteLine($"{num}^2.5 = {Math.Pow(num,2.5)}");
+
