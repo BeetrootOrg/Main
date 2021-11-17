@@ -1,22 +1,25 @@
-﻿try
+﻿int xValue, yValue;
+bool success = false;
+
+do
 {
     Console.WriteLine("Please, enter the value for X:");
-    double xValue = Convert.ToDouble(Console.ReadLine());
+    string? xPreValue = Console.ReadLine();
 
     Console.WriteLine("Please, enter the value for Y:");
-    double yValue = Convert.ToDouble(Console.ReadLine());
+    string? yPreValue = Console.ReadLine();
 
-    Console.WriteLine("X: {0}, Y: {1}", xValue, yValue);
-    double sum = xValue;
+    bool xSuc = int.TryParse(xPreValue, out xValue);
+    bool ySuc = int.TryParse(yPreValue, out yValue);
+    success = xSuc && ySuc;
+} while (!success);
 
-    while (xValue != yValue)
-    {
-        sum += xValue > yValue ? --xValue : ++xValue;
-    }
+Console.WriteLine("X: {0}, Y: {1}", xValue, yValue);
+double sum = xValue;
 
-    Console.WriteLine("The sum of values between X and Y is {0}", sum);
-}
-catch (Exception e)
+while (xValue != yValue)
 {
-    Console.WriteLine("You have entered the invalid input(s)");
+    sum += xValue > yValue ? --xValue : ++xValue;
 }
+
+Console.WriteLine("The sum of values between X and Y is {0}", sum);
