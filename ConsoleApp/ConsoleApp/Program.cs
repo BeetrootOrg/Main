@@ -200,3 +200,7 @@ do
 } while (!success);
 
 Console.WriteLine($"It is number {num}");
+Console.Write($"It is number {num}");
+Console.Write($"It is number {num}");
+Console.Write($"It is number {num}\n");
+Console.Write($"It is number {num}\n");
