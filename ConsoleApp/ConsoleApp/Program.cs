@@ -95,3 +95,27 @@ while (incr++ < 10)
 {
     Console.WriteLine(incr);
 }
+
+Console.WriteLine("do while");
+incr = -1;
+do
+{
+    Console.WriteLine(incr);
+} while (++incr < 10);
+
+
+// difference
+Console.WriteLine("Diff");
+incr = 10;
+while (incr++ < 10)
+{
+    Console.WriteLine(incr);
+}
+
+do
+{
+    Console.WriteLine(incr);
+} while (++incr < 10);
+
+// ++incr < 10 -> first increment, then condition
+// incr++ < 10 -> first condition, then increment
