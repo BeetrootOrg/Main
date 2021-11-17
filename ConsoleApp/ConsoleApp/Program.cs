@@ -6,20 +6,64 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Enter the str: ");
+            string str = Convert.ToString(Console.ReadLine());
+            if (str == "Ivan" || str == "ivan")
+            {
+                Console.WriteLine($"Hello, Ivan");
+            }
+            else
+            {
+                Console.WriteLine($"Hello, {str}");
+            }
 
-            /*1. написати код, що буде виводити у консоль число з протилежним знаком, наприклад для 5 результат будет -5, для -1 результат буде 1
-              2. написати код, що буде виводити у консоль число зі знаком мінус, наприклад для 5 результат будет -5, для -1 результат буде -1
-              3. написати код, що буде виводити у консоль чи є число квадратом якогось цілого числа, наприклад 25 -> true (5^2), 24 -> false,
-                 9 -> true (3^2), 1 -> true (1^2), 0 -> true (0^2), -1 -> false
-            */
-            //1
-            Console.WriteLine("Enter the x:");
-            int x = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine(-x);
-            //2
-            Console.WriteLine(-Math.Abs(x));
-            //3
-            Console.WriteLine(Math.Round(Math.Sqrt(x)) == Math.Sqrt(x));
+            int c = 10;
+            int d;
+            if (c ==10)
+            {
+                d = 20;
+            }
+            else
+            {
+                d = 0;
+            }
+            //ternar variant
+            d = c == 10 ? 10 : 0;  
+
+            Console.WriteLine("Enter the a: ");
+            int a = Convert.ToInt32(Console.ReadLine());
+            int b = 0;
+            switch (a%2)
+            {
+                case 0:
+                    b = a * 2;
+                    break;
+                case 1:
+                    b = a * 3;
+                    break;
+                case 2:
+                    b = a * 4;
+                    break;
+                case 3:
+                    b = a * 5;
+                    break;
+                default:
+                    b = 0;
+                    break;
+            }
+            Console.WriteLine($"b = {b}");
+
+            //ternar variant
+            int e = a switch
+            {
+                0 => a * 2,
+                1 => a * 3,
+                2 => a * 4,
+                3 => a * 5,
+                _ => 0,
+            };
+
+            Console.WriteLine($"e = {e}");
 
         }
     }
