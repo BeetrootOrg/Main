@@ -119,3 +119,21 @@ do
 
 // ++incr < 10 -> first increment, then condition
 // incr++ < 10 -> first condition, then increment
+
+Console.WriteLine("FOR");
+for (; ; )
+{
+    break;
+}
+
+for (; incr < 15; ++incr)
+{
+    Console.WriteLine(incr);
+}
+
+for (; incr < 20;)
+{
+    Console.WriteLine(++incr);
+}
+
+int ii, jj = 20;
