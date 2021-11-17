@@ -50,7 +50,7 @@ decimal t0 = 3600;       // 1 hour in second
 decimal t = 220924800;   // 7 years in second
 
 decimal v = C*Sqrt(1.0m - Decimal.Divide(t0, t) * Decimal.Divide(t0, t));
-
+Console.WriteLine(Sqrt(1.0m - Decimal.Divide(t0, t) * Decimal.Divide(t0, t)));
 Console.WriteLine($"Our speed need to be: {Decimal.Round(v, 9)} m/s \n\n");
 
 static decimal Sqrt(decimal x)
@@ -73,7 +73,8 @@ Console.WriteLine($"До Нового Года осталось: {diff.Days} д�
 //Switch two numbers without third
 int a = 3;
 int b = 8;
+int c = 10;
 
 Console.WriteLine($"{a}, {b}");
-(a, b) = (b, a);
+(a, b, c) = (b, c, a);
 Console.WriteLine($"{a}, {b}");
