@@ -6,41 +6,40 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
+            /*
+            Create a program that will start with declaration of two constants (X and Y) and will count the sum of all numbers between these constants. 
+            If they are equal then sum should be one of them
 
-            double x = Convert.ToDouble(Console.ReadLine());
-            // x^3+2*x^2+5*x+6
-            //Console.WriteLine(x * x * x + 2 * x * x + 5 * x + 6);
-            Console.WriteLine(Math.Pow(x, 2) + 2 * Math.Pow(x, 2) + 5 * x + 6);
-
-            int incr = 5;
-            int res1 = ++incr;//incr=6 res1=6
-            int res2 = incr++;//res2=6 incr=7
-
-            //bool logic
-            bool bool1 = true;
-            var bool2 = false;
-            Console.WriteLine($"And: {bool1 && bool2}");
-            Console.WriteLine($"Or: {bool1 || bool2}");
-            Console.WriteLine($"Equal: {bool1 == bool2}");
-            Console.WriteLine($"Not Equal: {bool1 != bool2}");
-            Console.WriteLine($"Xor: {bool1 ^ bool2}");
-
-            //math equality & comparison
-            int first = 1;
-            int second = 2;
-            Console.WriteLine($"{first} > {second}: {first > second}");
-            Console.WriteLine($"{first} <= {second}: {first <= second}");
-            Console.WriteLine($"{first} == {second}: {first == second}");
-            Console.WriteLine($"{first} != {second}: {first != second}");
-
-            //int bool logic
-            int coolVar1 = 3; //in bin = 1010
-            int coolVar2 = 10;//in bin = 0011
-                              //and    = 0010 -> 2
-                              //or     = 1011 -> 11
-            Console.WriteLine(coolVar1 & coolVar2);
-            Console.WriteLine(coolVar1 | coolVar2);
-
+            Example:
+            X=10
+            Y=12
+            Sum=10+11+12=33
+            */
+            try
+            {
+                Console.WriteLine("Enter the x: ");
+                int x = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Enter the y: ");
+                int y = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine($"X= {x}\nY= {y}");
+                int sum = 0;
+                if (x > y) { int temp = y; y = x; x = temp; }
+                if (x == y) { Console.WriteLine($"Sum= {x}"); }
+                else
+                {
+                    Console.Write($"Sum = ");
+                    for (int i = x; i <= y; i++)
+                    {
+                        sum += i;
+                        if (i == y) { Console.Write($"{i} = {sum} "); break; }
+                        Console.Write($"{i} + ");
+                    }
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Invalid input! ");
+            }
         }
     }
 }
