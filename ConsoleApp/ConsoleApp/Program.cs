@@ -7,7 +7,7 @@ namespace ConsoleApp
         static void Main(string[] args)
         {
             Console.WriteLine("Enter the str: ");
-            string str = Convert.ToString(Console.ReadLine());
+            string? str = Console.ReadLine();
             if (str == "Ivan" || str == "ivan")
             {
                 Console.WriteLine($"Hello, Ivan");
@@ -29,6 +29,7 @@ namespace ConsoleApp
             }
             //ternar variant
             d = c == 10 ? 10 : 0;  
+
 
             Console.WriteLine("Enter the a: ");
             int a = Convert.ToInt32(Console.ReadLine());
@@ -65,6 +66,33 @@ namespace ConsoleApp
 
             Console.WriteLine($"e = {e}");
 
+            for (int i = 0; i <= 20; ++i)
+            {
+                if (i % 2 == 1)
+                {
+                    Console.WriteLine(i);
+                }
+            }
+            //OR
+            for (int i = 1; i <= 20; i+=2)
+            {
+                Console.WriteLine(i);
+            }
+            //OR
+            for (int i = 0; i <= 10; ++i)
+            {
+                Console.WriteLine(i * 2 + 1);
+            }
+            bool success;
+            int number;
+            do
+            {
+                Console.WriteLine("Enter the NUMBER, pleeeeeeese");
+                string strNumber = Console.ReadLine();
+                success = int.TryParse(strNumber, out number);
+                Console.WriteLine(success ? $"It is number- {number}" : $"It is not number! ");
+            }
+            while (!success);
         }
     }
 }
