@@ -137,3 +137,23 @@ for (; incr < 20;)
 }
 
 int ii, jj = 20;
+
+Console.WriteLine("Non-even numbers");
+for (int i = 0; i < 20; ++i)
+{
+    if (i % 2 == 1)
+    {
+        Console.WriteLine(i);
+    }
+}
+
+for (int i = 1; i < 20; i += 2)
+{
+    Console.WriteLine(i);
+}
+
+
+for (int i = 0; i < 10; ++i)
+{
+    Console.WriteLine(i * 2 + 1);
+}
