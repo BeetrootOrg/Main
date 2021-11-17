@@ -81,3 +81,45 @@ while (incr<10)
     Console.WriteLine(incr);
     ++incr;
 }
+
+
+Console.WriteLine("do while");
+incr = -1;
+do
+{
+    Console.WriteLine(incr);
+
+} while (++incr < 10);
+
+Console.WriteLine("diff");
+incr = 10;
+{
+    Console.WriteLine(incr);
+    ++incr;
+}
+
+
+
+do
+{
+    Console.WriteLine(incr);
+
+} while (++incr < 10) ;
+
+Console.WriteLine("FOR");
+
+for (; ; )
+{
+    break;
+}
+
+for(;incr<15;++incr)
+{
+    Console.WriteLine(incr);
+
+}
+
+for(int i, j=20;incr<20;)
+{
+    Console.WriteLine(++incr);
+        }
