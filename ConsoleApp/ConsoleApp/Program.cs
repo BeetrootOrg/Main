@@ -152,8 +152,24 @@ for (int i = 1; i < 20; i += 2)
     Console.WriteLine(i);
 }
 
-
 for (int i = 0; i < 10; ++i)
 {
     Console.WriteLine(i * 2 + 1);
 }
+
+Console.WriteLine("Break/Continue");
+for (int i = 0; i < 10; ++i)
+{
+    if (i == 5) continue;
+    Console.WriteLine(i);
+}
+
+for (int i = 0; i < 10; ++i)
+{
+    if (i == 5) break;
+    Console.WriteLine(i);
+}
+
+Console.WriteLine("Write your name:");
+string? name = Console.ReadLine();
+Console.WriteLine($"Hello, {name}");
