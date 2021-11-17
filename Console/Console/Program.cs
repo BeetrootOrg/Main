@@ -31,5 +31,5 @@ catch
 }
     Console.WriteLine("Whant to exit? Y\\N");
     var key = Console.ReadKey();
-    if (key.KeyChar == 'y') break; 
+    if (key.KeyChar == 'y'|| key.KeyChar == 'Y') break; 
 }
