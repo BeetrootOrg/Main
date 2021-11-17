@@ -73,3 +73,25 @@ for (int i = 9; i >= 0; --i)
 {
     Console.WriteLine(i);
 }
+
+int incr = 0;
+while (incr < 10)
+{
+    Console.WriteLine(incr);
+    ++incr;
+}
+
+
+Console.WriteLine("Pre increment");
+incr = -1;
+while (++incr < 10)
+{
+    Console.WriteLine(incr);
+}
+
+Console.WriteLine("Post increment");
+incr = -1;
+while (incr++ < 10)
+{
+    Console.WriteLine(incr);
+}
