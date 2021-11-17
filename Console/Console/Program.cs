@@ -1,42 +1,35 @@
-﻿
-//Optional - define maual imput of parameters
-Console.WriteLine("Input x as double");
-var value1 = Console.ReadLine();
-Console.WriteLine("Input y as double");
-var value2 = Console.ReadLine();
+﻿using System.IO;
+using System;
 
-//First part: define few diferent types of values and do simple operations
-int v1 = 10;
-float v2 = 2.34f;
-double v3 = 0.346236746;
-decimal v4 = 5.2143m;
-Console.WriteLine($"Sum int/float {v1 + v2}");
-Console.WriteLine($"Divide decimal/int {v4 / v1}");
-Console.WriteLine($"Multiple float/double {v2 * v3}");
-
-//Try to convert string input to a double, to prevert a app fail
+while (true)
+{
 try
 {
-    //Convert parameters and define formulas
-    double x = Convert.ToDouble(value1);
-    double y = Convert.ToDouble(value2);
-    double formula1 = -6 * Math.Pow(x, 3) + 5 * Math.Pow(x, 2) - 10 * x + 15;
-    double formula2 = Math.Abs(x) * Math.Sin(x);
-    double formula3 = 2 * Math.PI * x;
-    double formula4 = Math.Max(x, y);
-    Console.WriteLine($"Formula - 1(-6*x^3+5*x^2-10*x+15): {formula1} ");
-    Console.WriteLine($"Formula - 2(abs(x)*sin(x)): {formula2} ");
-    Console.WriteLine($"Formula - 3(2*pi*x): {formula3} ");
-    Console.WriteLine($"Formula - 4(max(x, y)): {formula4} ");
+    Console.WriteLine("Input natural X");
+    var X = Convert.ToInt32(Console.ReadLine());
+    Console.WriteLine("Input natural Y");
+    var Y = Convert.ToInt32(Console.ReadLine());
+    if (X != Y)
+    {
+        int max = Math.Max(X, Y);
+        int min = Math.Min(X, Y);
+        int sum = 0;
+        for (int cnt = min; cnt <= max; cnt++)
+        {
+            sum += cnt;
+        }
+        Console.WriteLine($"Summ = {sum}");
+    }
+    else
+    {
+        Console.WriteLine($"Summ = {X}");
+    }
 }
-catch //Exception catch
+catch
 {
-    Console.WriteLine($" X or Y have a not a double value ");
+    Console.WriteLine("X or Y have wrong input");
 }
-
-//Additional block - operations with date
-var dateNow = DateTime.Now;
-TimeSpan daysToNewYear = (Convert.ToDateTime(DateTime.Now.Year.ToString() + "-12-31") - dateNow.Date);
-TimeSpan daysFromNewYear = dateNow.Date - Convert.ToDateTime(DateTime.Now.Year.ToString() + "-01-01");
-Console.WriteLine($"Days to New Year : {daysToNewYear.Days}");
-Console.WriteLine($"Days from New Year : {daysFromNewYear.Days}");
+    Console.WriteLine("Whant to exit? Y\\N");
+    var key = Console.ReadKey();
+    if (key.KeyChar == 'y') break; 
+}
