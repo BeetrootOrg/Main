@@ -17,40 +17,40 @@ namespace Main
             max(x, y)
             */
 
-            byte byte_variable;// 0 to 255
-            short short_variable;// short int
-            int int_variable;// -2,147,483,648 to 2,147,483,647
-            long long_variable;// long int
+            byte byteVariable;// 0 to 255
+            short shortVariable;// short int
+            int intVariable;// -2,147,483,648 to 2,147,483,647
+            long longVariable;// long int
 
-            bool bool_variable;// true or false
+            bool boolVariable;// true or false
 
-            float float_variable;// floating-point numeric types
-            double double_variable;// more accurate that float
-            decimal decimal_variable;// more accurate that double
+            float floatVariable;// floating-point numeric types
+            double doubleVariable;// more accurate that float
+            decimal decimalVariable;// more accurate that double
 
-            char char_variable;// using to store one unicode character
-            string string_variable;// using to store more than one unicode character
+            char charVariable;// using to store one unicode character
+            string stringVariable;// using to store more than one unicode character
 
             Console.WriteLine("Enter the byte number: ");
-            byte_variable=Convert.ToByte(Console.ReadLine());
-            short_variable=1;
-            short_variable++;
-            int_variable=2+1;
-            long_variable=1000;
-            float_variable=0.5F;
-            double_variable=1.2;
-            decimal_variable=3.6m;
-            char_variable='=';
-            string_variable="Simple examples: ";
-            bool_variable=true;
+            byteVariable=Convert.ToByte(Console.ReadLine());
+            shortVariable=1;
+            shortVariable++;
+            intVariable=2+1;
+            longVariable=1000;
+            floatVariable=0.5F;
+            doubleVariable=1.2;
+            decimalVariable=3.6m;
+            charVariable='=';
+            stringVariable="Simple examples: ";
+            boolVariable=true;
 
-            if(bool_variable)
+            if(boolVariable)
             {
-                Console.WriteLine(string_variable);
-                Console.WriteLine($"{byte_variable}*{short_variable} {char_variable} {byte_variable*short_variable}");
-                Console.WriteLine($"{int_variable}+{long_variable} = {int_variable+long_variable} ");
-                Console.WriteLine($"{float_variable}+{double_variable} = {float_variable+double_variable}\n");
-                char_variable=string_variable[0];
+                Console.WriteLine(stringVariable);
+                Console.WriteLine($"{byteVariable}*{shortVariable} {charVariable} {byteVariable*shortVariable}");
+                Console.WriteLine($"{intVariable}+{longVariable} = {intVariable+longVariable} ");
+                Console.WriteLine($"{floatVariable}+{doubleVariable} = {floatVariable+doubleVariable}\n");
+                charVariable=stringVariable[0];
             }
 
             Console.WriteLine("Enter the x: ");
@@ -71,7 +71,7 @@ namespace Main
             X days left to New Year
             Y days passed from New Year
             */
-            Console.WriteLine($"{356-DateTime.Now.DayOfYear} days left to New Year");
+            Console.WriteLine($"{365-DateTime.Now.DayOfYear} days left to New Year");
             Console.WriteLine($"{DateTime.Now.DayOfYear} days passed from New Year");
         }
     }
