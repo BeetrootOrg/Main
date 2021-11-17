@@ -96,3 +96,67 @@ do
 {
     Console.WriteLine(incr);
 } while (++incr < 10);
+
+for (; ; )
+{
+    break;
+}
+
+for (; incr < 15; ++incr)
+{
+    Console.WriteLine(incr);
+}
+
+for (int i, j = 20; incr < 20;)
+{
+    Console.WriteLine(++incr);
+}
+int ii, jj = 20;
+
+
+
+
+
+for (int i = 0; i < 20; ++i)
+{
+    if (i % 2 ==1)
+    {
+        Console.WriteLine(i);
+    }
+
+}
+for (int i = 1; i < 20; i +=2)
+{  
+    Console.WriteLine(i);
+
+}
+for (int i = 0; i < 10; ++i)
+{
+    if (i % 2 == 1)
+    {
+        Console.WriteLine(i);
+    }
+}
+
+
+
+for (int i = 0; i < 20; ++i)
+{
+    if (i == 5) continue;
+        Console.WriteLine(i);
+}
+
+for (int i = 0; i < 20; ++i)
+{
+    if (i == 5) break;
+    Console.WriteLine(i);
+}
+
+while (true)
+{
+    if (true) break;
+}
+
+
+
+
