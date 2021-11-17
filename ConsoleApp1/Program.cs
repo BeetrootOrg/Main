@@ -157,6 +157,8 @@ while (true)
     if (true) break;
 }
 
-
+Console.WriteLine("Type ur name");
+string? name = Console.ReadLine();
+Console.WriteLine($"Hello, {name}");
 
 
