@@ -3,77 +3,56 @@
     using System;
     class ConsoleApp
     {
-        static long SumCalculate(int x, int y)
+        
+        static void Main(string[] args)
         {
-            long sum = 0;
-            Console.Write("Sum=");
-            if (x < y)
-            {
-                Console.Write("{0}", x);
-                sum = x;
-                do
-                {
+            Console.WriteLine("\r\n 03-other-kata\r\n");
 
-                    sum += ++x;
-                    Console.Write("+{0}", x);
-                } while (x != y);
-            }
-            else if (y < x)
+            // 1.написати код, що буде виводити у консоль число з протилежним знаком, наприклад для 5 результат будет -5, для - 1 результат буде 1
+            int aa = 5;
+            Console.WriteLine("{0}", -aa);
+
+            int bb = 1;
+            Console.WriteLine("{0}", -(Math.Abs(bb)));
+            // 2.написати код, що буде виводити у консоль число зі знаком мінус, наприклад для 5 результат будет -5, для - 1 результат буде -1
+
+            // 3. написати код, що буде виводити у консоль чи є число квадратом якогось цілого числа,
+            // наприклад 25 -> true (5^2), 24 -> false, 9 -> true (3^2), 1 -> true (1^2), 0 -> true (0^2), -1 -> false            
+            Console.WriteLine("1. {0}", 25 == Math.Pow(5, 2));
+            Console.WriteLine("2. {0}", 25 == Math.Pow(5, 2));
+            Console.WriteLine("3. {0}", 9 == Math.Pow(3, 2));
+            Console.WriteLine("4. {0}", 1 == Math.Pow(3, 2));
+            Console.WriteLine("5. {0}", 0 == Math.Pow(0, 2));
+            Console.WriteLine("6. {0}", 0 == Math.Pow(-1, 2));
+
+            double aaa = -1;
+            UInt32 bbb = 1;
+            if(aaa > bbb)
             {
-                Console.Write("{0}", y);
-                sum = y;
-                do
-                {
-                    sum += ++y;
-                    Console.Write("+{0}", y);
-                } while (x != y);
+                Console.WriteLine("aaa{0} > bbb{1}", aaa, bbb);
+            }
+            else if(aaa < bbb)
+            {
+                Console.WriteLine("aaa{0} < bbb{1}", aaa, bbb);
             }
             else
             {
-                Console.Write("{0}", x);
-                sum = x;
+                Console.WriteLine("aaa{0} == bbb{1}", aaa, bbb);
             }
-            return sum;
-        }
-        static long ReadConsoleAndSumCalculate()
-        {
-            int ConsoleA = 0;
-            int ConsoleB = 0;
-            long Sum = 0;
+            
+            
+            
+            
+            Console.WriteLine("do whille");
+            int iii = 0;
+            do
+            {
+                Console.WriteLine("iii {0}", iii);
+            } while (iii++ < 10);
 
-            Console.Write("\r\nEnter a: ");
-            string ConsoleStringA = Console.ReadLine();
-            try
-            {
-                ConsoleA = Convert.ToInt32(ConsoleStringA);
-            }
-            catch
-            {
-                Console.Write("Error!\r\n");
-                return 0;
-            }
-            Console.Write("Enter b: ");
-            string ConsoleStringB = Console.ReadLine();
-            try
-            {
-                ConsoleB = Convert.ToInt32(ConsoleStringB);
-            }
-            catch
-            {
-                Console.Write("Error!\r\n");
-                return 0;
-            }
-            Sum = SumCalculate(ConsoleA, ConsoleB);
-            return Sum;
-        }
-        static void Main(string[] args)
-        {
-            Console.WriteLine("\r\n 03-homework-operations\r\n");
 
-            Console.WriteLine("={0}", SumCalculate(10, 12));
-            Console.WriteLine("={0}", SumCalculate(5, 2));
 
-            Console.WriteLine("={0}", ReadConsoleAndSumCalculate());
+
 
             Console.Write("\r\n");
         }
