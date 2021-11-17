@@ -53,3 +53,13 @@ switch (a)
 }
 
 Console.WriteLine(d);
+
+int e = a switch
+{
+    0 => 42,
+    1 => 43,
+    2 => 1,
+    _ => 0,
+};
+
+Console.WriteLine(e);
