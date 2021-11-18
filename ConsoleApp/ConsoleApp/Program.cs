@@ -1,26 +1,24 @@
 ﻿int x, y;
+bool successX = true,
+    successY = true;
+string? xInput, yInput;
 
-Console.WriteLine("Please define X variable");
-string? xInput = Console.ReadLine();
-bool successX = int.TryParse(xInput, out x);
-
-while (!successX)
+do
 {
-    Console.WriteLine("X should be a number, so please define X variable again");
+    Console.WriteLine(successX ? "Please define X variable" : "X should be a number, so please define X variable again");
     xInput = Console.ReadLine();
     successX = int.TryParse(xInput, out x);
 }
+while (!successX);
 
-Console.WriteLine("Please define Y variable");
-string? yInput = Console.ReadLine();
-bool successY = int.TryParse(yInput, out y);
-
-while (!successY)
+do
 {
-    Console.WriteLine("Y should be a number, so please define Y variable again");
+    Console.WriteLine(successY ? "Please define Y variable" : "Y should be a number, so please define Y variable again");
     yInput = Console.ReadLine();
     successY = int.TryParse(yInput, out y);
 }
+while (!successY);
+
 int sum = 0;
 
 if (x == y)
