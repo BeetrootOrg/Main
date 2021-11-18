@@ -1,28 +1,40 @@
-﻿try
-{
-    Console.WriteLine("Please define X variable");
-    int x = Int32.Parse(Console.ReadLine());
-    Console.WriteLine("Please define Y variable");
-    int y = Int32.Parse(Console.ReadLine());
-    int sum = 0;
+﻿int x, y;
 
-    if (x == y)
-    {
-        sum = x;
-    }
-    else
-    {
+Console.WriteLine("Please define X variable");
+string? xInput = Console.ReadLine();
+bool successX = int.TryParse(xInput, out x);
 
-        int minVal = Math.Min(x, y);
-        int maxVal = Math.Max(x, y);
-        for (int i = minVal; i <= maxVal; i++)
-        {
-            sum += i;
-        }
-    }
-    Console.WriteLine($"The sum of the integers between these two numbers is {sum}");
-}
-catch (FormatException)
+while (!successX)
 {
-    Console.WriteLine($"Invalid input");
+    Console.WriteLine("X should be a number, so please define X variable again");
+    xInput = Console.ReadLine();
+    successX = int.TryParse(xInput, out x);
 }
+
+Console.WriteLine("Please define Y variable");
+string? yInput = Console.ReadLine();
+bool successY = int.TryParse(yInput, out y);
+
+while (!successY)
+{
+    Console.WriteLine("Y should be a number, so please define Y variable again");
+    yInput = Console.ReadLine();
+    successY = int.TryParse(yInput, out y);
+}
+int sum = 0;
+
+if (x == y)
+{
+    sum = x;
+}
+else
+{
+    int minVal = Math.Min(x, y);
+    int maxVal = Math.Max(x, y);
+
+    for (int i = minVal; i <= maxVal; i++)
+    {
+        sum += i;
+    }
+}
+Console.WriteLine($"The sum of the integers between these two numbers is {sum}");
