@@ -35,10 +35,17 @@
             return sum % 2 == 0;
         }
 
+        //Is this from CodeWars?
+        static string Repeat(string str, int repeat)
+        {
+            return string.Concat(Enumerable.Repeat(str, repeat));
+        }
+
         static void Main(string[] args)
         {
             Console.WriteLine(MaxValue(2,3,4,8,2));
             Console.WriteLine(TrySumIfOdd(6, 9));
+            Console.WriteLine(Repeat("test", 5));
         }
     }
 }
