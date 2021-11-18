@@ -24,7 +24,7 @@
             return numbers.Min();
         }
 
-        static bool TrySumIfOdd(int x, int y)
+        static long TrySumIfOdd(int x, int y, out bool isOdd)
         {
             int xValue = x, yValue = y;
             long sum = xValue;
@@ -32,7 +32,8 @@
             {
                 sum += xValue > yValue ? --xValue : ++xValue;
             }
-            return sum % 2 == 0;
+            isOdd = sum % 2 != 0;
+            return sum;
         }
 
         //Is this from CodeWars?
@@ -44,7 +45,10 @@
         static void Main(string[] args)
         {
             Console.WriteLine(MaxValue(2,3,4,8,2));
-            Console.WriteLine(TrySumIfOdd(6, 9));
+
+            TrySumIfOdd(6, 9, out bool isOdd);
+            Console.WriteLine((isOdd) ? "The sum is odd" : "The sum is even");
+
             Console.WriteLine(Repeat("test", 5));
         }
     }
