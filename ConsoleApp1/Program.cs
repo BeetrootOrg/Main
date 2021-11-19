@@ -162,3 +162,17 @@ string? name = Console.ReadLine();
 Console.WriteLine($"Hello, {name}");
 
 
+Console.WriteLine("Write number");
+
+string? strNum = Console.ReadLine();
+int num = int.Parse(strNum);
+num = Convert.ToInt32(strNum);
+Console.WriteLine($"{num}^2={num * num}");
+Console.WriteLine($"{num}^2.5={Math.Pow(num, 2.5)}");
+
+Console.WriteLine("Write number, pls");
+strNum = Console.ReadLine();
+bool success = int.TryParse(strNum, out num);
+//num = Convert.ToInt32(strNum);
+//Console.WriteLine($"{num}^2={num * num}");
+Console.WriteLine($"{num}^2.5={Math.Pow(num, 2.5)}");
