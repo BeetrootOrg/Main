@@ -23,3 +23,13 @@ for (int index = min; index <= max; ++index)
 }
 
 Console.WriteLine($"Sum = {sum}");
+
+
+// newyear
+var nowDate = DateTime.Now;
+var prevNewYear = new DateTime(nowDate.Year, 1, 1);
+var nextNewYear = new DateTime(nowDate.Year + 1, 1, 1);
+var daysPassed = (nowDate - prevNewYear).Days;
+var daysLeft = (nextNewYear - nowDate).Days;
+Console.WriteLine($"{daysPassed} days passed from New Year");
+Console.WriteLine($"{daysLeft} days left to New Year");
