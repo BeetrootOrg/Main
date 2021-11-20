@@ -59,7 +59,33 @@ namespace ConsoleApp
             Console.WriteLine(AddThree(b: 1, a: 4));
             Console.WriteLine(AddThree(c: 3, b: 1, a: 4));
             Console.WriteLine(AddThree(3, 2, 1));
+
+            Console.WriteLine("SUM");
+
+            // 1. call Sum(1, 3)
+            // 2. return 1 + Sum(2, 3)
+            // 3. call Sum(2, 3)
+            // 4. return 2 + Sum(3, 3)
+            // 5. call Sum(3, 3)
+            // 6. return 3
+            // 7. return to step 4
+            // 8. return 2 + 3
+            // 9. return to step 2
+            // 10. return 1 + 2 + 3
+            Console.WriteLine(Sum(1, 3));
+
+            // the same as before, but first call Sum(1, 3)
+            Console.WriteLine(Sum(3, 1));
+            Console.WriteLine(Sum(1, 1));
         }
+
+        static int Sum(int min, int max)
+        {
+            if (min > max) return Sum(max, min);
+            if (min == max) return min;
+            return min + Sum(min + 1, max);
+        }
+
 
         static double FuncWithABigName(double x) => x * x * x + 5 * x * x + 6;
         static void Concat(string str1, string str2) => Console.WriteLine($"{str1}, {str2}");
