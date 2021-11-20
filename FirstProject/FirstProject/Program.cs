@@ -1,10 +1,13 @@
-﻿string str = "Arthur";
+﻿int n = 4;
+int f1=0, f2=1;
+int sum = 0;
 
-if (str == "Arthur")
+for (int i = 2; i < n; i++)
 {
-    Console.WriteLine("Hello,Arthur");
+    sum = f1 + f2;
+    f1 = f2;
+    f2 = sum;
 }
-else
-{
-    Console.WriteLine($"Hello{str}");
-}
+Console.WriteLine(sum);
+
+        
