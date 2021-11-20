@@ -44,6 +44,12 @@ namespace ConsoleApp
             {
                 Console.WriteLine("Cannot count sum because inputs are not odd");
             }
+
+            // int.TryParse("1", out int res);
+            Console.WriteLine(SomeMath(5));
+            Console.WriteLine(SomeMath(5, 4));
+            Console.WriteLine(SomeMath(5, 4, 6));
+            Console.WriteLine(SomeMath(5, 4, 6, 1));
         }
 
         static double FuncWithABigName(double x) => x * x * x + 5 * x * x + 6;
@@ -88,5 +94,9 @@ namespace ConsoleApp
             sum = 0;
             return false;
         }
+
+        static int SomeMath(int a, int b = 3) => a + b;
+        static int SomeMath(int a, int b, int c = 4) => a * 2 + b * 3 + c * 5;
+        static double SomeMath(int a, int b, int c = 4, int d = 5) => Math.Sqrt(a + b + c + d);
     }
 }
