@@ -11,6 +11,10 @@ namespace  ConsoleApp
             int sum;
             const int i1 = 4;
             const int i2 = 5;
+            int n = 4;
+            string str = "str ";
+            
+
 
 
             //First task
@@ -18,10 +22,7 @@ namespace  ConsoleApp
             Console.WriteLine($"Min:{ Min(1,8,4,6,7)}");
             
 
-            //Second task
-            //створити метод TryMulIfDividedByThree що повертає булеве значення true / false якщо хоче б одне з чисел ділиться на 3.
-            //за допомогою out параметру повернути результат добутку(або нуль якщо обидва числа не діляться на 3)
-
+            //Second task            
             if (TryAddIfOdd(i1,i2, out sum))
             {
                 Console.WriteLine($"Multiplication equals: {sum}");
@@ -30,6 +31,11 @@ namespace  ConsoleApp
             {
                 Console.WriteLine(sum);
             }
+
+            //Third task
+
+            Repeat(str, n);            
+
         }
                
         //First task
@@ -56,6 +62,20 @@ namespace  ConsoleApp
             return false;
         }
 
+        //Third task
+        
+        static void Repeat(string str, int n)
+        {
+            if (n > 0)
+            { 
+                for (int i = 0; i < n; i++)
+                {
+                    Console.Write(str);                       
+                }
+            }            
+            
+
+        }
 
     }
 }
