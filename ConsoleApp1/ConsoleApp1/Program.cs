@@ -44,3 +44,14 @@ int result1 = incr++;
 int result2 = ++incr;
 Console.WriteLine($"{result1}, {result2}, {incr}");
 
+// bool logic
+
+var bool1 = true;
+var bool2 = false;
+
+Console.WriteLine($"AND: {bool1 && bool2}");
+Console.WriteLine($"OR: {bool1 || bool2}");
+Console.WriteLine($"EQUAL: {bool1 == bool2}");
+Console.WriteLine($"NOT bool1: {!bool1}");
+Console.WriteLine($"NOT bool2: {!bool2}");
+Console.WriteLine($"XOR: {bool1 ^ bool2}"); // якщо однакові повертає false
