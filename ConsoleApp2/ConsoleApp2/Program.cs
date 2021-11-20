@@ -1,11 +1,16 @@
 ﻿using System;
 namespace ConsoleApp
 {
-    class program
+    class Program
     {
         static void Main()
         {
-            Console.WriteLine("Hello, World!");
+            double result = FuncWithBigName(5.5);
+            Console.WriteLine(result);
         }
-            }
+
+        static double FuncWithBigName(double x) {
+            return x * x * x + 5 * x * x + 6;
+        }
+    }
 }
