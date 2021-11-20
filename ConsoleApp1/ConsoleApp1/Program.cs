@@ -93,3 +93,23 @@ Console.WriteLine(coolVar1 | coolVar2);
 Console.WriteLine(coolVar1 << coolVar2); // 10 << 3; 00001010 << 3; 01010000
 Console.WriteLine(coolVar1 >> coolVar2); // 10 >> 3; 00001010 >> 3; 00000001
 
+// assign
+
+int aa = 8;
+int bb = 2;
+
+aa = aa + bb;
+Console.WriteLine(aa);
+aa += bb; // identical to the line above
+aa %= bb;
+aa -= bb;
+
+// temp
+aa = 10;
+bb = 5;
+int temp = aa; // assign 10
+aa = bb; // assign 5
+bb = temp // assign 10
+
+    Console.WriteLine(aa);
+    Console.WriteLine(bb);
