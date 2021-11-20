@@ -50,6 +50,15 @@ namespace ConsoleApp
             Console.WriteLine(SomeMath(5, 4));
             Console.WriteLine(SomeMath(5, 4, 6));
             Console.WriteLine(SomeMath(5, 4, 6, 1));
+
+            Console.WriteLine(AddThree());
+            Console.WriteLine(AddThree(8));
+            Console.WriteLine(AddThree(b: 1));
+            Console.WriteLine(AddThree(c: 1));
+            Console.WriteLine(AddThree(c: 1, a: 4));
+            Console.WriteLine(AddThree(b: 1, a: 4));
+            Console.WriteLine(AddThree(c: 3, b: 1, a: 4));
+            Console.WriteLine(AddThree(3, 2, 1));
         }
 
         static double FuncWithABigName(double x) => x * x * x + 5 * x * x + 6;
@@ -99,5 +108,7 @@ namespace ConsoleApp
         static int SomeMath(int a, int b, int c = 4) => a * 2 + b * 3 + c * 5;
         static double SomeMath(double a, int b, int c = 4) => a * 2 + b * 3 + c * 5;
         static double SomeMath(int a, int b, int c = 4, int d = 5) => Math.Sqrt(a + b + c + d);
+
+        static int AddThree(int a = 1, int b = 2, int c = 3) => a + b + c;
     }
 }
