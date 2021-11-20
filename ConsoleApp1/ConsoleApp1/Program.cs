@@ -22,7 +22,20 @@
             Console.WriteLine(str);
             AddRef(ref str, " dima");
             Console.WriteLine(str);
-
+            Console.WriteLine(AddIfOdd(2, 4));
+            Console.WriteLine(AddIfOdd(1, 4));
+            Console.WriteLine(AddIfOdd(2, 5));
+            int sum;
+            const int i1 = 2;
+            const int i2 = 4;
+            if (TryAddIfOdd(i1,i2,out sum))
+            {
+                Console.WriteLine($"Sum equal to {sum}");
+            }
+            else
+            {
+                Console.WriteLine("Cannot count sum, becuse not odd");
+            }
         }
 
         static double FuncWithABigName(double x)
@@ -59,13 +72,24 @@
             Console.WriteLine(str1);
         }
 
-        static int AddIfOdd(int i1, int i2)
+        static int AddIfOdd(int i1= 2, int i2 =2)
         {
             if (i1 % 2 == 0 && i2 % 2 == 0)
             {
                 return i1 + i2;
             }
             return 0;
+        }
+
+        static bool TryAddIfOdd(int i1, int i2, out int Sum)
+        {
+            if (i1 % 2 == 0 && i2 % 2 == 0)
+            {
+                Sum = i1 + i2;
+                return true;
+            }
+            Sum = 0;
+            return false;
         }
     }
 }
