@@ -23,6 +23,27 @@ namespace ConsoleApp
 
             AddRef(ref str, ", Dima");
             Console.WriteLine($"In Main: {str}");
+
+            Console.WriteLine(AddIfOdd(2, 4));
+            Console.WriteLine(AddIfOdd(1, 4));
+            Console.WriteLine(AddIfOdd(2, 1));
+
+            Console.WriteLine(AddIfOdd(-2, 2));
+            Console.WriteLine(AddIfOdd(-1, 1));
+            Console.WriteLine(AddIfOdd(0, 0));
+
+            const int i1 = 3;
+            const int i2 = 4;
+
+            int sum;
+            if (TryAddIfOdd(i1, i2, out sum))
+            {
+                Console.WriteLine($"Sum equal to {sum}");
+            }
+            else
+            {
+                Console.WriteLine("Cannot count sum because inputs are not odd");
+            }
         }
 
         static double FuncWithABigName(double x) => x * x * x + 5 * x * x + 6;
@@ -55,5 +76,17 @@ namespace ConsoleApp
         static int AddIfOdd(int i1, int i2) => i1 % 2 == 0 && i2 % 2 == 0
             ? i1 + i2
             : 0;
+
+        static bool TryAddIfOdd(int i1, int i2, out int sum)
+        {
+            if (i1 % 2 == 0 && i2 % 2 == 0)
+            {
+                sum = i1 + i2;
+                return true;
+            }
+
+            sum = 0;
+            return false;
+        }
     }
 }
