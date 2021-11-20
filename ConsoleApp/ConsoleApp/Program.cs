@@ -97,6 +97,7 @@ namespace ConsoleApp
 
         static int SomeMath(int a, int b = 3) => a + b;
         static int SomeMath(int a, int b, int c = 4) => a * 2 + b * 3 + c * 5;
+        static double SomeMath(double a, int b, int c = 4) => a * 2 + b * 3 + c * 5;
         static double SomeMath(int a, int b, int c = 4, int d = 5) => Math.Sqrt(a + b + c + d);
     }
 }
