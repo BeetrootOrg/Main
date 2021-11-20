@@ -77,6 +77,8 @@ namespace ConsoleApp
             // the same as before, but first call Sum(1, 3)
             Console.WriteLine(Sum(3, 1));
             Console.WriteLine(Sum(1, 1));
+
+            Console.WriteLine(Fibonacci(6));
         }
 
         static int Sum(int min, int max)
@@ -86,6 +88,12 @@ namespace ConsoleApp
             return min + Sum(min + 1, max);
         }
 
+        static int Fibonacci(int n)
+        {
+            if (n == 0) return 0;
+            if (n == 1) return 1;
+            return Fibonacci(n - 1) + Fibonacci(n - 2);
+        }
 
         static double FuncWithABigName(double x) => x * x * x + 5 * x * x + 6;
         static void Concat(string str1, string str2) => Console.WriteLine($"{str1}, {str2}");
