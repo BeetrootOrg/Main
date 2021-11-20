@@ -109,7 +109,7 @@ aa = 10;
 bb = 5;
 int temp = aa; // assign 10
 aa = bb; // assign 5
-bb = temp // assign 10
+bb = temp; // assign 10
 
     Console.WriteLine(aa);
     Console.WriteLine(bb);
