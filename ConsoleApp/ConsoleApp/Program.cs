@@ -11,7 +11,7 @@ namespace ConsoleApp
             int f0 = 0;
             int f1 = 1;
             int f = 0;
-            for (int i = 0; i < n-2; i++)
+            for (int i = 2; i <= n; i++)
             { 
                 f = f0 + f1;
                 f0 = f1;
