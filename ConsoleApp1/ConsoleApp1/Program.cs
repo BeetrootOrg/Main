@@ -1,95 +1,102 @@
-﻿namespace Console
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    class Program
-    {
-        static void Main()
-        {
-            double result = FuncWithABigName(5.5);
-            System.Console.WriteLine($"{result}");
-            ConCat("Hello", "Dima");
-            int ai = 0;
-            InrementReferenc(ref ai);
-            Console.WriteLine($"In main {ai}");
-            ai= 0;
-            Inrement(ai);
-            Console.WriteLine($"In main {ai}");
+﻿using System;
 
-            string str = "Hello";
-            Add(str, " dima");
-            Console.WriteLine(str);
-            AddRef(ref str, " dima");
-            Console.WriteLine(str);
-            Console.WriteLine(AddIfOdd(2, 4));
-            Console.WriteLine(AddIfOdd(1, 4));
-            Console.WriteLine(AddIfOdd(2, 5));
-            int sum;
-            const int i1 = 2;
-            const int i2 = 4;
-            if (TryAddIfOdd(i1,i2,out sum))
+namespace Homework
+{
+    public class Homework
+    {
+        static void Main(string[] args)
+        {
+            
+        }
+
+        //створити метод Max приймає від 2 до 5 аргументів та повертає max відповідно значення серед цих аргументів
+        public static int MaxV(int? v1, int? v2, int? v3 = null, int? v4 = null, int? v5 = null)
+        {
+            int result = 0;
+            if (v3 != null)
             {
-                Console.WriteLine($"Sum equal to {sum}");
+                if (v4 != null)
+                {
+                    if (v5 != null)
+                    {
+                        result = v5.Value > v4.Value ? v5.Value : v4.Value;
+                    }
+                    else result = v4.Value;
+                    result = result > v3.Value ? result : v3.Value;
+                }
+                else result = v3.Value;
+                result = result > v2.Value ? result : v2.Value;
+            }
+            else result = v2.Value;
+            result = result > v1.Value ? result : v1.Value;
+            return result;
+        }
+
+        //створити метод Min приймає від 2 до 5 аргументів та повертає min відповідно значення серед цих аргументів
+        public static int MinV(int? v1, int? v2, int? v3 = null, int? v4 = null, int? v5 = null)
+        {
+            int result = 0;
+            if (v3 != null)
+            {
+                if (v4 != null)
+                {
+                    if (v5 != null)
+                    {
+                        result = v5.Value < v4.Value ? v5.Value : v4.Value;
+                    }
+                    else result = v4.Value;
+                    result = result < v3.Value ? result : v3.Value;
+                }
+                else result = v3.Value;
+                result = result < v2.Value ? result : v2.Value;
+            }
+            else result = v2.Value;
+            result = result < v1.Value ? result : v1.Value;
+            return result;
+        }
+
+        //створити метод TryMulIfDividedByThree що повертає булеве значення true/false якщо хоче б одне з чисел ділиться на 3. за допомогою out параметру повернути результат добутку(або нуль якщо обидва числа не діляться на 3)
+
+        public static bool TryMulIfDividedByThree(double var1, double var2,out double result)
+        {
+            if(var1%3==0 || var2 % 3 == 0)
+            {
+                result = var1 / var2;
+                return true;
             }
             else
             {
-                Console.WriteLine("Cannot count sum, becuse not odd");
+                result = 0;
+                return false;
             }
         }
 
-        static double FuncWithABigName(double x)
+        //створити метод Repeat що приймає строку str та число n і повертає строку str, що повторюється n разів(e.g.Repeat(‘str’, 3) returns ‘strstrstr’ = ‘str’ three times)
+        public static string Repeat(string str, int count)
         {
-            return x * x * x + 5 * x * x + 6;
-        }
-
-        static void ConCat(string str1,string str2)
-        {
-            System.Console.WriteLine(str2+" , "+str1);
-        }
-
-        static void InrementReferenc(ref int i)
-        {
-            i++;
-            System.Console.WriteLine($"Increment {i}");
-        }
-
-        static void Inrement(int i)
-        {
-            i++;
-            System.Console.WriteLine($"Increment {i}");
-        }
-
-        static void Add(string str1,string str2)
-        {
-            str1 += str2;
-            Console.WriteLine(str1);
-        }
-
-        static void AddRef(ref string str1, string str2)
-        {
-            str1 += str2;
-            Console.WriteLine(str1);
-        }
-
-        static int AddIfOdd(int i1= 2, int i2 =2)
-        {
-            if (i1 % 2 == 0 && i2 % 2 == 0)
+            string concat = str;
+            for(int i = 1; i < count; i++)
             {
-                return i1 + i2;
+                concat = concat + str;
             }
-            return 0;
+            return concat;
+        }
+        //створити функцію Pow(x, y) що буде підносити X в степінь Y(x та y цілі невід'ємні числа)
+        public static int Pow(int value, int power)
+        {
+            int result = 0;
+            if (power > 0 && power != 1)
+            {
+                result = value * Pow(value, power - 1);
+            }
+            else
+            {
+                result = value;
+            }
+            return result;
+            
         }
 
-        static bool TryAddIfOdd(int i1, int i2, out int Sum)
-        {
-            if (i1 % 2 == 0 && i2 % 2 == 0)
-            {
-                Sum = i1 + i2;
-                return true;
-            }
-            Sum = 0;
-            return false;
-        }
     }
+
 }
