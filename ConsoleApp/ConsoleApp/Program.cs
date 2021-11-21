@@ -1,20 +1,27 @@
-﻿    //-6*x^3+5*x^2-10*x+15
+﻿try
+{
+    Console.WriteLine("Write number X: ");
+    int numX = int.Parse(Console.ReadLine());
+    Console.WriteLine("Write number Y: ");
+    int numY = int.Parse(Console.ReadLine());
+    int sum = 0;
+    int max = Math.Max(numX, numY);
+    int min = Math.Min(numX, numY);
 
-double x = 2;
-Console.WriteLine( -6 * Math.Pow(x, 3) + 5 * Math.Pow(x, 2) - 10 * x + 15);
-
-    //abs(z)*sin(z)
-
-double z = 1.4;
-Console.WriteLine(Math.Abs(z) * Math.Sin(z));
-
-    //2*pi*c
-
-double c = -0.1;
-Console.WriteLine(2 * Math.PI * c);
-
-    //max(v, b)
-
-double v = 12;
-double b = 21;
-Console.WriteLine(Math.Max(v, b));
+    if (numX == numY)
+    {
+        sum = numX;
+    }
+    else
+    {
+        for (int i = min; i <= max; i++)
+        {
+            sum += i;
+        }
+    }
+    Console.WriteLine($"The sum of numbers from {max} to {min} is: {sum}");
+}
+catch (FormatException)
+{
+    Console.WriteLine("Please, write a number");
+}
