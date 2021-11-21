@@ -30,6 +30,6 @@ namespace ConsoleApp
             Console.WriteLine($"F(5.5) = {result}");
         }
         static double FunkWithABigName(double x) => x * x * x + 5 * x * x + 6;
-        }
+        
     }
 }
