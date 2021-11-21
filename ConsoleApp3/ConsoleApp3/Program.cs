@@ -22,6 +22,11 @@ namespace MyApp
             Console.WriteLine(MinFirst(-5, b: 0));
             Console.WriteLine(MaxFirst(24, d:-1));
 
+            Console.WriteLine(new string('*', 70));
+            Console.WriteLine(Repeat(" repeat ", 5));
+            Console.WriteLine(new string('*', 70));
+
+
             double dob;
             if (TryMulIfDividedByThree(81.0, -20.0, 7, out dob))
             {
@@ -60,6 +65,15 @@ namespace MyApp
 
         //--------------------------------------------------------------------
 
+        //буз масива, цикла та конкатенацій =_))
 
+        static string Repeat(string str, int n)
+        {
+            if (n >0)
+            {
+                return str + Repeat(str, n - 1);
+            }
+            return "";
+        }
     }
 }
