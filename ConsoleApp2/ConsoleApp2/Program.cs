@@ -19,6 +19,10 @@ namespace ConsoleApp
 
             AddRef(ref str, ", Dima");
             Console.WriteLine($"In Man ref {str}");
+
+            Console.WriteLine(AddIfOdd(2, 4));
+            Console.WriteLine(AddIfOdd(1, 4));
+            Console.WriteLine(AddIfOdd(2, 1));
         }
 
         static double FuncWithBigName(double x) {
@@ -46,5 +50,13 @@ namespace ConsoleApp
             str1 += str2;
             Console.WriteLine($"In AddRef {str1}");
         }
+
+        static int AddIfOdd(int i1, int i2) 
+        {
+            return i1 % 2 == 0 && 2 % 2 == 0
+                ? i1 + i2
+                : 0;
+          
+        } 
     }
 }
