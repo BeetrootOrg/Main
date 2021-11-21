@@ -23,6 +23,19 @@ namespace ConsoleApp
             Console.WriteLine(AddIfOdd(2, 4));
             Console.WriteLine(AddIfOdd(1, 4));
             Console.WriteLine(AddIfOdd(2, 1));
+
+            const int i1 = 1;
+            const int i2 = 4;
+            int sum;
+
+            if (TryAddIfOdd(i1, i2, out sum))
+            {
+                Console.WriteLine($"Sum equal to {sum}");
+            }
+            else
+            {
+                Console.WriteLine("Cannot count sum");
+            }
         }
 
         static double FuncWithBigName(double x) {
@@ -56,7 +69,19 @@ namespace ConsoleApp
             return i1 % 2 == 0 && 2 % 2 == 0
                 ? i1 + i2
                 : 0;
-          
-        } 
+        }
+
+        // Patern try
+
+        static bool TryAddIfOdd(int i1, int i2, out int sum)
+        {
+            if (i1 % 2 == 0 && 2 % 2 == 0)
+            {
+                sum = i1 + i2;
+                return true;
+            }
+            sum = 0;
+            return false;
+        }
     }
 }
