@@ -1,127 +1,91 @@
-﻿string str = "vova";
-string str2 = "TestName";
+﻿using System;
 
-if (str == "Vova") 
+namespace ConsoleApp
 {
-    Console.WriteLine($"Hello,{str}! ");
-}
-else if (str == "vova") 
-{
-    Console.WriteLine($"Hello, {str2}");
-}
 
-
-/*for (int i = 0; i < 10; ++i)
-{
-    Console.WriteLine(i);
-}
-*/
-
-
-/*
- for (int i = 9; i >= 0; --i)
-{
-    Console.WriteLine(i);
-}
-*/
-
-/*
- * int incr = 0;
-while (incr < 10)
-{
-    Console.WriteLine(incr);
-    ++incr;
-}
-*/
-
-int incr = -1;
-while (incr++ < 10)
-{
-    Console.WriteLine(incr);
-
-}
-
-Console.WriteLine("do while") ;
-
-incr = -1;
-do
-{
-    Console.WriteLine(incr);
-} while (++incr < 10);
-
-Console.WriteLine("try while");
-incr = 10;
-while (incr++ <10)
-{
-    Console.WriteLine(incr);
-}
-Console.WriteLine("diff between while and do");
-
-do
-{
-    Console.WriteLine(incr);
-} while (++incr < 10);
-
-for (; ; )
-{
-    break;
-}
-
-for (; incr < 15; ++incr)
-{
-    Console.WriteLine(incr);
-}
-for (; incr < 20;)
-{
-    Console.WriteLine(++incr);
-}
-
-//int ij, jj = 20;
-
-Console.WriteLine("first try");
-
-for (int i = 0; i < 20; ++i)
-{
-    if (i % 2 == 1)
+    class Program
     {
-        Console.WriteLine(i);
+        static void Main()
+        {
+            double result = FunctWihABigName(5.5);
+            Console.WriteLine(result);
+            Concat("Hello", "Test");
+
+            int ai = 0;
+            Increment(ai);
+
+            IncrementRef(ref ai);
+            Console.WriteLine($"In Main: {ai}");
+
+            string str = "Hello";
+            Add(str, ",Test");
+            Console.WriteLine($"In main {str}");
+
+            AddRef(ref str, ",Test");
+            Console.WriteLine($"In main {str}");
+
+            Console.WriteLine(ADdIfOdd(-2,2));
+            Console.WriteLine(ADdIfOdd(1, 4));
+            Console.WriteLine(ADdIfOdd(-2, 2));
+            Console.WriteLine(ADdIfOdd(0, 0));
+
+            const int i1 = 3;
+            const int i2 = 4;
+
+            int sum;
+            if (TryAddifOdd(i1, i2, out sum))
+            {
+                Console.WriteLine($"Sum equal to {sum}");
+            }
+            else 
+            {
+                Console.WriteLine($"Cannot count sum cause inputs not odd");
+            }
+        }
+
+        static double FunctWihABigName(double x) => x * x * x + 5 * 5 * 5 + 6;
+
+        static void Concat(string str1, string str2) => Console.WriteLine($"{str1}, {str2}");
+
+        static void Increment(int i)
+        {
+            ++i;
+            Console.WriteLine($"In Increment: {i}");
+        }
+
+        static void IncrementRef(ref int i)
+        {
+            ++i;
+            Console.WriteLine($"In IncrementRef: {i}");
+        }
+        static void Add(string str1, string str2)
+        {
+            str1 += str2;
+            Console.WriteLine($"int Add: {str1}");
+
+        }
+        static void AddRef(ref string str1, string str2)
+        {
+            str1 += str2;
+            Console.WriteLine($"int AddRef: {str1}");
+
+        }
+
+        static int ADdIfOdd(int i1, int i2) => i1 % 2 == 0 && i2 % 2 == 0
+            ? i1 + i2
+            : 0;
+
+        static bool TryAddifOdd(int i1, int i2, out int sum)
+        {
+            if (i1 % 2 == 0 && i2 % 2 == 0)
+            {
+                sum = i1 + i2;
+                return true;
+            }
+            sum = 0;
+            return false;
+        }
+
     }
-}
+    }
 
-Console.WriteLine("second try");
-
-for (int i = 1; i < 20; i += 2)
-{
-        Console.WriteLine(i);
-}
-
-Console.WriteLine("third try");
-for (int i = 0; i < 10; ++i)
-{ 
-    Console.WriteLine(i*2+1);
-}
-
-Console.WriteLine("Write your name:");
-string? name= Console.ReadLine();
-Console.WriteLine($"Hi, {name}");
-
-Console.WriteLine("Write digit:");
-string? strNum = Console.ReadLine();
-int num = int.Parse(strNum);
-num =Convert.ToInt32(strNum);
-Console.WriteLine($"{num}^2={num * num}");
-Console.WriteLine($"{num}^2.5={Math.Pow(num,2.5)}");
-
-Console.WriteLine("Write digits, please:");
-strNum = Console.ReadLine();
-bool success = int.TryParse(strNum, out num);
-num = Convert.ToInt32(strNum);
-
-Console.WriteLine(success? $"It is number{num}":"It is not number");
-
-do
-{
-    Console.WriteLine("Write number, pleeeaseeeee:");
-    strNum = Console.ReadLine();
-    success = int.TryParse(strNum, out num);
-} while (!success);
