@@ -44,7 +44,7 @@ namespace ConsoleApp
             Console.WriteLine(AddThree(5, 4, 6));
             Console.WriteLine(AddThree(a: 8));
 
-
+            Console.WriteLine(Sum(1, 3));
 
         }
 
