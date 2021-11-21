@@ -8,6 +8,10 @@
 /// out параметру повернути результат добутку 
 /// (або нуль якщо обидва числа не діляться на 3)
 /// 
+/// створити метод Repeat що приймає строку str та число n і повертає
+/// строку str, що повторюється n разів (e.g. Repeat(‘str’, 3)
+/// returns ‘strstrstr’ = ‘str’ three times)
+/// 
 /// </summary>
 namespace MyApp 
 {
@@ -18,7 +22,16 @@ namespace MyApp
             Console.WriteLine(MinFirst(-5, b: 0));
             Console.WriteLine(MaxFirst(24, d:-1));
 
-
+            double dob;
+            if (TryMulIfDividedByThree(81.0, -20.0, 7, out dob))
+            {
+                Console.WriteLine($" Dob equal to {dob}");
+            }
+            else
+            {
+                Console.WriteLine($"CannotUnloadAppDomainException count dob = {dob}");
+            }
+           
         }
 
         //--------------------------------------------------------------------
@@ -33,7 +46,7 @@ namespace MyApp
 
         //--------------------------------------------------------------------
 
-        static bool TryMulIfDividedByThree(double a, double b = 9, double c = 8, out double dob) 
+        static bool TryMulIfDividedByThree(double a, double b, double c, out double dob)
         {
             if (a % 3 == 0 || b % 3 == 0 || c % 3 == 0)
             {
@@ -44,5 +57,9 @@ namespace MyApp
             return false;
 
         }
+
+        //--------------------------------------------------------------------
+
+
     }
 }
