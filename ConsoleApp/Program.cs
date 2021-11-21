@@ -1,5 +1,14 @@
 ﻿using System;
+/*
+1 створити методи Max та Min що приймають від 2 до 5 аргументів та повертають max та min відповідно 
+значення серед цих аргументів
+2. створити метод TryMulIfDividedByThree що повертає булеве значення true/false 
+якщо хоче б одне з чисел ділиться на 3. за допомогою out параметру повернути результат добутку 
+(або нуль якщо обидва числа не діляться на 3)
 
+3. створити метод Repeat що приймає строку str та число n і повертає строку str, 
+що повторюється n разів (e.g. Repeat(‘str’, 3) returns ‘strstrstr’ = ‘str’ three times)
+*/
 namespace ConsoleApp
 {
 
@@ -7,85 +16,54 @@ namespace ConsoleApp
     {
         static void Main()
         {
-            double result = FunctWihABigName(5.5);
-            Console.WriteLine(result);
-            Concat("Hello", "Test");
+            Console.WriteLine($"try find Minimum among argumets of function (2 to 5 argu): {FindMin(12,11)}\n");
+            Console.WriteLine($"try find Max among argumets of function (2 to 5 argu): {FindMax(-1,-123, 11)}\n");
+            Console.WriteLine("try find multiple of argu, if argu can be divided on 3");
 
-            int ai = 0;
-            Increment(ai);
-
-            IncrementRef(ref ai);
-            Console.WriteLine($"In Main: {ai}");
-
-            string str = "Hello";
-            Add(str, ",Test");
-            Console.WriteLine($"In main {str}");
-
-            AddRef(ref str, ",Test");
-            Console.WriteLine($"In main {str}");
-
-            Console.WriteLine(ADdIfOdd(-2,2));
-            Console.WriteLine(ADdIfOdd(1, 4));
-            Console.WriteLine(ADdIfOdd(-2, 2));
-            Console.WriteLine(ADdIfOdd(0, 0));
-
-            const int i1 = 3;
-            const int i2 = 4;
-
-            int sum;
-            if (TryAddifOdd(i1, i2, out sum))
+            double multiply;
+            if (TryMulIfDividedByThree(3, 12, out multiply))
             {
-                Console.WriteLine($"Sum equal to {sum}");
+                Console.WriteLine($"Good one, multiply is {multiply}\n");
+            } else 
+            {
+                Console.WriteLine($"Bad try, multiply error is {multiply}\n");
             }
-            else 
+ 
+            Console.WriteLine(Repeat("tc",1));
+        }
+        static int FindMin(int a, int b, int c= 32767, int d= 32767, int e= 32767)
+        {
+            return (Math.Min(Math.Min(Math.Min(Math.Min(a, b),c),d),e));
+        }
+        static int FindMax(int a, int b, int c = -32767, int d = -32767, int e = -32767)
+        {
+            return (Math.Max(Math.Max(Math.Max(Math.Max(a, b), c), d), e));
+        }
+        static bool TryMulIfDividedByThree(int a, int b, out double multiply)
+        {
+            if (a % 3 == 0 || b % 3 == 0)
             {
-                Console.WriteLine($"Cannot count sum cause inputs not odd");
-            }
-        }
-
-        static double FunctWihABigName(double x) => x * x * x + 5 * 5 * 5 + 6;
-
-        static void Concat(string str1, string str2) => Console.WriteLine($"{str1}, {str2}");
-
-        static void Increment(int i)
-        {
-            ++i;
-            Console.WriteLine($"In Increment: {i}");
-        }
-
-        static void IncrementRef(ref int i)
-        {
-            ++i;
-            Console.WriteLine($"In IncrementRef: {i}");
-        }
-        static void Add(string str1, string str2)
-        {
-            str1 += str2;
-            Console.WriteLine($"int Add: {str1}");
-
-        }
-        static void AddRef(ref string str1, string str2)
-        {
-            str1 += str2;
-            Console.WriteLine($"int AddRef: {str1}");
-
-        }
-
-        static int ADdIfOdd(int i1, int i2) => i1 % 2 == 0 && i2 % 2 == 0
-            ? i1 + i2
-            : 0;
-
-        static bool TryAddifOdd(int i1, int i2, out int sum)
-        {
-            if (i1 % 2 == 0 && i2 % 2 == 0)
-            {
-                sum = i1 + i2;
+                multiply = a * b;
                 return true;
+            } else 
+            {
+                multiply = 0;
+                return false;
             }
-            sum = 0;
-            return false;
+        }
+        static string Repeat(string str, int n)
+        {
+             if (n > 0)
+            {
+                for (int a=2; a <= n; a++)
+                {
+                    str += str;
+                }
+                return str;
+            }
+            return "n<1, can't create string";
         }
 
     }
-    }
+}
 
