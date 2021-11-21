@@ -36,7 +36,27 @@ namespace ConsoleApp
             {
                 Console.WriteLine("Cannot count sum");
             }
+
+            // int.TryPrse("1", out int res);
+
+            Console.WriteLine(AddThree(5));
+            Console.WriteLine(AddThree(5, 4));
+            Console.WriteLine(AddThree(5, 4, 6));
+            Console.WriteLine(AddThree(a: 8));
+
+
+
         }
+
+        static int Sum(int min, int max)
+        {
+            if (min > max) return Sum(max, min);
+            if (min == max) return min;
+            return min + Sum(min + 1, max);
+        }
+
+
+
 
         static double FuncWithBigName(double x) {
             return x * x * x + 5 * x * x + 6;
@@ -83,5 +103,9 @@ namespace ConsoleApp
             sum = 0;
             return false;
         }
+
+        static int AddThree(int a, int b = 3) => a + b;
+        static int AddThree(int a, int b, int c = 4) => a + b + c;
+        static double AddThree(int a, int b, int c = 4, int d = 6) => Math.Sqrt( a + b + c + d);
     }
 }
