@@ -3,77 +3,73 @@
     using System;
     class ConsoleApp
     {
-        static void ShowValue(int value)
+        static int GetMax(int a, int b, int c)
         {
-            Console.Write("+" + (value < 0 ? "(" + value + ")" : value));
+            return Math.Max(Math.Max(a, b), c);
         }
-        static long SumCalculate(int x, int y)
+        static int GetMin(int a, int b, int c)
         {
-            long sum = 0;
-            Console.Write("Sum = ");
-            if (x < y)
-            {
-                Console.Write("{0}", x);
-                sum = x;
-                do
-                {
-                    sum += ++x;
-                    ShowValue(x);
-                } while (x != y);
-            }
-            else if (y < x)
-            {
-                Console.Write("{0}", y);
-                sum = y;
-                do
-                {
-                    sum += ++y;
-                    ShowValue(y);
-                } while (x != y);
+            return Math.Min(Math.Min(a, b), c);
+        }
+        static bool TrySumifOdd(int a, int b, out int result)
+        {
+            result = a + b;
+            if ((result & 1) == 1)
+            {                
+                return true;
             }
             else
             {
-                Console.Write("{0}", x);
-                sum = x;
+                return false;
             }
-            return sum;
         }
-        static int ReadConsoleValue(string str)
+        static void ShowSum(bool executResult, int sum)
         {
-            string? ConsoleString = null;
-            bool success = false;
-            int value = 0;
-
-            while (success == false)
+            if(executResult == true)
             {
-                Console.Write("Enter " + str + ": ");
-                ConsoleString = Console.ReadLine();
-                success = int.TryParse(ConsoleString, out value);
-                if (success == false)
-                {
-                    Console.Write("Error!\r\n");
-                }
+                Console.WriteLine("{0} // Sum is Odd", sum);
             }
-            return value;
+            else
+            {
+                Console.WriteLine("{0} // Sum is Even", sum);
+            }
         }
-        static long ReadConsoleAndSumCalculate()
+        static string Repeat(string str, int repeatTimes)
         {
-            int ConsoleA = 0;
-            int ConsoleB = 0;
-
-            ConsoleA = ReadConsoleValue("a");
-            ConsoleB = ReadConsoleValue("b");
-
-            return SumCalculate(ConsoleA, ConsoleB);
+            if (repeatTimes-- > 0)
+            {
+                return str + Repeat(str, repeatTimes);
+            }
+            else
+            {
+                return null;
+            }
         }
         static void Main(string[] args)
         {
-            Console.WriteLine("\r\n 03-homework-operations\r\n");
+            Console.WriteLine("\r\n a.tkachenko/homework/04-methods \r\n"); 
+            
+            Console.WriteLine("Get Max/Min:");
+            int a = -5;
+            int b = 3;
+            int c = 15;
+            Console.WriteLine("Enter numbers: {0} {1} {2}", a, b, c);
+            Console.WriteLine("Max {0}", GetMax(a, b, c));
+            Console.WriteLine("Min {0}\r\n", GetMin(a, b, c));
 
-            Console.WriteLine("={0}", SumCalculate(10, 12));
-            Console.WriteLine("={0}", SumCalculate(5, 2));  
 
-            Console.WriteLine("={0}", ReadConsoleAndSumCalculate());
+            Console.WriteLine("Calculate Sum:");
+            int d = -5;
+            int e = 4;
+            int oddResult;
+            Console.Write("{0} + {1} = ", d, e);
+            ShowSum(TrySumifOdd(d, e, out oddResult), oddResult);
+
+            Console.Write("\r\n");
+            string _str = "str ";
+            int repeatTimes = 3;
+            Console.WriteLine("Repeat \"{0}\" {1} times:", _str, repeatTimes);
+            Console.Write("{0}", Repeat(_str, repeatTimes));
 
             Console.Write("\r\n");
         }
