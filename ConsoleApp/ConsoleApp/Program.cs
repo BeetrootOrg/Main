@@ -27,6 +27,23 @@ namespace ConsoleApp
 
             TimeSpan diff = now - date;
             Console.WriteLine(diff);
+            Console.WriteLine(diff.Days);
+            Console.WriteLine(diff.Seconds);
+            Console.WriteLine(diff.TotalSeconds);
+            Console.WriteLine(diff.TotalMinutes);
+
+            TimeSpan small = new TimeSpan(0, 0, 1);
+            Console.WriteLine(small.TotalMinutes);
+
+            // how to add something to datetitme
+            // option 1 - call AddSMTHG()
+            DateTime date1 = date.AddDays(5);
+            Console.WriteLine(date);
+            Console.WriteLine(date1);
+
+            date1 = date.AddMonths(1).AddDays(2).AddMinutes(5);
+            Console.WriteLine(date1);
+            Console.WriteLine(date1.AddMonths(1));
         }
     }
 }
