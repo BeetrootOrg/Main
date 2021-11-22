@@ -102,7 +102,7 @@ namespace FirstProject
         {
             if (a % 3 == 0 || b % 3 == 0)
             {
-                summ = a + b * 2;
+                summ = (a + b) * 2;
                 return true;
             }
             summ = 0;
