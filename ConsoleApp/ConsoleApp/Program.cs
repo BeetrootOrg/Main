@@ -27,12 +27,12 @@ namespace ConsoleApp
 
         static int Gcd(int a, int b)
         {
-            int c = 0;
-            for (int i = 1; i < Math.Max(a, b); i++)
+            int min = Math.Min(a, b);
+            for (int i = min; i > 0; i--) 
             {
-                if (a % i == 0 && b % i == 0) { c = i; }
+                if (a % i == 0 && b % i == 0) { return i; }
             }
-            return c;
+            return 0;
         }
     }
 }
