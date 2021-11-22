@@ -12,7 +12,6 @@ namespace MyApp
         }
         public static double RoundNumber(double x)
         {
-           
             return ((x / 5) +1) * 5 + ((x % 5) > 0 ? 5 : 0);
         }
     }
