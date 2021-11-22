@@ -19,7 +19,7 @@ namespace MyApp
 
             int a = 30;
             int b = 12;
-            Console.WriteLine(Gcd(30, 12));
+            Console.WriteLine(Gcd(a, b));
         }
 
         //------------------------------------------------------------------
@@ -28,6 +28,7 @@ namespace MyApp
         {
             return ((x / 5) +1) * 5 + ((x % 5) > 0 ? 5 : 0);
         }
+
         //------------------------------------------------------------------
 
         public static int Gcd(int a, int b) 
