@@ -11,6 +11,7 @@ int SecondTask (int a, int b)
         if (dec == 0 && a % i == 0 && b % i == 0)
         {
             dec = i;
+            break;
         }
     }
     return dec;
