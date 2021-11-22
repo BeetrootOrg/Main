@@ -41,9 +41,19 @@ namespace ConsoleApp
             Console.WriteLine(date);
             Console.WriteLine(date1);
 
-            date1 = date.AddMonths(1).AddDays(2).AddMinutes(5);
+            date1 = date.AddMonths(1).AddDays(-2).AddMinutes(5);
             Console.WriteLine(date1);
             Console.WriteLine(date1.AddMonths(1));
+
+            // option 2 - with TimeSpan
+            date1 = date1 + timeSpan;
+
+            // option 3 - the same
+            date1 = date1.Add(timeSpan);
+
+            // subtract
+            date1 = date1.Subtract(diff);
+            Console.WriteLine(date1);
         }
     }
 }
