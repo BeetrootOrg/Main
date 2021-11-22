@@ -19,6 +19,14 @@ namespace ConsoleApp
 
             DateTime min = DateTime.MinValue;
             Console.WriteLine(min);
+
+            Console.WriteLine(now > min);
+
+            TimeSpan timeSpan = new TimeSpan(10, 12, 32, 56, 999);
+            Console.WriteLine(timeSpan);
+
+            TimeSpan diff = now - date;
+            Console.WriteLine(diff);
         }
     }
 }
