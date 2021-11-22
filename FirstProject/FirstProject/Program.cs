@@ -1,159 +1,126 @@
-﻿//byte aLongLongName = 5;
-//Console.WriteLine(aLongLongName);
-////
-//byte a = 3;
-//byte b = 4;
-//int c = a + b;
-//Console.WriteLine(c);
-////
-//int mul = a / b;
-//Console.WriteLine(mul);
-////
-//int i = 42;
-//int j = 90;
-//Console.WriteLine(j / i);
-//Console.WriteLine(j % i);
-
-////
-//double x = 3.6;
-//Console.WriteLine(x * x * x + 2 * x * x + 5 * x + 6);
-////
-//decimal y = 3.6m;
-//Console.WriteLine(y * y * y + 2 * y * y + 5 * y + 6);
-////
-//double z = 4;
-//Console.WriteLine(Math.Pow(z, 3) + 2 * Math.Pow(z, 2) + 5 * z + 6);
-
-////
-//int incr = 5;
-//int result1 = incr++;
-//int result2 = ++incr;
-//Console.WriteLine(result1);
-//Console.WriteLine(result2);
-//Console.WriteLine(incr);
-////
-
-//var bool1 = true;
-//var bool2 = false;
-////
-//Console.WriteLine($"AND: { bool1 && bool2}");
-//Console.WriteLine($"OR: { bool1 || bool2}");
-//Console.WriteLine($"EQUAL: { bool1 == bool2}");
-//Console.WriteLine($"NOT bool1: { !bool1}");
-//Console.WriteLine($"NOT bool2: { !bool2}");
-//Console.WriteLine($"XOR: { bool1 ^ bool2}");
-////
-//int first = 1;
-//int second = 2;
-//int third = 1;
-//Console.WriteLine($"first > second:{first > second}");
-//Console.WriteLine($"first < second:{first < second}");
-//Console.WriteLine($"first == third:{first == third}");
-//Console.WriteLine($"first != third:{first != third}");
-//Console.WriteLine($"first != second:{first != second}");
-//Console.WriteLine($"first >= third:{first >= third}");
-//Console.WriteLine($"first >= second:{first >= second}");
-////
-//var bool3 = true;
-//var bool4 = false;
-//var bool5 = false;
-//Console.WriteLine($"AND: { bool3 & bool4 & bool5 }");
-//Console.WriteLine($"OR: {bool3 | bool4 | bool5}");
-////
-//int coolVar1 = 10;
-//int coolVar2 = 3;
-//Console.WriteLine(coolVar1 & coolVar2);
-//Console.WriteLine(coolVar1 | coolVar2);
-//Console.WriteLine(coolVar1 << coolVar2);
-
-////
-//int aa = 8;
-//int bb = 2;
-//aa = aa + bb;
-//aa += bb;
-//aa %= bb;
-//aa -= bb;
-
-//Console.WriteLine(aa);
+﻿using System;
+namespace FirstProject
+{
+    class Program
+    {
+        static void Main()
+        {
+            //1 задание
+            Console.WriteLine(MaxV(33,10,5,11,12));
+            Console.WriteLine(MinV(33, 1, 5, 11, 12));
 
 
-//--HOMEWORK AREA
-//hard task :
-int a = 3;
-int b = 6;
+            //2 задание
+            int a = 5;
+            int b = 6;
 
-b = a + b;
-a = b - a;
-b = b - a;
-
-//1 task:
-// -6*x^3+5*x^2-10*x+15
-
-int x= 3;
-Console.WriteLine(-6*x^3+5*x^2-10*x+15);
-
-//2 task;
-double y = 4;
-Console.WriteLine(Math.Abs(y)*Math.Sin(y));
-
-using System;
-namespace FirstProject;
-//{
-//3 task 
-int j = 2;
-Console.WriteLine(Math.Pow(Math.PI,2)*j);
-
-//4 task
-int c = 5;
-int d = 6;
-Console.WriteLine(Math.Max(c, d));
-//    class Program
-//    {
-//        static void Main()
-//        {
-//            double result = Foo(5.5);
-//            Console.WriteLine(result);
-//            Concat("Hello", "Dima");
-//            string str = "Hello";
-//            Console.WriteLine(AddIfOdd(2,4));
-//        }
-//        static double Foo(double x) => x * x * x + 5 * x * x + 6;
-
-
-
-//        static void Concat(string str1, string str2)
-//        {
-//            Console.WriteLine($"{str1},{str2}");
-//        }
-//        static void Increment(int i)
-//        {
-//            i++;
-//            Console.WriteLine(i);
-//        }
-//        static void Add(string str1, string str2)
-//        {
-//            str1 += str2;
-//            Console.WriteLine($"In add:{ str1}");
-
-
-//        }
-//        static void AddRef(ref string str1, string str2)
-//        {
-//            str1 += str2;
-//            Console.WriteLine($"In Ref add:{ str1}");
-
-//        }
-//        static int AddIfOdd(int i1,int i2)
-//        {
-//            return i1 % 2 == 0 && i2 % 2 == 0 ? i1+i2 :  0;
-        static int AddIfOdd(int i1,int i2)
-//        }
-//    }
-            return i1 % 2 == 0 && i2 % 2 == 0 ? i1+i2 :  0;
-            
+            int summ;
+            if(TryMulIfDividedByThree(a,b,out summ))
+            {
+                Console.WriteLine(summ);    
+            }
+            else
+            {
+                Console.WriteLine("Error");
+            }
+            //3 задание 
+            Console.WriteLine(Repeat("str", 5));
         }
+     
+
+
+
+
+
+        //Находим максимальное значение 
+
+        static int MaxV(int n1, int n2)
+        {
+            int res = 0;
+            res = n2 > n1 ? n2 : n1;
+            return res;
+        }
+        static int MaxV(int n1, int n2, int n3)
+        {
+            int res = 0;
+            res = n3 > n2 ? n3 : n2;
+            res = res > n1 ? res : n1;
+            return res;
+        }
+        static int MaxV(int n1, int n2, int n3, int n4)
+        {
+            int res = 0;
+            res = n4 > n3 ? n4 : n3;
+            res = res > n2 ? res : n2;
+            res = res > n1 ? res : n1;
+            return res;
+        }
+        static int MaxV(int n1, int n2, int n3, int n4, int n5)
+        {
+            int res = 0;
+            res = n5 > n4 ? n5 : n4;
+            res = res > n3 ? res : n3;
+            res = res > n2 ? res : n2;
+            res = res > n1 ? res : n1;
+            return res;
+
+        }
+        //находим минимальное значение
+        static int MinV(int n1, int n2)
+        {
+            int res = 0;
+            res = n2 < n1 ? n2 : n1;
+            return res;
+        }
+        static int MinV(int n1, int n2, int n3)
+        {
+            int res = 0;
+            res = n3 < n2 ? n3 : n2;
+            res = res < n1 ? res : n1;
+            return res;
+        }
+        static int MinV(int n1, int n2, int n3, int n4)
+        {
+            int res = 0;
+            res = n4 < n3 ? n4 : n3;
+            res = res < n2 ? res : n2;
+            res = res < n1 ? res : n1;
+            return res;
+        }
+        static int MinV(int n1, int n2, int n3, int n4, int n5)
+        {
+            int res = 0;
+            res = n5 < n4 ? n5 : n4;
+            res = res < n3 ? res : n3;
+            res = res < n2 ? res : n2;
+            res = res < n1 ? res : n1;
+            return res;
+
+        }
+        // Вывести произведение чисел если кратно 3
+        static bool TryMulIfDividedByThree(int a,int b,out int summ)
+        {
+            if (a % 3 == 0 || b % 3 == 0)
+            {
+                summ = a + b * 2;
+                return true;
+            }
+            summ = 0;
+            return false;
+        }
+
+        // Повтор строки введеного кол-во раз
+        static string Repeat(string str, int num)
+        {
+            string res = "str";
+            for (int i = 0; i <= num; i++)
+            {
+                res += str;
+            }
+            return res;
+        }
+
+
+
     }
-
 }
-
-//}
