@@ -27,8 +27,7 @@ namespace ConsoleApp
 
         static int Gcd(int a, int b)
         {
-            int min = Math.Min(a, b);
-            for (int i = min; i > 0; i--) 
+            for (int i = Math.Min(a, b); i > 0; i--) 
             {
                 if (a % i == 0 && b % i == 0) { return i; }
             }
