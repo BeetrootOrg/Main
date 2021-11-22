@@ -96,6 +96,9 @@ Console.WriteLine(-6*x^3+5*x^2-10*x+15);
 double y = 4;
 Console.WriteLine(Math.Abs(y)*Math.Sin(y));
 
+using System;
+namespace FirstProject;
+//{
 //3 task 
 int j = 2;
 Console.WriteLine(Math.Pow(Math.PI,2)*j);
@@ -104,10 +107,53 @@ Console.WriteLine(Math.Pow(Math.PI,2)*j);
 int c = 5;
 int d = 6;
 Console.WriteLine(Math.Max(c, d));
+//    class Program
+//    {
+//        static void Main()
+//        {
+//            double result = Foo(5.5);
+//            Console.WriteLine(result);
+//            Concat("Hello", "Dima");
+//            string str = "Hello";
+//            Console.WriteLine(AddIfOdd(2,4));
+//        }
+//        static double Foo(double x) => x * x * x + 5 * x * x + 6;
 
 
 
+//        static void Concat(string str1, string str2)
+//        {
+//            Console.WriteLine($"{str1},{str2}");
+//        }
+//        static void Increment(int i)
+//        {
+//            i++;
+//            Console.WriteLine(i);
+//        }
+//        static void Add(string str1, string str2)
+//        {
+//            str1 += str2;
+//            Console.WriteLine($"In add:{ str1}");
 
 
+//        }
+//        static void AddRef(ref string str1, string str2)
+//        {
+//            str1 += str2;
+//            Console.WriteLine($"In Ref add:{ str1}");
 
+//        }
+//        static int AddIfOdd(int i1,int i2)
+//        {
+//            return i1 % 2 == 0 && i2 % 2 == 0 ? i1+i2 :  0;
+        static int AddIfOdd(int i1,int i2)
+//        }
+//    }
+            return i1 % 2 == 0 && i2 % 2 == 0 ? i1+i2 :  0;
+            
+        }
+    }
 
+}
+
+//}
