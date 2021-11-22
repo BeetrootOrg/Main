@@ -54,6 +54,16 @@ namespace ConsoleApp
             // subtract
             date1 = date1.Subtract(diff);
             Console.WriteLine(date1);
+
+            // RANDOM
+            Random rand = new Random((int)DateTime.Now.Ticks);
+            Console.WriteLine(rand.Next());
+            Console.WriteLine(rand.Next(10));
+            Console.WriteLine(rand.Next(15, 20));
+
+            Console.WriteLine(rand.NextDouble());
+            Console.WriteLine(rand.NextSingle());
+            Console.WriteLine(rand.NextInt64());
         }
     }
 }
