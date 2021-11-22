@@ -6,52 +6,29 @@ namespace Homework
     {
         static void Main(string[] args)
         {
-            
+            Console.WriteLine(MaxV(1,2));
+                Console.WriteLine(MaxV(2,3,5,6,7));
         }
 
         //створити метод Max приймає від 2 до 5 аргументів та повертає max відповідно значення серед цих аргументів
-        public static int MaxV(int? v1, int? v2, int? v3 = null, int? v4 = null, int? v5 = null)
+        public static int MaxV(int v1, int v2, int v3 = -2147483648, int v4 = -2147483648, int v5 = -2147483648)
         {
             int result = 0;
-            if (v3 != null)
-            {
-                if (v4 != null)
-                {
-                    if (v5 != null)
-                    {
-                        result = v5.Value > v4.Value ? v5.Value : v4.Value;
-                    }
-                    else result = v4.Value;
-                    result = result > v3.Value ? result : v3.Value;
-                }
-                else result = v3.Value;
-                result = result > v2.Value ? result : v2.Value;
-            }
-            else result = v2.Value;
-            result = result > v1.Value ? result : v1.Value;
+            result = v5 > v4 ? v5 : v4;
+            result = result > v3 ? result : v3;
+            result = result > v2 ? result : v2;
+            result = result > v1 ? result : v1;
             return result;
         }
 
         //створити метод Min приймає від 2 до 5 аргументів та повертає min відповідно значення серед цих аргументів
-        public static int MinV(int? v1, int? v2, int? v3 = null, int? v4 = null, int? v5 = null)
+        public static int MinV(int v1, int v2, int v3 = 2147483647, int v4 = 2147483647, int v5 = 2147483647)
         {
             int result = 0;
-            if (v3 != null)
-            {
-                if (v4 != null)
-                {
-                    if (v5 != null)
-                    {
-                        result = v5.Value < v4.Value ? v5.Value : v4.Value;
-                    }
-                    else result = v4.Value;
-                    result = result < v3.Value ? result : v3.Value;
-                }
-                else result = v3.Value;
-                result = result < v2.Value ? result : v2.Value;
-            }
-            else result = v2.Value;
-            result = result < v1.Value ? result : v1.Value;
+            result = v5 < v4 ? v5 : v4;
+            result = result < v3 ? result : v3;
+            result = result < v2 ? result : v2;
+            result = result < v1 ? result : v1;
             return result;
         }
 
@@ -61,7 +38,7 @@ namespace Homework
         {
             if(var1%3==0 || var2 % 3 == 0)
             {
-                result = var1 / var2;
+                result = var1 * var2;
                 return true;
             }
             else
