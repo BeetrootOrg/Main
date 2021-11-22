@@ -1,4 +1,9 @@
-﻿namespace MyApp
+﻿using System;
+/// <summary>
+/// 
+/// </summary>
+
+namespace MyApp
 {
     public class Program
     {
