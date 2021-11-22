@@ -1,5 +1,4 @@
-﻿Console.WriteLine(Gcd(25,10));
-
+﻿
 static int RoundToNext5(int n)
 {
 	int x = 0;
