@@ -24,7 +24,7 @@ namespace FirstProject
                 Console.WriteLine("Error");
             }
             //3 задание 
-            Console.WriteLine(Repeat("str", 5));
+            Console.WriteLine(Repeat("gav ", 5));
         }
      
 
@@ -102,7 +102,7 @@ namespace FirstProject
         {
             if (a % 3 == 0 || b % 3 == 0)
             {
-                summ = (a + b) * 2;
+                summ = a*b;
                 return true;
             }
             summ = 0;
@@ -112,7 +112,9 @@ namespace FirstProject
         // Повтор строки введеного кол-во раз
         static string Repeat(string str, int num)
         {
-            string res = "str";
+            string res="";
+            //теперь любое слово будет работать)
+
             for (int i = 0; i <= num; i++)
             {
                 res += str;
