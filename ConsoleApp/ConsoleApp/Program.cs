@@ -64,6 +64,22 @@ namespace ConsoleApp
             Console.WriteLine(rand.NextDouble());
             Console.WriteLine(rand.NextSingle());
             Console.WriteLine(rand.NextInt64());
+
+            Console.WriteLine("Start the game");
+            while (true)
+            {
+                Console.ReadLine();
+                int random = rand.Next(0, 6);
+                if (random == 0)
+                {
+                    Console.WriteLine("You killed");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine($"You got {random}. Continue...");
+                }
+            }
         }
     }
 }
