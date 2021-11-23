@@ -3,73 +3,89 @@
     using System;
     class ConsoleApp
     {
-        static int GetMax(int a, int b, int c)
+        static int F(int n)
         {
-            return Math.Max(Math.Max(a, b), c);
-        }
-        static int GetMin(int a, int b, int c)
-        {
-            return Math.Min(Math.Min(a, b), c);
-        }
-        static bool TrySumifOdd(int a, int b, out int result)
-        {
-            result = a + b;
-            if ((result & 1) == 1)
-            {                
-                return true;
+            if (n == 0)
+            {
+                return 1;
             }
             else
             {
-                return false;
+                return n - M(F(n - 1));
             }
         }
-        static void ShowSum(bool executResult, int sum)
+        static int M(int n)
         {
-            if(executResult == true)
+            if (n == 0)
             {
-                Console.WriteLine("{0} // Sum is Odd", sum);
+                return 0;
             }
             else
             {
-                Console.WriteLine("{0} // Sum is Even", sum);
+                return n - F(M(n - 1));
             }
         }
-        static string Repeat(string str, int repeatTimes)
+        static UInt64 Pow(UInt32 x, UInt32 y)
         {
-            if (repeatTimes-- > 0)
+            UInt64 result;
+
+            if(y == 0)
             {
-                return str + Repeat(str, repeatTimes);
+                return 1;
+            }
+            if(x == 0)
+            {
+                if (y == 0)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+
+            result = x;
+            for (int i = 1; i < y; i++)
+            {
+                result *= x;
+            }
+            return result;
+        }
+        static string RecursiveDataConsole(int n)
+        {
+            if (n == 1)
+            {
+                return "1 ";
             }
             else
             {
-                return null;
+                return (RecursiveDataConsole(n - 1) + n).ToString() + " ";
             }
         }
         static void Main(string[] args)
         {
-            Console.WriteLine("\r\n a.tkachenko/homework/04-methods \r\n"); 
-            
-            Console.WriteLine("Get Max/Min:");
-            int a = -5;
-            int b = 3;
-            int c = 15;
-            Console.WriteLine("Enter numbers: {0} {1} {2}", a, b, c);
-            Console.WriteLine("Max {0}", GetMax(a, b, c));
-            Console.WriteLine("Min {0}\r\n", GetMin(a, b, c));
+            Console.WriteLine("\r\n a.tkachenko/homework/05-debug \r\n");
 
+            Console.WriteLine("1. F(n), M(n):");
+            for (int n = 0; n < 10; n++)
+            {
+                Console.Write("F({0}) = {1}; ", n, F(n));
+                Console.Write("M({0}) = {1}\r\n", n, M(n));
+            }
 
-            Console.WriteLine("Calculate Sum:");
-            int d = -5;
-            int e = 4;
-            int oddResult;
-            Console.Write("{0} + {1} = ", d, e);
-            ShowSum(TrySumifOdd(d, e, out oddResult), oddResult);
+            Console.WriteLine("\r\n2. Pow(X, Y):");
+            for (UInt32 x = 0; x < 5; x++)
+            {
+                for (UInt32 y = 0; y < 7; y++)
+                {
+                    Console.Write("{0}^{1} = {2}; ", x, y, Pow(x, y));
+                }
+                Console.Write("\r\n");
+            }
 
-            Console.Write("\r\n");
-            string _str = "str ";
-            int repeatTimes = 3;
-            Console.WriteLine("Repeat \"{0}\" {1} times:", _str, repeatTimes);
-            Console.Write("{0}", Repeat(_str, repeatTimes));
+            Console.WriteLine("\r\n3. RecursiveDataConsole(10):");
+            Console.WriteLine(RecursiveDataConsole(10));
 
             Console.Write("\r\n");
         }
