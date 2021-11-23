@@ -9,16 +9,9 @@
     int max = Math.Max(x, y);
     int min = Math.Min(x, y);
 
-    if (x == y)
+    for (int i = min; i <= max; i++)
     {
-        sum = x;
-    }
-    else
-    {
-        for (int i = min; i <= max; i++)
-        {
-            sum += i;
-        }
+        sum += i;
     }
     Console.WriteLine($"Sum: {sum}");
 }
