@@ -12,7 +12,7 @@ namespace ConsoleApp
             Console.WriteLine(M(4));
             //Pow method
             Console.WriteLine("Pow method");
-            Console.WriteLine(Pow(2, 5));
+            Console.WriteLine(Pow(2, 3));
 
             //AllNumbers method
             Console.WriteLine("AllNumbers method");
@@ -35,7 +35,6 @@ namespace ConsoleApp
         static int Pow(int x, int y)
         {
             if (y == 0) return 1;
-            if (y == 1) return x;
             return x > 0 ? x * Pow(x, y - 1) : -x * Pow(x, y - 1);
         }
 
@@ -43,7 +42,14 @@ namespace ConsoleApp
         static void AllNumbers(int n)
         {
             if (n > 1) AllNumbers(n - 1);
-            Console.WriteLine(n);
+            if (n > 0)
+            {
+                Console.WriteLine(n);
+            }
+            else
+            {
+                Console.WriteLine("The number is less than 0");
+            }
         }
     }
 }
