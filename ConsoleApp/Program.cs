@@ -31,11 +31,11 @@ namespace ConsoleApp
  
             Console.WriteLine(Repeat("tc",1));
         }
-        static int FindMin(int a, int b, int c= 32767, int d= 32767, int e= 32767)
+        static int FindMin(int a, int b, int c= 2147483647, int d= 2147483647, int e= 2147483647)
         {
             return (Math.Min(Math.Min(Math.Min(Math.Min(a, b),c),d),e));
         }
-        static int FindMax(int a, int b, int c = -32767, int d = -32767, int e = -32767)
+        static int FindMax(int a, int b, int c = -2147483648 , int d = -2147483648, int e = -2147483648)
         {
             return (Math.Max(Math.Max(Math.Max(Math.Max(a, b), c), d), e));
         }
