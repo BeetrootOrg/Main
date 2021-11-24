@@ -24,6 +24,18 @@ namespace ConsoleApp
 
             UpdateFirstElementRef(ref array);
             PrintArray(array);
+
+            int[] newArr = new int[10];
+            Console.WriteLine("Before init");
+            PrintArray(newArr);
+
+            for (int i = 0; i < newArr.Length; i++)
+            {
+                newArr[i] = i;
+            }
+
+            Console.WriteLine("After init");
+            PrintArray(newArr);
         }
 
         static void PrintArray(int[] arr)
