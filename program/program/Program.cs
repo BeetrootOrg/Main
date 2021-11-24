@@ -12,8 +12,8 @@ namespace  ConsoleApp
 
             //second task
 
-            Console.WriteLine("Third task:");
-            Pow(1, 4);
+            Console.WriteLine("Second task:");
+            Console.WriteLine(Pow(4, 3));
 
 
             //third task
@@ -39,12 +39,16 @@ namespace  ConsoleApp
 
         //second task
 
-        static int Pow(int x, int y)
+        static double Pow(int x, int y)
         {
-            Console.WriteLine(x);
-          
-
+            if (y == 0)
+                return 1;
+            if (y > 0)
+                return Pow(x, y - 1) * x;
+            return 1.0 / (Pow(x, -y));
         }
+
+
 
         //third task
 
