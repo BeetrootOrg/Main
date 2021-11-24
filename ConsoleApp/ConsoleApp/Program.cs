@@ -6,117 +6,80 @@ namespace ConsoleApp
     {
         static void Main()
         {
-            double result = FuncWithABigName(5.5);
-            Console.WriteLine($"Result: {result}");
-            Concat("Hi", "Sasha");
+            DateTime date = new DateTime(2021, 10, 12, 15, 05, 10);
+            Console.WriteLine(date);
+            Console.WriteLine($"{date:f}");
 
-            int ai = 0;
-            Increment(ai);
-            Console.WriteLine($"In Main:{ai}");
+            DateTime now = DateTime.Now;
+            Console.WriteLine(now);
+            Console.WriteLine(now.DayOfWeek);
 
-            ai = 0;
-            IncrementRef(ref ai);
-            Console.WriteLine($"In Main:{ai}");
+            Console.WriteLine(date.Ticks);
 
-            string str = "Hello";
-            Add(str, ", Sasha");
-            Console.WriteLine($"In Main:{str}");
+            DateTime min = DateTime.MinValue;
 
-            str = "Hello";
-            AddRef(ref str, ", Sasha");
-            Console.WriteLine($"In Main:{str}");
+            Console.WriteLine(now > min);
+
+            TimeSpan timeSpan = new TimeSpan(10, 12, 32, 52, 999);
+
+            Console.WriteLine(timeSpan);
+
+            TimeSpan diff = now - date;
+            Console.WriteLine(diff);
+            Console.WriteLine(diff.Days);
+            Console.WriteLine(diff.Seconds);
+            Console.WriteLine(diff.TotalSeconds);
+
+            //add something to datetime
+            //1 -call AddSMTHNG
+            DateTime date1 = date.AddDays(2);
+            Console.WriteLine(date);
+            Console.WriteLine(date1);
+
+            date1 = date.AddMonths(1).AddDays(2).AddHours(4);
+            Console.WriteLine(date1);
+
+            //2 - with TimeSpan
+            date1 = date1 + timeSpan;
 
 
-            Console.WriteLine(AddIffEven(4, 10));
+            //3 - with TimeSpan
+            date1 = date1.Add(timeSpan);
 
-            const int i1 = 2;
-            const int i2 = 11;
-            int sum;
-            if (TryAddIfEven(i1, i2, out sum))
+            //4 - substract
+            date1 = date1.Subtract(diff);
+
+            Console.WriteLine(date1);
+
+
+            //Random
+            Random rand = new Random((int)DateTime.Now.Ticks);
+
+            Console.WriteLine(rand.Next());
+            Console.WriteLine(rand.Next(5));
+            Console.WriteLine(rand.Next(10, 48));
+            Console.WriteLine(rand.NextDouble());
+            Console.WriteLine(rand.NextSingle());
+            Console.WriteLine(rand.NextInt64());
+
+            Console.WriteLine("Start the game.");
+            while (true)
             {
-                Console.WriteLine($"Sum equal to {sum}");
+                Console.ReadLine();
+                int random = rand.Next(0, 6);
+
+                if (random == 0)
+                {
+                    Console.WriteLine("You Killed.");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine($"You got {random}. Continue...");
+                }
             }
-            else
-            {
-                Console.WriteLine($"Can't count sum because inputs are not even");
-            }
-
-            Console.WriteLine(SomeMath(5));
-            Console.WriteLine(SomeMath(5, 4));
-            Console.WriteLine(SomeMath(5, 4, 6));
-            Console.WriteLine(SomeMath(5.0, 4, 6));
-            Console.WriteLine(SomeMath(5, 4, 6, 20));
-            Console.WriteLine(SomeMath(b: 5, a: 4));
-
-            Console.WriteLine("SUM");
-            Console.WriteLine(Sum(1, 5));
-            Console.WriteLine(Sum(3, 1));
-            Console.WriteLine(Sum(1, 1));
-
-
-            Console.WriteLine(Fbnc(4));
         }
 
-        static double FuncWithABigName(double x) => x * x * x + 5 * x * x + 6;
 
-        static void Concat(string str1, string str2) => Console.WriteLine($"{str1}, {str2}");
-
-        static void IncrementRef(ref int i)
-        {
-            ++i;
-            Console.WriteLine($"In Increment: {i}");
-        }
-
-        static void Increment(int i)
-        {
-            ++i;
-            Console.WriteLine($"In Increment: {i}");
-        }
-
-        static void Add(string str1, string str2)
-        {
-            str1 += str2;
-            Console.WriteLine($"In Add: {str1}");
-        }
-
-        static void AddRef(ref string str1, string str2)
-        {
-            str1 += str2;
-            Console.WriteLine($"In Add: {str1}");
-        }
-
-        static int AddIffEven(int i1, int i2) => i1 % 2 == 0 && i2 % 2 == 0 ? i1 + i2 : 0;
-
-
-        static bool TryAddIfEven(int i1, int i2, out int sum)
-        {
-            if (i1 % 2 == 0 && i2 % 2 == 0)
-            {
-                sum = i1 + i2;
-                return true;
-            }
-            sum = 0;
-            return false;
-        }
-
-        static int SomeMath(int a, int b = 3) => a + b;
-        static int SomeMath(int a, int b, int c = 3) => a + b + c;
-        static double SomeMath(double a, int b, int c = 3) => a + b + c;
-        static double SomeMath(int a, int b, int c = 3, int d = 10) => Math.Sqrt(a + b + c + d);
-
-        static int Sum(int from, int to)
-        {
-            if (from > to) return Sum(to, from);
-            if (from == to) return from;
-            return from + Sum(from + 1, to);
-
-        }
-
-        static int Fbnc(int n)
-        {
-            if (n == 0) return 0;
-            if (n == 1) return 1;
-            return Fbnc(n - 1) + Fbnc(n - 2);
-        }
     }
 }
