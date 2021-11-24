@@ -64,7 +64,8 @@ namespace ConsoleApp
             PrintArray(Sort(new[] { 1, 2, 3, 4, 5 }));
 
             // sorted vice versa
-            PrintArray(Sort(new[] { 5, 4, 3, 2, 1 }));
+            var sorted = Sort(new[] { 5, 4, 3, 2, 1 });
+            PrintArray(sorted);
 
             ShowAll();
             ShowAll(1, 2, 3);
@@ -88,6 +89,8 @@ namespace ConsoleApp
             {
                 new int[] {1,2,3,4,5},
                 new int[] {6,7,8,9},
+                new int[] {10},
+                new int[] {11, 12},
             };
 
             foreach (var innerArray in jagged)
@@ -97,6 +100,19 @@ namespace ConsoleApp
                     Console.WriteLine(elem);
                 }
             }
+
+            Console.WriteLine("Ranges");
+            PrintArray(sorted[0..2]); // first two elements
+            PrintArray(sorted[0..^0]); // from first to the last
+
+            Console.WriteLine("0..^1");
+            PrintArray(sorted[0..^1]); // from first to the element before last
+
+            Console.WriteLine("^2..^1");
+            PrintArray(sorted[^2..^1]); // 
+
+            Console.WriteLine("^5..^0");
+            PrintArray(sorted[^5..^0]); // 
         }
 
         static void ShowAll(params int[] arr)
