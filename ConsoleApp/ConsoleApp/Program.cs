@@ -6,117 +6,91 @@ namespace ConsoleApp
     {
         static void Main()
         {
-            double result = FuncWithABigName(5.5);
-            Console.WriteLine($"Result: {result}");
-            Concat("Hi", "Sasha");
+            //Max Method
+            Console.WriteLine("Max Method");
+            Console.WriteLine(Max(4, 8));
+            Console.WriteLine(Max(4, 8, 2));
+            Console.WriteLine(Max(400, 21, 47));
+            Console.WriteLine(Max(51, 34, 49, 15));
+            Console.WriteLine(Max(51, 34, 49, 27, 19));
 
-            int ai = 0;
-            Increment(ai);
-            Console.WriteLine($"In Main:{ai}");
+            //Min Method
+            Console.WriteLine("Min Method");
+            Console.WriteLine(Min(4, 8));
+            Console.WriteLine(Min(4, 8, 2));
+            Console.WriteLine(Min(400, 21, 47));
+            Console.WriteLine(Min(51, 34, 49, 15));
+            Console.WriteLine(Min(51, 34, 49, 27, 19));
 
-            ai = 0;
-            IncrementRef(ref ai);
-            Console.WriteLine($"In Main:{ai}");
-
-            string str = "Hello";
-            Add(str, ", Sasha");
-            Console.WriteLine($"In Main:{str}");
-
-            str = "Hello";
-            AddRef(ref str, ", Sasha");
-            Console.WriteLine($"In Main:{str}");
-
-
-            Console.WriteLine(AddIffEven(4, 10));
-
-            const int i1 = 2;
-            const int i2 = 11;
+            //TryMulIfDividedByThree Method
+            Console.WriteLine("TryMulIfDividedByThree Method");
+            int x = SetIntVar("X");
+            int y = SetIntVar("Y");
             int sum;
-            if (TryAddIfEven(i1, i2, out sum))
+
+            if (TryMulIfDividedByThree(x, y, out sum))
             {
-                Console.WriteLine($"Sum equal to {sum}");
+                Console.WriteLine($"Multiplication of {x} and {y} equals {sum}");
             }
             else
             {
-                Console.WriteLine($"Can't count sum because inputs are not even");
+                Console.WriteLine($"Both numbers can't be divided by 3");
             }
 
-            Console.WriteLine(SomeMath(5));
-            Console.WriteLine(SomeMath(5, 4));
-            Console.WriteLine(SomeMath(5, 4, 6));
-            Console.WriteLine(SomeMath(5.0, 4, 6));
-            Console.WriteLine(SomeMath(5, 4, 6, 20));
-            Console.WriteLine(SomeMath(b: 5, a: 4));
-
-            Console.WriteLine("SUM");
-            Console.WriteLine(Sum(1, 5));
-            Console.WriteLine(Sum(3, 1));
-            Console.WriteLine(Sum(1, 1));
-
-
-            Console.WriteLine(Fbnc(4));
+            //Repeat Method
+            Console.WriteLine("Repeat Method");
+            Console.WriteLine(Repeat("Test", 5));
         }
 
-        static double FuncWithABigName(double x) => x * x * x + 5 * x * x + 6;
+        //Max Method
+        static int Max(int a, int b) => Math.Max(a, b);
+        static int Max(int a, int b, int c) => Math.Max(a, Math.Max(b, c));
+        static int Max(int a, int b, int c, int d) => Math.Max(a, Math.Max(b, Math.Max(c, d)));
+        static int Max(int a, int b, int c, int d, int e) => Math.Max(a, Math.Max(b, Math.Max(c, Math.Max(d, e))));
 
-        static void Concat(string str1, string str2) => Console.WriteLine($"{str1}, {str2}");
+        //Min Method
+        static int Min(int a, int b) => Math.Min(a, b);
+        static int Min(int a, int b, int c) => Math.Min(a, Math.Min(b, c));
+        static int Min(int a, int b, int c, int d) => Math.Min(a, Math.Min(b, Math.Min(c, d)));
+        static int Min(int a, int b, int c, int d, int e) => Math.Min(a, Math.Min(b, Math.Min(c, Math.Min(d, e))));
 
-        static void IncrementRef(ref int i)
+        //TryMulIfDividedByThree Method with input method from previous HW
+        static int SetIntVar(string varName)
         {
-            ++i;
-            Console.WriteLine($"In Increment: {i}");
-        }
-
-        static void Increment(int i)
-        {
-            ++i;
-            Console.WriteLine($"In Increment: {i}");
-        }
-
-        static void Add(string str1, string str2)
-        {
-            str1 += str2;
-            Console.WriteLine($"In Add: {str1}");
-        }
-
-        static void AddRef(ref string str1, string str2)
-        {
-            str1 += str2;
-            Console.WriteLine($"In Add: {str1}");
-        }
-
-        static int AddIffEven(int i1, int i2) => i1 % 2 == 0 && i2 % 2 == 0 ? i1 + i2 : 0;
-
-
-        static bool TryAddIfEven(int i1, int i2, out int sum)
-        {
-            if (i1 % 2 == 0 && i2 % 2 == 0)
+            bool success = true;
+            string? varInput;
+            int intInput;
+            do
             {
-                sum = i1 + i2;
+                Console.WriteLine(success ? $"Please define {varName} variable" : $"{varName} should be a number, so please define {varName} variable again");
+                varInput = Console.ReadLine();
+                success = int.TryParse(varInput, out intInput);
+            }
+            while (!success);
+            return intInput;
+        }
+
+        static bool TryMulIfDividedByThree(int a, int b, out int sum)
+        {
+            if (a % 3 == 0 || b % 3 == 0)
+            {
+                sum = a * b;
                 return true;
             }
             sum = 0;
             return false;
         }
 
-        static int SomeMath(int a, int b = 3) => a + b;
-        static int SomeMath(int a, int b, int c = 3) => a + b + c;
-        static double SomeMath(double a, int b, int c = 3) => a + b + c;
-        static double SomeMath(int a, int b, int c = 3, int d = 10) => Math.Sqrt(a + b + c + d);
-
-        static int Sum(int from, int to)
+        //Repeat Method
+        static string Repeat(string str, int n)
         {
-            if (from > to) return Sum(to, from);
-            if (from == to) return from;
-            return from + Sum(from + 1, to);
-
+            string originalStr = str;
+            for (int i = 1; i < n; ++i)
+            {
+                str += " " + originalStr;
+            }
+            return str;
         }
 
-        static int Fbnc(int n)
-        {
-            if (n == 0) return 0;
-            if (n == 1) return 1;
-            return Fbnc(n - 1) + Fbnc(n - 2);
-        }
     }
 }
