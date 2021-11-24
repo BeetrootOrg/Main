@@ -63,29 +63,35 @@
                 return (RecursiveDataConsole(n - 1) + n).ToString() + " ";
             }
         }
+        static long Fact(int n)
+        {
+            if(n == 0)
+            {
+                return 1;
+            }
+            return n * Fact(n - 1);
+        }
+
+        static void printArray(int[]arr)
+        {
+            for(int i = 0; i < arr.Length; i++)
+            {
+                Console.Write("{0} ", arr[i]);
+            }
+            Console.Write("\r\n");
+        }
         static void Main(string[] args)
         {
-            Console.WriteLine("\r\n a.tkachenko/homework/05-debug \r\n");
+            Console.WriteLine("\r\n a.tkachenko/classroom/06-arrays \r\n");
 
-            Console.WriteLine("1. F(n), M(n):");
-            for (int n = 0; n < 10; n++)
-            {
-                Console.Write("F({0}) = {1}; ", n, F(n));
-                Console.Write("M({0}) = {1}\r\n", n, M(n));
-            }
+            // int fact_int = 5;
+            // Console.WriteLine("Factorial ({0}) = {1}", fact_int, Fact(fact_int));
 
-            Console.WriteLine("\r\n2. Pow(X, Y):");
-            for (UInt32 x = 0; x < 5; x++)
-            {
-                for (UInt32 y = 0; y < 7; y++)
-                {
-                    Console.Write("{0}^{1} = {2}; ", x, y, Pow(x, y));
-                }
-                Console.Write("\r\n");
-            }
 
-            Console.WriteLine("\r\n3. RecursiveDataConsole(10):");
-            Console.WriteLine(RecursiveDataConsole(10));
+            int[] array = { 1, 2, 3, 4, 5 };
+            printArray(array);
+            array[1] = 5;
+            printArray(array);
 
             Console.Write("\r\n");
         }
