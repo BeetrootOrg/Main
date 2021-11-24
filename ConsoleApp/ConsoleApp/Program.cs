@@ -91,6 +91,5 @@ namespace ConsoleApp
             }
             return str;
         }
-
     }
 }
