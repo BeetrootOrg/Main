@@ -69,6 +69,20 @@ namespace ConsoleApp
             ShowAll();
             ShowAll(1, 2, 3);
             ShowAll(new []{ 1, 2 });
+
+            int[,] multidim = new int[,]
+            {
+                { 2, 3, 4 }, 
+                { 5, 6, 7 }    
+            };
+
+            Console.WriteLine("MULTI");
+            foreach (var item in multidim)
+            {
+                Console.WriteLine(item);
+            }
+
+            var three = multidim[0, 1];
         }
 
         static void ShowAll(params int[] arr)
