@@ -65,6 +65,18 @@ namespace ConsoleApp
 
             // sorted vice versa
             PrintArray(Sort(new[] { 5, 4, 3, 2, 1 }));
+
+            ShowAll();
+            ShowAll(1, 2, 3);
+            ShowAll(new []{ 1, 2 });
+        }
+
+        static void ShowAll(params int[] arr)
+        {
+            foreach (var el in arr)
+            {
+                Console.WriteLine(el);
+            }
         }
 
         static void PrintArray(int[] arr)
