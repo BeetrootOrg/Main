@@ -37,9 +37,10 @@ namespace ConsoleApp
             Console.WriteLine("After init");
             PrintArray(newArr);
 
-            var copy = newArr;
+            var original = newArr;
 
             Array.Resize(ref newArr, 15);
+            Console.WriteLine(ReferenceEquals(original, newArr));
             Console.WriteLine("After resize to bigger");
             PrintArray(newArr);
 
@@ -50,7 +51,7 @@ namespace ConsoleApp
             newArr[0] = 42;
 
             Console.WriteLine("Get copy");
-            PrintArray(copy);
+            PrintArray(original);
         }
 
         static void PrintArray(int[] arr)
