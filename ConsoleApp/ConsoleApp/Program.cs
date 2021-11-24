@@ -54,6 +54,17 @@ namespace ConsoleApp
 
             Console.WriteLine("Get copy");
             PrintArray(original);
+
+            Console.WriteLine("Sorting");
+
+            // no sort at all
+            PrintArray(Sort(new[] { 3, 5, 2, 6, 7 }));
+
+            // already sorted
+            PrintArray(Sort(new[] { 1, 2, 3, 4, 5 }));
+
+            // sorted vice versa
+            PrintArray(Sort(new[] { 5, 4, 3, 2, 1 }));
         }
 
         static void PrintArray(int[] arr)
@@ -74,6 +85,30 @@ namespace ConsoleApp
         {
             arr[0] = 42;
             arr = new[] { 5, 6, 7 };
+        }
+
+        static int[] Sort(int[] original)
+        {
+            int[] copy = new int[original.Length];
+            Array.Copy(original, copy, original.Length);
+
+            for (int i = 0; i < copy.Length - 1; ++i)
+            {
+                int minIndex = i;
+                for (int j = i + 1; j < copy.Length; ++j)
+                {
+                    if (copy[j] < copy[minIndex])
+                    {
+                        minIndex = j;
+                    }
+                }
+
+                var temp = copy[i];
+                copy[i] = copy[minIndex];
+                copy[minIndex] = temp;
+            }
+
+            return copy;
         }
     }
 }
