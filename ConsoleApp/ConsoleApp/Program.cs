@@ -36,6 +36,14 @@ namespace ConsoleApp
 
             Console.WriteLine("After init");
             PrintArray(newArr);
+
+            Array.Resize(ref newArr, 15);
+            Console.WriteLine("After resize to bigger");
+            PrintArray(newArr);
+
+            Array.Resize(ref newArr, 5);
+            Console.WriteLine("After resize to smaller");
+            PrintArray(newArr);
         }
 
         static void PrintArray(int[] arr)
