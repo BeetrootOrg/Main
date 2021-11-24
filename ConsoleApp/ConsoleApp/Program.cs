@@ -48,6 +48,8 @@ namespace ConsoleApp
             Console.WriteLine("After resize to smaller");
             PrintArray(newArr);
 
+            var temp = newArr[1];
+            temp = 43;
             newArr[0] = 42;
 
             Console.WriteLine("Get copy");
