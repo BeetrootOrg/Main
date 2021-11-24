@@ -87,7 +87,7 @@ namespace ConsoleApp
             arr = new[] { 5, 6, 7 };
         }
 
-        // Insertion sort
+        // Selection sort
         static int[] Sort(int[] original)
         {
             int[] copy = new int[original.Length];
