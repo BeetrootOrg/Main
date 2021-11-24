@@ -68,12 +68,12 @@ namespace ConsoleApp
 
             ShowAll();
             ShowAll(1, 2, 3);
-            ShowAll(new []{ 1, 2 });
+            ShowAll(new[] { 1, 2 });
 
             int[,] multidim = new int[,]
             {
-                { 2, 3, 4 }, 
-                { 5, 6, 7 }    
+                { 2, 3, 4 },
+                { 5, 6, 7 }
             };
 
             Console.WriteLine("MULTI");
@@ -83,6 +83,20 @@ namespace ConsoleApp
             }
 
             var three = multidim[0, 1];
+
+            int[][] jagged = new[]
+            {
+                new int[] {1,2,3,4,5},
+                new int[] {6,7,8,9},
+            };
+
+            foreach (var innerArray in jagged)
+            {
+                foreach (var elem in innerArray)
+                {
+                    Console.WriteLine(elem);
+                }
+            }
         }
 
         static void ShowAll(params int[] arr)
