@@ -6,68 +6,58 @@ namespace ConsoleApp
     {
         static void Main()
         {
-            DateTime date = new DateTime(1921, 10, 12, 11, 23, 11);
-            Console.WriteLine(date);
-
-            DateTime now = DateTime.Now;
-
-
-            DateTime min = DateTime.MinValue;
-            Console.WriteLine($"now \n");
-            Console.WriteLine(now > min);
-
-            TimeSpan timeSpan = new TimeSpan(10, 12, 3, 12, 312);
-            Console.WriteLine($"{ timeSpan}\n");
-
-            TimeSpan diff = now - date;
-            Console.WriteLine(diff);
-            Console.WriteLine(diff.TotalDays);
-
-            //how 2 add some time
-
-            DateTime date1 = date.AddDays(5);
-            Console.WriteLine(date);
-            Console.WriteLine(date1);
-
-            date1 = date.AddMonths(12).AddDays(12);
-
-            Console.WriteLine(date1.AddMonths(3));
-
-            //TimeSpan
-            date1 = date1 + timeSpan;
-
-            //the same
-            date1 = date1.Add(timeSpan);
-
-            //substract
-            date1 = date1.Subtract(diff);
-            Console.WriteLine(date1);
-
-            //random
-
-            Random rand = new Random((int)DateTime.Now.Ticks);
-            Console.WriteLine(rand.Next());
-            Console.WriteLine(rand.Next(10));
-            Console.WriteLine(rand.Next(1,5));
-
-            Console.WriteLine(rand.NextDouble());
-            Console.WriteLine(rand.NextInt64());
-            Console.WriteLine(rand.NextSingle());
-
-            while (true)
+            /*
+            1
+            F(0) = 1
+            M(0) = 0
+            F(n) = n - M(F(n - 1))
+            M(n) = n - F(M(n - 1))
+            обчислити значення функцій F та M для будь-якого N
+             
+            2 інше:
+            створити функцію Pow(x, y) що буде підносити X в степінь Y(x та y цілі невід'ємні числа)
+            
+            3 ще одне:
+            вивести в консоль всі числа від 1 до N за допомогою рекурсії, сигнатуру метода можете самі вигадати
+            */
+            int a = 3;
+            Console.WriteLine($"First one. Result of method F(n) is {F(a)}\n");
+            static int F(int n)
             {
-                Console.ReadLine();
-                int random = rand.Next(0, 6);
-                if (random == 0)
                 {
-                    Console.WriteLine("You killed");
-                    break;
+                    return (n > 0) ? n - M(F(n - 1)) : 1;
                 }
-                else
+                static int M(int n)
                 {
-                    Console.WriteLine($"You got {random}.Continue");
+                    return (n > 0) ? n - F(M(n - 1)) : 0;
                 }
             }
+
+            int b = 3;
+            
+            Console.WriteLine($"Second one. Result of homemade multiplication method: {Pow(a,b)}\n");
+
+            static int Pow(int n, int o)
+            {
+                return (o > 0) ? n*Pow(n, --o): 1;  
+            }
+            
+            int c = 12;
+            
+            Number(c);
+            static void Number(int a,int d=1)
+            { 
+                if (a > d)
+                {
+                    Console.WriteLine(d);
+                    Number(a,++d);
+                }
+
+                                
+            }
+
+
+
         }
     } 
 }
