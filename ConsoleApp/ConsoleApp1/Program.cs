@@ -1,22 +1,26 @@
-﻿
-Console.WriteLine(Gcd(15, 10));
+﻿Console.WriteLine(Fact(0));
+Console.WriteLine(Fact(1));
+Console.WriteLine(Fact(5));
 
-static int RoundToNext5(int n)
+static long Fact(int n)
 {
-	int x = 0;
-    while ((n + x) % 5 != 0)
-    {
-        x++;
-    }
-    return n + x;
+	if (n == 0|| n == 1) return 1;
+	return n * Fact(n - 1);
 }
 
 static int Gcd(int a, int b)
 {
-    int c = a > b ? b : a; 
-    while(a%c !=0 || b%c !=0 )
+    return Gcd(a, b, Math.Min(a, b));
+}
+
+static int Gcd(int a, int b, int possibleGcd)
+{
+	if(a%possibleGcd == 0 || b % possibleGcd == 0)
     {
-        c--;
+		return possibleGcd;
     }
-    return c;
+    else
+    {
+        return Gcd(a, b, possibleGcd - 1);
+    }
 }
