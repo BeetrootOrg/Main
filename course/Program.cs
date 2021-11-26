@@ -9,7 +9,7 @@
 
         static int[] BubbleSorting(int[] arrayToSort)
         {
-            for (int i = 0; i < arrayToSort.Length - 1; i++)
+            for (int i = 0; i < arrayToSort.Length; i++)
             {
                 for (int j = 0; j < arrayToSort.Length - 1; j++)
                 {
