@@ -7,7 +7,7 @@ namespace FirstProject
         {
             int [] arr ={ 9,12,15,32,2,7};
             int[] arr2 = { 5, 6, 1, 8, 32, 9, 12 };
-            int[] sortArr = QuickSort(arr,0,arr.Length -1);\
+            int[] sortArr = QuickSort(arr,0,arr.Length -1);
             //
             Console.WriteLine("QuickSort arr: ");
             PrintArr(sortArr);
@@ -45,11 +45,11 @@ namespace FirstProject
 
             return piv;
         }
-         static void Swap(ref int leftIn,ref int rightIn)
+        static void Swap(ref int leftIn, ref int rightIn)
         {
-            int temp=leftIn;
-            leftIn=rightIn;
-            rightIn=temp;
+            int temp = leftIn;
+            leftIn = rightIn;
+            rightIn = temp;
         }
         static void PrintArr(int[] arr)
         {
