@@ -5,124 +5,77 @@ namespace FirstProject
     {
         static void Main()
         {
-            //1 задание
-            Console.WriteLine(MaxV(33,10,5,11,12));
-            Console.WriteLine(MinV(33, 1, 5, 11, 12));
+            int [] arr ={ 9,12,15,32,2,7};
+            int[] arr2 = { 5, 6, 1, 8, 32, 9, 12 };
+            int[] sortArr = QuickSort(arr,0,arr.Length -1);\
+            //
+            Console.WriteLine("QuickSort arr: ");
+            PrintArr(sortArr);
+            //
+            BubbleSort(arr2);
+            Console.WriteLine("BubbleSort arr: ");
+            PrintArr(arr2);
 
-
-            //2 задание
-            int a = 5;
-            int b = 6;
-
-            int summ;
-            if(TryMulIfDividedByThree(a,b,out summ))
+        }
+         static int[] QuickSort(int [] array,int minIn , int maxIn)
+        {
+            if (minIn >= maxIn)
             {
-                Console.WriteLine(summ);    
+                return array;
             }
-            else
+            int pivIn = GetPivIn(array,minIn,maxIn);
+            QuickSort(array, minIn, pivIn - 1);
+            QuickSort(array, pivIn + 1, maxIn);
+
+            return array;
+        }
+        private static int GetPivIn(int[] array,int minIn,int maxIn)
+        {
+            int piv = minIn-1;
+            for(int i=minIn; i<=maxIn; i++)
             {
-                Console.WriteLine("Error");
+                if (array[i] < array[maxIn])
+                {
+                    piv++;
+                    Swap(ref array[piv], ref array[i]);
+                }
             }
-            //3 задание 
-            Console.WriteLine(Repeat("gav ", 5));
-        }
-     
+            piv++;
+            Swap(ref array[piv], ref array[maxIn]);
 
-
-
-
-
-        //Находим максимальное значение 
-
-        static int MaxV(int n1, int n2)
-        {
-            int res = 0;
-            res = n2 > n1 ? n2 : n1;
-            return res;
+            return piv;
         }
-        static int MaxV(int n1, int n2, int n3)
+         static void Swap(ref int leftIn,ref int rightIn)
         {
-            int res = 0;
-            res = n3 > n2 ? n3 : n2;
-            res = res > n1 ? res : n1;
-            return res;
+            int temp=leftIn;
+            leftIn=rightIn;
+            rightIn=temp;
         }
-        static int MaxV(int n1, int n2, int n3, int n4)
+        static void PrintArr(int[] arr)
         {
-            int res = 0;
-            res = n4 > n3 ? n4 : n3;
-            res = res > n2 ? res : n2;
-            res = res > n1 ? res : n1;
-            return res;
-        }
-        static int MaxV(int n1, int n2, int n3, int n4, int n5)
-        {
-            int res = 0;
-            res = n5 > n4 ? n5 : n4;
-            res = res > n3 ? res : n3;
-            res = res > n2 ? res : n2;
-            res = res > n1 ? res : n1;
-            return res;
-
-        }
-        //находим минимальное значение
-        static int MinV(int n1, int n2)
-        {
-            int res = 0;
-            res = n2 < n1 ? n2 : n1;
-            return res;
-        }
-        static int MinV(int n1, int n2, int n3)
-        {
-            int res = 0;
-            res = n3 < n2 ? n3 : n2;
-            res = res < n1 ? res : n1;
-            return res;
-        }
-        static int MinV(int n1, int n2, int n3, int n4)
-        {
-            int res = 0;
-            res = n4 < n3 ? n4 : n3;
-            res = res < n2 ? res : n2;
-            res = res < n1 ? res : n1;
-            return res;
-        }
-        static int MinV(int n1, int n2, int n3, int n4, int n5)
-        {
-            int res = 0;
-            res = n5 < n4 ? n5 : n4;
-            res = res < n3 ? res : n3;
-            res = res < n2 ? res : n2;
-            res = res < n1 ? res : n1;
-            return res;
-
-        }
-        // Вывести произведение чисел если кратно 3
-        static bool TryMulIfDividedByThree(int a,int b,out int summ)
-        {
-            if (a % 3 == 0 || b % 3 == 0)
+            for(int i = 0; i < arr.Length; i++)
             {
-                summ = a*b;
-                return true;
+                Console.WriteLine(arr[i]);  
             }
-            summ = 0;
-            return false;
         }
 
-        // Повтор строки введеного кол-во раз
-        static string Repeat(string str, int num)
+        static void BubbleSort(int [] arr)
         {
-            string res="";
-            //теперь любое слово будет работать)
-
-            for (int i = 0; i <= num; i++)
+            for (var i = 1; i < arr.Length; i++)
             {
-                res += str;
+                for (var j = 0; j < arr.Length - i; j++)
+                {
+                    if (arr[j] > arr[j + 1])
+                    {
+                        Swap(ref arr[j], ref arr[j + 1]);
+                    }
+                }
             }
-            return res;
         }
+
 
 
 
     }
+
 }
