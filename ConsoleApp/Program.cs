@@ -6,44 +6,52 @@ namespace ConsoleApp
     {
         static void Main()
         {
-            int[] array = { 1, 2, 3, 4, 5 };
-            array = new[] { 1, 2, 3, 4, 5, 6, 7 };
-            array = new int[4] { 1, 2, 3, 4 };
+            //пузырьковый метод сортировки
+            
+            //declare array at first
 
+            int[] array = { 5,6,2,1,0,23,12,32 };
+            Console.WriteLine("Array before:");
             PrintArray(array);
-            int[] newArray = new int[10];
-            for (int i = 0; i < newArray.Length; i++)
+            var sortedArray = Sort(array);
+            PrintArray(sortedArray);
+
+            static void PrintArray(int[] arr)
             {
-                newArray[i] = i;
+                string str = "";
+                for (int i = 0; i < arr.Length; i++)
+                {
+                    str=str+" "+(arr[i]);
+                }
+                Console.WriteLine(str);
             }
-            Console.WriteLine("After init");
-            PrintArray(newArray);
 
-        static void PrintArray(int[] arr)
-        {
-        for (int i = 0; i<arr.Length; i++)
-			{
-            Console.WriteLine(arr[i]);
-			}
-        }
-
-        static int[] Sort(int[]original)
-            { 
+            static int[] Sort(int[] original)
+            {
                 int[] copy = new int[original.Length];
                 Array.Copy(original, copy, original.Length);
-                for (int i = 0; i < copy.Length; ++i) 
+
+                for (int j=0; j<copy.Length;++j)//проверить длину перебора
                 {
-                    int minIndex = i;
-                    for (int j = i + 1; j < copy.Length; j++)
-                    { 
-                    minIndex = j;
-                    }
+               
+                for (int i =0; i < j ; ++i) //проверить длину перебора
+                {
+                        if (copy[i] > copy[i+1])
+                        {
+                            int tempInt = copy[i];
+                            copy[i]=copy[i+1];
+                            copy[i + 1] = tempInt;
+                        };
                 }
-                var temp = copy[i];
-                copy[i] = copy[minIndex];
-                copy[minIndex] = temp;
-                
+                }
+
+
+                return copy;
             }
+
+
+
+
 
         }
     }
