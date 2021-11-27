@@ -1,137 +1,21 @@
 ﻿using System;
-
-
-
 namespace ConsoleApp
 {
     class Program
     {
         static void Main()
         {
-            int[] array = { 1, 2, 3, 4, 5, 6 };
-            array = new[] { 1, 2, 3 };
-            array = new int[] { 1, 2, 3 };
-            array = new int[4] { 1, 2, 3, 4 };
-            UpdateFirstElement(array);
-            PrintArray(array);
-            UpdateFirstElementRef(ref array);
-            PrintArray(array);
-
-            int[] newArr = new int[5];
-            Console.WriteLine("Before init");
-            PrintArray(newArr);
-            for (int i = 0; i < newArr.Length; i++)
-            {
-                newArr[i] = i;
-            }
-            Console.WriteLine("After init");
-            PrintArray(newArr);
-            Console.WriteLine("After resize");
-            Array.Resize(ref newArr, 10);
-            PrintArray(newArr);
-            Console.WriteLine("Sorting");
-            PrintArray(Sort(new[] { 3, 2, 18, 5, 47, 6, 5 }));
-            Console.WriteLine("Sorting");
-            PrintArray(Sort(new[] { 1, 2, 3, 4, 5 }));
-            Console.WriteLine("Sorting");
-            PrintArray(Sort(new[] { 5, 4, 3, 2, 1 }));
-
-
-            ShowAll();
-            ShowAll(1, 2, 3);
-            ShowAll(new[] { 1, 2, 3 });
-
-            int[,] multidim = new int[,]
-             {
-                { 2, 3, 4 },
-                { 5, 6, 7 }
-             };
-
-            Console.WriteLine("MULTI");
-            foreach (var item in multidim)
+            int[] original = { 1, 2, 3, 4, 5, 6 };
+            foreach (var item in CopyArr(original))
             {
                 Console.WriteLine(item);
             }
-
-            var three = multidim[0, 1];
-
-            int[][] jagged = new[]
-            {
-                new int[] {1,2,3,4,5},
-                new int[] {6,7,8,9},
-            };
-
-            foreach (var innerArray in jagged)
-            {
-                foreach (var elem in innerArray)
-                {
-                    Console.WriteLine(elem);
-                }
-            }
-
-
-            Console.WriteLine("Ranges");
-            PrintArray(sorted[0..2]); // first two elements
-            PrintArray(sorted[0..^0]); // from first to the last
-
-            Console.WriteLine("0..^1");
-            PrintArray(sorted[0..^1]); // from first to the element before last
-
-            Console.WriteLine("^2..^1");
-            PrintArray(sorted[^2..^1]); // 
-
-            Console.WriteLine("^5..^0");
-            PrintArray(sorted[^5..^0]); // 
-
         }
-
-        static void PrintArray(int[] arr)
-        {
-            for (int i = 0; i < arr.Length; i++)
-            {
-                Console.WriteLine(arr[i]);
-            }
-        }
-
-        static void UpdateFirstElementRef(ref int[] arr)
-        {
-            arr[0] = 42;
-            arr = new[] { 5, 6, 7 };
-        }
-        static void UpdateFirstElement(int[] arr)
-        {
-            arr[0] = 42;
-            arr = new[] { 5, 6, 7 };
-        }
-
-        static int[] Sort(int[] original)
+        static int[] CopyArr(int[] original)
         {
             int[] copy = new int[original.Length];
             Array.Copy(original, copy, original.Length);
-            for (int i = 0; i < copy.Length - 1; ++i)
-            {
-                int minIndex = i;
-                for (int j = i + 1; j < copy.Length; ++j)
-                {
-                    if (copy[j] < copy[minIndex])
-                    {
-                        minIndex = j;
-                    }
-                }
-
-                var temp = copy[i];
-                copy[i] = copy[minIndex];
-                copy[minIndex] = temp;
-            }
             return copy;
-        }
-
-        static void ShowAll(params int[] arr)
-        {
-            foreach (var item in arr)
-            {
-                Console.WriteLine(item);
-            }
         }
     }
 }
