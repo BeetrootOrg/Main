@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Program
 {
@@ -34,6 +35,12 @@ namespace Program
             Console.WriteLine(s);
             var substring = str[0..^5];
             Console.WriteLine(substring);
+
+            string str1 = "Dima";
+            string str2 = "dima";
+            Console.WriteLine(str1.Equals(str2,StringComparison.InvariantCulture));
+            Console.WriteLine(str1.Equals(str2, StringComparison.OrdinalIgnoreCase));
+
         }
 
 
