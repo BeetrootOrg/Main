@@ -6,166 +6,28 @@ namespace ConsoleApp
     {
         static void Main()
         {
-            // init array (all same options)
-            // 1 option
-            int[] array = { 1, 2, 3 };
+            var source = new[] { 1, 2, 3 };
+            var destination = new int[source.Length];
 
-            // 2 option
-            array = new[] { 1, 2, 3 };
+            Copy(source, destination);
 
-            // 3 option
-            array = new int[] { 1, 2, 3 };
+            Print(destination);
+        }
 
-            // 4 option
-            array = new int[3] { 1, 2, 3 };
-
-            UpdateFirstElement(array);
-            PrintArray(array);
-
-            UpdateFirstElementRef(ref array);
-            PrintArray(array);
-
-            int[] newArr = new int[10];
-            Console.WriteLine("Before init");
-            PrintArray(newArr);
-
-            for (int i = 0; i < newArr.Length; i++)
+        static void Copy(int[] source, int[] destination)
+        {
+            for (int i = 0; i < source.Length; i++)
             {
-                newArr[i] = i;
+                destination[i] = source[i];
             }
+        }
 
-            Console.WriteLine("After init");
-            PrintArray(newArr);
-
-            var original = newArr;
-
-            Array.Resize(ref newArr, 15);
-            Console.WriteLine(ReferenceEquals(original, newArr));
-            Console.WriteLine("After resize to bigger");
-            PrintArray(newArr);
-
-            Array.Resize(ref newArr, 5);
-            Console.WriteLine("After resize to smaller");
-            PrintArray(newArr);
-
-            var temp = newArr[1];
-            temp = 43;
-            newArr[0] = 42;
-
-            Console.WriteLine("Get copy");
-            PrintArray(original);
-
-            Console.WriteLine("Sorting");
-
-            // no sort at all
-            PrintArray(Sort(new[] { 3, 5, 2, 6, 7 }));
-
-            // already sorted
-            PrintArray(Sort(new[] { 1, 2, 3, 4, 5 }));
-
-            // sorted vice versa
-            var sorted = Sort(new[] { 5, 4, 3, 2, 1 });
-            PrintArray(sorted);
-
-            ShowAll();
-            ShowAll(1, 2, 3);
-            ShowAll(new[] { 1, 2 });
-
-            int[,] multidim = new int[,]
-            {
-                { 2, 3, 4 },
-                { 5, 6, 7 }
-            };
-
-            Console.WriteLine("MULTI");
-            foreach (var item in multidim)
+        static void Print(int[] arr)
+        {
+            foreach (var item in arr)
             {
                 Console.WriteLine(item);
             }
-
-            var three = multidim[0, 1];
-
-            int[][] jagged = new[]
-            {
-                new int[] {1,2,3,4,5},
-                new int[] {6,7,8,9},
-                new int[] {10},
-                new int[] {11, 12},
-            };
-
-            foreach (var innerArray in jagged)
-            {
-                foreach (var elem in innerArray)
-                {
-                    Console.WriteLine(elem);
-                }
-            }
-
-            Console.WriteLine("Ranges");
-            PrintArray(sorted[0..2]); // first two elements
-            PrintArray(sorted[0..^0]); // from first to the last
-
-            Console.WriteLine("0..^1");
-            PrintArray(sorted[0..^1]); // from first to the element before last
-
-            Console.WriteLine("^2..^1");
-            PrintArray(sorted[^2..^1]); // 
-
-            Console.WriteLine("^5..^0");
-            PrintArray(sorted[^5..^0]); // 
-        }
-
-        static void ShowAll(params int[] arr)
-        {
-            foreach (var el in arr)
-            {
-                Console.WriteLine(el);
-            }
-        }
-
-        static void PrintArray(int[] arr)
-        {
-            for (int i = 0; i < arr.Length; i++)
-            {
-                Console.WriteLine(arr[i]);
-            }
-        }
-
-        static void UpdateFirstElement(int[] arr)
-        {
-            arr[0] = 42;
-            arr = new[] { 5, 6, 7 };
-        }
-
-        static void UpdateFirstElementRef(ref int[] arr)
-        {
-            arr[0] = 42;
-            arr = new[] { 5, 6, 7 };
-        }
-
-        // Selection sort
-        static int[] Sort(int[] original)
-        {
-            int[] copy = new int[original.Length];
-            Array.Copy(original, copy, original.Length);
-
-            for (int i = 0; i < copy.Length - 1; ++i)
-            {
-                int minIndex = i;
-                for (int j = i + 1; j < copy.Length; ++j)
-                {
-                    if (copy[j] < copy[minIndex])
-                    {
-                        minIndex = j;
-                    }
-                }
-
-                var temp = copy[i];
-                copy[i] = copy[minIndex];
-                copy[minIndex] = temp;
-            }
-
-            return copy;
         }
     }
 }
