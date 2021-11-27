@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace ConsoleApp
 {
@@ -91,6 +92,40 @@ namespace ConsoleApp
             Console.WriteLine($"Last index of 'IS': {str1.LastIndexOf("IS")}"); // -1
             Console.WriteLine($"Last index of 'IS' (ignore case): {str1.LastIndexOf("IS", StringComparison.OrdinalIgnoreCase)}"); // 5
             Console.WriteLine($"Index of 'i' or 'h': {str1.IndexOfAny(new[] { 'i', 'h' })}"); // 1
+
+            Console.WriteLine($"To Lower: {str1.ToLower()}");
+            Console.WriteLine($"To Upper: {str1.ToUpper()}");
+
+            int[] intArray = new int[50];
+            for (int i = 0; i < intArray.Length; i++)
+            {
+                intArray[i] = i;
+            }
+
+            // 1. Join
+            Console.WriteLine(string.Join(", ", intArray));
+
+            // 2. Using string concatenation (the worst)
+            string concatResult = string.Empty;
+            foreach (var item in intArray)
+            {
+                // 1. we create 50 new string each assigment
+                // 2. extra comma in the end
+                concatResult += item + ", ";
+            }
+
+            // problem - we need to trim
+            Console.WriteLine(concatResult.Trim().TrimEnd(','));
+
+            // 3. using StringBuilder
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in intArray)
+            {
+                // 1. extra comma
+                sb.Append(item).Append(", ");
+            }
+
+            Console.WriteLine(sb.ToString().Trim().TrimEnd(','));
         }
     }
 }
