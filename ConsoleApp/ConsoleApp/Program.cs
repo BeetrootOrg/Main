@@ -43,6 +43,22 @@ namespace ConsoleApp
 
             formatted = "{0}, {4}";
             Console.WriteLine(formatted, "Dima", null, null, null, -5);
+            Console.WriteLine($"{42} is a number");
+
+            string str = "Thes is string"; // string with error
+
+            char c = str[2];
+            Console.WriteLine($"Error in symbol '{c}'");
+
+            string substring = str[0..^5];
+            Console.WriteLine($"Substring 0..^5: {substring}");
+
+            string[] arrayOfString = { "1", "42", "68" };
+            int[] parsed = new int[arrayOfString.Length];
+            for (int i = 0; i < arrayOfString.Length; i++)
+            {
+                parsed[i] = int.Parse(arrayOfString[i]);
+            }
         }
     }
 }
