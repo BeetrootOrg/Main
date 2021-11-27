@@ -14,7 +14,11 @@ namespace ConsoleApp
         static int[] CopyArr(int[] original)
         {
             int[] copy = new int[original.Length];
-            Array.Copy(original, copy, original.Length);
+
+            for (int i = 0; i < original.Length; i++)
+            {
+                copy[i] = original[i];
+            }
             return copy;
         }
     }
