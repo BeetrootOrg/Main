@@ -11,7 +11,8 @@ namespace ConsoleApp
             PrintArray(arr);
 
             PrintArray(BubbleSort(arr));
-            PrintArray(QuickSort(arr, 0, arr.Length - 1));        }
+            PrintArray(QuickSort(arr, 0, arr.Length - 1));
+        }
 
         //Bubble Sort Method
         static int[] BubbleSort(int[] arr)
@@ -32,7 +33,7 @@ namespace ConsoleApp
             }
             return copyArr;
         }
-
+        
         //Method to print array
         static void PrintArray(int[] arr)
         {
@@ -44,46 +45,46 @@ namespace ConsoleApp
         }
 
         //QUICK SORT
-        static int[] QuickSort(int[] arr, int start, int end)
+        static int[] QuickSort(int[] arr, int minIndex, int maxIndex)
         {
-            if (start < end)
+            if (minIndex >= maxIndex)
             {
-                int divideIndex = Partition(arr, start, end);
-
-                QuickSort(arr, start, divideIndex - 1);
-                QuickSort(arr, divideIndex, end);
+                return arr;
             }
+
+            int pivodIndex = GetPivodIndex(arr, minIndex, maxIndex);
+
+            QuickSort(arr, minIndex, pivodIndex - 1);
+            QuickSort(arr, pivodIndex + 1, maxIndex);
 
             return arr;
         }
 
-        static int Partition(int[] arr, int start, int end)
+        static int GetPivodIndex(int[] arr, int minIndex, int maxIndex)
         {
-            int leftIndex = start;
-            int rightIndex = end;
+            int pivod = minIndex - 1;
 
-            int pivot = (end - 1) / 2;
-
-            while (leftIndex <= rightIndex)
+            for (int i = minIndex; i <= maxIndex; i++)
             {
-                while(arr[leftIndex] < pivot)
-                    leftIndex++;
-
-                while(arr[rightIndex] > pivot)
-                    rightIndex--;
-
-                if(leftIndex <= rightIndex)
+                if (arr[i] < arr[maxIndex])
                 {
-                    int temp = arr[leftIndex];
-                    arr[leftIndex] = arr[rightIndex];
-                    arr[rightIndex] = temp;
-
-                    leftIndex++;
-                    rightIndex++;
+                    pivod++;
+                    Swap(ref arr[pivod], ref arr[i]);
+                    
                 }
             }
 
-            return leftIndex;
+            pivod++;
+            Swap(ref arr[pivod], ref arr[maxIndex]);
+
+            return pivod;
+        }
+
+        static void Swap(ref int leftElement, ref int rightElement)
+        {
+            int temp = leftElement;
+            leftElement = rightElement;
+            rightElement = temp;
         }
     }
 }
