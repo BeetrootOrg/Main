@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace ConsoleApp
 {
@@ -6,12 +7,39 @@ namespace ConsoleApp
     {
         static void Main()
         {
-            int[] arr = { 8, 9, 7, 6, -5, 0, -7, 7, -9, 3, 6 };
+            Stopwatch timeBubbleSort = new Stopwatch();
+            Stopwatch timeQuickSort = new Stopwatch();
 
-            PrintArray(arr);
+            int[] arr = GenerateArray(100000);
 
-            PrintArray(BubbleSort(arr));
-            PrintArray(QuickSort(arr, 0, arr.Length - 1));
+
+            //Measure the execution time of the Bubble Sort
+            timeBubbleSort.Start();
+            int[] arrBubbleSort = BubbleSort(arr);
+            timeBubbleSort.Stop();
+
+            //Measure the execution time of the Quick Sort
+            timeQuickSort.Start();
+            int[] arrQuickSort = QuickSort(arr, 0, arr.Length - 1);
+            timeQuickSort.Stop();
+
+            //PrintArray(BubbleSort(arr));
+            Console.WriteLine($"Bubble sort time {arr.Length} elements: {timeBubbleSort.ElapsedMilliseconds} ms");
+
+            //PrintArray(arrQuickSort);
+            Console.WriteLine($"Quick sort time {arr.Length} elements: {timeQuickSort.ElapsedMilliseconds} ms");
+        }
+
+        //Generate array with n-elements
+        static int[] GenerateArray(int n)
+        {
+            Random random = new Random();
+            int[] arr = new int[n];
+            for (int i = 0; i < n; i++)
+            {
+                arr[i] = random.Next(-100, 101);
+            }
+            return arr;
         }
 
         //Bubble Sort Method
