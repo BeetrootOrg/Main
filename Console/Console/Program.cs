@@ -1,42 +1,62 @@
-﻿
-//Optional - define maual imput of parameters
-Console.WriteLine("Input x as double");
-var value1 = Console.ReadLine();
-Console.WriteLine("Input y as double");
-var value2 = Console.ReadLine();
-
-//First part: define few diferent types of values and do simple operations
-int v1 = 10;
-float v2 = 2.34f;
-double v3 = 0.346236746;
-decimal v4 = 5.2143m;
-Console.WriteLine($"Sum int/float {v1 + v2}");
-Console.WriteLine($"Divide decimal/int {v4 / v1}");
-Console.WriteLine($"Multiple float/double {v2 * v3}");
-
-//Try to convert string input to a double, to prevert a app fail
-try
+﻿namespace Console
 {
-    //Convert parameters and define formulas
-    double x = Convert.ToDouble(value1);
-    double y = Convert.ToDouble(value2);
-    double formula1 = -6 * Math.Pow(x, 3) + 5 * Math.Pow(x, 2) - 10 * x + 15;
-    double formula2 = Math.Abs(x) * Math.Sin(x);
-    double formula3 = 2 * Math.PI * x;
-    double formula4 = Math.Max(x, y);
-    Console.WriteLine($"Formula - 1(-6*x^3+5*x^2-10*x+15): {formula1} ");
-    Console.WriteLine($"Formula - 2(abs(x)*sin(x)): {formula2} ");
-    Console.WriteLine($"Formula - 3(2*pi*x): {formula3} ");
-    Console.WriteLine($"Formula - 4(max(x, y)): {formula4} ");
-}
-catch //Exception catch
-{
-    Console.WriteLine($" X or Y have a not a double value ");
-}
+    using System;
+    public class Program
+    {
+        static void Main()
+        {
 
-//Additional block - operations with date
-var dateNow = DateTime.Now;
-TimeSpan daysToNewYear = (Convert.ToDateTime(DateTime.Now.Year.ToString() + "-12-31") - dateNow.Date);
-TimeSpan daysFromNewYear = dateNow.Date - Convert.ToDateTime(DateTime.Now.Year.ToString() + "-01-01");
-Console.WriteLine($"Days to New Year : {daysToNewYear.Days}");
-Console.WriteLine($"Days from New Year : {daysFromNewYear.Days}");
+        }
+
+
+        //обчислити значення функцій F та M для будь-якого N
+        public static double Ff(double N)
+        {
+            if (N == 0) return 1;
+            else
+            {
+                return N - Mf(Ff(N - 1));
+            }
+        }
+
+        public static double Mf(double N)
+        {
+            if (N == 0) return 0;
+            else
+            {
+                return N - Ff(Mf(N - 1));
+            }
+        }
+
+        //створити функцію Pow(x, y) що буде підносити X в степінь Y(x та y цілі невід'ємні числа)
+
+        public static int Pow(int val, int pow)
+        {
+            if (pow == 1) return val;
+            else
+                return val * Pow(val,pow-1);
+        }
+
+
+        //вивести в консоль всі числа від 1 до N за допомогою рекурсії,
+        public static void Print(int num)
+        {
+            if(num >= 1)
+            {
+                Print(num,1);
+            }
+            
+        }
+
+        public static void Print(int num, int cnum)
+        {
+            if (cnum <= num)
+            {
+                Console.WriteLine(cnum);
+                Print(num,++cnum);
+            }
+        }
+    }
+
+
+}
