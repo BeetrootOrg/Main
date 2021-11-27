@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Text;
 
 namespace Program
 {
@@ -41,6 +42,29 @@ namespace Program
             Console.WriteLine(str1.Equals(str2,StringComparison.InvariantCulture));
             Console.WriteLine(str1.Equals(str2, StringComparison.OrdinalIgnoreCase));
 
+            int[] array = new int[50];
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i] = i;  
+            }
+            //1
+            Console.WriteLine(string.Join(",", array));
+
+            //2 Concat 
+            string result = "";
+            foreach (int i in array)
+            {
+                result += i + ",";
+            }
+            Console.WriteLine(result.TrimEnd(','));
+
+            //3 stringbuilder
+            var sb = new StringBuilder();
+            foreach (int i in array)
+            {
+                sb.Append(i).Append(", ");
+            }
+            Console.WriteLine(sb.ToString().Trim().TrimEnd(','));
         }
 
 
