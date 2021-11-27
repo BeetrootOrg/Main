@@ -1,9 +1,8 @@
 ﻿using System;
 
-
 namespace Program
 {
-    using System;
+
     class Program
     {
         static void Main()
@@ -23,6 +22,18 @@ namespace Program
             }
             char res;
             Console.WriteLine($"Try parse {char.TryParse("b",out res)}");
+
+            string formated = "Hello, {0}";
+            Console.WriteLine(string.Format(formated, "Dima"));
+
+            formated = "{0} = {1}";
+            Console.WriteLine(formated, "x^2", 3 * 3);
+            string str = "Thes is string";
+            var s = str[2];
+
+            Console.WriteLine(s);
+            var substring = str[0..^5];
+            Console.WriteLine(substring);
         }
 
 
