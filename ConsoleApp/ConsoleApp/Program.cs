@@ -26,6 +26,17 @@ namespace ConsoleApp
 
             Console.WriteLine($"TryParse 'b': {char.TryParse("b", out result)}. Result: {result}");
             Console.WriteLine($"TryParse 'bb': {char.TryParse("bb", out result)}. Result: {result}");
+
+            Console.WriteLine("STRING\n");
+
+            string formatted = "Hello, {0}";
+            Console.WriteLine(string.Format(formatted, "Dima"));
+
+            formatted = "{0} = {1}";
+            Console.WriteLine(formatted, "3^2", 3 * 3);
+
+            formatted = "{0} says: 'I am {0}'";
+            Console.WriteLine(formatted, "Dima");
         }
     }
 }
