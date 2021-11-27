@@ -5,57 +5,55 @@
     {
         static void Main()
         {
+            int[] arr = { 1, 2, 5, 88, 123, 15, 78, 12, 5, 6, 7, 78, 212, 23, 45, 66, 22, 12, };
+            BubbleSrt(ref arr);
+            PrintArr(arr);
 
         }
 
-
-        //обчислити значення функцій F та M для будь-якого N
-        public static double Ff(double N)
+        public static void PrintArr(int[] array)
         {
-            if (N == 0) return 1;
-            else
+            foreach (int item in array)
             {
-                return N - Mf(Ff(N - 1));
+                Console.WriteLine(item);   
             }
         }
 
-        public static double Mf(double N)
+        public static void BubbleSrt(ref int[] array)
         {
-            if (N == 0) return 0;
-            else
+            bool val = false;
+            for(int i =0; i<array.Length-1; i++)
             {
-                return N - Ff(Mf(N - 1));
+                if(val)
+                {
+                    val = BubbleSrt(ref array, i);
+                    val = true;
+                }
+                else val = BubbleSrt(ref array, i);
             }
-        }
-
-        //створити функцію Pow(x, y) що буде підносити X в степінь Y(x та y цілі невід'ємні числа)
-
-        public static int Pow(int val, int pow)
-        {
-            if (pow == 1) return val;
-            else
-                return val * Pow(val,pow-1);
-        }
-
-
-        //вивести в консоль всі числа від 1 до N за допомогою рекурсії,
-        public static void Print(int num)
-        {
-            if(num >= 1)
+            if (val)
             {
-                Print(num,1);
+                val = false;
+                BubbleSrt(ref array);
+            }           
+        }
+        public static bool BubbleSrt(ref int[] array, int count)
+        {
+            if(array[count] > array[count + 1])
+            {
+                int x = array[count];
+                array[count] = array[count + 1];
+                array[count + 1] = x;
+                return true;
             }
-            
+            else if(array[count] <=  array[count + 1])
+            {
+                return false;
+            }
+            return false;
+
         }
 
-        public static void Print(int num, int cnum)
-        {
-            if (cnum <= num)
-            {
-                Console.WriteLine(cnum);
-                Print(num,++cnum);
-            }
-        }
     }
 
 
