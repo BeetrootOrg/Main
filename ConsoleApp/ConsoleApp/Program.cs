@@ -37,6 +37,12 @@ namespace ConsoleApp
 
             formatted = "{0} says: 'I am {0}'";
             Console.WriteLine(formatted, "Dima");
+
+            formatted = "Some stuff: {0}, {1}, {2}, {0}, {3}, {5}";
+            Console.WriteLine(formatted, "Dima", 42, 'c', true, 0, -5);
+
+            formatted = "{0}, {4}";
+            Console.WriteLine(formatted, "Dima", null, null, null, -5);
         }
     }
 }
