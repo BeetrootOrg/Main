@@ -1,26 +1,21 @@
-﻿Console.WriteLine(Fact(0));
-Console.WriteLine(Fact(1));
-Console.WriteLine(Fact(5));
-
-static long Fact(int n)
+﻿namespace Console
 {
-	if (n == 0|| n == 1) return 1;
-	return n * Fact(n - 1);
-}
-
-static int Gcd(int a, int b)
-{
-    return Gcd(a, b, Math.Min(a, b));
-}
-
-static int Gcd(int a, int b, int possibleGcd)
-{
-	if(a%possibleGcd == 0 || b % possibleGcd == 0)
+    using System;
+    public class Program
     {
-		return possibleGcd;
-    }
-    else
-    {
-        return Gcd(a, b, possibleGcd - 1);
+        static void Main()
+        {
+
+        }
+
+        public static void Copy(ref int[] toArr, int[] fromArr)
+        {
+            for(int i = 0; i < toArr.Length; i++)
+            {
+                int[] resArr = new int[fromArr.Length];
+                resArr[i] = fromArr[i];
+                toArr = resArr;
+            }
+        }
     }
 }
