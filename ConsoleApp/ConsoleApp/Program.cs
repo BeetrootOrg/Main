@@ -10,7 +10,7 @@ namespace ConsoleApp
             Stopwatch timeBubbleSort = new Stopwatch();
             Stopwatch timeQuickSort = new Stopwatch();
 
-            //Generate BIG array
+            //Generate BIG array on 100 000 elements
             int[] arr = GenerateArray(100000);
 
 
