@@ -64,10 +64,18 @@ namespace ConsoleApp
             string str2 = "dima";
 
             Console.WriteLine("String comparison");
-            Console.WriteLine(str1 == str2); // false
+            Console.WriteLine(str1 == str2); // false, by default Ordinal
             Console.WriteLine(str1.Equals(str2, StringComparison.OrdinalIgnoreCase)); // true
             Console.WriteLine("c".Equals("с", StringComparison.InvariantCulture)); // false
             Console.WriteLine("11.01".Equals("11,01", StringComparison.InvariantCulture)); // false
+
+            str1 = "abc";
+            str2 = "dce";
+
+            // if result <0 then str1 < str2
+            // if result ==0 then str1 == str2
+            // if result >0 then str1 > str2
+            Console.WriteLine(str1.CompareTo(str2)); // -1
         }
     }
 }
