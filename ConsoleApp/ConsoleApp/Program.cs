@@ -76,6 +76,21 @@ namespace ConsoleApp
             // if result ==0 then str1 == str2
             // if result >0 then str1 > str2
             Console.WriteLine(str1.CompareTo(str2)); // -1
+
+            str1 = "ABC";
+            str2 = "abc";
+            Console.WriteLine(str1.CompareTo(str2)); // 1
+
+            str1 = "This is a string";
+            Console.WriteLine($"Ends with: {str1.EndsWith("string")}"); // true
+            Console.WriteLine($"Starts with: {str1.StartsWith("This is")}"); // true
+            Console.WriteLine($"Contains: {str1.Contains("is a")}"); // true
+            Console.WriteLine($"Index of 'i': {str1.IndexOf('i')}"); // 2
+            Console.WriteLine($"Index of 'is': {str1.IndexOf("is")}"); // 2
+            Console.WriteLine($"Last index of 'is': {str1.LastIndexOf("is")}"); // 5
+            Console.WriteLine($"Last index of 'IS': {str1.LastIndexOf("IS")}"); // -1
+            Console.WriteLine($"Last index of 'IS' (ignore case): {str1.LastIndexOf("IS", StringComparison.OrdinalIgnoreCase)}"); // 5
+            Console.WriteLine($"Index of 'i' or 'h': {str1.IndexOfAny(new[] { 'i', 'h' })}"); // 1
         }
     }
 }
