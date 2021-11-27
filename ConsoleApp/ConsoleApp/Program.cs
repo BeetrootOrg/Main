@@ -11,12 +11,21 @@ namespace ConsoleApp
             foreach (var item in arr)
             {
                 Console.WriteLine($"Symbol: {item}");
-                Console.WriteLine($"Is Lower: {char.IsLower(item)}"); // false
-                Console.WriteLine($"Is Upper: {char.IsUpper(item)}"); // true
-                Console.WriteLine($"Is Number: {char.IsNumber(item)}"); // false
-                Console.WriteLine($"Is Ascii: {char.IsAscii(item)}"); // true
-                Console.WriteLine($"Is Letter: {char.IsLetter(item)}"); // true
+                Console.WriteLine($"Is Lower: {char.IsLower(item)}");
+                Console.WriteLine($"Is Upper: {char.IsUpper(item)}");
+                Console.WriteLine($"Is Number: {char.IsNumber(item)}");
+                Console.WriteLine($"Is Ascii: {char.IsAscii(item)}");
+                Console.WriteLine($"Is Letter: {char.IsLetter(item)}");
+                Console.WriteLine($"Is Letter: {char.IsControl(item)}");
+
+                Console.WriteLine($"To Lower: {char.ToLower(item)}");
+                Console.WriteLine($"To Upper: {char.ToUpper(item)}");
             }
+
+            char result;
+
+            Console.WriteLine($"TryParse 'b': {char.TryParse("b", out result)}. Result: {result}");
+            Console.WriteLine($"TryParse 'bb': {char.TryParse("bb", out result)}. Result: {result}");
         }
     }
 }
