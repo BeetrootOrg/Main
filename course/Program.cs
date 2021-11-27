@@ -2,32 +2,25 @@
 {
     class Course
     {
-        static void PrintArrayElements(int[] arrayToPrint)
+        static void PrintArray(int[] arr)
         {
-            Array.ForEach(arrayToPrint, el => Console.WriteLine(el));
+            Array.ForEach(arr, el => Console.WriteLine(el));
         }
-
-        static int[] BubbleSorting(int[] arrayToSort)
+        static int[] Copy(ref int[] fromCopy, ref int[] toCopy)
         {
-            for (int i = 0; i < arrayToSort.Length; i++)
+            int index = 0;
+            foreach (var item in fromCopy)
             {
-                for (int j = 0; j < arrayToSort.Length - 1; j++)
-                {
-                    if (arrayToSort[j + 1] < arrayToSort[j])
-                    {
-                        var temp = arrayToSort[j];
-                        arrayToSort[j] = arrayToSort[j + 1];
-                        arrayToSort[j + 1] = temp;
-                    }
-                }
+                toCopy[index++] = item;
             }
 
-            return arrayToSort;
+            return toCopy;
         }
-
         public static void Main(string[] args)
         {
-            PrintArrayElements(BubbleSorting(new int[] { 2, 4, 9, 3, 6, 1 }));
+            int[] a = new int[] { 1, 2, 3 };
+            int[] b = new int[] { 5, 6, 7 };
+            PrintArray(Copy(ref a, ref b));
         }
     }
 }
