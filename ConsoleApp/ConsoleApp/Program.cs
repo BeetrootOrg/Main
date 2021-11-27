@@ -10,6 +10,7 @@ namespace ConsoleApp
             Stopwatch timeBubbleSort = new Stopwatch();
             Stopwatch timeQuickSort = new Stopwatch();
 
+            //Generate BIG array
             int[] arr = GenerateArray(100000);
 
 
@@ -23,6 +24,8 @@ namespace ConsoleApp
             int[] arrQuickSort = QuickSort(arr, 0, arr.Length - 1);
             timeQuickSort.Stop();
 
+
+            //I dont want to print so big array)
             //PrintArray(BubbleSort(arr));
             Console.WriteLine($"Bubble sort time {arr.Length} elements: {timeBubbleSort.ElapsedMilliseconds} ms");
 
@@ -35,6 +38,7 @@ namespace ConsoleApp
         {
             Random random = new Random();
             int[] arr = new int[n];
+
             for (int i = 0; i < n; i++)
             {
                 arr[i] = random.Next(-100, 101);
@@ -53,9 +57,7 @@ namespace ConsoleApp
                 {
                     if (copyArr[j] > copyArr[j + 1])
                     {
-                        int temp = copyArr[j + 1];
-                        copyArr[j + 1] = copyArr[j];
-                        copyArr[j] = temp;
+                        Swap(ref copyArr[j], ref copyArr[j + 1]);
                     }
                 }
             }
@@ -108,6 +110,7 @@ namespace ConsoleApp
             return pivod;
         }
 
+        //Swap Method
         static void Swap(ref int leftElement, ref int rightElement)
         {
             int temp = leftElement;
