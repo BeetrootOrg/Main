@@ -67,9 +67,9 @@ namespace ConsoleApp
         //Method to print array
         static void PrintArray(int[] arr)
         {
-            for (int i = 0; i < arr.Length; i++)
+            foreach(int item in arr)
             {
-                Console.Write(arr[i] + " ");
+                Console.Write(item + " ");
             }
             Console.WriteLine();
         }
