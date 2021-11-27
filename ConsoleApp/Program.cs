@@ -3,96 +3,111 @@
     using System;
     class ConsoleApp
     {
-        static int F(int n)
+        static void SelectionSort(int[] arr)
         {
-            if (n == 0)
+            int founMinValue;
+            for (int i = 0, j = 0; i < arr.Length; i++)
             {
-                return 1;
-            }
-            else
-            {
-                return n - M(F(n - 1));
-            }
-        }
-        static int M(int n)
-        {
-            if (n == 0)
-            {
-                return 0;
-            }
-            else
-            {
-                return n - F(M(n - 1));
-            }
-        }
-        static UInt64 Pow(UInt32 x, UInt32 y)
-        {
-            UInt64 result;
-
-            if(y == 0)
-            {
-                return 1;
-            }
-            if(x == 0)
-            {
-                if (y == 0)
+                founMinValue = arr[i];
+                int minIndex = 0;
+                int replaceElement = arr[i];
+                for (j = i+1; j < arr.Length; j++)
                 {
-                    return 1;
+                    if(arr[j] < founMinValue)
+                    {
+                        minIndex = j;
+                        founMinValue = arr[j];
+                        arr[i] = founMinValue;
+                    }
                 }
-                else
+                if (minIndex != 0)
                 {
-                    return 0;
+                    arr[minIndex] = replaceElement;
                 }
             }
-
-            result = x;
-            for (int i = 1; i < y; i++)
-            {
-                result *= x;
-            }
-            return result;
         }
-        static string RecursiveDataConsole(int n)
-        {
-            if (n == 1)
-            {
-                return "1 ";
-            }
-            else
-            {
-                return (RecursiveDataConsole(n - 1) + n).ToString() + " ";
-            }
-        }
-        static long Fact(int n)
-        {
-            if(n == 0)
-            {
-                return 1;
-            }
-            return n * Fact(n - 1);
-        }
-
-        static void printArray(int[]arr)
+        static void printArray(int [] arr, string comment)
         {
             for(int i = 0; i < arr.Length; i++)
             {
                 Console.Write("{0} ", arr[i]);
             }
-            Console.Write("\r\n");
+            Console.Write(" // {0}\r\n", comment);
+        }
+        static void printArray(int[] arr, int length, string comment)
+        {
+            for (int i = 0; i < length; i++)
+            {
+                Console.Write("{0} ", arr[i]);
+            }
+            Console.Write(" // {0}\r\n", comment);
+        }
+        static void SwapElements(ref int a, ref int b)
+        {
+            int temp = a;
+            a = b; 
+            b = temp;
+        }
+        static void bubbleSort(int[] arr, int n)
+        {
+            int i, j, k;
+            bool ArraySorted;
+
+            for (k = 0; k < n; k++)
+            {
+                ArraySorted = true;
+                for (i = 0, j = 1; j < n; i++, j++)
+                {
+                    if (arr[i] > arr[j])
+                    {
+                        ArraySorted = false;
+                        SwapElements(ref arr[j], ref arr[i]);
+                    }
+                }
+
+                printArray(arr, n, "cycle " + k.ToString());
+
+                if(ArraySorted == true)
+                {
+                    break;
+                }
+            }
+        }
+        static void InsertionSort(int[] arr)
+        {
+            if(arr.Length < 2)
+            {
+                return;
+            }
+            for(int i = 2; i <= arr.Length; i++)
+            {
+                bubbleSort(arr, i);
+            }
         }
         static void Main(string[] args)
         {
-            Console.WriteLine("\r\n a.tkachenko/classroom/06-arrays \r\n");
-
-            // int fact_int = 5;
-            // Console.WriteLine("Factorial ({0}) = {1}", fact_int, Fact(fact_int));
+            Console.WriteLine("\r\n a.tkachenko/homework/06-arrays \r\n");
 
 
-            int[] array = { 1, 2, 3, 4, 5 };
-            printArray(array);
-            array[1] = 5;
-            printArray(array);
+            Console.WriteLine("1. Selection Sort:");
+            // int[] array = { 64, 25, 12, 22, 11 , 7};
+            int[] array = { 45, 78, 12, 45, 27, 0, 1, 1, 1, 0, 0, 4, 75 };
+            printArray(array, "-- Input array");
+            SelectionSort(array);
+            printArray(array, "-- Sorted array\r\n");
 
+            Console.WriteLine("2. Buble Sort:");
+            int[] BubbleArray = { 45, 78, 12, 35, 27, 0, 13, 0, 57, 0 };
+            int n = BubbleArray.Length;
+            printArray(BubbleArray, "-- Input array");
+            bubbleSort(BubbleArray, n);
+            printArray(BubbleArray, "-- Sorted array\r\n");
+
+            Console.WriteLine("3. Insertion Sort:");
+            int[] InsertionArray = { 4, 3, 2, 1, 0 /*45, 13, 1, 57, 0*/ };
+            printArray(InsertionArray, "-- Input array");
+            InsertionSort(InsertionArray);
+            printArray(InsertionArray, "-- Sorted array\r\n");
             Console.Write("\r\n");
         }
     }
