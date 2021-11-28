@@ -53,7 +53,7 @@ namespace ConsoleApp
 
             for (int i = 0; i < copyArr.Length; i++)
             {
-                for (int j = 0; j < copyArr.Length - 1; j++)
+                for (int j = 0; j < copyArr.Length - 1 - i; j++)
                 {
                     if (copyArr[j] > copyArr[j + 1])
                     {
