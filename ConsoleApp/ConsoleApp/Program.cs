@@ -8,81 +8,13 @@ namespace ConsoleApp
     {
         static void Main()
         {
-            int[] array = { 1, 2, 3, 4, 5, 6 };
-            array = new[] { 1, 2, 3 };
-            array = new int[] { 1, 2, 3 };
-            array = new int[4] { 1, 2, 3, 4 };
-            UpdateFirstElement(array);
+            int[] array = { 9, 3, 8, 5, 2, 6, 4, 1, 7, 10, 0 };
+            Console.WriteLine("Unsorted");
             PrintArray(array);
-            UpdateFirstElementRef(ref array);
-            PrintArray(array);
-
-            int[] newArr = new int[5];
-            Console.WriteLine("Before init");
-            PrintArray(newArr);
-            for (int i = 0; i < newArr.Length; i++)
-            {
-                newArr[i] = i;
-            }
-            Console.WriteLine("After init");
-            PrintArray(newArr);
-            Console.WriteLine("After resize");
-            Array.Resize(ref newArr, 10);
-            PrintArray(newArr);
-            Console.WriteLine("Sorting");
-            PrintArray(Sort(new[] { 3, 2, 18, 5, 47, 6, 5 }));
-            Console.WriteLine("Sorting");
-            PrintArray(Sort(new[] { 1, 2, 3, 4, 5 }));
-            Console.WriteLine("Sorting");
-            PrintArray(Sort(new[] { 5, 4, 3, 2, 1 }));
-
-
-            ShowAll();
-            ShowAll(1, 2, 3);
-            ShowAll(new[] { 1, 2, 3 });
-
-            int[,] multidim = new int[,]
-             {
-                { 2, 3, 4 },
-                { 5, 6, 7 }
-             };
-
-            Console.WriteLine("MULTI");
-            foreach (var item in multidim)
-            {
-                Console.WriteLine(item);
-            }
-
-            var three = multidim[0, 1];
-
-            int[][] jagged = new[]
-            {
-                new int[] {1,2,3,4,5},
-                new int[] {6,7,8,9},
-            };
-
-            foreach (var innerArray in jagged)
-            {
-                foreach (var elem in innerArray)
-                {
-                    Console.WriteLine(elem);
-                }
-            }
-
-
-            Console.WriteLine("Ranges");
-            PrintArray(sorted[0..2]); // first two elements
-            PrintArray(sorted[0..^0]); // from first to the last
-
-            Console.WriteLine("0..^1");
-            PrintArray(sorted[0..^1]); // from first to the element before last
-
-            Console.WriteLine("^2..^1");
-            PrintArray(sorted[^2..^1]); // 
-
-            Console.WriteLine("^5..^0");
-            PrintArray(sorted[^5..^0]); // 
-
+            Console.WriteLine("Insertion Sort");
+            PrintArray(InsertionSort(array));
+            Console.WriteLine("Bubble Sort");
+            PrintArray(BubbleSort(array));
         }
 
         static void PrintArray(int[] arr)
@@ -93,18 +25,8 @@ namespace ConsoleApp
             }
         }
 
-        static void UpdateFirstElementRef(ref int[] arr)
-        {
-            arr[0] = 42;
-            arr = new[] { 5, 6, 7 };
-        }
-        static void UpdateFirstElement(int[] arr)
-        {
-            arr[0] = 42;
-            arr = new[] { 5, 6, 7 };
-        }
-
-        static int[] Sort(int[] original)
+        //Selection Sort - from classwork
+        static int[] SelectionSort(int[] original)
         {
             int[] copy = new int[original.Length];
             Array.Copy(original, copy, original.Length);
@@ -126,12 +48,41 @@ namespace ConsoleApp
             return copy;
         }
 
-        static void ShowAll(params int[] arr)
+        // Insertion Sort
+        static int[] InsertionSort(int[] original)
         {
-            foreach (var item in arr)
+            int[] copy = new int[original.Length];
+            Array.Copy(original, copy, original.Length);
+
+            for (int i = 1; i < copy.Length; i++)
             {
-                Console.WriteLine(item);
+                int currentElement = copy[i],
+                    previousElementIndex = i - 1;
+                while (previousElementIndex >= 0 && copy[previousElementIndex] > currentElement)
+                {
+                    copy[previousElementIndex + 1] = copy[previousElementIndex];
+                    previousElementIndex = previousElementIndex - 1;
+                }
+                copy[previousElementIndex + 1] = currentElement;
             }
+            return copy;
+        }
+
+        // Bubble Sort
+        static int[] BubbleSort(int[] original)
+        {
+            int[] copy = new int[original.Length];
+            Array.Copy(original, copy, original.Length);
+
+            for (int i = 0; i < copy.Length - 1; i++)
+                for (int j = 0; j < copy.Length - i - 1; j++)
+                    if (copy[j] > copy[j + 1])
+                    {
+                        int temp = copy[j];
+                        copy[j] = copy[j + 1];
+                        copy[j + 1] = temp;
+                    }
+            return copy;
         }
     }
 }
