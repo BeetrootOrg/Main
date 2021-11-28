@@ -1,26 +1,71 @@
-﻿namespace Course
+﻿using System.Text;
+
+namespace Course
 {
     class Course
     {
-        static void PrintArray(int[] arr)
+        static bool Compare(string strF, string strS)
         {
-            Array.ForEach(arr, el => Console.WriteLine(el));
-        }
-        static int[] Copy(ref int[] fromCopy, ref int[] toCopy)
-        {
-            int index = 0;
-            foreach (var item in fromCopy)
+            if (strF.Length != strS.Length)
             {
-                toCopy[index++] = item;
+                return false;
             }
 
-            return toCopy;
+            for (int i = 0; i < strF.Length; i++)
+            {
+                if (strF[i] != strS[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
-        public static void Main(string[] args)
+        static void Analyze(string text, out int alpbets, out int digits, out int specialC)
         {
-            int[] a = new int[] { 1, 2, 3 };
-            int[] b = new int[] { 5, 6, 7 };
-            PrintArray(Copy(ref a, ref b));
+            alpbets = 0;
+            digits = 0;
+            specialC = 0;
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (Char.IsLetter(text[i]))
+                {
+                    alpbets++;
+                } else if (Char.IsDigit(text[i]))
+                {
+                    digits++;
+                } else
+                {
+                    specialC++;
+                }
+            }
+        }
+        static string Sort(string textToSort)
+        {
+            char[] letters = textToSort.ToLower().ToCharArray();
+            Array.Sort(letters);
+            return new string(letters);
+        }
+        static char[] Duplicate(string textToCheck)
+        {
+            string sortedString = Sort(textToCheck);
+        }
+        static void PrintArray(char[] arrToPrint)
+        {
+            Array.ForEach(arrToPrint, (el) => Console.WriteLine(el));
+        }
+        public static void Main()
+        {
+            Console.WriteLine(Compare("Everything is fine", "Everything is Fine"));
+
+            Analyze("Some random stuff 4 you to analyzE!@#", out int alphabet, out int digits, out int specialC);
+            Console.WriteLine($"Text contain {alphabet} letters, {digits} digits and {specialC} special characters");
+
+            Console.WriteLine(Sort("Wonderfull"));
+
+            Console.WriteLine("Duplicates in word `Hello`:");
+            PrintArray(Duplicate("Hello"));
         }
     }
 }
