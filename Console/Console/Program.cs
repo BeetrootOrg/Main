@@ -21,7 +21,6 @@
         //Compare that will return true if 2 strings are equal, otherwise false, but do not use build-in method
         public static bool Compare(string first, string second)
         {
-            bool result = false;
             char[] str1 = first.ToCharArray();
             char[] str2 = second.ToCharArray();
             if(str1.Length != str2.Length)
