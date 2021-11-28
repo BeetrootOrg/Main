@@ -49,7 +49,16 @@ namespace Course
         }
         static char[] Duplicate(string textToCheck)
         {
+            StringBuilder stringBuilder = new StringBuilder("");
             string sortedString = Sort(textToCheck);
+            for (int i = 0; i < sortedString.Length - 1; i++)
+            {
+                if (sortedString[i] == sortedString[i + 1] && stringBuilder.ToString().IndexOf(sortedString[i]) == -1)
+                {
+                    stringBuilder.Append(sortedString[i]);
+                }
+            }
+            return stringBuilder.ToString().ToCharArray();
         }
         static void PrintArray(char[] arrToPrint)
         {
