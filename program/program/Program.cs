@@ -5,38 +5,53 @@ namespace  ConsoleApp
     {
         static void Main()
         {
-            //bublle sort
-            int[] array = {30,89,1,8,46,98};
-            Sort(array);
-            Console.WriteLine("Sorted array");
-            printArray(array);
+
+            //First task
+            Console.WriteLine("First task:");
+            string stringCompare1 = "Hello";
+            string stringCompare2 = "Hello";
+
             
+
+            bool compare = stringCompare1==stringCompare2;
+            Console.WriteLine($"Is string equal: {compare}");
+
+            //Second task
+            Console.WriteLine("\nSecond task:");
+
+            string example1 = "afASDsd12345";                  
+            
+
+            Console.Write("numbers = ");
+            Console.WriteLine(CountOfNumbers(example1));
+            Console.Write("letter = ");
+            Console.WriteLine(CountOfLetters(example1));
         }
 
-
-         static void Sort(int[] array)
+        static int CountOfLetters(String example1)
         {
-            int n = array.Length;
+            int letter = 0;
 
-            for (int i = 0; i < n - 1; i++)
-                for (int j = 0; j < n - i - 1;j++)
-            if (array[j] > array[j+1])
+            for (int i = 0; i < example1.Length; i++)
             {
-                int temp = array[j];
-                array[j] = array[j + 1];
-                array[j + 1] = temp;
+                if ((example1[i] >= 'A' && example1[i] <= 'Z') || (example1[i] >= 'a' && example1[i] <= 'z'))
+                    letter++;
+                
             }
-
-            
+            return letter;
         }
-        static void printArray(int[] array)
+
+        static int CountOfNumbers(string example1)
         {
-            int n = array.Length;
-            for (int i = 0; i < n; ++i)
-                Console.Write(array[i] + ",");
-            Console.WriteLine();
+            int number = 0; 
+            for(int i = 0; i < example1.Length; i++)
+            {
+                if (example1[i] >= '0' && example1[i] <= '9')
+                    number++;
+            }
+            return number;
         }
 
-
+        
     }
 }
