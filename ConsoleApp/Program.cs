@@ -27,30 +27,11 @@
         }
         static UInt64 Pow(UInt32 x, UInt32 y)
         {
-            UInt64 result;
-
             if(y == 0)
             {
                 return 1;
             }
-            if(x == 0)
-            {
-                if (y == 0)
-                {
-                    return 1;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-
-            result = x;
-            for (int i = 1; i < y; i++)
-            {
-                result *= x;
-            }
-            return result;
+            return x * Pow(x, y - 1);
         }
         static string RecursiveDataConsole(int n)
         {
