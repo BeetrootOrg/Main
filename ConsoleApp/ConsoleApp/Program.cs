@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Text;
 
 namespace ConsoleApp
 {
@@ -7,20 +8,37 @@ namespace ConsoleApp
     {
         static void Main()
         {
+            //Test method StringCompare
             string strA = "ABC";
-            string strB = "  ^hEL  LOhe^ll9o8";
+            string strB = "ABc";
 
-            Console.WriteLine($"Equals {strA} & {strB}: {StringCompare(strA, strB)}");
+            Console.WriteLine($"Equals {strA} & {strB}: {StringCompare(strA, strB)} \n");
 
-            Console.WriteLine(SortString(strB) + "\n");
+            //Test method SortString
+            string toSortStr = "zvxbdusydsdaa";
+            Console.WriteLine($"Unsorted string: {toSortStr}");
+            Console.WriteLine(($"Sorted string: {SortString(toSortStr)}\n"));
 
-            Console.WriteLine(strB);
-            StringAnalyze(strB, out int letterCount, out int numberCount, out int spchCount);
+            //Test Analyze string method
+            string toAnalizeStr = "2+2=x and";
+            Console.WriteLine($"String to analyze: {toAnalizeStr}");
+            StringAnalyze(toAnalizeStr, out int letterCount, out int numberCount, out int spchCount);
             Console.WriteLine($"Numbers of letters in string: {letterCount}");
             Console.WriteLine($"Numbers of digits in string: {numberCount}");
-            Console.WriteLine($"Number of special character: {spchCount}");
+            Console.WriteLine($"Number of special character: {spchCount}\n");
+
+            //Test Duplicate check
+            string checkDupStr = "Hello && Hill";
+            Console.WriteLine($"Check duolicate: {checkDupStr}");
+
+            foreach (char item in Duplicate(checkDupStr))
+            {
+                Console.Write(item + " ");
+            }
         }
 
+
+        //Compare Two strings
         static bool StringCompare(string a, string b)
         {
             if(a == b)
@@ -51,6 +69,7 @@ namespace ConsoleApp
             return String.Join("", strCopy);
         }
 
+        //Method to Analyze string
         static void StringAnalyze(string str, out int letterCount, out int numberCount, out int spchCount)
         {
             char[] strCopy = str.Replace(" ", "").ToCharArray();
@@ -73,10 +92,26 @@ namespace ConsoleApp
             }
         }
 
+        //Method to Check Duplicate Letters
+        //It was hardest
         static char[] Duplicate(string str)
         {
-            char[] strCopy = str.Replace(" ", "").ToLower().ToCharArray();
+            char[] strArray = str.Replace(" ", "").ToLower().ToCharArray();
+            StringBuilder strCopy = new StringBuilder(str.Replace(" ", "").ToLower());
+            StringBuilder result = new StringBuilder();
 
+
+            //We checking how many same letters we removed
+            for (int i = 0; i < strArray.Length; i++)
+            {
+                int currentLenght = strCopy.Length;
+
+                if(currentLenght - strCopy.Replace(strArray[i].ToString(), "").Length > 1)
+                {
+                    result.Append(strArray[i]);
+                }
+            }
+            return result.ToString().ToCharArray();
         }
     }
 }
