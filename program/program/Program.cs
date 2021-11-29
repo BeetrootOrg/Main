@@ -75,23 +75,7 @@ namespace  ConsoleApp
 
         //Fourth task
 
-        static string DublicateFilter(string input2)
-        {
-            {
-                string table = "";
-                int pos = 0;
-                foreach (var character in input2.ToCharArray())
-                {
-                    pos = table.IndexOf(character, Math.Abs(pos));
-                    if (pos == -1)
-                    {
-                        table += character;
-                    }
-
-                }
-                return table;
-            }
-        }
+       
         
     }
 }
