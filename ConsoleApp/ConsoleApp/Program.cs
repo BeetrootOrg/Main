@@ -131,5 +131,18 @@ namespace ConsoleApp
 
             return phoneBook;
         }
+
+        static string[] ConvertToText((string, string, string)[] data)
+        {
+            var content = new string[data.Length + 1];
+            content[0] = "FirstName,LastName,PhoneNumber";
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                content[i + 1] = $"{data[i].Item1},{data[i].Item2},{data[i].Item3}";
+            }
+
+            return content;
+        }
     }
 }
