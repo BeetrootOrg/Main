@@ -23,6 +23,9 @@ namespace ConsoleApp
 
             Console.WriteLine(a);
             Console.WriteLine(b);
+
+            (int, bool, string, decimal) bigTuple = (1, true, "str1", 0.42m);
+            Console.WriteLine(bigTuple);
         }
     }
 }
