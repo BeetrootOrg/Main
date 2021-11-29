@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 
 namespace ConsoleApp
 {
@@ -7,19 +6,23 @@ namespace ConsoleApp
     {
         static void Main()
         {
-        }
+            (int, string) tuple1 = (42, "string");
+            Console.WriteLine(tuple1);
 
-        static int Compare(string str1, string str2) => SumOfSymbols(str1) - SumOfSymbols(str2);
+            tuple1.Item1 = 1;
+            tuple1.Item2 = "str";
 
-        static int SumOfSymbols(string str)
-        {
-            int sum = 0;
-            foreach (char symbol in str)
-            {
-                sum += symbol;
-            }
+            (int number, string str) tuple2 = (42, "string");
+            tuple2.number = 5;
+            tuple2.str = "str3";
 
-            return sum;
+            Console.WriteLine(tuple2);
+
+            // var (a, b) = tuple - the same
+            (int a, string b) = tuple1;
+
+            Console.WriteLine(a);
+            Console.WriteLine(b);
         }
     }
 }
