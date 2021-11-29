@@ -51,13 +51,28 @@ namespace ConsoleApp
         private static void SearchByName()
         {
             Console.Clear();
-            Console.WriteLine("Enter First Name...");
-            var firstName = Console.ReadLine();
+            Console.WriteLine("Search condition - if first/last name contains search term you will see it");
 
-            Console.WriteLine("Enter Last Name...");
-            var lastName = Console.ReadLine();
+            Console.WriteLine("Enter Search Term...");
+            var searchTerm = Console.ReadLine();
 
-            // ToDo: finish it
+            bool found = false;
+            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+            {
+                if (firstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    lastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
+                    found = true;
+                }
+            }
+
+            if (!found)
+            {
+                Console.WriteLine("Not such users");
+            }
+
+            Wait();
         }
 
         private static void Exit()
@@ -94,6 +109,11 @@ namespace ConsoleApp
                 Console.WriteLine();
             }
 
+            Wait();
+        }
+
+        private static void Wait()
+        {
             Console.WriteLine("To back to menu type Enter...");
             Console.ReadLine();
         }
