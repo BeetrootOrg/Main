@@ -1,55 +1,31 @@
 ﻿using System;
+
 namespace  ConsoleApp
 {
     class Program
     {
         static void Main()
         {
-
-            //First task
-            Console.WriteLine("First task:");
-            string stringCompare1 = "Hello";
-            string stringCompare2 = "Hello";
-
+            (int, string) tuple1 = (42,"string");
             
+            Console.WriteLine(tuple1);
 
-            bool compare = stringCompare1==stringCompare2;
-            Console.WriteLine($"Is string equal: {compare}");
-
-            //Second task
-            Console.WriteLine("\nSecond task:");
-
-            string example1 = "afASDsd12345";                  
+            tuple1.Item1 = 1;
+            tuple1.Item2 = "str";
             
+            (int number, string str) tuple2 = (42,"string");
+            tuple2.number = 5;
+            tuple2.str = "str3";
+            Console.WriteLine(tuple2);
 
-            Console.Write("numbers = ");
-            Console.WriteLine(CountOfNumbers(example1));
-            Console.Write("letter = ");
-            Console.WriteLine(CountOfLetters(example1));
-        }
+            //var (a, b) = tuple; Same as belo
+            (int a, string b) = tuple1;
 
-        static int CountOfLetters(String example1)
-        {
-            int letter = 0;
+            Console.WriteLine(a);
+            Console.WriteLine(b);
 
-            for (int i = 0; i < example1.Length; i++)
-            {
-                if ((example1[i] >= 'A' && example1[i] <= 'Z') || (example1[i] >= 'a' && example1[i] <= 'z'))
-                    letter++;
-                
-            }
-            return letter;
-        }
+            tuple2 = tuple1;
 
-        static int CountOfNumbers(string example1)
-        {
-            int number = 0; 
-            for(int i = 0; i < example1.Length; i++)
-            {
-                if (example1[i] >= '0' && example1[i] <= '9')
-                    number++;
-            }
-            return number;
         }
 
         
