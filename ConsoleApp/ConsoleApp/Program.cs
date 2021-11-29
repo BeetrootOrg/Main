@@ -26,14 +26,24 @@ namespace ConsoleApp
             {
                 return 1;
             }
-            else if (str1Sum < str2Sum)
+            if (str1Sum < str2Sum)
             {
                 return -1;
             }
-            else
+            return 0;
+        }
+
+        static int CompareStrOther(string str1, string str2) => SumOfSymbols(str1) - SumOfSymbols(str2);
+        static int SumOfSymbols(string arr)
+        {
+            var sum = 0;
+            foreach (char c in arr)
             {
-                return 0;
+                sum += c;
             }
+            return sum;
         }
     }
+}
+
 }
