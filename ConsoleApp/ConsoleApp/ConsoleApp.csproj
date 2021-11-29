@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <Content Include="phonebook.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
