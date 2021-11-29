@@ -3,93 +3,114 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Text;
     class Program
     {
+        public class Person
+        {
+            public string phone;
+            public string name;
+            public string BirthDay;
+        }
+
+        public static List<Person> People = new List<Person>();
         static void Main()
         {
-            double result = FuncWithABigName(5.5);
-            System.Console.WriteLine($"{result}");
-            ConCat("Hello", "Dima");
-            int ai = 0;
-            InrementReferenc(ref ai);
-            Console.WriteLine($"In main {ai}");
-            ai= 0;
-            Inrement(ai);
-            Console.WriteLine($"In main {ai}");
+            GetFile();
+            Menu();
+  
+        }
 
-            string str = "Hello";
-            Add(str, " dima");
-            Console.WriteLine(str);
-            AddRef(ref str, " dima");
-            Console.WriteLine(str);
-            Console.WriteLine(AddIfOdd(2, 4));
-            Console.WriteLine(AddIfOdd(1, 4));
-            Console.WriteLine(AddIfOdd(2, 5));
-            int sum;
-            const int i1 = 2;
-            const int i2 = 4;
-            if (TryAddIfOdd(i1,i2,out sum))
-            {
-                Console.WriteLine($"Sum equal to {sum}");
-            }
+        public static void GetFile()
+        {
+            if (!File.Exists("DB.csv")) File.Create("DB.csv") ;
             else
             {
-                Console.WriteLine("Cannot count sum, becuse not odd");
+
+                string[] vs = File.ReadAllLines("DB.csv");
+                int i = 0;
+                foreach (string line in vs)
+                {
+                    if (i >= 1)
+                    {
+                        string[] p = line.Split(';');
+                        People.Add(new Person { phone = p[0], name = p[1], BirthDay = p[2] });
+                    }
+                    i++;
+                }
             }
+
         }
 
-        static double FuncWithABigName(double x)
+        public static void AddPerson(string name, string phone , string BDay)
         {
-            return x * x * x + 5 * x * x + 6;
+            People.Add(new Person { name = name, phone = phone ,BirthDay = BDay });
         }
 
-        static void ConCat(string str1,string str2)
+        public static void Save()
         {
-            System.Console.WriteLine(str2+" , "+str1);
-        }
-
-        static void InrementReferenc(ref int i)
-        {
-            i++;
-            System.Console.WriteLine($"Increment {i}");
-        }
-
-        static void Inrement(int i)
-        {
-            i++;
-            System.Console.WriteLine($"Increment {i}");
-        }
-
-        static void Add(string str1,string str2)
-        {
-            str1 += str2;
-            Console.WriteLine(str1);
-        }
-
-        static void AddRef(ref string str1, string str2)
-        {
-            str1 += str2;
-            Console.WriteLine(str1);
-        }
-
-        static int AddIfOdd(int i1= 2, int i2 =2)
-        {
-            if (i1 % 2 == 0 && i2 % 2 == 0)
+            string[] phones = new string[People.Count+1];
+            phones[0] = "Name;Phone;BDay";
+            int i = 1;
+            foreach (Person person in People)
             {
-                return i1 + i2;
+                StringBuilder sb = new StringBuilder();
+                sb.Append(person.name);
+                sb.Append(";");
+                sb.Append(person.phone);
+                sb.Append(";");
+                sb.Append(person.BirthDay);
+                phones[i] = sb.ToString();
+                i++;
             }
-            return 0;
+            File.WriteAllLines("DB.csv",phones); 
         }
 
-        static bool TryAddIfOdd(int i1, int i2, out int Sum)
+        public static void Find(string value)
         {
-            if (i1 % 2 == 0 && i2 % 2 == 0)
+            foreach (Person person in People)
             {
-                Sum = i1 + i2;
-                return true;
+                if(person.phone == value)
+                {
+                    Console.WriteLine($"Name {person.name} , Phone {person.phone} , B-Day {person.BirthDay}");
+                }
             }
-            Sum = 0;
-            return false;
         }
+
+        public static void PrintAll()
+        {
+
+                foreach (Person person in People)
+                {
+                    Console.WriteLine($"Name {person.name} , Phone {person.phone} , B-Day {person.BirthDay}");
+                }
+
+        }
+
+        public static void ReadPerson()
+        {
+            Console.WriteLine("Input name");
+            string name = Console.ReadLine();
+            Console.WriteLine("Input phone");
+            string phone = Console.ReadLine();
+            Console.WriteLine("Input B-day");
+            string birthDay = Console.ReadLine();
+        }
+
+        public static void Menu()
+        {
+            Console.WriteLine("Hello");
+            Console.WriteLine("Here is Phone book");
+            Console.WriteLine("Please choose option");
+            Console.WriteLine("a. Add new");
+            Console.WriteLine("b. Find");
+            Console.WriteLine("c. Show all");
+            var key = Console.ReadKey();
+            switch (key)
+            {
+                
+            }
+        }
+ 
     }
 }
