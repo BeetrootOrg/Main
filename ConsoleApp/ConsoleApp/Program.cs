@@ -7,115 +7,76 @@ namespace ConsoleApp
     {
         static void Main()
         {
-            Stopwatch timeBubbleSort = new Stopwatch();
-            Stopwatch timeQuickSort = new Stopwatch();
+            string strA = "ABC";
+            string strB = "  ^hEL  LOhe^ll9o8";
 
-            //Generate BIG array on 100 000 elements
-            int[] arr = GenerateArray(100000);
+            Console.WriteLine($"Equals {strA} & {strB}: {StringCompare(strA, strB)}");
 
+            Console.WriteLine(SortString(strB) + "\n");
 
-            //Measure the execution time of the Bubble Sort
-            timeBubbleSort.Start();
-            int[] arrBubbleSort = BubbleSort(arr);
-            timeBubbleSort.Stop();
-
-            //Measure the execution time of the Quick Sort
-            timeQuickSort.Start();
-            int[] arrQuickSort = QuickSort(arr, 0, arr.Length - 1);
-            timeQuickSort.Stop();
-
-
-            //I dont want to print so big array)
-            //PrintArray(BubbleSort(arr));
-            Console.WriteLine($"Bubble sort time {arr.Length} elements: {timeBubbleSort.ElapsedMilliseconds} ms");
-
-            //PrintArray(arrQuickSort);
-            Console.WriteLine($"Quick sort time {arr.Length} elements: {timeQuickSort.ElapsedMilliseconds} ms");
+            Console.WriteLine(strB);
+            StringAnalyze(strB, out int letterCount, out int numberCount, out int spchCount);
+            Console.WriteLine($"Numbers of letters in string: {letterCount}");
+            Console.WriteLine($"Numbers of digits in string: {numberCount}");
+            Console.WriteLine($"Number of special character: {spchCount}");
         }
 
-        //Generate array with n-elements
-        static int[] GenerateArray(int n)
+        static bool StringCompare(string a, string b)
         {
-            Random random = new Random();
-            int[] arr = new int[n];
-
-            for (int i = 0; i < n; i++)
+            if(a == b)
             {
-                arr[i] = random.Next(-100, 101);
+                return true;
             }
-            return arr;
+            return false;
         }
 
-        //Bubble Sort Method
-        static int[] BubbleSort(int[] arr)
+        //Bubble Sort for string
+        static string SortString(string str)
         {
-            int[] copyArr = arr;
+            //Delete all spaces in string and change to lower register
+            char[] strCopy = str.Replace(" ", "").ToLower().ToCharArray();
 
-            for (int i = 0; i < copyArr.Length; i++)
+            for (int i = 0; i < strCopy.Length; i++)
             {
-                for (int j = 0; j < copyArr.Length - 1 - i; j++)
+                for (int j = 0; j < strCopy.Length - 1 - i; j++)
                 {
-                    if (copyArr[j] > copyArr[j + 1])
+                    if (strCopy[j] > strCopy[j + 1])
                     {
-                        Swap(ref copyArr[j], ref copyArr[j + 1]);
+                        char temp = strCopy[j + 1];
+                        strCopy[j + 1] = strCopy[j];
+                        strCopy[j] = temp;
                     }
                 }
             }
-            return copyArr;
-        }
-        
-        //Method to print array
-        static void PrintArray(int[] arr)
-        {
-            foreach(int item in arr)
-            {
-                Console.Write(item + " ");
-            }
-            Console.WriteLine();
+            return String.Join("", strCopy);
         }
 
-        //QUICK SORT
-        static int[] QuickSort(int[] arr, int minIndex, int maxIndex)
+        static void StringAnalyze(string str, out int letterCount, out int numberCount, out int spchCount)
         {
-            if (minIndex >= maxIndex)
+            char[] strCopy = str.Replace(" ", "").ToCharArray();
+
+            letterCount = 0;
+            numberCount = 0;
+            spchCount = 0;
+
+            for (int i = 0; i < strCopy.Length; i++)
             {
-                return arr;
-            }
-
-            int pivodIndex = GetPivodIndex(arr, minIndex, maxIndex);
-
-            QuickSort(arr, minIndex, pivodIndex - 1);
-            QuickSort(arr, pivodIndex + 1, maxIndex);
-
-            return arr;
-        }
-
-        static int GetPivodIndex(int[] arr, int minIndex, int maxIndex)
-        {
-            int pivod = minIndex - 1;
-
-            for (int i = minIndex; i <= maxIndex; i++)
-            {
-                if (arr[i] < arr[maxIndex])
+                if(Char.IsLetter(strCopy[i]))
                 {
-                    pivod++;
-                    Swap(ref arr[pivod], ref arr[i]);
-                    
+                    letterCount++;
                 }
+                else if(Char.IsDigit(strCopy[i]))
+                {
+                    numberCount++;
+                }
+                else spchCount++;
             }
-
-            pivod++;
-            Swap(ref arr[pivod], ref arr[maxIndex]);
-
-            return pivod;
         }
 
-        //Swap Method
-        static void Swap(ref int leftElement, ref int rightElement)
+        static char[] Duplicate(string str)
         {
-            int temp = leftElement;
-            leftElement = rightElement;
-            rightElement = temp;
+            char[] strCopy = str.Replace(" ", "").ToLower().ToCharArray();
+
         }
     }
 }
