@@ -5,4 +5,14 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="phonebook.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="phonebook.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
