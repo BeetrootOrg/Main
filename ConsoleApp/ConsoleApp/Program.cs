@@ -19,6 +19,7 @@ namespace ConsoleApp
             Console.WriteLine("Welcome to Phone Book Application!\n");
             Console.WriteLine("\tMenu");
             Console.WriteLine("\t1. Show all phone book");
+            Console.WriteLine("\t0. Exit");
 
             ConsoleKeyInfo ck = Console.ReadKey();
             
@@ -27,6 +28,10 @@ namespace ConsoleApp
                 ShowAllNumbers();
                 Console.WriteLine("To back to menu type Enter...");
                 Console.ReadLine();
+            }
+            else if (ck.Key == ConsoleKey.D0 || ck.Key == ConsoleKey.NumPad0)
+            {
+                Environment.Exit(0);
             }
         }
 
