@@ -3,13 +3,37 @@
     using System;
     class ConsoleApp
     {
+        static int GetMax(int a, int b)
+        {
+            return Math.Max(a, b);
+        }
         static int GetMax(int a, int b, int c)
         {
             return Math.Max(Math.Max(a, b), c);
         }
+        static int GetMax(int a, int b, int c, int d)
+        {
+            return Math.Max(Math.Max(a, b), Math.Max(c, d));
+        }
+        static int GetMax(int a, int b, int c, int d, int e)
+        {
+            return Math.Max(Math.Max(Math.Max(a, b), Math.Max(c, d)), e);
+        }
+        static int GetMin(int a, int b)
+        {
+            return Math.Min(a, b);
+        }
         static int GetMin(int a, int b, int c)
         {
             return Math.Min(Math.Min(a, b), c);
+        }
+        static int GetMin(int a, int b, int c, int d)
+        {
+            return Math.Min(Math.Min(a, b), Math.Min(c, d));
+        }
+        static int GetMin(int a, int b, int c, int d, int e)
+        {
+            return Math.Min(Math.Min(Math.Min(a, b), Math.Min(c, d)), e);
         }
         static bool TrySumifOdd(int a, int b, out int result)
         {
@@ -52,18 +76,29 @@
             Console.WriteLine("Get Max/Min:");
             int a = -5;
             int b = 3;
-            int c = 15;
+            int c = 54;
+            int d = 75;
+            int e = 21;
+            Console.WriteLine("Enter numbers: {0} {1}", a, b);
+            Console.WriteLine("Max {0}", GetMax(a, b));
+            Console.WriteLine("Min {0}\r\n", GetMin(a, b));
             Console.WriteLine("Enter numbers: {0} {1} {2}", a, b, c);
             Console.WriteLine("Max {0}", GetMax(a, b, c));
             Console.WriteLine("Min {0}\r\n", GetMin(a, b, c));
+            Console.WriteLine("Enter numbers: {0} {1} {2} {3}", a, b, c, d);
+            Console.WriteLine("Max {0}", GetMax(a, b, c, d));
+            Console.WriteLine("Min {0}\r\n", GetMin(a, b, c, d));
+            Console.WriteLine("Enter numbers: {0} {1} {2} {3} {4}", a, b, c, d, e);
+            Console.WriteLine("Max {0}", GetMax(a, b, c, d, e));
+            Console.WriteLine("Min {0}\r\n", GetMin(a, b, c, d, e));
 
 
             Console.WriteLine("Calculate Sum:");
-            int d = -5;
-            int e = 4;
+            int f = -5;
+            int g = 4;
             int oddResult;
-            Console.Write("{0} + {1} = ", d, e);
-            ShowSum(TrySumifOdd(d, e, out oddResult), oddResult);
+            Console.Write("{0} + {1} = ", f, g);
+            ShowSum(TrySumifOdd(f, g, out oddResult), oddResult);
 
             Console.Write("\r\n");
             string _str = "str ";
