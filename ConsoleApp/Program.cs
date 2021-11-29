@@ -40,16 +40,16 @@
         }
         static int ReadConsoleValue(string str)
         {
-            string? ConsoleString = null;
+            string? consoleString = null;
             bool success = false;
             int value = 0;
 
-            while (success == false)
+            while (!success)
             {
                 Console.Write("Enter " + str + ": ");
-                ConsoleString = Console.ReadLine();
-                success = int.TryParse(ConsoleString, out value);
-                if (success == false)
+                consoleString = Console.ReadLine();
+                success = int.TryParse(consoleString, out value);
+                if (!success)
                 {
                     Console.Write("Error!\r\n");
                 }
@@ -58,13 +58,13 @@
         }
         static long ReadConsoleAndSumCalculate()
         {
-            int ConsoleA = 0;
-            int ConsoleB = 0;
+            int consoleA = 0;
+            int consoleB = 0;
 
-            ConsoleA = ReadConsoleValue("a");
-            ConsoleB = ReadConsoleValue("b");
+            consoleA = ReadConsoleValue("a");
+            consoleB = ReadConsoleValue("b");
 
-            return SumCalculate(ConsoleA, ConsoleB);
+            return SumCalculate(consoleA, consoleB);
         }
         static void Main(string[] args)
         {
