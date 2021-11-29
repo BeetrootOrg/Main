@@ -10,8 +10,11 @@ namespace  ConsoleApp
             Console.WriteLine("First task:");
             string stringCompare1 = "Hello";
             string stringCompare2 = "Hello";
+            string sortABC = "Hello";
+            string dublicate = "Hello and hi";
 
-            
+
+
 
             bool compare = stringCompare1==stringCompare2;
             Console.WriteLine($"Is string equal: {compare}");
@@ -26,6 +29,14 @@ namespace  ConsoleApp
             Console.WriteLine(CountOfNumbers(example1));
             Console.Write("letter = ");
             Console.WriteLine(CountOfLetters(example1));
+
+            //Third task
+            Console.WriteLine(SortByAlphabetical(sortABC));
+
+            //Fourth task
+
+            Console.WriteLine(DublicateFilter(dublicate));
+
         }
 
         static int CountOfLetters(String example1)
@@ -52,6 +63,35 @@ namespace  ConsoleApp
             return number;
         }
 
+        //Third task
+
+        static string SortByAlphabetical(string input)
+        {
+            string charsLow = input.ToLower();
+            char[] chars = charsLow.ToCharArray();
+            Array.Sort(chars);
+            return new string(chars);
+        }
+
+        //Fourth task
+
+        static string DublicateFilter(string input2)
+        {
+            {
+                string table = "";
+                int pos = 0;
+                foreach (var character in input2.ToCharArray())
+                {
+                    pos = table.IndexOf(character, Math.Abs(pos));
+                    if (pos == -1)
+                    {
+                        table += character;
+                    }
+
+                }
+                return table;
+            }
+        }
         
     }
 }
