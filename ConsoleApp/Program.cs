@@ -42,6 +42,15 @@
             }
             Console.Write(" // {0}\r\n", comment);
         }
+        static void printArray(int[] arr, int start, int end, string comment)
+        {
+            if (end <= start) return;
+            for (int i = start; i < end; i++)
+            {
+                Console.Write("{0} ", arr[i]);
+            }
+            Console.Write(" // {0}\r\n", comment);
+        }
         static void SwapElements(ref int a, ref int b)
         {
             int temp = a;
@@ -84,13 +93,39 @@
                 bubbleSort(arr, i);
             }
         }
+        static int Partation(ref int[] arr, int start, int end)
+        {
+            int pivot = arr[end];
+            int m = start;
+
+            printArray(arr, start, end, "Pivot " + pivot);
+
+            for (int i = start; i < end; i++)
+            {
+                if (arr[i] < pivot)
+                {
+                    SwapElements(ref arr[i], ref arr[m]);
+                    m++;
+                }
+            }
+            SwapElements(ref arr[m], ref arr[end]);
+            return m;
+        }
+        static void QuickSort(ref int [] arr, int start, int end)
+        {
+            if (start < end)
+            {
+                int pivot = Partation(ref arr, start, end);
+                QuickSort(ref arr, start, pivot - 1);
+                QuickSort(ref arr, pivot + 1, end);
+            }
+        }
         static void Main(string[] args)
         {
             Console.WriteLine("\r\n a.tkachenko/homework/06-arrays \r\n");
 
 
             Console.WriteLine("1. Selection Sort:");
-            // int[] array = { 64, 25, 12, 22, 11 , 7};
             int[] array = { 45, 78, 12, 45, 27, 0, 1, 1, 1, 0, 0, 4, 75 };
             printArray(array, "-- Input array");
             SelectionSort(array);
@@ -104,10 +139,21 @@
             printArray(BubbleArray, "-- Sorted array\r\n");
 
             Console.WriteLine("3. Insertion Sort:");
-            int[] InsertionArray = { 4, 3, 2, 1, 0 /*45, 13, 1, 57, 0*/ };
+            int[] InsertionArray = { 4, 3, 2, 1, 0 };
             printArray(InsertionArray, "-- Input array");
             InsertionSort(InsertionArray);
             printArray(InsertionArray, "-- Sorted array\r\n");
+
+            Console.WriteLine("4. Quick Sort:");
+            int[] QuickArr = { 5, 1, 3, 0, 7, 6, 2, 9, 4};
+            printArray(QuickArr, "-- Input array");
+            QuickSort(ref QuickArr, 0, QuickArr.Length - 1);
+            printArray(QuickArr, "-- Sorted array\r\n");
+            QuickArr = new int[] { 45, 78, 12, 35, 27, 0, 13, 0, 57, 0 };
+            printArray(QuickArr, "-- Input array");
+            QuickSort(ref QuickArr, 0, QuickArr.Length - 1);
+            printArray(QuickArr, "-- Sorted array\r\n");
+
             Console.Write("\r\n");
         }
     }
