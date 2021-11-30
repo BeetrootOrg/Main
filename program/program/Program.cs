@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 namespace  ConsoleApp
 {
     class Program
@@ -75,7 +76,14 @@ namespace  ConsoleApp
 
         //Fourth task
 
-       
-        
+
+        static char DublicateFilter(string str)
+        {
+            char[] strArray = str.Replace(" " ,"").ToLower().ToCharArray();
+
+        }
+
+
+
     }
 }
