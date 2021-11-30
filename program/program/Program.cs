@@ -23,6 +23,7 @@ namespace ConsoleApp
             Console.WriteLine("\t1. Show all phone book");
             Console.WriteLine("\t2. Create phone record");
             Console.WriteLine("\t3. Search by name");
+            Console.WriteLine("\t4. Search by phone number");
             Console.WriteLine("\t0. Exit");
 
             ConsoleKeyInfo ck = Console.ReadKey();
@@ -40,6 +41,10 @@ namespace ConsoleApp
                 case ConsoleKey.D3:
                 case ConsoleKey.NumPad3:
                     SearchByName();
+                    break;
+                case ConsoleKey.D4:
+                case ConsoleKey.NumPad4:
+                    SearchByPhoneNumber();
                     break;
                 case ConsoleKey.D0:
                 case ConsoleKey.NumPad0:
@@ -75,6 +80,33 @@ namespace ConsoleApp
             Wait();
         }
 
+        private static void SearchByPhoneNumber()
+        {
+            Console.Clear();
+            Console.WriteLine("Search by the name.");
+            Console.WriteLine("Pls enter the nuberr");
+
+            var searchTerm = Console.ReadLine();
+
+            bool found = false;
+            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+            {
+                if (phoneNumber.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    
+                {
+                    Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
+                    found = true;
+                }
+            }
+            if (!found)
+            {
+                Console.WriteLine("Not such users");
+            }
+
+            Wait();
+
+        }
+
         private static void Exit()
         {
             Environment.Exit(0);
@@ -91,6 +123,7 @@ namespace ConsoleApp
 
             Console.WriteLine("Enter Phone Number...");
             var phoneNumber = Console.ReadLine();
+
 
             File.AppendAllLines(Filename, new[] { $"{firstName},{lastName},{phoneNumber}" });
         }
@@ -116,6 +149,8 @@ namespace ConsoleApp
         {
             Console.WriteLine("To back to menu type Enter...");
             Console.ReadLine();
+
+
         }
 
         static (string, string, string)[] ReadPhoneBook()
