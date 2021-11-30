@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+
 namespace  ConsoleApp
 {
     class Program
@@ -77,10 +78,23 @@ namespace  ConsoleApp
         //Fourth task
 
 
-        static char DublicateFilter(string str)
+        static char[] DublicateFilter(string str)
         {
-            char[] strArray = str.Replace(" " ,"").ToLower().ToCharArray();
+            char[] strArray = str.Replace(" ", "").ToLower().ToCharArray();
+            StringBuilder strCopy = new StringBuilder(str.Replace(" ", "").ToLower());
+            StringBuilder result = new StringBuilder();
+                        
 
+            for (int i = 0; i < strArray.Length; i++)
+            {
+                int strLenght = strCopy.Length;
+
+                if (strLenght - strCopy.Replace(strArray[i].ToString(), "").Length > 1)
+                {
+                    result.Append(strArray[i] + ",");
+                }
+            }
+            return result.ToString().ToCharArray();
         }
 
 
