@@ -39,7 +39,7 @@ namespace ConsoleApp
 
 
         //Compare Two strings
-        static bool StringCompare(string a, string b) => a == b ? true : false;
+        static bool StringCompare(string a, string b) => a == b;
 
         //Bubble Sort for string
         static string SortString(string str)
