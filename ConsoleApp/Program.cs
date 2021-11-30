@@ -3,156 +3,154 @@
     using System;
     class ConsoleApp
     {
-        static void SelectionSort(int[] arr)
+        static void ShowCompareResult(bool result, string str1, string str2)
         {
-            int founMinValue;
-            for (int i = 0, j = 0; i < arr.Length; i++)
+            if (result == true)
             {
-                founMinValue = arr[i];
-                int minIndex = 0;
-                int replaceElement = arr[i];
-                for (j = i+1; j < arr.Length; j++)
+                Console.WriteLine("\"{0}\" == \"{1}\"", str1, str2);
+            }
+            else 
+            { 
+                Console.WriteLine("\"{0}\" != \"{1}\"", str1, str2);
+            }
+        }
+        static bool Compare(string str1, string str2)
+        {
+            if(str1.Length != str2.Length)
+            {
+                return false;
+            }
+            for(int i = 0; i < str1.Length; i++)
+            {
+                if (str1[i] != str2[i])
                 {
-                    if(arr[j] < founMinValue)
+                    return false;
+                }
+            }
+            return true;
+        }
+        static void ShowAnalizeResult(string str, (int, int, int)result)
+        {
+            Console.WriteLine("The string \"{0}\" consist: {1} Letters, {2} Digits and {3} another symbols", str, result.Item1, result.Item2, result.Item3);
+        }
+        static (int, int, int) Analize(string str)
+        {
+            int countAlphabetics = 0;
+            int countDigits = 0;
+            int countAnotherSymbols = 0;
+
+            for (int i = 0; i < str.Length; i++)
+            {
+                if(char.IsLetter(str[i]))
+                {
+                    countAlphabetics++;
+                }
+                else if(char.IsDigit(str[i]))
+                {
+                    countDigits++;
+                }
+                else
+                {
+                    countAnotherSymbols++;
+                }
+
+            }
+            return (countAlphabetics, countDigits, countAnotherSymbols);
+        }
+        static void Sort(out string sortedString, string inputString)
+        {
+            inputString = inputString.ToLower();
+            char[] arr = inputString.ToCharArray();
+            Array.Sort(arr);
+            sortedString = new string(arr);
+        }
+        static void ShowSortedString(string inputString, string sortedString)
+        {
+            Console.WriteLine("Input string: \"{0}\", Sorted string: \"{1}\"", inputString, sortedString);
+        }
+        static void Dublicate(out (char, int)[] dublicateChars, string inputString)
+        {
+            Sort(out inputString, inputString);
+            int[] count = new int[inputString.Length];
+            int charcount;
+            int numberOfDublicats = 0;
+
+            for (int i = 0; i < inputString.Length; i += charcount)
+            {
+                char checkChar = inputString[i];
+                count[i] = 1;
+                charcount = 1;
+                if (char.IsLetter(checkChar))
+                {
+                    for (int j = i + 1; j < inputString.Length; j++)
                     {
-                        minIndex = j;
-                        founMinValue = arr[j];
-                        arr[i] = founMinValue;
+                        if (checkChar == inputString[j])
+                        {
+                            count[i]++;
+                            charcount++;
+                        }
                     }
                 }
-                if (minIndex != 0)
+                if (charcount > 1)
                 {
-                    arr[minIndex] = replaceElement;
+                    numberOfDublicats++;
+                }
+            }
+            dublicateChars = new (char, int)[numberOfDublicats];
+            for (int i = 0, j = 0; i < count.Length; i++)
+            {
+                if (count[i] > 1)
+                {
+                    dublicateChars[j++] = (inputString[i], count[i]);
                 }
             }
         }
-        static void printArray(int [] arr, string comment)
+        static void ShowDublicate(string inputString, (char, int)[] dublicateChars)
         {
-            for(int i = 0; i < arr.Length; i++)
+            Console.WriteLine("The string \"{0}\", consist dublicat characters:", inputString);
+            for(int i = 0; i < dublicateChars.Length; i++)
             {
-                Console.Write("{0} ", arr[i]);
-            }
-            Console.Write(" // {0}\r\n", comment);
-        }
-        static void printArray(int[] arr, int length, string comment)
-        {
-            for (int i = 0; i < length; i++)
-            {
-                Console.Write("{0} ", arr[i]);
-            }
-            Console.Write(" // {0}\r\n", comment);
-        }
-        static void printArray(int[] arr, int start, int end, string comment)
-        {
-            if (end <= start) return;
-            for (int i = start; i < end; i++)
-            {
-                Console.Write("{0} ", arr[i]);
-            }
-            Console.Write(" // {0}\r\n", comment);
-        }
-        static void SwapElements(ref int a, ref int b)
-        {
-            int temp = a;
-            a = b; 
-            b = temp;
-        }
-        static void bubbleSort(int[] arr, int n)
-        {
-            int i, j, k;
-            bool ArraySorted;
-
-            for (k = 0; k < n; k++)
-            {
-                ArraySorted = true;
-                for (i = 0, j = 1; j < n; i++, j++)
-                {
-                    if (arr[i] > arr[j])
-                    {
-                        ArraySorted = false;
-                        SwapElements(ref arr[j], ref arr[i]);
-                    }
-                }
-
-                printArray(arr, n, "cycle " + k.ToString());
-
-                if(ArraySorted == true)
-                {
-                    break;
-                }
-            }
-        }
-        static void InsertionSort(int[] arr)
-        {
-            if(arr.Length < 2)
-            {
-                return;
-            }
-            for(int i = 2; i <= arr.Length; i++)
-            {
-                bubbleSort(arr, i);
-            }
-        }
-        static int Partation(ref int[] arr, int start, int end)
-        {
-            int pivot = arr[end];
-            int m = start;
-
-            printArray(arr, start, end, "Pivot " + pivot);
-
-            for (int i = start; i < end; i++)
-            {
-                if (arr[i] < pivot)
-                {
-                    SwapElements(ref arr[i], ref arr[m]);
-                    m++;
-                }
-            }
-            SwapElements(ref arr[m], ref arr[end]);
-            return m;
-        }
-        static void QuickSort(ref int [] arr, int start, int end)
-        {
-            if (start < end)
-            {
-                int pivot = Partation(ref arr, start, end);
-                QuickSort(ref arr, start, pivot - 1);
-                QuickSort(ref arr, pivot + 1, end);
+                Console.WriteLine("{0} : {1}", dublicateChars[i].Item1, dublicateChars[i].Item2);
             }
         }
         static void Main(string[] args)
         {
-            Console.WriteLine("\r\n a.tkachenko/homework/06-arrays \r\n");
+            Console.WriteLine("\r\n a.tkachenko/homework/07-strings \r\n");
 
 
-            Console.WriteLine("1. Selection Sort:");
-            int[] array = { 45, 78, 12, 45, 27, 0, 1, 1, 1, 0, 0, 4, 75 };
-            printArray(array, "-- Input array");
-            SelectionSort(array);
-            printArray(array, "-- Sorted array\r\n");
+            Console.WriteLine("1. Compare:");
+            string str1 = "string 1";
+            string str2 = "string 2";
+            bool result = Compare(str1, str2);
+            ShowCompareResult(result, str1, str2);
+            str1 = "same string";
+            str2 = "same string";
+            result = Compare(str1, str2);
+            ShowCompareResult(result, str1, str2);
+            Console.Write("\r\n");
 
-            Console.WriteLine("2. Buble Sort:");
-            int[] BubbleArray = { 45, 78, 12, 35, 27, 0, 13, 0, 57, 0 };
-            int n = BubbleArray.Length;
-            printArray(BubbleArray, "-- Input array");
-            bubbleSort(BubbleArray, n);
-            printArray(BubbleArray, "-- Sorted array\r\n");
+            Console.WriteLine("2. Analize:");
+            string analizeSting = "Hello!  %^& 234";
+            (int, int, int) analizeResult = Analize(analizeSting);
+            ShowAnalizeResult(analizeSting, analizeResult);
+            Console.Write("\r\n");
 
-            Console.WriteLine("3. Insertion Sort:");
-            int[] InsertionArray = { 4, 3, 2, 1, 0 };
-            printArray(InsertionArray, "-- Input array");
-            InsertionSort(InsertionArray);
-            printArray(InsertionArray, "-- Sorted array\r\n");
+            Console.WriteLine("3. Sort:");
+            string nonSortedString = "Hello";
+            string sortedString;
+            Sort(out sortedString, nonSortedString);
+            ShowSortedString(nonSortedString, sortedString);
+            nonSortedString = "HklThRAfF";
+            Sort(out sortedString, nonSortedString);
+            ShowSortedString(nonSortedString, sortedString);
+            Console.Write("\r\n");
 
-            Console.WriteLine("4. Quick Sort:");
-            int[] QuickArr = { 5, 1, 3, 0, 7, 6, 2, 9, 4};
-            printArray(QuickArr, "-- Input array");
-            QuickSort(ref QuickArr, 0, QuickArr.Length - 1);
-            printArray(QuickArr, "-- Sorted array\r\n");
-            QuickArr = new int[] { 45, 78, 12, 35, 27, 0, 13, 0, 57, 0 };
-            printArray(QuickArr, "-- Input array");
-            QuickSort(ref QuickArr, 0, QuickArr.Length - 1);
-            printArray(QuickArr, "-- Sorted array\r\n");
+            Console.WriteLine("4. Dublicate:");
+            string inputString = "Hello and hi";
+            (char, int)[] dublicateChars;
+            Dublicate(out dublicateChars, inputString);
+            ShowDublicate(inputString, dublicateChars);
+            Console.Write("\r\n");
 
             Console.Write("\r\n");
         }
