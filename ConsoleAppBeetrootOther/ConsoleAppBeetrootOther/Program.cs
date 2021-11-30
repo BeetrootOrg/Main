@@ -1,46 +1,78 @@
 ﻿using System;
-using System.Text;
+using System.IO;
 
-namespace ConsoleAppBeetrootOther
+namespace ConsoleApp
 {
-    class ConsoleAppBeetrootOther
+    class Program
     {
-        static void Main(string[] args)
-        {
-            Console.WriteLine(Compare("AD","BC"));
-            Console.WriteLine(Compare("AD","DD"));
-            Console.WriteLine(Compare("aa", "AA"));
+        const string Filename = @"C:\Users\lordh\source\repos\Main\Main\ConsoleAppBeetrootOther\ConsoleAppBeetrootOther";
 
+        static void Main()
+        {
+            while (true)
+            {
+                Menu();
+            }
+        }
 
-        }
-        static int Compare(string str1, string str2)
+        static void Menu()
         {
-            var bytes1 = Encoding.Unicode.GetBytes(str1);
-            var sum1 = Sum(bytes1);
-            var bytes2 = Encoding.Unicode.GetBytes(str2);
-            var sum2 = Sum(bytes2);
-            if (sum1 == sum2)
+            Console.Clear();
+            Console.WriteLine("Welcome to Phone Book Application!\n");
+            Console.WriteLine("\tMenu");
+            Console.WriteLine("\t1. Show all phone book");
+            Console.WriteLine("\t2. Create phone record");
+            Console.WriteLine("\t0. Exit");
+
+            ConsoleKeyInfo ck = Console.ReadKey();
+
+            if (ck.Key == ConsoleKey.D1 || ck.Key == ConsoleKey.NumPad1)
             {
-                return 0;
+                ShowAllNumbers();
+                Console.WriteLine("To back to menu type Enter...");
+                Console.ReadLine();
             }
-            return sum1 > sum2 ? 1 : -1;
+            else if (ck.Key == ConsoleKey.D2 || ck.Key == ConsoleKey.NumPad2)
+            {
+                CreatePhoneNumber();
+            }
+            else if (ck.Key == ConsoleKey.D0 || ck.Key == ConsoleKey.NumPad0)
+            {
+                Environment.Exit(0);
+            }
         }
-        static int Sum(byte[] bytes)
+
+        static void CreatePhoneNumber()
         {
-            var sum = 0;
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                sum += bytes[i];
-            }
-            return sum;
+            Console.Clear();
+            Console.WriteLine("Enter First Name...");
+            var firstName = Console.ReadLine();
+
+            Console.WriteLine("Enter Last Name...");
+            var lastName = Console.ReadLine();
+
+            Console.WriteLine("Enter Phone Number...");
+            var phoneNumber = Console.ReadLine();
+
+            File.AppendAllLines(Filename, new[] { $"{firstName},{lastName},{phoneNumber}" });
         }
-        //написати метод int Compare(string str1, string str2), що буде порівнювати строки використовуючи суму UTF-16 кодів кожного символу.
-        //результат:
-        //будь-яке число менше 0, якщо str1<str2 за тим алгоритмом
-        //0, якщо str1 == str2
-        //будь-яке число більше за 0, якщо str1 > str2
-        //наприклад:
-        //Compare('AD', 'BC') повертає 0, бо код(A)=65, код(В)=66, код(С)=67, код(D)=68, код(AD)=65+68=133, код(BC)=66+67=133, код(AD)=код(BC) тому результат 0
-        //Compare('AD', 'DD') повертає 1, бо код('AD')=65+68=133, код('DD')=68+68=136, код(AD)<код(DD), тому -1
+
+        static void ShowAllNumbers()
+        {
+            Console.Clear();
+             string[] lines = File.ReadAllLines(Filename);
+
+            foreach (string line in lines)
+            {
+                string[] splitted = line.Split(',');
+
+                foreach (var item in splitted)
+                {
+                    Console.Write($"{item,-15}");
+                }
+
+                Console.WriteLine();
+            }
+        }
     }
 }
