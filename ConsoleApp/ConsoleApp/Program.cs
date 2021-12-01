@@ -156,9 +156,13 @@ namespace ConsoleApp
 
                 return phoneBook;
             }
+            catch (IOException)
+            {
+                File.WriteAllText(Filename, $"{Header}\n");
+                return new (string, string, string)[0];
+            }
             catch
             {
-                // File.WriteAllText(Filename, $"{Header}\n");
                 return null;
             }
         }
