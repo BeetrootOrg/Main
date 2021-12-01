@@ -7,12 +7,21 @@ namespace ConsoleApp
     {
         const string Filename = @"phonebook123.csv";
         const string Header = "FirstName,LastName,PhoneNumber";
+        const int MaxStringLength = 14;
 
         static void Main()
         {
             while (true)
             {
-                Menu();
+                try
+                {
+                    Menu();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.ReadLine();
+                }
             }
         }
 
@@ -96,11 +105,26 @@ namespace ConsoleApp
             Console.WriteLine("Enter First Name...");
             var firstName = Console.ReadLine();
 
+            if (firstName.Length > MaxStringLength)
+            {
+                throw new ArgumentException($"Max length of first name is {MaxStringLength}", nameof(firstName));
+            }
+
             Console.WriteLine("Enter Last Name...");
             var lastName = Console.ReadLine();
 
+            if (lastName.Length > MaxStringLength)
+            {
+                throw new ArgumentException($"Max length of last name is {MaxStringLength}", nameof(lastName));
+            }
+
             Console.WriteLine("Enter Phone Number...");
             var phoneNumber = Console.ReadLine();
+
+            if (phoneNumber.Length > MaxStringLength)
+            {
+                throw new ArgumentException($"Max length of phone number is {MaxStringLength}", nameof(phoneNumber));
+            }
 
             File.AppendAllLines(Filename, new[] { $"{firstName},{lastName},{phoneNumber}" });
         }
