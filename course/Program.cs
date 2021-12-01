@@ -160,6 +160,7 @@ namespace Course
                 {
                     userData = ( firstName, lastName, phoneNumber );
                     found = true;
+                    break;
                 }
                 if (!found)
                 {
