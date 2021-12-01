@@ -24,6 +24,7 @@ namespace ConsoleApp
             Console.WriteLine("\t2. Create phone record");
             Console.WriteLine("\t3. Search by name");
             Console.WriteLine("\t4. Search by phone number");
+            Console.WriteLine("\t5. Update user");
             Console.WriteLine("\t0. Exit");
 
             ConsoleKeyInfo ck = Console.ReadKey();
@@ -46,7 +47,11 @@ namespace ConsoleApp
                 case ConsoleKey.NumPad4:
                     SearchByPhoneNumber();
                     break;
-                case ConsoleKey.D0:
+                case ConsoleKey.D5:
+                case ConsoleKey.NumPad5:
+                    UpdateUser();
+                    break;
+                case ConsoleKey.D0:                    
                 case ConsoleKey.NumPad0:
                     Exit();
                     break;
@@ -104,6 +109,23 @@ namespace ConsoleApp
             }
 
             Wait();
+        }
+
+        private static void UpdateUser()
+        {
+            Console.Clear();
+            Console.WriteLine("Witch user are you want to update");
+
+            Console.WriteLine("Enter First Name...");
+            var firstName = Console.ReadLine();
+
+            Console.WriteLine("Enter Last Name...");
+            var lastName = Console.ReadLine();
+
+            Console.WriteLine("Enter Phone Number...");
+            var phoneNumber = Console.ReadLine();
+
+            File.WriteAllLines(Filename, new[] { firstName, lastName, phoneNumber });
 
         }
 
