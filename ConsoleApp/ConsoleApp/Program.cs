@@ -5,7 +5,7 @@ namespace ConsoleApp
 {
     class Program
     {
-        const string Filename = @"phonebook123.csv";
+        const string Filename = @"directory/123/phonebook123.csv";
         const string Header = "FirstName,LastName,PhoneNumber";
         const int MaxStringLength = 14;
 
@@ -179,6 +179,11 @@ namespace ConsoleApp
                 }
 
                 return phoneBook;
+            }
+            // throw new DirectoryNotFoundException(...) -> dnfe;
+            catch (DirectoryNotFoundException dnfe)
+            {
+                throw;
             }
             catch (IOException)
             {
