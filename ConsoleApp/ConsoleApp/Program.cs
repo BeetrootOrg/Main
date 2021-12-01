@@ -5,7 +5,7 @@ namespace ConsoleApp
 {
     class Program
     {
-        const string Filename = @"directory/123/phonebook123.csv";
+        const string Filename = @"phonebook123.csv";
         const string Header = "FirstName,LastName,PhoneNumber";
         const int MaxStringLength = 14;
 
@@ -60,38 +60,42 @@ namespace ConsoleApp
 
         private static void SearchByName()
         {
-            Console.Clear();
-            Console.WriteLine("Search condition - if first/last name contains search term you will see it");
-
-            Console.WriteLine("Enter Search Term...");
-            var searchTerm = Console.ReadLine();
-
-            bool found = false;
-            var phoneBook = ReadPhoneBook();
-
-            if (phoneBook == null)
+            try
             {
-                Console.WriteLine("Error occured during file read, press Enter...");
-                Console.ReadLine();
-                return;
-            }
+                Console.Clear();
+                Console.WriteLine("Search condition - if first/last name contains search term you will see it");
 
-            foreach (var (firstName, lastName, phoneNumber) in phoneBook)
-            {
-                if (firstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
-                    lastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                Console.WriteLine("Enter Search Term...");
+                var searchTerm = Console.ReadLine();
+
+                bool found = false;
+                var phoneBook = ReadPhoneBook();
+
+                if (phoneBook == null)
                 {
-                    Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
-                    found = true;
+                    Console.WriteLine("Error occured during file read.");
+                    return;
+                }
+
+                foreach (var (firstName, lastName, phoneNumber) in phoneBook)
+                {
+                    if (firstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                        lastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
+                        found = true;
+                    }
+                }
+
+                if (!found)
+                {
+                    Console.WriteLine("No such users");
                 }
             }
-
-            if (!found)
+            finally
             {
-                Console.WriteLine("Not such users");
+                Wait();
             }
-
-            Wait();
         }
 
         private static void Exit()
@@ -183,6 +187,7 @@ namespace ConsoleApp
             // throw new DirectoryNotFoundException(...) -> dnfe;
             catch (DirectoryNotFoundException dnfe)
             {
+                // some code can be here
                 throw;
             }
             catch (IOException)
