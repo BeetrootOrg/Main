@@ -5,7 +5,8 @@ namespace ConsoleApp
 {
     class Program
     {
-        const string Filename = @"phonebook.csv";
+        const string Filename = @"phonebook123.csv";
+        const string Header = "FirstName,LastName,PhoneNumber";
 
         static void Main()
         {
@@ -57,7 +58,16 @@ namespace ConsoleApp
             var searchTerm = Console.ReadLine();
 
             bool found = false;
-            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+            var phoneBook = ReadPhoneBook();
+
+            if (phoneBook == null)
+            {
+                Console.WriteLine("Error occured during file read, press Enter...");
+                Console.ReadLine();
+                return;
+            }
+
+            foreach (var (firstName, lastName, phoneNumber) in phoneBook)
             {
                 if (firstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
                     lastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
@@ -98,10 +108,19 @@ namespace ConsoleApp
         static void ShowAllNumbers()
         {
             Console.Clear();
+
+            var phoneBook = ReadPhoneBook();
+            if (phoneBook == null)
+            {
+                Console.WriteLine("Error occured during file read, press Enter...");
+                Console.ReadLine();
+                return;
+            }
+
             // show header
             Console.WriteLine($"{"First Name",-15}{"Last Name",-15}{"Phone Number",-15}");
 
-            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+            foreach (var (firstName, lastName, phoneNumber) in phoneBook)
             {
                 Console.Write($"{firstName,-15}");
                 Console.Write($"{lastName,-15}");
@@ -118,18 +137,30 @@ namespace ConsoleApp
             Console.ReadLine();
         }
 
+        /// <summary>
+        /// Parse CSV file to Phone Book
+        /// </summary>
+        /// <returns>array if read was success, null if error occures</returns>
         static (string, string, string)[] ReadPhoneBook()
         {
-            string[] lines = File.ReadAllLines(Filename);
-
-            var phoneBook = new (string, string, string)[lines.Length - 1];
-            for (int i = 1; i < lines.Length; i++)
+            try
             {
-                string[] splitted = lines[i].Split(',');
-                phoneBook[i - 1] = (splitted[0], splitted[1], splitted[2]);
-            }
+                string[] lines = File.ReadAllLines(Filename);
 
-            return phoneBook;
+                var phoneBook = new (string, string, string)[lines.Length - 1];
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    string[] splitted = lines[i].Split(',');
+                    phoneBook[i - 1] = (splitted[0], splitted[1], splitted[2]);
+                }
+
+                return phoneBook;
+            }
+            catch
+            {
+                // File.WriteAllText(Filename, $"{Header}\n");
+                return null;
+            }
         }
 
         static string[] ConvertToText((string, string, string)[] data)
