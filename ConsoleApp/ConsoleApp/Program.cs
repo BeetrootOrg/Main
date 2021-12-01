@@ -192,7 +192,15 @@ namespace ConsoleApp
             }
             catch (IOException)
             {
-                File.WriteAllText(Filename, $"{Header}\n");
+                try
+                {
+                    File.WriteAllText(Filename, $"{Header}\n");
+                }
+                catch
+                {
+                    // ignore
+                }
+
                 return new (string, string, string)[0];
             }
             catch
