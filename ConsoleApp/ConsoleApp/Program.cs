@@ -1,17 +1,27 @@
 ﻿using System;
 using System.Text;
 using System.IO;
+
 namespace ConsoleApp
 {
     class Program
     {
-        const string Filename = @"phonebook.csv";
-
+        const string Filename = @"phonebook123.csv";
+        const string Header = "FirstName,LastName,PhoneNumber";
+        const int MaxStringLength = 14;
         static void Main()
         {
             while (true)
             {
-                Menu();
+                try 
+                {
+                    Menu();
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.ReadLine();
+                }
             }
         }
 
@@ -50,28 +60,43 @@ namespace ConsoleApp
 
         private static void SearchByName()
         {
-            Console.Clear();
-            Console.WriteLine("Search condition - if first/last name contains search term you will see it");
-            Console.WriteLine("Enter Search Term...");
-            var searchTerm = Console.ReadLine();
-
-            bool found = false;
-            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+            try
             {
-                if (firstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
-                    lastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                Console.Clear();
+                Console.WriteLine("Search condition - if first/last name contains search term you will see it");
+
+                Console.WriteLine("Enter Search Term...");
+                var searchTerm = Console.ReadLine();
+
+                bool found = false;
+                var phoneBook = ReadPhoneBook();
+
+                if (phoneBook == null)
                 {
-                    Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
-                    found = true;
+                    Console.WriteLine("Error occured during file read, press Enter...");
+                    return;
+                }
+
+                foreach (var (firstName, lastName, phoneNumber) in phoneBook)
+                {
+                    if (firstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                        lastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
+                        found = true;
+                    }
+                }
+
+                if (!found)
+                {
+                    Console.WriteLine("No such users");
                 }
             }
-
-            if (!found)
+            finally
             {
-                Console.WriteLine("Not such users");
+                Wait();
             }
 
-            Wait();
         }
 
         private static void Exit()
@@ -85,11 +110,22 @@ namespace ConsoleApp
             Console.WriteLine("Enter First Name...");
             var firstName = Console.ReadLine();
 
+            if (firstName.Length > MaxStringLength)
+            {
+                throw new ArgumentException($"Max length of first name is {MaxStringLength}", nameof(firstName));
+            }
             Console.WriteLine("Enter Last Name...");
             var lastName = Console.ReadLine();
-
+            if (lastName.Length > MaxStringLength)
+            {
+                throw new ArgumentException($"Max length of last name is {MaxStringLength}", nameof(lastName));
+            }
             Console.WriteLine("Enter Phone Number...");
             var phoneNumber = Console.ReadLine();
+            if (phoneNumber.Length > MaxStringLength)
+            {
+                throw new ArgumentException($"Max length of phone number is {MaxStringLength}", nameof(phoneNumber));
+            }
 
             File.AppendAllLines(Filename, new[] { $"{firstName},{lastName},{phoneNumber}" });
         }
@@ -97,9 +133,19 @@ namespace ConsoleApp
         static void ShowAllNumbers()
         {
             Console.Clear();
+
+            var phoneBook = ReadPhoneBook();
+            if (phoneBook == null)
+            {
+                Console.WriteLine("Error occured during file read, press Enter...");
+                Console.ReadLine();
+                return;
+            }
+
+            // show header
             Console.WriteLine($"{"First Name",-15}{"Last Name",-15}{"Phone Number",-15}");
 
-            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+            foreach (var (firstName, lastName, phoneNumber) in phoneBook)
             {
                 Console.Write($"{firstName,-15}");
                 Console.Write($"{lastName,-15}");
@@ -116,18 +162,52 @@ namespace ConsoleApp
             Console.ReadLine();
         }
 
+        /// <summary>
+        /// Parse CSV file to Phone Book
+        /// </summary>
+        /// <returns>array if read was success, null if error occures</returns>
         static (string, string, string)[] ReadPhoneBook()
         {
-            string[] lines = File.ReadAllLines(Filename);
-
-            var phoneBook = new (string, string, string)[lines.Length - 1];
-            for (int i = 1; i < lines.Length; i++)
+            try
             {
-                string[] splitted = lines[i].Split(',');
-                phoneBook[i - 1] = (splitted[0], splitted[1], splitted[2]);
+                string[] lines = File.ReadAllLines(Filename);
+
+                var phoneBook = new (string, string, string)[lines.Length - 1];
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    string[] splitted = lines[i].Split(',');
+                    phoneBook[i - 1] = (splitted[0], splitted[1], splitted[2]);
+                }
+
+                return phoneBook;
+            }
+            catch(DirectoryNotFoundException dnfe)
+            {
+                throw;
+            }
+            catch(IOException)
+            {
+                File.WriteAllText(Filename, $"{Header}\n");
+                return new (string, string, string)[0];
+            }
+            catch
+            {
+                // File.WriteAllText(Filename, $"{Header}\n");
+                return null;
+            }
+        }
+
+        static string[] ConvertToText((string, string, string)[] data)
+        {
+            var content = new string[data.Length + 1];
+            content[0] = "FirstName,LastName,PhoneNumber";
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                content[i + 1] = $"{data[i].Item1},{data[i].Item2},{data[i].Item3}";
             }
 
-            return phoneBook;
+            return content;
         }
-    }  
+    }
 }
