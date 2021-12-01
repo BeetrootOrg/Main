@@ -3,7 +3,7 @@
     using System;
     class ConsoleApp
     {
-        const string Filename = @"phonebook.csv";
+        const string Filename = @"..\..\..\phonebook.csv";
 
         static void ShowCompareResult(bool result, string str1, string str2)
         {
@@ -230,7 +230,77 @@
 
             Wait();
         }
+        private static int SearchByFullName(string searchFirstName, string searchLastName)
+        {
+            int index = -1;
+            bool found = false;
 
+            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+            {
+                if (firstName.Contains(searchFirstName, StringComparison.OrdinalIgnoreCase) ||
+                    lastName.Contains(searchLastName, StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
+                    found = true;
+                }
+                index++;
+            }
+
+            if (!found)
+            {
+                Console.WriteLine("The \"{0} {1}\" user, not found!", searchFirstName, searchLastName);
+                return -1;
+            }
+            return index-1;
+        }
+        private static int SearchByFullName(string searchFirstName, string searchLastName, ref (string, string, string)[] PhoneBook)
+        {
+            int index = 1;
+            bool found = false;
+
+            foreach (var (firstName, lastName, phoneNumber) in PhoneBook)
+            {
+                if (firstName.Contains(searchFirstName, StringComparison.OrdinalIgnoreCase) ||
+                    lastName.Contains(searchLastName, StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
+                    found = true;
+                    break;
+                }
+                index++;
+            }
+
+            if (!found)
+            {
+                Console.WriteLine("The \"{0} {1}\" user, not found!", searchFirstName, searchLastName);
+                return -1;
+            }
+            return index;
+        }
+        private static int SearchByFullName(string searchFirstName, string searchLastName, ref string[] lines)
+        {
+            int index = 0;
+            bool found = false;
+
+            foreach (var name in lines)
+            {
+                if (name.Contains(searchFirstName, StringComparison.OrdinalIgnoreCase) || name.Contains(searchLastName, StringComparison.OrdinalIgnoreCase))
+                {
+                    // Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
+                    Console.WriteLine("Found user {0}", name);
+                    found = true;
+                    break;
+                }
+                index++;
+            }
+
+            if (!found)
+            {
+                Console.WriteLine("The \"{0} {1}\" user, not found!", searchFirstName, searchLastName);
+                return -1;
+            }
+            return index;
+        }
         private static void SearchByPhone()
         {
             Console.Clear();
@@ -289,10 +359,23 @@
             Console.WriteLine("Enter Last Name...");
             var lastName = Console.ReadLine();
 
-            Console.WriteLine("Enter Phone Number...");
-            var phoneNumber = Console.ReadLine();
+            string[] lines;
+            (string, string, string)[] phoneBook;
+            ReadPhoneBook(out lines, out phoneBook);
 
-            //File.AppendAllLines(Filename, new[] { $"{firstName},{lastName},{phoneNumber}" });
+            int indexName = SearchByFullName(firstName, lastName, ref phoneBook);
+            UpdateNewPhoneNumber(firstName, lastName, lines, indexName);
+        }
+        private static void UpdateNewPhoneNumber(string? firstName, string? lastName, string[] lines, int indexName)
+        {
+            if ((indexName != -1) && (indexName <= lines.Length))
+            {
+                Console.WriteLine("Enter New Phone Number...");
+                var phoneNumber = Console.ReadLine();
+
+                lines[indexName] = firstName + "," + lastName + "," + phoneNumber;
+                File.WriteAllLines(Filename, lines);
+            }
         }
 
         static void ShowAllNumbers()
@@ -331,7 +414,19 @@
 
             return phoneBook;
         }
+        static (string, string, string)[] ReadPhoneBook(out string[] lines, out (string, string, string)[] phoneBook)
+        {
+            lines = File.ReadAllLines(Filename);
 
+            phoneBook = new (string, string, string)[lines.Length - 1];
+            for (int i = 1; i < lines.Length; i++)
+            {
+                string[] splitted = lines[i].Split(',');
+                phoneBook[i - 1] = (splitted[0], splitted[1], splitted[2]);
+            }
+
+            return phoneBook;
+        }
         static string[] ConvertToText((string, string, string)[] data)
         {
             var content = new string[data.Length + 1];
