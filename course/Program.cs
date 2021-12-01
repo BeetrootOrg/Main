@@ -178,13 +178,14 @@ namespace Course
 
                 phoneBook[index] = userData;
 
-                string[] covertedPhoneBook = new string[phoneBook.Length];
+                string[] convertedPhoneBook = new string[phoneBook.Length+1];
+                convertedPhoneBook[0] = "FirstName,LastName,PhoneNumber";
                 for (int i = 0; i < phoneBook.Length; i++)
                 {
-                    covertedPhoneBook[i] = $"{phoneBook[i].Item1},{phoneBook[i].Item2},{phoneBook[i].Item3}";
+                    convertedPhoneBook[i + 1] = $"{phoneBook[i].Item1},{phoneBook[i].Item2},{phoneBook[i].Item3}";
                 }
 
-                File.WriteAllLines(Filename, covertedPhoneBook);
+                File.WriteAllLines(Filename, convertedPhoneBook);
             }
 
             Wait();
