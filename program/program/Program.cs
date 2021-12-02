@@ -114,6 +114,8 @@ namespace ConsoleApp
         private static void UpdateUser()
         {
             Console.Clear();
+
+
             bool found = false;
             // show header
             Console.WriteLine($"{"#",-15}{"First Name",-15}{"Last Name",-15}{"Phone Number",-15}");
@@ -127,30 +129,32 @@ namespace ConsoleApp
                 Console.WriteLine();
             }
 
-            Console.WriteLine("\nWitch user are you want to rename? (write the number of them)\n");
+            Console.WriteLine("\nWrite user number to change phone number)\n");
             var searchTerm = Console.ReadLine();
+            
 
             Console.Clear();
 
-            foreach (var(number,firstName,lastName,phoneNumber) in ReadPhoneBook())
+            foreach (var (number, firstName, lastName, phoneNumber) in ReadPhoneBook())
             {
-                if(number.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-                {
-                    Console.Clear();
-                    Console.WriteLine("Enter First Name...");
-                    var firstNameChanger = Console.ReadLine();
-
-                    Console.WriteLine("Enter Last Name...");
-                    var lastNameChanger = Console.ReadLine();
-
-                    File.WriteAllLines(Filename , new[] { $"{firstNameChanger}, {lastNameChanger}" });                    
-                }
-                else
-                {
-                    Console.WriteLine("This user is not found!");
+                if (number.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                {                    
+                    Console.WriteLine($"Found user {firstName} {lastName} with phone number: {phoneNumber}");                    
+                    found = true;
                 }
             }
+            if (!found)
+            {
+                Console.WriteLine("User not found!");
+            }
+
+            if (found)
+            {
+                
+            }
+
             
+
             Wait();
         }
 
@@ -162,6 +166,7 @@ namespace ConsoleApp
         static void CreatePhoneNumber()
         {
             Console.Clear();
+            var number = 0;
             Console.WriteLine("Enter First Name...");
             var firstName = Console.ReadLine();
 
@@ -172,7 +177,7 @@ namespace ConsoleApp
             var phoneNumber = Console.ReadLine();
 
 
-            File.AppendAllLines(Filename, new[]  { $"{firstName},{lastName},{phoneNumber}" });
+            File.AppendAllLines(Filename, new[]  { $"{number},{firstName},{lastName},{phoneNumber}" });
         }
 
         static void ShowAllNumbers()
