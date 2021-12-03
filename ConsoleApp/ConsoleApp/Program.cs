@@ -7,6 +7,7 @@ namespace ConsoleApp
     public class Program
     {
         const string FileName = "phonebook.csv";
+        const string Head = "FirstName,LastName,PhoneNumber";
         static void Main()
         {
             while (true)
@@ -169,34 +170,38 @@ namespace ConsoleApp
                 string lookFirstName = Console.ReadLine();
                 string lookLastName = Console.ReadLine();
 
-                Console.WriteLine("\nWrite new PHONE NUMBER:");
-                string newPhoneNumber = Console.ReadLine();
-
                 bool found = false;
                 (string firstName, string lastName, string phoneNumber)[] phoneBook = ReadPhoneBook();
 
-                for(int i = 0; i < phoneBook.Length; i++)
+                //Here we looking our contact and as soon as we found, we change it and write in fle
+                for (int i = 0; i < phoneBook.Length; i++)
                 {
                     if (phoneBook[i].firstName.ToLower() == lookFirstName.ToLower() && phoneBook[i].lastName.ToLower() == lookLastName.ToLower())
                     {
-                        phoneBook[i].phoneNumber = newPhoneNumber;
+                        //If we found the contact we change phone number here
+                        Console.WriteLine("\nWrite new PHONE NUMBER:");
+                        phoneBook[i].phoneNumber = Console.ReadLine();
+
+                        string[] newPhoneBook = new string[phoneBook.Length + 1];
+                        newPhoneBook[0] = Head;
+
+                        for (int j = 0; j < phoneBook.Length; j++)
+                        {
+                            newPhoneBook[j + 1] = String.Join(',', phoneBook[j].firstName, phoneBook[j].lastName, phoneBook[j].phoneNumber);
+                        }
+
+                        File.WriteAllLines(FileName, newPhoneBook);
+
+                        Console.WriteLine("Update is successful!!!");
                         found = true;
+                        break;
                     }
                 }
-
-                if (found)
+                //If we don't found the contact
+                if (!found)
                 {
-                    string[] newPhoneBook = new string[phoneBook.Length + 1];
-                    newPhoneBook[0] = "FirstName,LastName,PhoneNumber";
-
-                    for (int i = 0; i < phoneBook.Length; i++)
-                    {
-                        newPhoneBook[i + 1] = String.Join(',', phoneBook[i].firstName, phoneBook[i].lastName, phoneBook[i].phoneNumber);
-                    }
-
-                    File.WriteAllLines(FileName, newPhoneBook);
+                    Console.WriteLine("This user not exist!");
                 }
-                else Console.WriteLine("This user not exist!!!");
 
                 Wait();
             }
