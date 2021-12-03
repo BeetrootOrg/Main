@@ -41,6 +41,15 @@ namespace ConsoleApp
             string line=Console.ReadLine();
             int n=Convert.ToInt32(Console.ReadLine());
             Console.WriteLine($"Repeat({line}, {n})= {Repeat(line, n)}");
+
+            Console.WriteLine("Enter x and y: ");
+            int f = Convert.ToInt32(Console.ReadLine());
+            int g = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine($"x^y= {MyPow(f, g)}");
+
+            Console.WriteLine("Enter the number n: ");
+            int m = Convert.ToInt32(Console.ReadLine());
+            From1ToN(m);
         }
         static int Maxi(int a, int b, int c = 0, int d = 0, int e = 0)
         {
@@ -74,6 +83,21 @@ namespace ConsoleApp
                 result += str;
             }
             return result;
+        }
+
+        static int MyPow(int x,int y)
+        {
+            if (y == 1) { return x; }
+            return x * MyPow(x, y - 1);
+        }
+
+        static void From1ToN(int n)
+        {
+            if (n > 1) 
+            {
+                From1ToN(n - 1); 
+            }
+            Console.WriteLine(n);    
         }
     }
 }
