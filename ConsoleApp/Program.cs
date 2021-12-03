@@ -1,32 +1,148 @@
 ﻿using System;
+using System.IO;
 
 namespace ConsoleApp
 {
     class Program
     {
+        const string Filename = @"phonebook.csv";
+
         static void Main()
         {
-         //Comparing strings by sum of their signs in UTF16
-
-            string str1 = "AD123f";
-            string str2 = "BC123sa";
-            string formatted = "Result of comparing {0} and {1} is {2}";
-
-            Console.WriteLine(formatted,str1,str2,Compare(str1,str2));
-
-            static int Compare(string first, string second)
+            while (true)
             {
-                int sum1 = 0;
-                int sum2 = 0;
-
-                for (int i = 0; i < first.Length; i++)
-                    sum1 += first[i];
-
-                for (int i = 0; i < second.Length; i++)
-                    sum2 += second[i];
-
-                return sum1 - sum2;
+                Menu();
             }
+        }
+
+        static void Menu()
+        {
+            Console.Clear();
+            Console.WriteLine("Welcome to Phone Book Application!\n");
+            Console.WriteLine("\tMenu");
+            Console.WriteLine("\t1. Show all phone book");
+            Console.WriteLine("\t2. Create phone record");
+            Console.WriteLine("\t3. Search by name");
+            Console.WriteLine("\t0. Exit");
+
+            ConsoleKeyInfo ck = Console.ReadKey();
+
+            switch (ck.Key)
+            {
+                case ConsoleKey.D1:
+                case ConsoleKey.NumPad1:
+                    ShowAllNumbers();
+                    break;
+                case ConsoleKey.D2:
+                case ConsoleKey.NumPad2:
+                    CreatePhoneNumber();
+                    break;
+                case ConsoleKey.D3:
+                case ConsoleKey.NumPad3:
+                    SearchByName();
+                    break;
+                case ConsoleKey.D0:
+                case ConsoleKey.NumPad0:
+                    Exit();
+                    break;
+            }
+        }
+
+        private static void SearchByName()
+        {
+            Console.Clear();
+            Console.WriteLine("Search condition - if first/last name contains search term you will see it");
+
+            Console.WriteLine("Enter Search Term...");
+            var searchTerm = Console.ReadLine();
+
+            bool found = false;
+            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+            {
+                if (firstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    lastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
+                    found = true;
+                }
+            }
+
+            if (!found)
+            {
+                Console.WriteLine("Not such users");
+            }
+
+            Wait();
+        }
+
+        private static void Exit()
+        {
+            Environment.Exit(0);
+        }
+
+        static void CreatePhoneNumber()
+        {
+            Console.Clear();
+            Console.WriteLine("Enter First Name...");
+            var firstName = Console.ReadLine();
+
+            Console.WriteLine("Enter Last Name...");
+            var lastName = Console.ReadLine();
+
+            Console.WriteLine("Enter Phone Number...");
+            var phoneNumber = Console.ReadLine();
+
+            File.AppendAllLines(Filename, new[] { $"{firstName},{lastName},{phoneNumber}" });
+        }
+
+        static void ShowAllNumbers()
+        {
+            Console.Clear();
+            // show header
+            Console.WriteLine($"{"First Name",-15}{"Last Name",-15}{"Phone Number",-15}");
+
+            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+            {
+                Console.Write($"{firstName,-15}");
+                Console.Write($"{lastName,-15}");
+                Console.Write($"{phoneNumber,-15}");
+                Console.WriteLine();
+            }
+
+            Wait();
+        }
+
+        private static void Wait()
+        {
+            Console.WriteLine("To back to menu type Enter...");
+            Console.ReadLine();
+        }
+
+        static (string, string, string)[] ReadPhoneBook()
+        {
+            string[] lines = File.ReadAllLines(Filename);
+
+            var phoneBook = new (string, string, string)[lines.Length - 1];
+            for (int i = 1; i < lines.Length; i++)
+            {
+                string[] splitted = lines[i].Split(',');
+                phoneBook[i - 1] = (splitted[0], splitted[1], splitted[2]);
+            }
+
+            return phoneBook;
+        }
+
+        static string[] ConvertToText((string, string, string)[] data)
+        {
+            var content = new string[data.Length + 1];
+            content[0] = "FirstName,LastName,PhoneNumber";
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                content[i + 1] = $"{data[i].Item1},{data[i].Item2},{data[i].Item3}";
+            }
+
+            return content;
         }
     }
 }
