@@ -74,14 +74,14 @@
         {
             Sort(out inputString, inputString);
             int[] count = new int[inputString.Length];
-            int charcount;
+            int charCount;
             int numberOfDublicats = 0;
 
-            for (int i = 0; i < inputString.Length; i += charcount)
+            for (int i = 0; i < inputString.Length; i += charCount)
             {
                 char checkChar = inputString[i];
                 count[i] = 1;
-                charcount = 1;
+                charCount = 1;
                 if (char.IsLetter(checkChar))
                 {
                     for (int j = i + 1; j < inputString.Length; j++)
@@ -89,11 +89,11 @@
                         if (checkChar == inputString[j])
                         {
                             count[i]++;
-                            charcount++;
+                            charCount++;
                         }
                     }
                 }
-                if (charcount > 1)
+                if (charCount > 1)
                 {
                     numberOfDublicats++;
                 }
@@ -277,30 +277,30 @@
             }
             return index;
         }
-        private static int SearchByFullName(string searchFirstName, string searchLastName, ref string[] lines)
-        {
-            int index = 0;
-            bool found = false;
+        //private static int SearchByFullName(string searchFirstName, string searchLastName, ref string[] lines)
+        //{
+        //    int index = 0;
+        //    bool found = false;
 
-            foreach (var name in lines)
-            {
-                if (name.Contains(searchFirstName, StringComparison.OrdinalIgnoreCase) || name.Contains(searchLastName, StringComparison.OrdinalIgnoreCase))
-                {
-                    // Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
-                    Console.WriteLine("Found user {0}", name);
-                    found = true;
-                    break;
-                }
-                index++;
-            }
+        //    foreach (var name in lines)
+        //    {
+        //        if (name.Contains(searchFirstName, StringComparison.OrdinalIgnoreCase) || name.Contains(searchLastName, StringComparison.OrdinalIgnoreCase))
+        //        {
+        //            // Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
+        //            Console.WriteLine("Found user {0}", name);
+        //            found = true;
+        //            break;
+        //        }
+        //        index++;
+        //    }
 
-            if (!found)
-            {
-                Console.WriteLine("The \"{0} {1}\" user, not found!", searchFirstName, searchLastName);
-                return -1;
-            }
-            return index;
-        }
+        //    if (!found)
+        //    {
+        //        Console.WriteLine("The \"{0} {1}\" user, not found!", searchFirstName, searchLastName);
+        //        return -1;
+        //    }
+        //    return index;
+        //}
         private static void SearchByPhone()
         {
             Console.Clear();
