@@ -78,16 +78,32 @@ namespace Course
 
         static (string, string, string)[] ReadPhoneBook()
         {
-            string[] lines = File.ReadAllLines(Filename);
-
-            var phoneBook = new (string, string, string)[lines.Length - 1];
-            for (int i = 1; i < lines.Length; i++)
+            try
             {
-                string[] splitted = lines[i].Split(',');
-                phoneBook[i - 1] = (splitted[0], splitted[1], splitted[2]);
-            }
+                string[] lines = File.ReadAllLines(Filename);
 
-            return phoneBook;
+                var phoneBook = new (string, string, string)[lines.Length - 1];
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    string[] splitted = lines[i].Split(',');
+                    phoneBook[i - 1] = (splitted[0], splitted[1], splitted[2]);
+                }
+
+                return phoneBook;
+            }
+            catch (DirectoryNotFoundException)
+            {
+                return ReturnEmptyPhoneBook();
+            }
+            catch (FileNotFoundException)
+            {
+                return ReturnEmptyPhoneBook();
+            }
+            catch (IndexOutOfRangeException exc)
+            {
+                Console.WriteLine("You have some problems with array");
+                throw exc;
+            }
         }
 
         static void CreatePhoneNumber()
@@ -186,10 +202,34 @@ namespace Course
                     convertedPhoneBook[i + 1] = $"{phoneBook[i].Item1},{phoneBook[i].Item2},{phoneBook[i].Item3}";
                 }
 
-                File.WriteAllLines(Filename, convertedPhoneBook);
+                try
+                {
+                    File.WriteAllLines(Filename, convertedPhoneBook);
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    WriteToLocalFile(convertedPhoneBook);
+                }
+                catch (System.Security.SecurityException)
+                {
+                    WriteToLocalFile(convertedPhoneBook);
+                }
             }
 
             Wait();
+        }
+
+        private static (string, string, string)[] ReturnEmptyPhoneBook()
+        {
+            Console.WriteLine("There was an issue processing your file location");
+            return new (string, string, string)[0];
+        }
+
+        private static void WriteToLocalFile(string[] data)
+        {
+            Console.WriteLine("We're unable to save the data to the desired file");
+            Console.WriteLine("The data was saved in the local file");
+            File.WriteAllLines(@"testFile.csv", data);
         }
 
         private static void Exit()
