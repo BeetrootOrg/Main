@@ -2,6 +2,7 @@
 
 namespace ConsoleApp
 {
+    //i.safontev/classwork/10-oop
     enum Gender
     {
         Male,
@@ -23,7 +24,7 @@ namespace ConsoleApp
         public string LastName { get; set; }
         public string FullName=>$"{FirstName} {LastName}";
         public Gender Gender { get; set; }
-        public int Age { get; set; }
+        public int Age { get; set; } = 0;
         public string PhoneNumber
         {
             get
@@ -70,6 +71,32 @@ namespace ConsoleApp
             }
         }
     }
+
+    class TestStatic
+    {
+        public static string StaticName = "static_name";
+        public string Name;
+
+        static TestStatic() 
+        {
+            //Вызывается всегда при создании экземпляра, потому что static
+            StaticName = "static";
+            //Name = StaticName; cant- Name isn't static
+        }
+
+        public TestStatic()
+        {
+            StaticName = "non_static";
+        }
+        public TestStatic(string name)
+        {
+            StaticName = "non_static";
+            Name = name;
+        }
+        public static string StaticMethod() => $"STATIC";
+        public string Method() => $"NONSTATIC";
+    }
+
     class Program
     {
         static void Main(string[] args)
@@ -139,6 +166,12 @@ namespace ConsoleApp
                 Book = PhoneNumbers
             };
             book.ShowAll();
+
+            var obj1 = new TestStatic();
+            obj1 = new TestStatic("name");
+            obj1.Method();
+            TestStatic.StaticMethod();
+
         }
     }
 }
