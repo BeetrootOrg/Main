@@ -25,6 +25,27 @@ namespace ConsoleApp
             var person = new Person();
             Console.WriteLine(person);
             Console.WriteLine(person.Age);
+
+            // 1st approach to init
+            person.FirstName = "Dima";
+            person.LastName = "Misik";
+            person.Age = 25;
+            person.PhoneNumber = "+12345";
+            person.Gender = Gender.Male;
+            person.Height = 178;
+
+            Console.WriteLine(person.Age);
+
+            // 2nd approach to init - preferable
+            person = new Person
+            {
+                FirstName = "Dima",
+                LastName = "Misik",
+                Age = 25,
+                PhoneNumber = "+12345",
+                Gender = Gender.Male,
+                Height = 178,
+            };
         }
     }
 }
