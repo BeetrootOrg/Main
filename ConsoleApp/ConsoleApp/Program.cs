@@ -1,96 +1,199 @@
 ﻿using System;
+
 namespace ConsoleApp
 {
+    enum Gender
+    {
+        Male,
+        Female
+    }
+
+    class Person
+    {
+        private int _phoneNumberUpdatedCounter;
+        private string _phoneNumber;
+
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string FullName => $"{FirstName} {LastName}";
+        public int Age { get; set; } = 1;
+        public string PhoneNumber
+        {
+            get
+            {
+                return _phoneNumber;
+            }
+            set
+            {
+                _phoneNumber = value;
+                ++_phoneNumberUpdatedCounter;
+            }
+        }
+
+        public Gender Gender { get; set; }
+        public int Height { get; set; }
+
+        public int PhoneNumberUpdatedCounter
+        {
+            get
+            {
+                return _phoneNumberUpdatedCounter;
+            }
+        }
+
+        public int Weight { get; init; }
+
+        public double WeightIndex()
+        {
+            return Weight / (Height * Height / 10000);
+        }
+    }
+
+    class User
+    {
+        public string FirstName { get; init; }
+        public string LastName { get; init; }
+        public string FullName => $"{FirstName} {LastName}";
+    }
+
+    class PhoneNumberRecord
+    {
+        public User User { get; init; }
+        public string PhoneNumber { get; init; }
+
+        public string Show() => $"{User.FullName} -> {PhoneNumber}";
+    }
+
+    class PhoneNumberBook
+    {
+        public PhoneNumberRecord[] Book { get; init; }
+
+        public void ShowAll()
+        {
+            foreach (var record in Book)
+            {
+                Console.WriteLine(record.Show());
+            }
+        }
+    }
+
+    class TestStatic
+    {
+        public static string StaticName = "static_name";
+        public string Name;
+
+        static TestStatic()
+        {
+            StaticName = "static";
+            // can't do Name = StaticName;
+        }
+
+        public TestStatic()
+        {
+            StaticName = "non_static";
+        }
+
+        public TestStatic(string name)
+        {
+            StaticName = "non_static_with_param";
+            Name = name;
+        }
+
+        public static string StaticMethod() => "STATIC";
+        public string Method() => "NONSTATIC";
+    }
+
     class Program
     {
         static void Main()
         {
-            string str1 = "TestD";
-            string str2 = "Testd";
-            Console.WriteLine("Compare Method");
-            Console.WriteLine(Compare(str1, str2));
-            Console.WriteLine("Analyze Method");
-            Console.WriteLine(Analyze("Test string 12345 ???@"));
-            Console.WriteLine("Sort Method");
-            Console.WriteLine(Sort("vbfhavkcjcdj"));
-            Console.WriteLine("Duplicate Method");
-            foreach (char str in Duplicate("AaaaazzzzSFsAA"))
-            {
-                Console.WriteLine(str);
-            }
-        }
+            var person = new Person();
+            Console.WriteLine(person);
+            Console.WriteLine(person.Age);
 
-        //Compare method
-        static bool Compare(string str1, string str2)
-        {
-            if (str1.Length != str2.Length)
-            {
-                return false;
-            }
-            else
-            {
-                for (int i = 0; i < str1.Length; i++)
-                    if (str1[i] != str2[i])
-                        return false;
-                return true;
-            }
-        }
+            // 1st approach to init
+            person.FirstName = "Sasha";
+            person.LastName = "Martynenko";
+            person.Age = 25;
+            person.PhoneNumber = "+12345";
+            person.Gender = Gender.Male;
+            person.Height = 178;
 
-        //Analyze method
-        static string Analyze(string str)
-        {
-            int alphabeticChars = 0;
-            int digits = 0;
-            int specialSymbols = 0;
+            Console.WriteLine(person.Age);
 
-            foreach (var item in str)
+            // 2nd approach to init - preferable
+            person = new Person
             {
-                if (Char.IsDigit(item))
+                FirstName = "Sasha",
+                LastName = "Martynenko",
+                Age = 25,
+                PhoneNumber = "+12345",
+                Gender = Gender.Male,
+                Height = 178,
+                Weight = 70
+            };
+
+            var person1 = new Person
+            {
+                Weight = 90,
+                Height = 190
+            };
+
+            Console.WriteLine(person.PhoneNumber);
+            Console.WriteLine(person.Weight);
+            Console.WriteLine(person.FullName);
+
+            person.PhoneNumber = "+12346";
+            Console.WriteLine(person.PhoneNumberUpdatedCounter);
+            Console.WriteLine($"Weight Index = {person.WeightIndex()}");
+            Console.WriteLine($"Weight Index = {person1.WeightIndex()}");
+
+            var users = new User[]
+            {
+                new User
                 {
-                    digits++;
-                }
-                else if (Char.IsLetter(item))
+                    FirstName = "A",
+                    LastName = "B"
+                },
+                new User
                 {
-                    alphabeticChars++;
+                    FirstName = "C",
+                    LastName = "D"
                 }
-                else
-                {
-                    specialSymbols++;
-                }
-            }
-            string result = $"There are {alphabeticChars} - alpabetical chars, {digits} - digits and {specialSymbols} - special symbols (spaces are included) in this string";
-            return result;
-        }
+            };
 
-        //Sort method
-        static string Sort(string str)
-        {
-            char[] loweredCharArr = str.ToLower().ToCharArray();
-
-            for (int i = 0; i < loweredCharArr.Length - 1; i++)
-                for (int j = 0; j < loweredCharArr.Length - i - 1; j++)
-                    if (loweredCharArr[j] > loweredCharArr[j + 1])
-                    {
-                        char temp = loweredCharArr[j];
-                        loweredCharArr[j] = loweredCharArr[j + 1];
-                        loweredCharArr[j + 1] = temp;
-                    }
-            return new string(loweredCharArr);
-        }
-
-        //Duplicate method
-        static char[] Duplicate(string str)
-        {
-            string result = "";
-            string loweredStr = str.ToLower();
-            foreach (char value in loweredStr)
+            var phoneNumbers = new PhoneNumberRecord[]
             {
-                if (result.IndexOf(value) == -1)
+                new PhoneNumberRecord
                 {
-                    result += value;
+                    User = users[0],
+                    PhoneNumber = "+1234"
+                },
+                new PhoneNumberRecord
+                {
+                    User = users[1],
+                    PhoneNumber = "+1235"
+                },
+                new PhoneNumberRecord
+                {
+                    User = users[0],
+                    PhoneNumber = "126"
                 }
-            }
-            return result.ToCharArray();
+            };
+
+            var book = new PhoneNumberBook
+            {
+                Book = phoneNumbers
+            };
+
+            book.ShowAll();
+
+            var obj1 = new TestStatic();
+            var obj2 = new TestStatic("name");
+            obj1.Method();
+            TestStatic.StaticMethod();
+            Console.WriteLine(TestStatic.StaticName);
         }
     }
 }
