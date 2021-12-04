@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 
 namespace ConsoleApp
 {
     class Program
     {
-        const string Filename = @"phonebook123.csv";
+        const string Filename = @"phonebook.csv";
         const string Header = "FirstName,LastName,PhoneNumber";
         const int MaxStringLength = 14;
 
@@ -33,6 +34,8 @@ namespace ConsoleApp
             Console.WriteLine("\t1. Show all phone book");
             Console.WriteLine("\t2. Create phone record");
             Console.WriteLine("\t3. Search by name");
+            Console.WriteLine("\t4. Search by phone number");
+            Console.WriteLine("\t5. Edit phone number");
             Console.WriteLine("\t0. Exit");
 
             ConsoleKeyInfo ck = Console.ReadKey();
@@ -51,6 +54,14 @@ namespace ConsoleApp
                 case ConsoleKey.NumPad3:
                     SearchByName();
                     break;
+                case ConsoleKey.D4:
+                case ConsoleKey.NumPad4:
+                    SearchByPhoneNumber();
+                    break;
+                case ConsoleKey.D5:
+                case ConsoleKey.NumPad5:
+                    ChangeUserPhone();
+                    break;
                 case ConsoleKey.D0:
                 case ConsoleKey.NumPad0:
                     Exit();
@@ -58,16 +69,94 @@ namespace ConsoleApp
             }
         }
 
+        private static void ChangeUserPhone()
+        {
+            try
+            {
+                Console.Clear();
+                Console.WriteLine("Search condition - if first/last name equals search term you will see it");
+                Console.WriteLine("Enter full First/Last Name...");
+                var searchTerm = Console.ReadLine();
+                bool found = false;
+                string[] lines = File.ReadAllLines(Filename);
+
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    string[] splitted = lines[i].Split(',');
+                    if (splitted[0].Equals(searchTerm, StringComparison.OrdinalIgnoreCase) || splitted[1].Equals(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.WriteLine($"Found user {splitted[0]} {splitted[1]} with phone {splitted[2]}");
+                        Console.WriteLine("Enter New Phone Number...");
+                        var newPhoneNumber = Console.ReadLine();
+                        if (newPhoneNumber.Length > MaxStringLength)
+                        {
+                            throw new ArgumentException($"Max length of phone number is {MaxStringLength}", nameof(newPhoneNumber));
+                        }
+                        splitted[2] = newPhoneNumber;
+                        lines[i] = string.Join(",", splitted);
+                        found = true;
+                    }
+                }
+                File.WriteAllLines(Filename, lines);
+
+                if (!found)
+                {
+                    Console.WriteLine("No such users");
+                }
+            }
+            finally
+            {
+                Wait();
+            }
+
+        }
+
+        private static void SearchByPhoneNumber()
+        {
+            try
+            {
+                Console.Clear();
+                Console.WriteLine("Search condition - if phone number contains search input you will see it");
+                Console.WriteLine("Enter Search Input...");
+                var searchTerm = Console.ReadLine();
+                bool found = false;
+                var phoneBook = ReadPhoneBook();
+
+                if (phoneBook == null)
+                {
+                    Console.WriteLine("Error occured during file read.");
+                    return;
+                }
+
+                foreach (var (firstName, lastName, phoneNumber) in phoneBook)
+                {
+                    if (phoneNumber.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
+                        found = true;
+                    }
+                }
+
+                if (!found)
+                {
+                    Console.WriteLine("No such users");
+                }
+            }
+            finally
+            {
+                SearchWait(SearchByPhoneNumber);
+            }
+        }
+
+
         private static void SearchByName()
         {
             try
             {
                 Console.Clear();
                 Console.WriteLine("Search condition - if first/last name contains search term you will see it");
-
                 Console.WriteLine("Enter Search Term...");
                 var searchTerm = Console.ReadLine();
-
                 bool found = false;
                 var phoneBook = ReadPhoneBook();
 
@@ -94,7 +183,7 @@ namespace ConsoleApp
             }
             finally
             {
-                Wait();
+                SearchWait(SearchByName);
             }
         }
 
@@ -161,8 +250,25 @@ namespace ConsoleApp
 
         private static void Wait()
         {
-            Console.WriteLine("To back to menu type Enter...");
+            Console.WriteLine("To back to menu press Enter...");
             Console.ReadLine();
+        }
+        private static void SearchWait(Action SearchType)
+        {
+            Console.WriteLine("To back to menu press Enter");
+            Console.WriteLine("Want to search more? Press 9");
+            ConsoleKeyInfo ck = Console.ReadKey();
+            switch (ck.Key)
+            {
+                case ConsoleKey.D9:
+                case ConsoleKey.NumPad9:
+                    SearchType();
+                    break;
+                case ConsoleKey.D0:
+                case ConsoleKey.NumPad0:
+                    Exit();
+                    break;
+            }
         }
 
         /// <summary>
@@ -187,7 +293,8 @@ namespace ConsoleApp
             // throw new DirectoryNotFoundException(...) -> dnfe;
             catch (DirectoryNotFoundException dnfe)
             {
-                // some code can be here
+                /* Console.WriteLine($"Hey, unfortunately this directory wasn't found");
+                 return new (string, string, string)[0];*/
                 throw;
             }
             catch (IOException)
@@ -201,17 +308,5 @@ namespace ConsoleApp
             }
         }
 
-        static string[] ConvertToText((string, string, string)[] data)
-        {
-            var content = new string[data.Length + 1];
-            content[0] = "FirstName,LastName,PhoneNumber";
-
-            for (int i = 0; i < data.Length; i++)
-            {
-                content[i + 1] = $"{data[i].Item1},{data[i].Item2},{data[i].Item3}";
-            }
-
-            return content;
-        }
     }
 }
