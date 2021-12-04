@@ -176,7 +176,9 @@ namespace ConsoleApp
                 //Here we looking our contact and as soon as we found, we change it and write in fle
                 for (int i = 0; i < phoneBook.Length; i++)
                 {
-                    if (phoneBook[i].firstName.ToLower() == lookFirstName.ToLower() && phoneBook[i].lastName.ToLower() == lookLastName.ToLower())
+
+                    if (String.Equals(lookFirstName, phoneBook[i].firstName, StringComparison.OrdinalIgnoreCase) && 
+                        String.Equals(lookLastName, phoneBook[i].lastName, StringComparison.OrdinalIgnoreCase))
                     {
                         //If we found the contact we change phone number here
                         Console.WriteLine("\nWrite new PHONE NUMBER:");
