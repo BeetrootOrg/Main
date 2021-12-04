@@ -115,11 +115,20 @@
                 Console.WriteLine("{0} : {1}", dublicateChars[i].Item1, dublicateChars[i].Item2);
             }
         }
+        class Person
+        {
+            public string Name { get; set; }
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public int Age { get; set; }
+            public string PhoneNumber { get; set; }
+            public int Height { get; set; }
+        }
         static void Main(string[] args)
         {
             Console.WriteLine("\r\n a.tkachenko/homework/08-Text \r\n");
 
-
+            var person = new Person();
             Console.WriteLine("1. Compare:");
             string str1 = "string 1";
             string str2 = "string 2";
@@ -154,12 +163,197 @@
             ShowDublicate(inputString, dublicateChars);
             Console.Write("\r\n");
 
+            String[] arr = { "contribute", "aaeks", "Aae", "yractice" };
+            String x = "ide";
+            int _result = binarySearch(arr, x);
+            ShowBinarySearchResult(x, _result);
+
+            string[] lines;
+            (string tLastName, string tFirstName, string tPhoneNumber)[] phoneBook;
+            ReadPhoneBook(out lines, out phoneBook);
+            x = "Sidorov";
+            _result = BinarySearchByLastName(phoneBook, x);
+            ShowBinarySearchResult(x, _result);
+            x = "Petrov";
+            _result = BinarySearchByLastName(phoneBook, x);
+            ShowBinarySearchResult(x, _result);
+            x = "Misik";
+            _result = BinarySearchByLastName(phoneBook, x);
+            ShowBinarySearchResult(x, _result);
+            x = "qwe";
+            _result = BinarySearchByLastName(phoneBook, x);
+            ShowBinarySearchResult(x, _result);
+            x = "Ivanov";
+            _result = BinarySearchByLastName(phoneBook, x);
+            ShowBinarySearchResult(x, _result);
+
+            Array.Sort(arr);
+
+
+            Array.Sort(lines, 1, lines.Length-1);
+            string temp = lines[1];
+            lines[1] = lines[4];
+            lines[4] = temp;
+            Array.Sort(lines, 1, lines.Length - 1);
+
+            try
+            {
+                (string tLastName, string tFirstName, string tPhoneNumber) newElement = ("Shewchenko", "Taras", "+4838");
+                lines = AddNewElement(lines, phoneBook, newElement);
+                newElement = ("Ivanov", "", "");
+                lines = AddNewElement(lines, phoneBook, newElement);
+            }
+            catch (Exception ex)
+            {
+                ShowExeption(ex.Message);
+            }
+
             while (true)
             {
                 Menu();
             }
 
             Console.Write("\r\n");
+        }
+        static string[] AddNewElement(string[] array, (string, string, string)[] phoneBook, (string lastName, string firstName, string phoneNumber) newElement)
+        {
+            CheckEnteredParameters(newElement.firstName, newElement.lastName, newElement.phoneNumber);
+
+            int searchResult = BinarySearchByLastName(phoneBook, newElement.lastName);
+            if (searchResult != -1)
+            {
+                throw new Exception("The \"" + newElement.lastName + "\" element, present in the List");
+            }
+
+            int newLength = array.Length + 1;
+
+            string[] result = new string[newLength];
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                result[i] = array[i];
+            }
+
+            result[newLength - 1] = newElement.lastName + "," + newElement.firstName + "," + newElement.phoneNumber;
+            Array.Sort(result, 1, result.Length - 1);
+
+            return result;
+        }
+        private static void CheckEnteredParameters(string firstName, string lastName)
+        {
+            if ((firstName.Length > 0) || (lastName.Length > 0))
+            {
+                if (!char.IsLetter(firstName[0]) || !char.IsLetter(lastName[0]))
+                {
+                    throw new Exception("\"First Name\" or/and \"Last Name\" - must be begin with the \"Letter\" character!");
+                }
+            }
+            else
+            {
+                throw new Exception("String \"Length\" Error in \"First Name\" or/and \"Last Name\"!");
+            }
+        }
+        private static void CheckEnteredParameters(string firstName, string lastName, string phoneNumber)
+        {
+            if ((firstName.Length > 0) || (lastName.Length > 0))
+            {
+                if (!char.IsLetter(firstName[0]) || !char.IsLetter(lastName[0]))
+                {
+                    throw new Exception("\"First Name\" or/and \"Last Name\" - must be begin with the \"Letter\" character!");
+                }
+                if(phoneNumber[0] != '+')
+                {
+                    throw new Exception("\"Phone number\" - must be begin with the \'+\' character!");
+                }
+                for(int i = 1; i < phoneNumber.Length; i++)
+                {
+                    if(!char.IsDigit(phoneNumber[i]))
+                    {
+                        throw new Exception("\"Phone number\" - must be include only \"Digit\" character!");
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("String \"Length\" Error in \"First Name\" or/and \"Last Name\"!");
+            }
+        }
+        private static void CheckEnteredPhoneNumberParameter(string phoneNumber)
+        {
+            if (phoneNumber.Length > 1)
+            {
+                if (phoneNumber[0] != '+')
+                {
+                    throw new Exception("\"Phone number\" - must be begin with the \'+\' character!");
+                }
+                for (int i = 1; i < phoneNumber.Length; i++)
+                {
+                    if (!char.IsDigit(phoneNumber[i]))
+                    {
+                        throw new Exception("\"Phone number\" - must be include only \"Digit\" character!");
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("ERROR: Phone number \"Length\" parametr must be >1 characters!");
+            }
+        }
+
+        private static void ShowBinarySearchResult(string str, int _result)
+        {
+            if (_result == -1)
+                Console.WriteLine("\"{0}\" element, not present", str);
+            else
+                Console.WriteLine("\"{0}\" element, found at index {1}", str, _result);
+        }
+        static int BinarySearchByLastName((string, string, string)[] phoneBook, String x)
+        {
+            int l = 0, r = phoneBook.Length - 1;
+            while (l <= r)
+            {
+                int m = l + (r - l) / 2;
+
+                int res = x.CompareTo(phoneBook[m].Item1);
+
+                // Check if x is present at mid
+                if (res == 0)
+                    return m;
+
+                // If x greater, ignore left half
+                if (res > 0)
+                    l = m + 1;
+
+                // If x is smaller, ignore right half
+                else
+                    r = m - 1;
+            }
+
+            return -1;
+        }
+        static int binarySearch(String[] arr, String x)
+        {
+            int l = 0, r = arr.Length - 1;
+            while (l <= r)
+            {
+                int m = l + (r - l) / 2;
+
+                int res = x.CompareTo(arr[m]);
+
+                // Check if x is present at mid
+                if (res == 0)
+                    return m;
+
+                // If x greater, ignore left half
+                if (res > 0)
+                    l = m + 1;
+
+                // If x is smaller, ignore right half
+                else
+                    r = m - 1;
+            }
+
+            return -1;
         }
         static void Menu()
         {
@@ -258,6 +452,20 @@
             int index = 1;
             bool found = false;
 
+            //if((searchFirstName.Length > 0) || (searchLastName.Length > 0))
+            //{
+            //    if (!char.IsLetter(searchFirstName[0]) || !char.IsLetter(searchLastName[0]))
+            //    {
+            //        throw new Exception("\"First Name\" or/and \"Last Name\" - must be begin with the \"Letter\" character!");
+            //    }
+            //}
+            //else
+            //{
+            //    throw new Exception("String \"Length\" Error in \"First Name\" or/and \"Last Name\"!");
+            //}
+
+            CheckEnteredParameters(searchFirstName, searchLastName);
+
             foreach (var (firstName, lastName, phoneNumber) in PhoneBook)
             {
                 if (firstName.Contains(searchFirstName, StringComparison.OrdinalIgnoreCase) ||
@@ -272,35 +480,10 @@
 
             if (!found)
             {
-                Console.WriteLine("The \"{0} {1}\" user, not found!", searchFirstName, searchLastName);
-                return -1;
+                throw new Exception("The \"" + searchFirstName + " " + searchLastName + "\" user, not found!");
             }
             return index;
         }
-        //private static int SearchByFullName(string searchFirstName, string searchLastName, ref string[] lines)
-        //{
-        //    int index = 0;
-        //    bool found = false;
-
-        //    foreach (var name in lines)
-        //    {
-        //        if (name.Contains(searchFirstName, StringComparison.OrdinalIgnoreCase) || name.Contains(searchLastName, StringComparison.OrdinalIgnoreCase))
-        //        {
-        //            // Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
-        //            Console.WriteLine("Found user {0}", name);
-        //            found = true;
-        //            break;
-        //        }
-        //        index++;
-        //    }
-
-        //    if (!found)
-        //    {
-        //        Console.WriteLine("The \"{0} {1}\" user, not found!", searchFirstName, searchLastName);
-        //        return -1;
-        //    }
-        //    return index;
-        //}
         private static void SearchByPhone()
         {
             Console.Clear();
@@ -332,6 +515,15 @@
         {
             Environment.Exit(0);
         }
+        private string value;
+        private int count;
+        private Tree left;
+        private Tree right;
+        enum Tree
+        {
+            left,
+            Right,
+        };
 
         static void CreatePhoneNumber()
         {
@@ -345,7 +537,21 @@
             Console.WriteLine("Enter Phone Number...");
             var phoneNumber = Console.ReadLine();
 
-            File.AppendAllLines(Filename, new[] { $"{firstName},{lastName},{phoneNumber}" });
+            string[] lines;
+            (string, string, string)[] phoneBook;
+            ReadPhoneBook(out lines, out phoneBook);
+            (string, string, string) newElement = (lastName, firstName, phoneNumber);
+            try
+            {
+                lines = AddNewElement(lines, phoneBook, newElement);
+                File.WriteAllLines(Filename, lines);
+            }
+            catch (Exception ex)
+            {
+                ShowExeption(ex.Message);
+            }
+
+            /*Replace this lineFile.AppendAllLines(Filename, new[] { $"{lastName},{firstName},{phoneNumber}" });*/
         }
 
         static void EditPhoneNumber()
@@ -363,18 +569,42 @@
             (string, string, string)[] phoneBook;
             ReadPhoneBook(out lines, out phoneBook);
 
-            int indexName = SearchByFullName(firstName, lastName, ref phoneBook);
-            UpdateNewPhoneNumber(firstName, lastName, lines, indexName);
+            try
+            {
+                int indexName = SearchByFullName(lastName, firstName, ref phoneBook);
+                UpdateNewPhoneNumber(lastName, firstName, lines, indexName);
+            }
+            catch(Exception ex)
+            {
+                ShowExeption(ex.Message);
+            }
         }
-        private static void UpdateNewPhoneNumber(string? firstName, string? lastName, string[] lines, int indexName)
+        private static void UpdateNewPhoneNumber(string? lastName, string? firstName, string[] lines, int indexName)
         {
             if ((indexName != -1) && (indexName <= lines.Length))
             {
-                Console.WriteLine("Enter New Phone Number...");
-                var phoneNumber = Console.ReadLine();
-
-                lines[indexName] = firstName + "," + lastName + "," + phoneNumber;
-                File.WriteAllLines(Filename, lines);
+                bool fileWritten = false;
+                do
+                {
+                    Console.WriteLine("Enter New Phone Number...");
+                    var phoneNumber = Console.ReadLine();
+                    try
+                    {
+                        CheckEnteredPhoneNumberParameter(phoneNumber);
+                        lines[indexName] = lastName + "," + firstName + "," + phoneNumber;
+                        File.WriteAllLines(Filename, lines);
+                        fileWritten = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        ShowExeption(ex.Message, "Type \"Pnone number\" with \"{+123}\" format...");
+                        Console.WriteLine("");
+                    }
+                } while (!fileWritten);
+            }
+            else
+            {
+                throw new Exception("ERORR: \"indexName\"!");
             }
         }
 
@@ -400,7 +630,19 @@
             Console.WriteLine("To back to menu type Enter...");
             Console.ReadLine();
         }
-
+        private static void ShowExeption(string ex)
+        {
+            Console.WriteLine("\r\nExeption:");
+            Console.WriteLine(ex);
+            Console.WriteLine("Type \"Enter\" to continue...");
+            Console.ReadLine();
+        }
+        private static void ShowExeption(string ex, string ToDo)
+        {
+            Console.WriteLine("\r\nExeption:");
+            Console.WriteLine(ex);
+            Console.WriteLine(ToDo);
+        }
         static (string, string, string)[] ReadPhoneBook()
         {
             string[] lines = File.ReadAllLines(Filename);
