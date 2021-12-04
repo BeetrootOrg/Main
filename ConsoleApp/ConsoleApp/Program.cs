@@ -81,14 +81,12 @@ namespace ConsoleApp
         //Duplicate method
         static char[] Duplicate(string str)
         {
-            string preResult = "";
             string result = "";
             string loweredStr = str.ToLower();
             foreach (char value in loweredStr)
             {
-                if (preResult.IndexOf(value) == -1)
+                if (result.IndexOf(value) == -1)
                 {
-                    preResult += value;
                     result += value;
                 }
             }
