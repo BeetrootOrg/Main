@@ -1,75 +1,60 @@
 ﻿using System;
 
-namespace Aaaa
+namespace ConsoleApp
 {
-    public class Program
+    class Program
     {
-        static void Main/*text block*/()
+        static void Main()
         {
-            Console.WriteLine("Counting F(n) and M(n):");
-
-            Console.WriteLine("Write n:");
-            int n = Convert.ToInt32(Console.ReadLine());
-
-            Console.WriteLine($"F({n}) = {F(n)}");
-            Console.WriteLine($"M({n}) = {M(n)}\n");
-
-            Console.WriteLine("Counting x^y:");
-            Console.WriteLine("Write x:");
-            int x = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("Write y:");
-
-            int y = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine($"{x}^{y} = {Pow(x, y)}\n");
-
-            Console.WriteLine("Writing numbers from 1 to n:");
-            Console.WriteLine("Write n:");
-            n = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine($"Your row of numbers: \n{Series(n)}\n");
-            Console.WriteLine("         Push any button to exit the programm\n");
-
+            int[] arr = { 1, 3, 2, 6, 4, 5, 8, 0, 9, 7 };
+            BubleSort(arr);
+            InsertionSort(arr);
         }
-        static int F(int n)
+        static void PrintArray(int[] arr)
         {
-            if (n >= 0)
+            for (int i = 0; i < arr.Length; i++)
             {
-                n = n -M(F(n-1));
+                Console.WriteLine(arr[i]);
             }
-            return n;
         }
-        static int M(int n)
+        static void BubleSort(int[] arr)
         {
-            if (n > 0)
+            int temp;
+            for (int i = 0; i < arr.Length - 1; ++i)
             {
-                n = n -F(M(n-1));
+                for (int j = 0; j < arr.Length; ++i)
+                {
+                    if (arr[j] > arr[j + 1])
+                    {
+                        temp = arr[j + 1];
+                        arr[j + 1] = arr[j];
+                        arr[j] = temp;
+                        
+                    }
+                }
             }
-            return n;
+            
         }
-        static int Pow(int x, int y)
+        static void InsertionSort(int[] arr)
         {
-            if (y > 1)
-            {
-                x = x * Pow(x, y - 1);
-            }
-            else if (y == 0)
-            {
-                x = 1;
-            }
-            return x;
-        }
-        static string Series(int n)
-        {
+            int MinIndex = 0;
+            int MinValFound = 0;
 
-            if (n > 0)
+            for (int i = 0; i < arr.Length; i++)
             {
-                return Series(n - 1) + n + " ";
-            }
-            else
-            {
-                return null;
-            }
+                MinIndex = i;
+                for (int j = i + 1; j < arr.Length; j++)
+                {
+                    if (arr[j]<arr[MinIndex])
+                    {
+                        MinIndex = j;
+                    }
+                }
+                MinValFound = arr[MinIndex];
+                arr[MinIndex] = arr[i];
+                arr[i] = MinValFound;
+            }   
         }
 
     }
-
 }
