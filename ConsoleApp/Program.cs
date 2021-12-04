@@ -6,12 +6,22 @@ namespace ConsoleApp
     class Program
     {
         const string Filename = @"phonebook.csv";
+        const string Header = "FirstName,LastName,PhoneNumber";
+        const int MaxStringLength = 14;
 
         static void Main()
         {
             while (true)
             {
-                Menu();
+                try
+                {
+                    Menu();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.ReadLine();
+                }
             }
         }
 
@@ -61,10 +71,16 @@ namespace ConsoleApp
             Console.Clear();
             Console.WriteLine("You must enter first and last name correct to update phone number");
 
+
             Console.WriteLine("Enter first name...");
-            var searchFirstName= Console.ReadLine();
+            var searchFirstName = Console.ReadLine();
             Console.WriteLine("Enter last name...");
             var searchLastName = Console.ReadLine();
+            if (!searchFirstName.All(Char.IsLetter) || !searchLastName.All(Char.IsLetter))
+            {
+                throw new ArgumentException($"First name and Last name must contain only a letters"); //4
+            }
+
 
             bool found = false;
             foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
@@ -74,6 +90,10 @@ namespace ConsoleApp
                 {
                     Console.WriteLine($"You can update phone nubmer. Please write it:");
                     var newPhoneNumber= Console.ReadLine();
+                    if (!newPhoneNumber.All(Char.IsDigit))
+                    { 
+                    throw   new ArgumentException($"Soorry, phone number can contain only a digits.Try again more carefully"); //5
+                    }
                     Modify(firstName, lastName,newPhoneNumber);
                     found = true;
                 }
@@ -145,11 +165,30 @@ namespace ConsoleApp
             Console.WriteLine("Enter First Name...");
             var firstName = Console.ReadLine();
 
+            if (firstName.Length > MaxStringLength)
+            {
+                throw new ArgumentException($"Max length of first name is {MaxStringLength}", nameof(firstName));
+            }
             Console.WriteLine("Enter Last Name...");
             var lastName = Console.ReadLine();
 
+            if (lastName.Length > MaxStringLength)
+            {
+                throw new ArgumentException($"Max length of last name is {MaxStringLength}", nameof(lastName));
+            }
+
             Console.WriteLine("Enter Phone Number...");
             var phoneNumber = Console.ReadLine();
+
+            if (phoneNumber.Length > MaxStringLength)
+            {
+                throw new ArgumentException($"Max length of phone number is {MaxStringLength}", nameof(phoneNumber));
+            }
+
+            if (!phoneNumber.All(Char.IsDigit)) //3
+            {
+                throw new ArgumentException($"Phone number can contain only a digits");
+            }
 
             File.AppendAllLines(Filename, new[] { $"{firstName},{lastName},{phoneNumber}" });
         }
@@ -179,16 +218,35 @@ namespace ConsoleApp
 
         static (string, string, string)[] ReadPhoneBook()
         {
-            string[] lines = File.ReadAllLines(Filename);
-
-            var phoneBook = new (string, string, string)[lines.Length - 1];
-            for (int i = 1; i < lines.Length; i++)
+            string[] lines;
+            try
             {
-                string[] splitted = lines[i].Split(',');
-                phoneBook[i-1] = (splitted[0], splitted[1], splitted[2]);
+                lines = File.ReadAllLines(Filename);
+            }
+            catch (FileNotFoundException) //1
+            {
+                File.Create(Filename);
+                File.AppendAllText(Filename, Header);
+            }
+              lines = File.ReadAllLines(Filename);
+
+            try
+            {
+                var phoneBook = new (string, string, string)[lines.Length - 1];
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    string[] splitted = lines[i].Split(',');
+                    phoneBook[i - 1] = (splitted[0], splitted[1], splitted[2]);
+                }
+
+                return phoneBook;
+            }
+            catch (IndexOutOfRangeException ex) //2
+            {
+                Console.WriteLine("Some problem with array of phonebook. Look for the amount of string");
+                throw(ex);
             }
 
-            return phoneBook;
         }
     }
 }
