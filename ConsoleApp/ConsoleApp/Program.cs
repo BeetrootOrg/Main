@@ -4,100 +4,49 @@ namespace ConsoleApp
 {
     class Program
     {
-        const int maxInt= 2147483647;
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter the nubmers: ");
-            int a = Convert.ToInt32(Console.ReadLine());
-            int b = Convert.ToInt32(Console.ReadLine());
-            int c = Convert.ToInt32(Console.ReadLine());
-            int d = Convert.ToInt32(Console.ReadLine());
-            int e = Convert.ToInt32(Console.ReadLine());
-
-            Console.WriteLine($"\nMax({a}, {b})= {Maxi(a, b)}");
-            Console.WriteLine($"\nMax({a}, {b}, {c})= {Maxi(a, b, c)}");
-            Console.WriteLine($"\nMax({a}, {b}, {c}, {d})= {Maxi(a, b, c, d)}");
-            Console.WriteLine($"\nMax({a}, {b}, {c}, {d}, {e})= {Maxi(a, b, c, d, e)}");
-            
-            Console.WriteLine($"\nMin({a}, {b})= {Mini(a, b)}");
-            Console.WriteLine($"\nMin({a}, {b}, {c})= {Mini(a, b, c)}");
-            Console.WriteLine($"\nMin({a}, {b}, {c}, {d})= {Mini(a, b, c, d)}");
-            Console.WriteLine($"\nMin({a}, {b}, {c}, {d}, {e})= {Mini(a, b, c, d, e)}");
-
-            Console.WriteLine("Enter x and y: ");
-            int x= Convert.ToInt32(Console.ReadLine());
-            int y= Convert.ToInt32(Console.ReadLine());
-            int db = 0;
-            if (TryMulIfDividedByThree(x, y, out db))
-            {
-                Console.WriteLine($"One of the numbers is divisible by 3!\nMultiplication of these numbers is {db}");
-            }
-            else
-            {
-                Console.WriteLine($"No one of the numbers is divisible by 3!");
-            }
-
-            Console.WriteLine("Enter the line and the number n: ");
-            string line=Console.ReadLine();
+            Console.WriteLine($"Enter the array length: \n");
             int n=Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine($"Repeat({line}, {n})= {Repeat(line, n)}");
 
-            Console.WriteLine("Enter x and y: ");
-            int f = Convert.ToInt32(Console.ReadLine());
-            int g = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine($"x^y= {MyPow(f, g)}");
-
-            Console.WriteLine("Enter the number n: ");
-            int m = Convert.ToInt32(Console.ReadLine());
-            From1ToN(m);
-        }
-        static int Maxi(int a, int b, int c = 0, int d = 0, int e = 0)
-        {
-            if (a > b) { b = a; }
-            if (c > b) { b = c; }
-            if (d > b) { b = d; }
-            if (e > b) { b = e; }
-            return b;
-        }
-        static int Mini(int a, int b, int c = maxInt, int d = maxInt, int e = maxInt)
-        {
-            if (a < b) { b = a; }
-            if (c < b) { b = c; }
-            if (d < b) { b = d; }
-            if (e < b) { b = e; }
-            return b;
-        }
-
-        static bool TryMulIfDividedByThree(int a, int b, out int d)
-        {
-            d = 0;
-            if (a % 3 == 0 || b % 3 == 0) { d = a * b; return true; }
-            return false;
-        }
-
-        static string Repeat(string str,int n)
-        {
-            string result = null;
+            int[] array1 = new int[n];
+            Console.WriteLine($"Enter the elements of the array: \n");
+            for(int i = 0; i < n; i++)
+            {
+                array1[i]=Convert.ToInt32(Console.ReadLine());
+            }
+            BubbleSort(array1);
+            Console.WriteLine($"Array after bubble sorting: ");
             for (int i = 0; i < n; i++)
             {
-                result += str;
+                Console.WriteLine($"\n{array1[i]}");
             }
-            return result;
         }
-
-        static int MyPow(int x,int y)
+        static void Swap(ref int a,ref int b)
         {
-            if (y == 1) { return x; }
-            return x * MyPow(x, y - 1);
+            int temp = a;
+            a = b;
+            b = temp;
         }
-
-        static void From1ToN(int n)
+        static int[] BubbleSort(int [] array)
         {
-            if (n > 1) 
+            int arrayLength=array.Length;
+            for(int i = 1; i < arrayLength; i++)
             {
-                From1ToN(n - 1); 
+                for(int j = 0; j < arrayLength - i; j++)
+                {
+                    if (array[j] > array[j + 1])
+                    {
+                        Swap(ref array[j], ref array[j + 1]);
+                    }
+                }
             }
-            Console.WriteLine(n);    
+            return array;
+        }
+        static int[] QuickSort(int[] array)
+        {
+
+            return array;
         }
     }
 }
