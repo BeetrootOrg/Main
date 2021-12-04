@@ -10,12 +10,36 @@ namespace ConsoleApp
 
     class Person
     {
+        private int _phoneNumberUpdatedCounter;
+        private string _phoneNumber;
+
+
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int Age { get; set; }
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber
+        {
+            get
+            {
+                return _phoneNumber;
+            }
+            set
+            {
+                _phoneNumber = value;
+                ++_phoneNumberUpdatedCounter;
+            }
+        }
+
         public Gender Gender { get; set; }
         public int Height { get; set; }
+
+        public int PhoneNumberUpdatedCounter
+        {
+            get
+            {
+                return _phoneNumberUpdatedCounter;
+            }
+        }
     }
 
     class Program
@@ -46,6 +70,13 @@ namespace ConsoleApp
                 Gender = Gender.Male,
                 Height = 178,
             };
+
+            var person1 = new Person();
+
+            Console.WriteLine(person.PhoneNumber);
+
+            person.PhoneNumber = "+12346";
+            Console.WriteLine(person.PhoneNumberUpdatedCounter);
         }
     }
 }
