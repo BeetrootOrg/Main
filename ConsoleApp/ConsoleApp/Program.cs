@@ -40,6 +40,8 @@ namespace ConsoleApp
                 return _phoneNumberUpdatedCounter;
             }
         }
+
+        public int Weight { get; init; }
     }
 
     class Program
@@ -69,11 +71,13 @@ namespace ConsoleApp
                 PhoneNumber = "+12345",
                 Gender = Gender.Male,
                 Height = 178,
+                Weight = 70
             };
 
             var person1 = new Person();
 
             Console.WriteLine(person.PhoneNumber);
+            Console.WriteLine(person.Weight);
 
             person.PhoneNumber = "+12346";
             Console.WriteLine(person.PhoneNumberUpdatedCounter);
