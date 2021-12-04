@@ -1,58 +1,75 @@
 ﻿using System;
 
-namespace ConsoleApp
+namespace Aaaa
 {
-
-    class Program
+    public class Program
     {
-        static void Main()
-        { 
-            Console.WriteLine($"Max and Min numbers: {FindMax(-1, 2, 0, 462647643)}, {FindMin(-1, 2, 0, 462647643)}\n");
+        static void Main/*text block*/()
+        {
+            Console.WriteLine("Counting F(n) and M(n):");
 
-            double multiply;
-            if (TryMulIfDividedByTgree(3, 1, out multiply))
+            Console.WriteLine("Write n:");
+            int n = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine($"F({n}) = {F(n)}");
+            Console.WriteLine($"M({n}) = {M(n)}\n");
+
+            Console.WriteLine("Counting x^y:");
+            Console.WriteLine("Write x:");
+            int x = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Write y:");
+
+            int y = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine($"{x}^{y} = {Pow(x, y)}\n");
+
+            Console.WriteLine("Writing numbers from 1 to n:");
+            Console.WriteLine("Write n:");
+            n = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine($"Your row of numbers: \n{Series(n)}\n");
+            Console.WriteLine("         Push any button to exit the programm\n");
+
+        }
+        static int F(int n)
+        {
+            if (n >= 0)
             {
-                Console.WriteLine($"Multiply: {multiply}\n");
+                n = n -M(F(n-1));
+            }
+            return n;
+        }
+        static int M(int n)
+        {
+            if (n > 0)
+            {
+                n = n -F(M(n-1));
+            }
+            return n;
+        }
+        static int Pow(int x, int y)
+        {
+            if (y > 1)
+            {
+                x = x * Pow(x, y - 1);
+            }
+            else if (y == 0)
+            {
+                x = 1;
+            }
+            return x;
+        }
+        static string Series(int n)
+        {
+
+            if (n > 0)
+            {
+                return Series(n - 1) + n + " ";
             }
             else
             {
-                Console.WriteLine($"Multiply error: {multiply}\n");
-            }
-            Console.WriteLine($"Str task: {Repeat("str", 0)}");
-        }
-        static int FindMin(int a, int b = 2147483647, int c = 2147483647, int d = 2147483647, int e = 2147483647)
-        {
-            return (Math.Min(Math.Min(Math.Min(Math.Min(a, b), c), d), e));
-        }
-        static int FindMax(int a, int b, int c = -2147483648, int d = -2147483648, int e = -2147483648)
-        {
-            return (Math.Max(Math.Max(Math.Max(Math.Max(a, b), c), d), e));
-        }
-        static bool TryMulIfDividedByTgree(int a, int b, out double multiply)
-        {
-            if (a%3 == 0 || b%3 == 0)
-            {
-                multiply = a*b;
-                return true;
-            }
-            else
-            {
-                multiply = 0;
-                return false;
+                return null;
             }
         }
-        static string Repeat(string str, int n)
-        {
-            if (n>0)
-            {
-                for (int a= 2; a <= n; ++a)
-                {
-                    str += str;
-                }
-                return str;
-            }
-            return "Something went wrong with string, please fix the problem";
-        }
+
     }
 
 }
