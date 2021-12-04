@@ -28,7 +28,7 @@ namespace ConsoleApp
             Console.WriteLine($"Duplicated chars is: ");
             for(int i = 0; i < charArrayLength; i++)
             {
-                Console.Write(array1[i]);
+                Console.Write($"{array1[i]} ");
             }
         }
         static void Swap(ref char a, ref char b)
