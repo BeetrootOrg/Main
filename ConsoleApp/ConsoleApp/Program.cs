@@ -16,6 +16,7 @@ namespace ConsoleApp
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string FullName => $"{FirstName} {LastName}";
         public int Age { get; set; }
         public string PhoneNumber
         {
@@ -78,6 +79,7 @@ namespace ConsoleApp
 
             Console.WriteLine(person.PhoneNumber);
             Console.WriteLine(person.Weight);
+            Console.WriteLine(person.FullName);
 
             person.PhoneNumber = "+12346";
             Console.WriteLine(person.PhoneNumberUpdatedCounter);
