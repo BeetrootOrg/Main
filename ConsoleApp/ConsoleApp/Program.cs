@@ -17,7 +17,7 @@ namespace ConsoleApp
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string FullName => $"{FirstName} {LastName}";
-        public int Age { get; set; }
+        public int Age { get; set; } = 1;
         public string PhoneNumber
         {
             get
@@ -76,6 +76,32 @@ namespace ConsoleApp
                 Console.WriteLine(record.Show());
             }
         }
+    }
+
+    class TestStatic
+    {
+        public static string StaticName = "static_name";
+        public string Name;
+
+        static TestStatic()
+        {
+            StaticName = "static";
+            // can't do Name = StaticName;
+        }
+
+        public TestStatic()
+        {
+            StaticName = "non_static";
+        }
+
+        public TestStatic(string name)
+        {
+            StaticName = "non_static_with_param";
+            Name = name;
+        }
+
+        public static string StaticMethod() => "STATIC";
+        public string Method() => "NONSTATIC";
     }
 
     class Program
@@ -162,6 +188,12 @@ namespace ConsoleApp
             };
 
             book.ShowAll();
+
+            var obj1 = new TestStatic();
+            var obj2 = new TestStatic("name");
+            obj1.Method();
+            TestStatic.StaticMethod();
+            Console.WriteLine(TestStatic.StaticName);
         }
     }
 }
