@@ -2,102 +2,143 @@
 
 namespace ConsoleApp
 {
+    enum Gender
+    {
+        Male,
+        Female
+    }
+
+    class Person
+    {
+        private int _phoneNumberUpdatedCount;
+        public int PhoneNumberUpdatedCount 
+        { 
+            get 
+            {
+                return _phoneNumberUpdatedCount; 
+            } 
+        }
+        private string _phoneNumber;
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string FullName=>$"{FirstName} {LastName}";
+        public Gender Gender { get; set; }
+        public int Age { get; set; }
+        public string PhoneNumber
+        {
+            get
+            {
+                return _phoneNumber; 
+            }
+            set
+            { 
+                _phoneNumber = value;
+                _phoneNumberUpdatedCount++;
+            } 
+        }
+        public double Height { get; set; }
+        public int Weight { get; set; }
+        
+        public double WeightIndex()
+        {
+            return Weight / (Height * Height / 10000);
+        }
+
+    }
+    class User
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string FullName => $"{FirstName} {LastName}";
+
+    }
+    class PhoneNumberRecord
+    {
+        public User User { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Show() => $"{User.FullName} -> {PhoneNumber}";
+
+    }
+    class PhoneNumberBook
+    {
+        public PhoneNumberRecord[] Book { get; set; }
+        public void ShowAll()
+        {
+            foreach(var record in Book)
+            {
+                Console.WriteLine(record.Show());
+            }
+        }
+    }
     class Program
     {
-        const int maxInt= 2147483647;
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter the nubmers: ");
-            int a = Convert.ToInt32(Console.ReadLine());
-            int b = Convert.ToInt32(Console.ReadLine());
-            int c = Convert.ToInt32(Console.ReadLine());
-            int d = Convert.ToInt32(Console.ReadLine());
-            int e = Convert.ToInt32(Console.ReadLine());
+            var person1 = new Person();
+            Console.WriteLine(person1);
+            Console.WriteLine(person1.Age);
+            //1 variant
+            person1.FirstName = "Ivan";
+            person1.LastName = "Safontev";
+            person1.Age = 18;
+            person1.PhoneNumber = "+1234";
+            person1.Gender = Gender.Male;
+            person1.Height = 180;
 
-            Console.WriteLine($"\nMax({a}, {b})= {Maxi(a, b)}");
-            Console.WriteLine($"\nMax({a}, {b}, {c})= {Maxi(a, b, c)}");
-            Console.WriteLine($"\nMax({a}, {b}, {c}, {d})= {Maxi(a, b, c, d)}");
-            Console.WriteLine($"\nMax({a}, {b}, {c}, {d}, {e})= {Maxi(a, b, c, d, e)}");
-            
-            Console.WriteLine($"\nMin({a}, {b})= {Mini(a, b)}");
-            Console.WriteLine($"\nMin({a}, {b}, {c})= {Mini(a, b, c)}");
-            Console.WriteLine($"\nMin({a}, {b}, {c}, {d})= {Mini(a, b, c, d)}");
-            Console.WriteLine($"\nMin({a}, {b}, {c}, {d}, {e})= {Mini(a, b, c, d, e)}");
-
-            Console.WriteLine("Enter x and y: ");
-            int x= Convert.ToInt32(Console.ReadLine());
-            int y= Convert.ToInt32(Console.ReadLine());
-            int db = 0;
-            if (TryMulIfDividedByThree(x, y, out db))
+            //2 variant
+            person1 = new Person
             {
-                Console.WriteLine($"One of the numbers is divisible by 3!\nMultiplication of these numbers is {db}");
-            }
-            else
+                FirstName = "Ivan",
+                LastName = "Safontev",
+                Age = 18,
+                PhoneNumber = "+1234",
+                Gender = Gender.Male,
+                Height = 180,
+                Weight = 80,
+
+            };
+            Console.WriteLine(person1.FullName);
+            person1.PhoneNumber = "+123456";
+            Console.WriteLine(person1.PhoneNumberUpdatedCount);
+
+            //person1 = null;
+
+            Console.WriteLine($"Weight index= {person1.WeightIndex()}");
+
+
+            var users = new User[]
             {
-                Console.WriteLine($"No one of the numbers is divisible by 3!");
-            }
+                new User
+                {
+                    FirstName ="a",
+                    LastName="b",
+                },
+                new User
+                {
+                    FirstName="c",
+                    LastName="d",
+                }
+            };
 
-            Console.WriteLine("Enter the line and the number n: ");
-            string line=Console.ReadLine();
-            int n=Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine($"Repeat({line}, {n})= {Repeat(line, n)}");
-
-            Console.WriteLine("Enter x and y: ");
-            int f = Convert.ToInt32(Console.ReadLine());
-            int g = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine($"x^y= {MyPow(f, g)}");
-
-            Console.WriteLine("Enter the number n: ");
-            int m = Convert.ToInt32(Console.ReadLine());
-            From1ToN(m);
-        }
-        static int Maxi(int a, int b, int c = 0, int d = 0, int e = 0)
-        {
-            if (a > b) { b = a; }
-            if (c > b) { b = c; }
-            if (d > b) { b = d; }
-            if (e > b) { b = e; }
-            return b;
-        }
-        static int Mini(int a, int b, int c = maxInt, int d = maxInt, int e = maxInt)
-        {
-            if (a < b) { b = a; }
-            if (c < b) { b = c; }
-            if (d < b) { b = d; }
-            if (e < b) { b = e; }
-            return b;
-        }
-
-        static bool TryMulIfDividedByThree(int a, int b, out int d)
-        {
-            d = 0;
-            if (a % 3 == 0 || b % 3 == 0) { d = a * b; return true; }
-            return false;
-        }
-
-        static string Repeat(string str,int n)
-        {
-            string result = null;
-            for (int i = 0; i < n; i++)
+            var PhoneNumbers = new PhoneNumberRecord[]
             {
-                result += str;
-            }
-            return result;
-        }
+                new PhoneNumberRecord
+                {
+                    User=users[0],
+                    PhoneNumber="+1234",
+                },
+                new PhoneNumberRecord
+                {
+                    User=users[1],
+                    PhoneNumber="+123432",
+                }
+            };
 
-        static int MyPow(int x,int y)
-        {
-            if (y == 1) { return x; }
-            return x * MyPow(x, y - 1);
-        }
-
-        static void From1ToN(int n)
-        {
-            if (n > 1) 
+            var book = new PhoneNumberBook
             {
-                From1ToN(n - 1); 
-            }
-            Console.WriteLine(n);    
+                Book = PhoneNumbers
+            };
+            book.ShowAll();
         }
     }
 }
