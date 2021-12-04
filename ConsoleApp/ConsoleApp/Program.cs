@@ -43,6 +43,11 @@ namespace ConsoleApp
         }
 
         public int Weight { get; init; }
+
+        public double WeightIndex()
+        {
+            return Weight / (Height * Height / 10000);
+        }
     }
 
     class Program
@@ -75,7 +80,11 @@ namespace ConsoleApp
                 Weight = 70
             };
 
-            var person1 = new Person();
+            var person1 = new Person
+            {
+                Weight = 90,
+                Height = 190
+            };
 
             Console.WriteLine(person.PhoneNumber);
             Console.WriteLine(person.Weight);
@@ -83,6 +92,8 @@ namespace ConsoleApp
 
             person.PhoneNumber = "+12346";
             Console.WriteLine(person.PhoneNumberUpdatedCounter);
+            Console.WriteLine($"Weight Index = {person.WeightIndex()}");
+            Console.WriteLine($"Weight Index = {person1.WeightIndex()}");
         }
     }
 }
