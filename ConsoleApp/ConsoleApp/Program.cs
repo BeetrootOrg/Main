@@ -2,95 +2,57 @@
 
 namespace ConsoleApp
 {
+
     class Program
     {
         static void Main()
+        { 
+            Console.WriteLine($"Max and Min numbers: {FindMax(-1, 2, 0, 462647643)}, {FindMin(-1, 2, 0, 462647643)}\n");
+
+            double multiply;
+            if (TryMulIfDividedByTgree(3, 1, out multiply))
+            {
+                Console.WriteLine($"Multiply: {multiply}\n");
+            }
+            else
+            {
+                Console.WriteLine($"Multiply error: {multiply}\n");
+            }
+            Console.WriteLine($"Str task: {Repeat("str", 0)}");
+        }
+        static int FindMin(int a, int b = 2147483647, int c = 2147483647, int d = 2147483647, int e = 2147483647)
         {
-            char[] arr = new[] { (char)65, 'A', (char)0x41, '\u0041', 'a', '9', '\u1234' }; // first four -> the same symbol 'A'
-
-            foreach (var item in arr)
+            return (Math.Min(Math.Min(Math.Min(Math.Min(a, b), c), d), e));
+        }
+        static int FindMax(int a, int b, int c = -2147483648, int d = -2147483648, int e = -2147483648)
+        {
+            return (Math.Max(Math.Max(Math.Max(Math.Max(a, b), c), d), e));
+        }
+        static bool TryMulIfDividedByTgree(int a, int b, out double multiply)
+        {
+            if (a%3 == 0 || b%3 == 0)
             {
-                Console.WriteLine($"Symbol: {item}");
-                Console.WriteLine($"Is Lower: {char.IsLower(item)}");
-                Console.WriteLine($"Is Upper: {char.IsUpper(item)}");
-                Console.WriteLine($"Is Number: {char.IsNumber(item)}");
-                Console.WriteLine($"Is Ascii: {char.IsAscii(item)}");
-                Console.WriteLine($"Is Letter: {char.IsLetter(item)}");
-                Console.WriteLine($"Is Letter: {char.IsControl(item)}");
-
-                Console.WriteLine($"To Lower: {char.ToLower(item)}");
-                Console.WriteLine($"To Upper: {char.ToUpper(item)}");
+                multiply = a*b;
+                return true;
             }
-
-            char result;
-
-            Console.WriteLine($"TryParse 'b': {char.TryParse("b", out result)}. Result: {result}");
-            Console.WriteLine($"TryParse 'bb': {char.TryParse("bb", out result)}. Result: {result}");
-
-            Console.WriteLine("STRING\n");
-
-            string formatted = "Hello, {0}";
-            Console.WriteLine(string.Format(formatted, "Dima"));
-
-            formatted = "{0} = {1}";
-            Console.WriteLine(formatted, "3^2", 3 * 3);
-
-            formatted = "{0} says: 'I am {0}'";
-            Console.WriteLine(formatted, "Dima");
-
-            formatted = "Some stuff: {0}, {1}, {2}, {0}, {3}, {5}";
-            Console.WriteLine(formatted, "Dima", 42, 'c', true, 0, -5);
-
-            formatted = "{0}, {4}";
-            Console.WriteLine(formatted, "Dima", null, null, null, -5);
-            Console.WriteLine($"{42} is a number");
-
-            string str = "Thes is string"; // string with error
-
-            char c = str[2];
-            Console.WriteLine($"Error in symbol '{c}'");
-
-            string substring = str[0..^5];
-            Console.WriteLine($"Substring 0..^5: {substring}");
-
-            string[] arrayOfString = { "1", "42", "68" };
-            int[] parsed = new int[arrayOfString.Length];
-            for (int i = 0; i < arrayOfString.Length; i++)
+            else
             {
-                parsed[i] = int.Parse(arrayOfString[i]);
+                multiply = 0;
+                return false;
             }
-
-            string str1 = "Dima";
-            string str2 = "dima";
-
-            Console.WriteLine("String comparison");
-            Console.WriteLine(str1 == str2); // false, by default Ordinal
-            Console.WriteLine(str1.Equals(str2, StringComparison.OrdinalIgnoreCase)); // true
-            Console.WriteLine("c".Equals("с", StringComparison.InvariantCulture)); // false
-            Console.WriteLine("11.01".Equals("11,01", StringComparison.InvariantCulture)); // false
-
-            str1 = "abc";
-            str2 = "dce";
-
-            // if result <0 then str1 < str2
-            // if result ==0 then str1 == str2
-            // if result >0 then str1 > str2
-            Console.WriteLine(str1.CompareTo(str2)); // -1
-
-            str1 = "ABC";
-            str2 = "abc";
-            Console.WriteLine(str1.CompareTo(str2)); // 1
-
-            str1 = "This is a string";
-            Console.WriteLine($"Ends with: {str1.EndsWith("string")}"); // true
-            Console.WriteLine($"Starts with: {str1.StartsWith("This is")}"); // true
-            Console.WriteLine($"Contains: {str1.Contains("is a")}"); // true
-            Console.WriteLine($"Index of 'i': {str1.IndexOf('i')}"); // 2
-            Console.WriteLine($"Index of 'is': {str1.IndexOf("is")}"); // 2
-            Console.WriteLine($"Last index of 'is': {str1.LastIndexOf("is")}"); // 5
-            Console.WriteLine($"Last index of 'IS': {str1.LastIndexOf("IS")}"); // -1
-            Console.WriteLine($"Last index of 'IS' (ignore case): {str1.LastIndexOf("IS", StringComparison.OrdinalIgnoreCase)}"); // 5
-            Console.WriteLine($"Index of 'i' or 'h': {str1.IndexOfAny(new[] { 'i', 'h' })}"); // 1
+        }
+        static string Repeat(string str, int n)
+        {
+            if (n>0)
+            {
+                for (int a= 2; a <= n; ++a)
+                {
+                    str += str;
+                }
+                return str;
+            }
+            return "Something went wrong with string, please fix the problem";
         }
     }
+
 }
