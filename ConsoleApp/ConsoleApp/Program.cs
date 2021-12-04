@@ -43,10 +43,5 @@ namespace ConsoleApp
             }
             return array;
         }
-        static int[] QuickSort(int[] array)
-        {
-
-            return array;
-        }
     }
 }
