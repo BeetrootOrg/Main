@@ -140,11 +140,15 @@ namespace ConsoleApp
             {
                 string fullName = firstName + " " + lastName; 
 
+
                 if (fullName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
                 {                    
                     Console.WriteLine($"Found user {fullName} with phone number: {phoneNumber}");                    
                     found = true;
 
+                    Console.WriteLine("New phone number:"); 
+                    
+                    var newPhoneNumber = ConvertToText(phoneNumber(Console.ReadLine()));
                     
                     
 
@@ -155,9 +159,8 @@ namespace ConsoleApp
                 Console.WriteLine("User not found!");
             }
             if(true) 
-            {
-                Console.WriteLine("New phone number:");                
-                //var newPhoneNumber = ConvertToText(phoneNumber(Console.ReadLine()));
+            {               
+
             }
             
 
