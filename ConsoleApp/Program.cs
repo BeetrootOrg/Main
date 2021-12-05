@@ -2,185 +2,81 @@
 
 namespace ConsoleApp
 {
-    enum Gender
+    enum Genre
     {
-        Male,
-        Female
+        Scifi,
+        Fantasy,
+        Pulpfiction,
+        Documentary,
+        Historical,
+        Detective,
+        Horror,
+        Triller
     }
 
-    class Person
-    {
-        private int _phoneNumberUpdatedCounter;
-        private string _phoneNumber;
-
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string FullName => $"{FirstName} {LastName}";
-        public int Age { get; set; }
-        public string PhoneNumber
-        {
-            get
-            {
-                return _phoneNumber;
-            }
-            set
-            {
-                _phoneNumber = value;
-                ++_phoneNumberUpdatedCounter;
-            }
-        }
-
-        public Gender Gender { get; set; }
-        public int Height { get; set; }
-
-        public int PhoneNumberUpdatedCounter
-        {
-            get
-            {
-                return _phoneNumberUpdatedCounter;
-            }
-        }
-
-        public int Weight { get; init; }
-
-        public double WeightIndex()
-        {
-            return Weight / (Height * Height / 10000);
-        }
-    }
-
-    class User
+    class Author
     {
         public string FirstName { get; init; }
         public string LastName { get; init; }
         public string FullName => $"{FirstName} {LastName}";
+        public int DayOfBirth { get; init; }
+        public bool IsAlive { get; set; }
+        public int DayOfDeath { get; set; }
     }
 
-    class PhoneNumberRecord
+    class Book
     {
-        public User User { get; init; }
+        public int ISBN { get; init; }
+        public string NameOfBook { get; set; }
+        public int DateOfCreating { get; init; }
+        public int[] DateOfPublication { get; set; }
+        public int CounsOfCopyInLibrary { get; set; }
+        public bool InLibrary { get; set; }    
+        public Genre Genre { get; init; }
+    }
+
+    class Reader
+    {
+        public string FirstName { get; init; }
+        public string LastName { get; init; }
+        public string FullName => $"{FirstName} {LastName}";
+        private string HomeAdress { get; init; }
+        private string WorkAdress { get; init; }
+        private string PhoneNumber { get; set; }
+        private int CountOfBooksTakenInLibrary { get; set; }     
+    }
+
+    class Staff
+    {
+        public string FirstName { get; init; }
+        public string LastName { get; init; }
+        public string FullName => $"{FirstName} {LastName}";
+        private string HomeAdress { get; init; }
+        private string PhoneNumber { get; set; }
+        private string Position { get; set; }
+        private int DateStartWorking { get; init; }
+        private int DateOfBirth { get; init; }
+
+    }
+
+    class Library 
+    {
+        public int DateOfBuilding { get; init; }
+        public string Adress { get; set; }
+        public int CountSitPlaces { get; init; }
         public string PhoneNumber { get; init; }
+        public int QuantityOfBooks { get; set; }
+        private int QuantityOfStaff { get; init; }
 
-        public string Show() => $"{User.FullName} -> {PhoneNumber}";
+
+        
     }
-
-    class PhoneNumberBook
-    {
-        public PhoneNumberRecord[] Book { get; init; }
-
-        public void ShowAll()
-        {
-            foreach (var record in Book)
-            {
-                Console.WriteLine(record.Show());
-            }
-        }
-    }
-
-    class TestStatic
-    {
-        public static string StaticName = "static_name ";
-        // can't do Name=StaticName;
-   
-
-        public TestStatic()
-        {
-            StaticName="non_static";
-        }
-
-        public TestStatic(string name)
-        {
-        StaticName = "non_static";
-    
-        }
-    }
-
 
 
 class Program
     {
         static void Main()
         {
-            var person = new Person();
-            Console.WriteLine(person);
-            Console.WriteLine(person.Age);
-
-            // 1st approach to init
-            person.FirstName = "Dima";
-            person.LastName = "Misik";
-            person.Age = 25;
-            person.PhoneNumber = "+12345";
-            person.Gender = Gender.Male;
-            person.Height = 178;
-
-            Console.WriteLine(person.Age);
-
-            // 2nd approach to init - preferable
-            person = new Person
-            {
-                FirstName = "Dima",
-                LastName = "Misik",
-                Age = 25,
-                PhoneNumber = "+12345",
-                Gender = Gender.Male,
-                Height = 178,
-                Weight = 70
-            };
-
-            var person1 = new Person
-            {
-                Weight = 90,
-                Height = 190
-            };
-
-            Console.WriteLine(person.PhoneNumber);
-            Console.WriteLine(person.Weight);
-            Console.WriteLine(person.FullName);
-
-            person.PhoneNumber = "+12346";
-            Console.WriteLine(person.PhoneNumberUpdatedCounter);
-            Console.WriteLine($"Weight Index = {person.WeightIndex()}");
-            Console.WriteLine($"Weight Index = {person1.WeightIndex()}");
-
-            var users = new User[]
-            {
-                new User
-                {
-                    FirstName = "A",
-                    LastName = "B"
-                },
-                new User
-                {
-                    FirstName = "C",
-                    LastName = "D"
-                }
-            };
-
-            var phoneNumbers = new PhoneNumberRecord[]
-            {
-                new PhoneNumberRecord
-                {
-                    User = users[0],
-                    PhoneNumber = "+1234"
-                },
-                new PhoneNumberRecord
-                {
-                    User = users[1],
-                    PhoneNumber = "+1235"
-                },
-                new PhoneNumberRecord
-                {
-                    User = users[0],
-                    PhoneNumber = "126"
-                }
-            };
-
-            var book = new PhoneNumberBook
-            {
-                Book = phoneNumbers
-            };
-
-            book.ShowAll();
         }
     }
 }
