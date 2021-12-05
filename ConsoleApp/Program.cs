@@ -76,7 +76,7 @@ namespace ConsoleApp
 
             static string SortCharInString(string str)
             { 
-            char[] array = new char [str.Length];
+                char[] array = new char [str.Length];
                 for (int i = 0; i < array.Length; i++)
                 {
                     array[i] = Char.ToLower(str[i]);
@@ -103,17 +103,16 @@ namespace ConsoleApp
             {
                 if (first.Length != second.Length)
                     return false;
-                else
+
+                for (int i = 0; i < first.Length; ++i)
                 {
-                    for (int i = 0; i < first.Length; ++i)
-                    {
-                        char a = first[i];
-                        char b = second[i];
-                        if (a != b)
-                            return false;
-                    }
-                    return true;
+                    char a = first[i];
+                    char b = second[i];
+                    if (a != b)
+                        return false;
                 }
+                    return true;
+                
             }
 
             static void Analyse(string str)
