@@ -18,6 +18,7 @@
             person.PhoneNumber = "+380631669127";
             person.Height = 202;
             person.Weight = 108;
+
             Console.WriteLine(person.WeightIndex());
         }
         
@@ -58,5 +59,5 @@
     {
         public PhoneNumberRecord[] phoneNumberRecords { get; set; }
     }
-
+   
 }
