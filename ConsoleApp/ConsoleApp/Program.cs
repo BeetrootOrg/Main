@@ -12,7 +12,16 @@ namespace ConsoleApp
         {
             while (true)
             {
-                Menu();
+                try
+                {
+                    Menu();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.Read();
+
+                }
             }
         }
 
@@ -95,16 +104,28 @@ namespace ConsoleApp
 
             static (string, string, string)[] ReadPhoneBook()
             {
-                string[] lines = File.ReadAllLines(FileName);
-
-                var phoneBook = new (string, string, string)[lines.Length - 1];
-                for (int i = 1; i < lines.Length; i++)
+                try
                 {
-                    string[] splitted = lines[i].Split(',');
-                    phoneBook[i - 1] = (splitted[0], splitted[1], splitted[2]);
-                }
+                    string[] lines = File.ReadAllLines(FileName);
 
-                return phoneBook;
+                    var phoneBook = new (string, string, string)[lines.Length - 1];
+                    for (int i = 1; i < lines.Length; i++)
+                    {
+                        string[] splitted = lines[i].Split(',');
+                        phoneBook[i - 1] = (splitted[0], splitted[1], splitted[2]);
+                    }
+                    return phoneBook;
+                }
+                catch(FileNotFoundException fnfe)
+                {
+                    Console.WriteLine("File not exist, you need to create your PHONEBOOK at first.");
+                    throw fnfe;
+                }
+                catch(DirectoryNotFoundException dnfe)
+                {
+                    Console.WriteLine("Directory not found.");
+                    throw dnfe;
+                }
             }
 
             static void SearchByName()
@@ -113,7 +134,24 @@ namespace ConsoleApp
                 Console.WriteLine("Search condition - if first/last name contains search term you will see it");
 
                 Console.WriteLine("Enter Search Term...");
-                var searchTerm = Console.ReadLine();
+                string searchTerm = null;
+                
+                //Checking searchTerm on empty string
+                try
+                {
+                    searchTerm = Console.ReadLine();
+                    if (String.IsNullOrEmpty(searchTerm))
+                        throw new ArgumentException();
+                }
+                catch(ArgumentException)
+                {
+                    while (String.IsNullOrEmpty(searchTerm))
+                    {
+                        Console.WriteLine("You didn't write term to serch, but you have the second chance!!! Write term correct...");
+                        searchTerm = Console.ReadLine();
+                    }
+                }
+
                 bool found = false;
 
                 foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
@@ -125,7 +163,6 @@ namespace ConsoleApp
                         found = true;
                     }
                 }
-
                 if (!found)
                 {
                     Console.WriteLine("Not such users");
@@ -142,7 +179,28 @@ namespace ConsoleApp
                 Console.WriteLine("Search condition - if phone number contains search digits we will find phone number ");
 
                 Console.WriteLine("Enter numbers...");
-                var searchTerm = Console.ReadLine();
+                string searchTerm = null;
+
+                //Checking searchTerm on empty string
+                try
+                {
+                    searchTerm = Console.ReadLine();
+                    if (String.IsNullOrEmpty(searchTerm))
+                        throw new ArgumentException();
+                }
+                catch (ArgumentException)
+                {
+                    while (String.IsNullOrEmpty(searchTerm))
+                    {
+                        Console.WriteLine("You didn't write term to serch, but you have the second chance!!! Write term correct...");
+                        searchTerm = Console.ReadLine();
+                    }
+                }
+                finally
+                {
+                    Console.WriteLine("You write term successful! It is not empty.");
+                }
+
                 bool found = false;
 
                 foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
@@ -170,42 +228,57 @@ namespace ConsoleApp
                 string lookFirstName = Console.ReadLine();
                 string lookLastName = Console.ReadLine();
 
-                bool found = false;
                 (string firstName, string lastName, string phoneNumber)[] phoneBook = ReadPhoneBook();
-
+                
                 //Here we looking our contact and as soon as we found, we change it and write in fle
-                for (int i = 0; i < phoneBook.Length; i++)
+                if (TrySearchPhone(phoneBook, lookFirstName, lookLastName, out int contactIndex))
                 {
+                    //If we found the contact we change phone number here
+                    Console.WriteLine("\nWrite new PHONE NUMBER:");
+                    phoneBook[contactIndex].phoneNumber = Console.ReadLine();
 
-                    if (String.Equals(lookFirstName, phoneBook[i].firstName, StringComparison.OrdinalIgnoreCase) && 
-                        String.Equals(lookLastName, phoneBook[i].lastName, StringComparison.OrdinalIgnoreCase))
+                    string[] newPhoneBook = new string[phoneBook.Length + 1];
+                    newPhoneBook[0] = Head;
+
+                    //IndexOutOfRangeException
+                    try
                     {
-                        //If we found the contact we change phone number here
-                        Console.WriteLine("\nWrite new PHONE NUMBER:");
-                        phoneBook[i].phoneNumber = Console.ReadLine();
-
-                        string[] newPhoneBook = new string[phoneBook.Length + 1];
-                        newPhoneBook[0] = Head;
-
                         for (int j = 0; j < phoneBook.Length; j++)
                         {
                             newPhoneBook[j + 1] = String.Join(',', phoneBook[j].firstName, phoneBook[j].lastName, phoneBook[j].phoneNumber);
                         }
-
-                        File.WriteAllLines(FileName, newPhoneBook);
-
-                        Console.WriteLine("Update is successful!!!");
-                        found = true;
-                        break;
                     }
+                    catch (IndexOutOfRangeException)
+                    {
+                        Console.WriteLine("Index was out of range. Correct your program.");
+                    }
+
+                    File.WriteAllLines(FileName, newPhoneBook);
+
+                    Console.WriteLine("Update is successful!!!");
                 }
-                //If we don't found the contact
-                if (!found)
+                else
                 {
                     Console.WriteLine("This user not exist!");
                 }
 
                 Wait();
+            }
+
+            //Method to search looking contact1
+            static bool TrySearchPhone((string firstName, string lastName, string phoneNumber)[] phoneBook, string lookFirstName, string lookLastName, out int contactIndex)
+            {
+                for (int i = 0; i < phoneBook.Length; i++)
+                {
+                    if (String.Equals(lookFirstName, phoneBook[i].firstName, StringComparison.OrdinalIgnoreCase) &&
+                        String.Equals(lookLastName, phoneBook[i].lastName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        contactIndex = i;
+                        return true;
+                    }
+                }
+                contactIndex = 0;
+                return false;
             }
 
 
