@@ -103,7 +103,7 @@ namespace ConsoleApp
                 newPhoneBook[i] = lines[i];
 
             }
-                File.WriteAllLines(Filename, newPhoneBook);
+            File.WriteAllLines(Filename, newPhoneBook);
         }
 
         private static void SearchBy(bool phone = true)
@@ -119,7 +119,7 @@ namespace ConsoleApp
             {
                 if (firstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
                     lastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
-                    phoneNumber.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    phoneNumber.Contains(searchTerm))
                 {
                     Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
                     found = true;
