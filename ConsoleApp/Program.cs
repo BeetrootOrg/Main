@@ -92,7 +92,7 @@ namespace ConsoleApp
                     var newPhoneNumber= Console.ReadLine();
                     if (!newPhoneNumber.All(Char.IsDigit))
                     { 
-                    throw   new ArgumentException($"Soorry, phone number can contain only a digits.Try again more carefully"); //5
+                        throw   new ArgumentException($"Soorry, phone number can contain only a digits.Try again more carefully"); //5
                     }
                     Modify(firstName, lastName,newPhoneNumber);
                     found = true;
@@ -228,7 +228,7 @@ namespace ConsoleApp
                 File.Create(Filename);
                 File.AppendAllText(Filename, Header);
             }
-              lines = File.ReadAllLines(Filename);
+            lines = File.ReadAllLines(Filename);
 
             try
             {
