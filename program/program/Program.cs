@@ -146,11 +146,11 @@ namespace ConsoleApp
                     Console.WriteLine($"Found user {fullName} with phone number: {phoneNumber}");                    
                     found = true;
 
-                    Console.WriteLine("New phone number:"); 
-                    
-                    var newPhoneNumber = ConvertToText(phoneNumber(Console.ReadLine()));
-                    
-                    
+                    Console.WriteLine("New phone number:");
+                    var newPhoneNumber = Console.ReadLine();
+                    //var newPhoneNumber = ConvertToText(phoneNumber(Console.ReadLine()));
+
+                    File.WriteAllLines(Filename, new[] { $"{firstName},{lastName},{newPhoneNumber}" });
 
                 }
             }
