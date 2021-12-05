@@ -67,7 +67,7 @@ namespace ConsoleApp
             var searchTerm = Console.ReadLine();
 
             bool found = false;
-            foreach (var (number, firstName, lastName, phoneNumber) in ReadPhoneBook())
+            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
             {
                 if (firstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
                     lastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
@@ -94,7 +94,7 @@ namespace ConsoleApp
             var searchTerm = Console.ReadLine();
 
             bool found = false;
-            foreach (var (number, firstName, lastName, phoneNumber) in ReadPhoneBook())
+            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
             {
                 if (phoneNumber.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
                     
@@ -118,11 +118,11 @@ namespace ConsoleApp
 
             bool found = false;
             // show header
-            Console.WriteLine($"{"#",-15}{"First Name",-15}{"Last Name",-15}{"Phone Number",-15}");
+            Console.WriteLine($"{"First Name",-15}{"Last Name",-15}{"Phone Number",-15}");
 
-            foreach (var (number, firstName, lastName, phoneNumber) in ReadPhoneBook())
+            foreach (var ( firstName, lastName, phoneNumber) in ReadPhoneBook())
             {
-                Console.Write($"{number,-15}");
+                
                 Console.Write($"{firstName,-15}");
                 Console.Write($"{lastName,-15}");
                 Console.Write($"{phoneNumber,-15}");
@@ -135,25 +135,32 @@ namespace ConsoleApp
 
             Console.Clear();
 
-            foreach (var (number, firstName, lastName, phoneNumber) in ReadPhoneBook())
+
+            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
             {
-                if (number.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                string fullName = firstName + " " + lastName; 
+
+                if (fullName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
                 {                    
-                    Console.WriteLine($"Found user {firstName} {lastName} with phone number: {phoneNumber}");                    
+                    Console.WriteLine($"Found user {fullName} with phone number: {phoneNumber}");                    
                     found = true;
+
+                    
+                    
+
                 }
             }
             if (!found)
             {
                 Console.WriteLine("User not found!");
             }
-
-            if (found)
+            if(true) 
             {
-                
+                Console.WriteLine("New phone number:");                
+                //var newPhoneNumber = ConvertToText(phoneNumber(Console.ReadLine()));
             }
-
             
+
 
             Wait();
         }
@@ -166,7 +173,7 @@ namespace ConsoleApp
         static void CreatePhoneNumber()
         {
             Console.Clear();
-            var number = 0;
+            
             Console.WriteLine("Enter First Name...");
             var firstName = Console.ReadLine();
 
@@ -177,18 +184,18 @@ namespace ConsoleApp
             var phoneNumber = Console.ReadLine();
 
 
-            File.AppendAllLines(Filename, new[]  { $"{number},{firstName},{lastName},{phoneNumber}" });
+            File.AppendAllLines(Filename, new[]  { $"{firstName},{lastName},{phoneNumber}" });
         }
 
         static void ShowAllNumbers()
         {
             Console.Clear();
             // show header
-            Console.WriteLine($"{"#",-15}{"First Name",-15}{"Last Name",-15}{"Phone Number",-15}");
+            Console.WriteLine($"{"First Name",-15}{"Last Name",-15}{"Phone Number",-15}");
 
-            foreach (var (number ,firstName, lastName, phoneNumber) in ReadPhoneBook())
+            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
             {
-                Console.Write($"{number,-15}");
+                
                 Console.Write($"{firstName,-15}");
                 Console.Write($"{lastName,-15}");
                 Console.Write($"{phoneNumber,-15}");
@@ -206,28 +213,28 @@ namespace ConsoleApp
 
         }
 
-        static (string, string, string, string)[] ReadPhoneBook()
+        static (string, string, string)[] ReadPhoneBook()
         {
             string[] lines = File.ReadAllLines(Filename);
 
-            var phoneBook = new (string,string, string, string)[lines.Length - 1];
+            var phoneBook = new (string, string, string)[lines.Length - 1];
             for (int i = 1; i < lines.Length; i++)
             {
                 string[] splitted = lines[i].Split(',');
-                phoneBook[i - 1] = (splitted[0], splitted[1], splitted[2], splitted[3]);
+                phoneBook[i - 1] = (splitted[0], splitted[1], splitted[2]);
             }
 
             return phoneBook;
         }
 
-        static string[] ConvertToText((string,string, string, string)[] data)
+        static string[] ConvertToText((string, string, string)[] data)
         {
             var content = new string[data.Length + 1];
-            content[0] = "#,FirstName,LastName,PhoneNumber";
+            content[0] = "FirstName,LastName,PhoneNumber";
 
             for (int i = 0; i < data.Length; i++)
             {
-                content[i + 1] = $"{data[i].Item1},{data[i].Item2},{data[i].Item3},{data[i].Item4}";
+                content[i + 1] = $"{data[i].Item1},{data[i].Item2},{data[i].Item3}";
             }
 
             return content;
