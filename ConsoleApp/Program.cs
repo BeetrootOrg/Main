@@ -5,219 +5,60 @@
     {
         const string Filename = @"..\..\..\phonebook.csv";
 
-        static void ShowCompareResult(bool result, string str1, string str2)
-        {
-            if (result == true)
-            {
-                Console.WriteLine("\"{0}\" == \"{1}\"", str1, str2);
-            }
-            else 
-            { 
-                Console.WriteLine("\"{0}\" != \"{1}\"", str1, str2);
-            }
-        }
-        static bool Compare(string str1, string str2)
-        {
-            if(str1.Length != str2.Length)
-            {
-                return false;
-            }
-            for(int i = 0; i < str1.Length; i++)
-            {
-                if (str1[i] != str2[i])
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-        static void ShowAnalizeResult(string str, (int, int, int)result)
-        {
-            Console.WriteLine("The string \"{0}\" consist: {1} Letters, {2} Digits and {3} another symbols", str, result.Item1, result.Item2, result.Item3);
-        }
-        static (int, int, int) Analize(string str)
-        {
-            int countAlphabetics = 0;
-            int countDigits = 0;
-            int countAnotherSymbols = 0;
-
-            for (int i = 0; i < str.Length; i++)
-            {
-                if(char.IsLetter(str[i]))
-                {
-                    countAlphabetics++;
-                }
-                else if(char.IsDigit(str[i]))
-                {
-                    countDigits++;
-                }
-                else
-                {
-                    countAnotherSymbols++;
-                }
-
-            }
-            return (countAlphabetics, countDigits, countAnotherSymbols);
-        }
-        static void Sort(out string sortedString, string inputString)
-        {
-            inputString = inputString.ToLower();
-            char[] arr = inputString.ToCharArray();
-            Array.Sort(arr);
-            sortedString = new string(arr);
-        }
-        static void ShowSortedString(string inputString, string sortedString)
-        {
-            Console.WriteLine("Input string: \"{0}\", Sorted string: \"{1}\"", inputString, sortedString);
-        }
-        static void Dublicate(out (char, int)[] dublicateChars, string inputString)
-        {
-            Sort(out inputString, inputString);
-            int[] count = new int[inputString.Length];
-            int charCount;
-            int numberOfDublicats = 0;
-
-            for (int i = 0; i < inputString.Length; i += charCount)
-            {
-                char checkChar = inputString[i];
-                count[i] = 1;
-                charCount = 1;
-                if (char.IsLetter(checkChar))
-                {
-                    for (int j = i + 1; j < inputString.Length; j++)
-                    {
-                        if (checkChar == inputString[j])
-                        {
-                            count[i]++;
-                            charCount++;
-                        }
-                    }
-                }
-                if (charCount > 1)
-                {
-                    numberOfDublicats++;
-                }
-            }
-            dublicateChars = new (char, int)[numberOfDublicats];
-            for (int i = 0, j = 0; i < count.Length; i++)
-            {
-                if (count[i] > 1)
-                {
-                    dublicateChars[j++] = (inputString[i], count[i]);
-                }
-            }
-        }
-        static void ShowDublicate(string inputString, (char, int)[] dublicateChars)
-        {
-            Console.WriteLine("The string \"{0}\", consist dublicat characters:", inputString);
-            for(int i = 0; i < dublicateChars.Length; i++)
-            {
-                Console.WriteLine("{0} : {1}", dublicateChars[i].Item1, dublicateChars[i].Item2);
-            }
-        }
-        class Person
-        {
-            public string Name { get; set; }
-            public string FirstName { get; set; }
-            public string LastName { get; set; }
-            public int Age { get; set; }
-            public string PhoneNumber { get; set; }
-            public int Height { get; set; }
-        }
         static void Main(string[] args)
         {
-            Console.WriteLine("\r\n a.tkachenko/homework/08-Text \r\n");
-
-            var person = new Person();
-            Console.WriteLine("1. Compare:");
-            string str1 = "string 1";
-            string str2 = "string 2";
-            bool result = Compare(str1, str2);
-            ShowCompareResult(result, str1, str2);
-            str1 = "same string";
-            str2 = "same string";
-            result = Compare(str1, str2);
-            ShowCompareResult(result, str1, str2);
-            Console.Write("\r\n");
-
-            Console.WriteLine("2. Analize:");
-            string analizeSting = "Hello!  %^& 234";
-            (int, int, int) analizeResult = Analize(analizeSting);
-            ShowAnalizeResult(analizeSting, analizeResult);
-            Console.Write("\r\n");
-
-            Console.WriteLine("3. Sort:");
-            string nonSortedString = "Hello";
-            string sortedString;
-            Sort(out sortedString, nonSortedString);
-            ShowSortedString(nonSortedString, sortedString);
-            nonSortedString = "HklThRAfF";
-            Sort(out sortedString, nonSortedString);
-            ShowSortedString(nonSortedString, sortedString);
-            Console.Write("\r\n");
-
-            Console.WriteLine("4. Dublicate:");
-            string inputString = "Hello and hi";
-            (char, int)[] dublicateChars;
-            Dublicate(out dublicateChars, inputString);
-            ShowDublicate(inputString, dublicateChars);
-            Console.Write("\r\n");
-
-            String[] arr = { "contribute", "aaeks", "Aae", "yractice" };
-            String x = "ide";
-            int _result = binarySearch(arr, x);
-            ShowBinarySearchResult(x, _result);
-
-            string[] lines;
-            (string tLastName, string tFirstName, string tPhoneNumber)[] phoneBook;
-            ReadPhoneBook(out lines, out phoneBook);
-            x = "Sidorov";
-            _result = BinarySearchByLastName(phoneBook, x);
-            ShowBinarySearchResult(x, _result);
-            x = "Petrov";
-            _result = BinarySearchByLastName(phoneBook, x);
-            ShowBinarySearchResult(x, _result);
-            x = "Misik";
-            _result = BinarySearchByLastName(phoneBook, x);
-            ShowBinarySearchResult(x, _result);
-            x = "qwe";
-            _result = BinarySearchByLastName(phoneBook, x);
-            ShowBinarySearchResult(x, _result);
-            x = "Ivanov";
-            _result = BinarySearchByLastName(phoneBook, x);
-            ShowBinarySearchResult(x, _result);
-
-            Array.Sort(arr);
-
-
-            Array.Sort(lines, 1, lines.Length-1);
-            string temp = lines[1];
-            lines[1] = lines[4];
-            lines[4] = temp;
-            Array.Sort(lines, 1, lines.Length - 1);
-
-            try
-            {
-                (string tLastName, string tFirstName, string tPhoneNumber) newElement = ("Shewchenko", "Taras", "+4838");
-                lines = AddNewElement(lines, phoneBook, newElement);
-                newElement = ("Ivanov", "", "");
-                lines = AddNewElement(lines, phoneBook, newElement);
-            }
-            catch (Exception ex)
-            {
-                ShowExeption(ex.Message);
-            }
+            Console.WriteLine("\r\n a.tkachenko/homework/08-Text and 09-Exception \r\n");
 
             while (true)
             {
                 Menu();
             }
-
-            Console.Write("\r\n");
         }
-        static string[] AddNewElement(string[] array, (string, string, string)[] phoneBook, (string lastName, string firstName, string phoneNumber) newElement)
+        static void Menu()
         {
-            CheckEnteredParameters(newElement.firstName, newElement.lastName, newElement.phoneNumber);
+            Console.Clear();
+            Console.WriteLine("Welcome to Phone Book Application!\n");
+            Console.WriteLine("\tMenu");
+            Console.WriteLine("\t1. Show all phone book");
+            Console.WriteLine("\t2. Create phone record");
+            Console.WriteLine("\t3. Edit phone record");
+            Console.WriteLine("\t4. Search by name");
+            Console.WriteLine("\t5. Search by phone");
+            Console.WriteLine("\t0. Exit");
+
+            ConsoleKeyInfo ck = Console.ReadKey();
+
+            switch (ck.Key)
+            {
+                case ConsoleKey.D1:
+                case ConsoleKey.NumPad1:
+                    ShowAllNumbers();
+                    break;
+                case ConsoleKey.D2:
+                case ConsoleKey.NumPad2:
+                    CreatePhoneNumber();
+                    break;
+                case ConsoleKey.D3:
+                case ConsoleKey.NumPad3:
+                    EditPhoneNumber();
+                    break;
+                case ConsoleKey.D4:
+                case ConsoleKey.NumPad4:
+                    SearchByName();
+                    break;
+                case ConsoleKey.D5:
+                case ConsoleKey.NumPad5:
+                    SearchByPhone();
+                    break;
+                case ConsoleKey.D0:
+                case ConsoleKey.NumPad0:
+                    Exit();
+                    break;
+            }
+        }
+        static string[] AddNewElement(string[] array, (string, string, string)[] phoneBook, ref (string lastName, string firstName, string phoneNumber) newElement)
+        {
+            CheckEnteredParameters(ref newElement.firstName, ref newElement.lastName, ref newElement.phoneNumber);
 
             int searchResult = BinarySearchByLastName(phoneBook, newElement.lastName);
             if (searchResult != -1)
@@ -239,7 +80,21 @@
 
             return result;
         }
-        private static void CheckEnteredParameters(string firstName, string lastName)
+        private static void CheckEnteredParameter(ref string Name)
+        {
+            if (Name.Length > 0)
+            {
+                if (!char.IsLetter(Name[0]))
+                {
+                    throw new Exception("\"Name\" - must be begin with the \"Letter\" character!");
+                }
+            }
+            else
+            {
+                throw new Exception("String \"Length\" Error in \"Name\" !");
+            }
+        }
+        private static void CheckEnteredParameters(ref string firstName, ref string lastName)
         {
             if ((firstName.Length > 0) || (lastName.Length > 0))
             {
@@ -252,8 +107,10 @@
             {
                 throw new Exception("String \"Length\" Error in \"First Name\" or/and \"Last Name\"!");
             }
+            firstName = firstName.Remove(0, 1).Insert(0, firstName[0].ToString().ToUpper());
+            lastName = lastName.Remove(0, 1).Insert(0, lastName[0].ToString().ToUpper());
         }
-        private static void CheckEnteredParameters(string firstName, string lastName, string phoneNumber)
+        private static void CheckEnteredParameters(ref string firstName, ref string lastName, ref string phoneNumber)
         {
             if ((firstName.Length > 0) || (lastName.Length > 0))
             {
@@ -261,13 +118,13 @@
                 {
                     throw new Exception("\"First Name\" or/and \"Last Name\" - must be begin with the \"Letter\" character!");
                 }
-                if(phoneNumber[0] != '+')
+                if (phoneNumber[0] != '+')
                 {
                     throw new Exception("\"Phone number\" - must be begin with the \'+\' character!");
                 }
-                for(int i = 1; i < phoneNumber.Length; i++)
+                for (int i = 1; i < phoneNumber.Length; i++)
                 {
-                    if(!char.IsDigit(phoneNumber[i]))
+                    if (!char.IsDigit(phoneNumber[i]))
                     {
                         throw new Exception("\"Phone number\" - must be include only \"Digit\" character!");
                     }
@@ -277,6 +134,9 @@
             {
                 throw new Exception("String \"Length\" Error in \"First Name\" or/and \"Last Name\"!");
             }
+
+            firstName = firstName.Remove(0, 1).Insert(0, firstName[0].ToString().ToUpper());
+            lastName = lastName.Remove(0, 1).Insert(0, lastName[0].ToString().ToUpper());
         }
         private static void CheckEnteredPhoneNumberParameter(string phoneNumber)
         {
@@ -331,73 +191,6 @@
 
             return -1;
         }
-        static int binarySearch(String[] arr, String x)
-        {
-            int l = 0, r = arr.Length - 1;
-            while (l <= r)
-            {
-                int m = l + (r - l) / 2;
-
-                int res = x.CompareTo(arr[m]);
-
-                // Check if x is present at mid
-                if (res == 0)
-                    return m;
-
-                // If x greater, ignore left half
-                if (res > 0)
-                    l = m + 1;
-
-                // If x is smaller, ignore right half
-                else
-                    r = m - 1;
-            }
-
-            return -1;
-        }
-        static void Menu()
-        {
-            Console.Clear();
-            Console.WriteLine("Welcome to Phone Book Application!\n");
-            Console.WriteLine("\tMenu");
-            Console.WriteLine("\t1. Show all phone book");
-            Console.WriteLine("\t2. Create phone record");
-            Console.WriteLine("\t3. Edit phone record");
-            Console.WriteLine("\t4. Search by name");
-            Console.WriteLine("\t5. Search by phone");
-            Console.WriteLine("\t0. Exit");
-
-            ConsoleKeyInfo ck = Console.ReadKey();
-
-            switch (ck.Key)
-            {
-                case ConsoleKey.D1:
-                case ConsoleKey.NumPad1:
-                    ShowAllNumbers();
-                    break;
-                case ConsoleKey.D2:
-                case ConsoleKey.NumPad2:
-                    CreatePhoneNumber();
-                    break;
-                case ConsoleKey.D3:
-                case ConsoleKey.NumPad3:
-                    EditPhoneNumber();
-                    break;
-                case ConsoleKey.D4:
-                case ConsoleKey.NumPad4:
-                    SearchByName();
-                    break;
-                case ConsoleKey.D5:
-                case ConsoleKey.NumPad5:
-                    SearchByPhone();
-                    break;
-                case ConsoleKey.D0:
-                case ConsoleKey.NumPad0:
-                    Exit();
-                    break;
-            }
-        }
-
         private static void SearchByName()
         {
             Console.Clear();
@@ -406,82 +199,51 @@
             Console.WriteLine("Enter Search Term...");
             var searchTerm = Console.ReadLine();
 
-            bool found = false;
-            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+            try
             {
-                if (firstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
-                    lastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                CheckEnteredParameter(ref searchTerm);
+
+                bool found = false;
+                foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
                 {
-                    Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
-                    found = true;
+                    if (firstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                        lastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
+                        found = true;
+                    }
+                }
+
+                if (!found)
+                {
+                    throw new Exception("Not such users");
                 }
             }
-
-            if (!found)
+            catch (Exception ex)
             {
-                Console.WriteLine("Not such users");
+                ShowExeption(ex.Message, "");
             }
-
             Wait();
         }
-        private static int SearchByFullName(string searchFirstName, string searchLastName)
+        private static int SearchByFullName(ref string searchFirstName, ref string searchLastName, ref (string, string, string)[] PhoneBook)
         {
-            int index = -1;
-            bool found = false;
 
-            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+            CheckEnteredParameters(ref searchFirstName, ref searchLastName);
+
+            int index = BinarySearchByLastName(PhoneBook, searchLastName);
+            if (index != -1)
             {
-                if (firstName.Contains(searchFirstName, StringComparison.OrdinalIgnoreCase) ||
-                    lastName.Contains(searchLastName, StringComparison.OrdinalIgnoreCase))
+                if (searchFirstName == PhoneBook[index].Item2)
                 {
-                    Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
-                    found = true;
+                    Console.WriteLine($"Found user {searchFirstName} {searchLastName} with phone {PhoneBook[index].Item3}");
+                    index += 1;
                 }
-                index++;
-            }
-
-            if (!found)
-            {
-                Console.WriteLine("The \"{0} {1}\" user, not found!", searchFirstName, searchLastName);
-                return -1;
-            }
-            return index-1;
-        }
-        private static int SearchByFullName(string searchFirstName, string searchLastName, ref (string, string, string)[] PhoneBook)
-        {
-            int index = 1;
-            bool found = false;
-
-            //if((searchFirstName.Length > 0) || (searchLastName.Length > 0))
-            //{
-            //    if (!char.IsLetter(searchFirstName[0]) || !char.IsLetter(searchLastName[0]))
-            //    {
-            //        throw new Exception("\"First Name\" or/and \"Last Name\" - must be begin with the \"Letter\" character!");
-            //    }
-            //}
-            //else
-            //{
-            //    throw new Exception("String \"Length\" Error in \"First Name\" or/and \"Last Name\"!");
-            //}
-
-            CheckEnteredParameters(searchFirstName, searchLastName);
-
-            foreach (var (firstName, lastName, phoneNumber) in PhoneBook)
-            {
-                if (firstName.Contains(searchFirstName, StringComparison.OrdinalIgnoreCase) ||
-                    lastName.Contains(searchLastName, StringComparison.OrdinalIgnoreCase))
+                else
                 {
-                    Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
-                    found = true;
-                    break;
+                    throw new Exception("The \"" + searchFirstName + " " + searchLastName + "\" user, not found!");
                 }
-                index++;
             }
 
-            if (!found)
-            {
-                throw new Exception("The \"" + searchFirstName + " " + searchLastName + "\" user, not found!");
-            }
             return index;
         }
         private static void SearchByPhone()
@@ -492,39 +254,37 @@
             Console.WriteLine("Enter Search Phone number...");
             var searchPhone = Console.ReadLine();
 
-            bool found = false;
-            if (searchPhone.Length > 1)
+            try
             {
-                foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+                CheckEnteredPhoneNumberParameter(searchPhone);
+
+                bool found = false;
+                if (searchPhone.Length > 1)
                 {
-                    if (phoneNumber.Contains(searchPhone, StringComparison.OrdinalIgnoreCase))
+                    foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
                     {
-                        Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
-                        found = true;
+                        if (phoneNumber.Contains(searchPhone, StringComparison.OrdinalIgnoreCase))
+                        {
+                            Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
+                            found = true;
+                        }
                     }
                 }
+                if (!found)
+                {
+                    throw new Exception("Not such users");
+                }
             }
-            if (!found)
+            catch (Exception ex)
             {
-                Console.WriteLine("Not such users");
+                ShowExeption(ex.Message, "");
             }
-
             Wait();
         }
         private static void Exit()
         {
             Environment.Exit(0);
         }
-        private string value;
-        private int count;
-        private Tree left;
-        private Tree right;
-        enum Tree
-        {
-            left,
-            Right,
-        };
-
         static void CreatePhoneNumber()
         {
             Console.Clear();
@@ -543,15 +303,13 @@
             (string, string, string) newElement = (lastName, firstName, phoneNumber);
             try
             {
-                lines = AddNewElement(lines, phoneBook, newElement);
+                lines = AddNewElement(lines, phoneBook, ref newElement);
                 File.WriteAllLines(Filename, lines);
             }
             catch (Exception ex)
             {
                 ShowExeption(ex.Message);
             }
-
-            /*Replace this lineFile.AppendAllLines(Filename, new[] { $"{lastName},{firstName},{phoneNumber}" });*/
         }
 
         static void EditPhoneNumber()
@@ -571,7 +329,7 @@
 
             try
             {
-                int indexName = SearchByFullName(lastName, firstName, ref phoneBook);
+                int indexName = SearchByFullName(ref firstName, ref lastName, ref phoneBook);
                 UpdateNewPhoneNumber(lastName, firstName, lines, indexName);
             }
             catch(Exception ex)
