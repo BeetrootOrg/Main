@@ -26,7 +26,7 @@
                 }
             }
         }
-        static void printArray(int [] arr, string comment)
+        static void PrintArray(int [] arr, string comment)
         {
             for(int i = 0; i < arr.Length; i++)
             {
@@ -34,7 +34,7 @@
             }
             Console.Write(" // {0}\r\n", comment);
         }
-        static void printArray(int[] arr, int length, string comment)
+        static void PrintArray(int[] arr, int length, string comment)
         {
             for (int i = 0; i < length; i++)
             {
@@ -42,7 +42,7 @@
             }
             Console.Write(" // {0}\r\n", comment);
         }
-        static void printArray(int[] arr, int start, int end, string comment)
+        static void PrintArray(int[] arr, int start, int end, string comment)
         {
             if (end <= start) return;
             for (int i = start; i < end; i++)
@@ -74,7 +74,7 @@
                     }
                 }
 
-                printArray(arr, n, "cycle " + k.ToString());
+                PrintArray(arr, n, "cycle " + k.ToString());
 
                 if(ArraySorted == true)
                 {
@@ -98,7 +98,7 @@
             int pivot = arr[end];
             int m = start;
 
-            printArray(arr, start, end, "Pivot " + pivot);
+            PrintArray(arr, start, end, "Pivot " + pivot);
 
             for (int i = start; i < end; i++)
             {
@@ -127,32 +127,32 @@
 
             Console.WriteLine("1. Selection Sort:");
             int[] array = { 45, 78, 12, 45, 27, 0, 1, 1, 1, 0, 0, 4, 75 };
-            printArray(array, "-- Input array");
+            PrintArray(array, "-- Input array");
             SelectionSort(array);
-            printArray(array, "-- Sorted array\r\n");
+            PrintArray(array, "-- Sorted array\r\n");
 
             Console.WriteLine("2. Buble Sort:");
             int[] BubbleArray = { 45, 78, 12, 35, 27, 0, 13, 0, 57, 0 };
             int n = BubbleArray.Length;
-            printArray(BubbleArray, "-- Input array");
+            PrintArray(BubbleArray, "-- Input array");
             bubbleSort(BubbleArray, n);
-            printArray(BubbleArray, "-- Sorted array\r\n");
+            PrintArray(BubbleArray, "-- Sorted array\r\n");
 
             Console.WriteLine("3. Insertion Sort:");
             int[] InsertionArray = { 4, 3, 2, 1, 0 };
-            printArray(InsertionArray, "-- Input array");
+            PrintArray(InsertionArray, "-- Input array");
             InsertionSort(InsertionArray);
-            printArray(InsertionArray, "-- Sorted array\r\n");
+            PrintArray(InsertionArray, "-- Sorted array\r\n");
 
             Console.WriteLine("4. Quick Sort:");
             int[] QuickArr = { 5, 1, 3, 0, 7, 6, 2, 9, 4};
-            printArray(QuickArr, "-- Input array");
+            PrintArray(QuickArr, "-- Input array");
             QuickSort(ref QuickArr, 0, QuickArr.Length - 1);
-            printArray(QuickArr, "-- Sorted array\r\n");
+            PrintArray(QuickArr, "-- Sorted array\r\n");
             QuickArr = new int[] { 45, 78, 12, 35, 27, 0, 13, 0, 57, 0 };
-            printArray(QuickArr, "-- Input array");
+            PrintArray(QuickArr, "-- Input array");
             QuickSort(ref QuickArr, 0, QuickArr.Length - 1);
-            printArray(QuickArr, "-- Sorted array\r\n");
+            PrintArray(QuickArr, "-- Sorted array\r\n");
 
             Console.Write("\r\n");
         }
