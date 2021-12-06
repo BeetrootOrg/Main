@@ -59,6 +59,7 @@
                 TotalVisitors = 0;
                 TotalWriters = 0;
             }
+            public Library() { }
             public void AddNewBook(Book newBook) { }
             public void EditBook(Book editBook) { }
             public void RemoveBook(Book removeBook) { }
@@ -72,25 +73,9 @@
         }
         static void Main(string[] args)
         {
-            Console.WriteLine("\r\n a.tkachenko/homework/10-Bool-Library \r\n");
+            Console.WriteLine("\r\n a.tkachenko/homework/10-Book-Library \r\n");
 
             Library BookLibrary = new Library();
-
-            BookLibrary.AddNewBook(new Book() { 
-                bookAuthor = { AuthorName = { FirstName = "Leo", LastName = "Tolstoy" }, BirthDay = new DateTime(1828, 5, 23) },
-                BookTitle = "War and Peace", 
-                category = Category.Classic });
-            BookLibrary.AddNewBook(new Book() { 
-                bookAuthor = { AuthorName = { FirstName = "Theodor", LastName = "Mommsen" }, BirthDay = new DateTime(1817, 11, 30) }, 
-                BookTitle = "Roman history", 
-                category = Category.History });
-            BookLibrary.AddNewBook(new Book() { 
-                bookAuthor = { AuthorName = { FirstName = "Ray Douglas", LastName = "Bradbury" }, BirthDay = new DateTime(1920, 8, 22) }, 
-                BookTitle = "The Martian Chronicles", 
-                category = Category.Fantasy });
-
-            BookLibrary.AddNewVisitor(new Name() { FirstName = "Petr", LastName = "Ivanov"});
-            BookLibrary.AddNewVisitor(new Name() { FirstName = "Ivan", LastName = "Petrov" });
 
         }
     }
