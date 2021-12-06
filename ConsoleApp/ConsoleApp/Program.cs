@@ -49,17 +49,15 @@ namespace ConsoleApp
         }
         static void Analyze(string a)
         {
-            int length = a.Length;
             int alphabeticCharUpperCount = 0;
             int alphabeticCharLowerCount = 0;
             int digitsCount = 0;
             int specialCharactersCount = 0;
-            char[] array1 = a.ToCharArray();
-            for (int i = 0; i < length; i++)
+            foreach(var symbol in a)
             {
-                if (array1[i] >= 65 && array1[i] <= 90)  { alphabeticCharUpperCount++; }
-                else if (array1[i] >= 97 && array1[i] <= 122) { alphabeticCharLowerCount++; }
-                else if (array1[i] >= 48 && array1[i] <= 57) { digitsCount++; }
+                if (char.IsDigit(symbol)) { digitsCount++; }
+                else if (char.IsUpper(symbol)) { alphabeticCharUpperCount++; }
+                else if (char.IsLower(symbol)) { alphabeticCharLowerCount++; }
                 else { specialCharactersCount++; }
             }
             Console.WriteLine($"Count of alphabetic upper chars is: {alphabeticCharUpperCount}");
@@ -69,8 +67,9 @@ namespace ConsoleApp
         }
         static string Sort(string a)
         {
-            int length = a.Length;
-            char[] array1 = a.ToCharArray();
+            string lower = a.ToLower();
+            int length = lower.Length;
+            char[] array1 = lower.ToCharArray();
             for (int i = 1; i < length; i++)
             {
                 for(int j = 0; j < length - i; j++)
@@ -81,21 +80,21 @@ namespace ConsoleApp
                     }
                 }
             }
-            String result = new string(array1); 
-            return result;
+            return new string(array1);
         }
         static char[] Duplicate(string a)
         {
-            int length = a.Length;
+            string lower = a.ToLower();
+            int length = lower.Length;
             char[] array1 = new char[length/2];
             int k = 0;
             for (int i = 0; i < length; i++)
             {
                 for (int j = i+1; j < length - i; j++)
                 {
-                    if (a[i]==a[j]) 
+                    if (lower[i]== lower[j]) 
                     {
-                        array1[k] = a[i];
+                        array1[k] = lower[i];
                         k++;
                     }
                 }
