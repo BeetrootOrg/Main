@@ -1,91 +1,49 @@
-﻿byte aLonLongName = 5;
-Console.WriteLine(aLonLongName);
+﻿namespace Program
+{
+    using System.Collections.Generic;
+    using System.Globalization;
 
-byte a = 3;
-byte b = 4;
-int c = a + b;
-Console.WriteLine(c);
+    public static class Program
+    {
+        public static void Main()
+        {
 
-int mul = a / b;
-Console.WriteLine(mul);
+        }
+    }
 
-int i = 42;
-int j = 90;
-Console.WriteLine(j/i);
-Console.WriteLine(j%i);
+    public class User
+    {
+        public int Id { get; set; }
+        public string UserName { get; set; }
+        private string Password { get; set; }
+        private string Email { get; set; }
+        public string Avatar { get; set; }
+        public List<Post> Posts { get; set; }
+        public List<User> Followers { get; set; }
+    }
 
-//x^3+2*x^2+5*x+6
-double x = 3.6;
-Console.WriteLine(x * x * x + 2 * (x * x) + 5 * x + 6);
+    public class Post
+    {
+        public User User { get; set; }
+        public int Id { get; set; }
+        public string CreatedAt { get; set; }
 
-decimal y = 3.6m;
-Console.WriteLine(y * y * y + 2 * (y * y) + 5 * y + 6);
+        public string Header { get; set; }
+        public string Content { get; set; }
+        public string Context { get; set; }
+        public List<Comment> Comments { get; set; }
+    }
 
-//same with Math
-double z = 4;
-Console.WriteLine(Math.Pow(z, 3) + 2 * Math.Pow(z, 2) + 5 * z + 6);
+    public class Comment
+    {
+        public Post Post { get; set; }
+        public User Author { get; set; }
+        public string Content { get; set; }
+    }
 
-
-//increment/decrement
-
-int incr = 5;
-int result1 = incr++;
-int result2 = ++incr;
-Console.WriteLine($"{result1} {result2} {incr}");
-
-// bool logic
-var bool1 = true;
-var bool2 = false;
-Console.WriteLine($"AND: {bool1&&bool2}");
-Console.WriteLine($"OR: {bool1 || bool2}");
-Console.WriteLine($"Equal: {bool1 == bool2}");
-Console.WriteLine($"Not bool1: {!bool1}");
-Console.WriteLine($"Not bool12: {!bool2}");
-Console.WriteLine($"XOR: {bool1^bool2}");
-
-//math compare
-int first = 1;
-int second = 2;
-int third = 1;
-Console.WriteLine($"First>second:{first>second}");
-Console.WriteLine($"First<second:{first < second}");
-Console.WriteLine($"First==third:{first == third}");
-Console.WriteLine($"First!=third:{first != third}");
-Console.WriteLine($"First!=second:{first != second}");
-Console.WriteLine($"First>=second:{first >= second}");
-Console.WriteLine($"First>=third:{first >= third}");
-
-//bool complex
-var bool3 = true;
-var bool4 = false;
-var bool5 = false;
-Console.WriteLine($"AND(bool):{bool3& bool4&bool5}");
-Console.WriteLine($"AND(bool):{bool3 | bool4 | bool5}");
-
-//int bool logic
-int var1 = 10;
-int var2 = 3;
-
-Console.WriteLine(var1 & var2);
-Console.WriteLine(var2 | var1);
-Console.WriteLine(var2 << var1);
-Console.WriteLine (var1 >> var2);
-
-//asign
-int aa = 8;
-int bb = 2;
-
-aa = aa + bb;
-aa += bb;
-aa *= bb;
-aa %= bb;
-Console.WriteLine(aa);
-
-//temp
-aa = 5;
-bb = 10;
-int temp = aa;
-aa = bb;
-bb = temp;
-Console.WriteLine(aa);
-Console.WriteLine(bb);
+    public class Feed
+    {
+        public List<Post> Posts { get; set;}
+        public User Owner { get; set; }
+    }
+}
