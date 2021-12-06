@@ -2,81 +2,96 @@
 
 namespace ConsoleApp
 {
-    enum Genre
+    public class Comment
     {
-        Scifi,
-        Fantasy,
-        Pulpfiction,
-        Documentary,
-        Historical,
-        Detective,
-        Horror,
-        Triller
+        public User Author { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string Content { get; set; }
     }
 
-    class Author
+    public class User
     {
-        public string FirstName { get; init; }
-        public string LastName { get; init; }
-        public string FullName => $"{FirstName} {LastName}";
-        public int DayOfBirth { get; init; }
-        public bool IsAlive { get; set; }
-        public int DayOfDeath { get; set; }
-    }
+        public string UserName { get; set; }
+        private string Password { get; set; }
+        public int Id { get; init; }
 
-    class Book
-    {
-        public int ISBN { get; init; }
-        public string NameOfBook { get; set; }
-        public int DateOfCreating { get; init; }
-        public int[] DateOfPublication { get; set; }
-        public int CounsOfCopyInLibrary { get; set; }
-        public bool InLibrary { get; set; }    
-        public Genre Genre { get; init; }
-    }
+        private string Email { get; set; }
 
-    class Reader
-    {
-        public string FirstName { get; init; }
-        public string LastName { get; init; }
-        public string FullName => $"{FirstName} {LastName}";
-        private string HomeAdress { get; init; }
-        private string WorkAdress { get; init; }
-        private string PhoneNumber { get; set; }
-        private int CountOfBooksTakenInLibrary { get; set; }     
-    }
+        public byte[] Avatar { get; set; }
 
-    class Staff
-    {
-        public string FirstName { get; init; }
-        public string LastName { get; init; }
-        public string FullName => $"{FirstName} {LastName}";
-        private string HomeAdress { get; init; }
-        private string PhoneNumber { get; set; }
-        private string Position { get; set; }
-        private int DateStartWorking { get; init; }
-        private int DateOfBirth { get; init; }
+        public User[] Followers { get; set; }
 
     }
 
-    class Library 
+    public class Post
     {
-        public int DateOfBuilding { get; init; }
-        public string Adress { get; set; }
-        public int CountSitPlaces { get; init; }
-        public string PhoneNumber { get; init; }
-        public int QuantityOfBooks { get; set; }
-        private int QuantityOfStaff { get; init; }
-
-
-        
+        public User User { get; set; }
+        public long Id { get; init; }
+        public DateTime CreatedAt { get; set; }
+        public string Description { get; set; }
+        public byte[] Content { get; set; }
     }
 
+    public class Feed
+    { 
+        public Post[] Posts { get; set; }
+        public User Owner { get; set; } 
+     }
 
-class Program
+    public class Updatable
+    {
+        private int _fieldA;
+        private string _fieldB;
+
+        public int FieldA
+        {
+            get
+            {
+                return _fieldA;
+            }
+            set
+            {
+                ++TimesUpdated;
+                _fieldA = value;
+            }
+        }
+
+        public string FieldB
+        {
+            get
+            {
+                return _fieldB;
+            }
+            set
+            {
+                ++TimesUpdated;
+                _fieldB = value;
+            }
+        }
+        public int TimesUpdated { get; private set; }
+
+        public void ShowValues() => Console.WriteLine($"Updatable has next values: {GetFieldA()}; {GetFieldB()}; {GetUpdated()}");
+
+        private string GetFieldA() => $"{nameof(FieldA)} = {FieldA}";
+        private string GetFieldB() => $"{nameof(FieldB)} = {FieldB}";
+        private string GetUpdated() => $"{nameof(TimesUpdated)} = {TimesUpdated}";
+
+    }
+
+    class Program
     {
         static void Main()
         {
+            var obj = new Updatable
+            {
+                FieldA = 42,
+                FieldB = "42"
+            };
+
+            obj.FieldA = 43;
+            obj.FieldB = "45";
+
+            obj.ShowValues();
         }
     }
 }
