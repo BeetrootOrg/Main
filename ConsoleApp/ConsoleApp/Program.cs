@@ -14,7 +14,7 @@ namespace ConsoleApp
         public string Username { get; set; }
         private string Password { get; set; }
         public long Id { get; init; }
-        public string Email { get; set; }
+        private string Email { get; set; }
         public byte[] Avatar { get; set; }
         public User[] Followers { get; set; }
     }
