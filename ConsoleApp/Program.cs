@@ -3,79 +3,129 @@
     using System;
     class ConsoleApp
     {
-        enum Category
+        enum Subject
         {
-            Classic,
-            History,
-            Fantasy
+            Mathematics,
+            Literature,
+            History
         }
-        class Name
-        {
-            public string FirstName { get; set; }
-            public string LastName { get; set; }
-        }
-        class BookAuthor
-        {
-            public Name AuthorName { get; set; }
-            public DateTime BirthDay { get; set; }
-        }
-        class Book
-        {
 
-            public BookAuthor bookAuthor { get; set; }
-            public string BookTitle { get; set; }
-            public Category category { get; set; }
-        }
-        class VisitHistory
+        class Lesson
         {
-            public DateTime StartReadTime { get; set; }
-            public DateTime FinishReadTime { get; set; }
-            public Book ReadBooks { get; set; }
+            DateTime dateTime;
+            Subject subject;
+            Teacher teacher;
         }
-        class BookRead
+        class Schedule
         {
-            public Book Reading { get; set; }
-            public DateTime StartReadTime { get; set; }
-        }
-        class Visitor
-        {
-            public Name ReaderName { get; set; }
-            private VisitHistory[] History;
-            public BookRead BookReadingNow { get; set; }
-            public void AddBookToHistory(Book book) { }
-            public void ShowHistory(DateTime from, DateTime to) { }
-        }
-        class Library
-        {
-            public static int TotalNumberOfBooks { get; private set; }
-            public static int TotalVisitors { get; private set; }
-            public static int TotalWriters { get; private set; } 
-            private Book[] _books;
-            private Visitor[] _activeVisitors;
+            private int _MaxGrade;
+            private int _DaysInYear;
+            private Lesson[,] _Lessons;
 
-            static Library()
+            public Schedule()
             {
-                TotalNumberOfBooks = 0;
-                TotalVisitors = 0;
-                TotalWriters = 0;
+                _Lessons = new Lesson[365, 11];
             }
-            public Library() { }
-            public void AddNewBook(Book newBook) { }
-            public void EditBook(Book editBook) { }
-            public void RemoveBook(Book removeBook) { }
-            public void ShowBook(Name authorName) { }
-            public void AddNewVisitor(Name newVisitor) { }
-            public void EditVisitor(Name editVisitor) { }
-            public void RemoveVisitor(Name removeVisitor) { }
-            public void ShowVisitorReadBooks(Name visitorName) { }
-            public void GiveBookToVisitor(Name visitorName, Book book) { }
-            public void GetBookFromVisitor(Name visitorName, Book book) { }
+            public Schedule (int daysInYear, int maxGrade)
+            {
+                _DaysInYear = daysInYear;
+                _MaxGrade = maxGrade;
+                _Lessons = new Lesson[_DaysInYear,_MaxGrade];
+            }
+            public void UpdateSchedule (DateTime dateTime, Subject subject, Teacher teacher) {}
+            public (Teacher, int Grade)[] GetSchedule (DateTime dateTime, Subject subject) { return null; }
+            public (Subject, int Grade)[] GetSchedule (DateTime dateTime, Teacher teacher) { return null; }
+            public (Subject, Teacher)[] GetSchedule (DateTime dateTime, int Grade) { return null; }
+        }
+        class Classes
+        {
+            Subject subject;
+            Schedule schedule;
+        }
+        class PupilsInformation
+        {
+            private Schedule schedule;
+            public PupilsInformation(ref Schedule sch)
+            {
+                schedule = sch;
+            }
+            public (Subject, Teacher)[] GetScheduleInformation(DateTime dateTime, int Grade) { return schedule.GetSchedule(dateTime, Grade); }
+        }
+        class Pupils
+        {
+            string Name;
+            Subject[] subject;
+            public PupilsInformation Information;
+        }
+        class Teacherformation
+        {
+            private Schedule schedule;
+            public Teacherformation(ref Schedule sch)
+            {
+                schedule = sch;
+            }
+            public (Subject, Teacher)[] GetScheduleInformation(DateTime dateTime, int Grade) { return schedule.GetSchedule(dateTime, Grade); }
+            public (Teacher, int Grade)[] GetScheduleInformation(DateTime dateTime, Subject subject) { return schedule.GetSchedule(dateTime, subject); }
+            public (Subject, int Grade)[] GetScheduleInformation(DateTime dateTime, Teacher teacher) { return schedule.GetSchedule(dateTime, teacher); }
+        }
+        class Teacher
+        {
+            string Name;
+            Subject TeachSubject;
+            public Teacherformation teacherformation;
+            public Teacher(ref Teacherformation refInfo)
+            {
+                teacherformation = refInfo;
+            }
+        }
+        class School
+        {
+            const int DaysInYear = 365;
+            const int MaxGrade = 11;
+            const int MaxTeachers = 20;
+            const int MaxClassess = MaxGrade;
+
+            static Schedule schedule;
+
+            private Teacher[] _Teacher;
+            private Pupils[,] _Pupils;
+            private Classes[] _Classes;
+
+            public PupilsInformation pupilsInformation;
+            public Teacherformation teacherformation;
+
+            public School()
+            {
+             schedule = new Schedule(DaysInYear, MaxGrade);
+
+                _Teacher = new Teacher[MaxTeachers];
+                _Pupils = new Pupils[MaxGrade, 0];
+                _Classes = new Classes[MaxClassess];
+
+                pupilsInformation = new PupilsInformation(ref schedule);
+                teacherformation = new Teacherformation(ref schedule);
+
+                updateTeachersSchedule();
+            }
+
+            void updateTeachersSchedule()
+            {
+                for (int i = 0; i < _Teacher.Length; i++)
+                {
+                    _Teacher[i] = new Teacher(ref teacherformation);
+                }
+            }
+            public void ShowTeasherInformation()
+            {
+                DateTime dateTime = DateTime.Now;
+                _Teacher[0].teacherformation.GetScheduleInformation(dateTime, 1);
+            }
         }
         static void Main(string[] args)
         {
-            Console.WriteLine("\r\n a.tkachenko/homework/10-Book-Library \r\n");
+            Console.WriteLine("\r\n a.tkachenko/homework/11-Encapsulation \r\n");
 
-            Library BookLibrary = new Library();
+            School school = new School();
 
         }
     }
