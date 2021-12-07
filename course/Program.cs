@@ -1,48 +1,49 @@
 ﻿using System;
 namespace Course
 {
-    enum Genre
+    public class Lesson
     {
-        Other,
-        Detective,
-        Adventure,
-        Horror,
+        public int Id { get; init; }
+        public string Name { get; set; }
     }
 
-    class Author
+    public class Schedule
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public DateTime BirthDate { get; init; }
-        public DateTime DeathDate { get; set; }
+        public int Id { get; init; }
+        public Lesson[] Lessons { get; set; }
     }
 
-    class Book
+    public class Pupil
     {
-        public string Title { get; set; }
-        public Author Author { get; init; }
-        public Genre Genre { get; set; }
-        public LibraryUser TakenBy { get; set; }
+        public int Id { get; init; }
+        public string FullName { get; set; }
+        public Class Class { get; set; }
+        private string PersonalCharacteristics { get; set; }
+    }
+    public class Class
+    {
+        public int Id { get; init; }
+        public Teacher ClassManager { get; set; }
+        public Pupil[] Pupils { get; set; }
+        public Schedule Schedule { get; set; }
     }
 
-    class BookInUse
+    public class Teacher
     {
-        public DateTime BorrowedDate { get; init; }
-        public DateTime DateToReturn { get; set; }
-        public Book TakenBook { get; set; }
+        public int Id { get; init; }
+        public string FullName { get; set; }
+        public Lesson[] LessonsToTeach { get; set; }
+        private double AnnualIncome { get; set; }
+        public Schedule TeachersSchedule { get; set; }
+        private string PersonalCharacteristics { get; set; }
     }
 
-    class LibraryUser
+    public class School
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public bool IsMembershipActive { get; set; }
-        public BookInUse[] BooksInUse { get; set; }
-    }
-
-    class BookLibrary
-    {
-        public Book[] Books { get; set; }
-        public LibraryUser[] LibraryUsers { get; set; }
+        public int Id { get; init; }
+        public string Name { get; set; }
+        public DateTime LaunchDate { get; init; }
+        public Class[] Classes { get; set; }
+        private Teacher[] Teachers { get; set; }
     }
 }
