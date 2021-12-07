@@ -3,266 +3,80 @@ using System.IO;
 
 namespace ConsoleApp
 {
-    class Program
-    {
-        const string Filename = @"phonebook.csv";
 
+    public class School
+    {
+        //If it`s a name of cabbinet "string" if as a room "object?"
+        // Have no "set" because we can`t change Gym and Director as a room
+        public string ClassRoom { get;}
+        public string Gym { get; }
+        public string Corridors { get; }
+        public string Canteen { get; }
+        public string DirectorCabinet { get;}
+        public string TeacherRoom { get;}
+
+
+    }
+
+    public class Inventory
+    {
+        public object SchoolDesks { get; set; }
+        public object Board { get; set; }
+        public object Chalk { get; set; }
+        public object AttendanceLog { get; set; } //класный журнал
+
+    }
+
+    public class Director
+    {
+        private int Payment { get; set; }
+        public string Qualification { get; set; }
+        public int DateTime { get; init; }
+        public string Sex { get; set; } // not sure about "set". We have very strange time for now)))
+
+    }
+
+    public class Teacher
+    {
+        private int Payment { get; set; }
+        public string SubjectOfStudy { get; set; }
+        public string Responsobility { get; set; }
+        public string DateTime { get; init; }
+        public string Sex { get; init; }
+
+    }
+
+    public class Student
+    {
+        private string KnowledgeLVL { get; set; }
+        public string Responsobility { get; set; }
+        public int Class { get; set; } 
+        public int DateTime { get; init; }
+        public string Sex { get; init; }
+        public string Backpack { get; set; } // description
+    }
+
+    public class Backpack 
+    {
+        //not sure about "public and private" if its stuff of Student it shold be all public but then everyone can use it?
+        public string TextBooks { get; set; }
+        public string NoteBooks { get; set; }
+        public int Pens { get; set; } //amount of
+        public string Food { get; set; } //type of
+        private string Wallet { get; set; } //deskription. If we talk about amount of money in it will be "int"
+        private string Pistol { get; set; }
+        public string MobilePhone { get; set; }
+        private string Drugs { get; set; }
+        
+    }
+    class Program
+    {        
         static void Main()
         {
             
-            while (true)
-            {
-                try
-                {
-                    Menu();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    Console.ReadLine();
-                }
-            }
-        }
-
-        static void Menu()
-        {
-            Console.Clear();
-            Console.WriteLine("Welcome to Phone Book Application!\n");
-            Console.WriteLine("\tMenu");
-            Console.WriteLine("\t1. Show all phone book");
-            Console.WriteLine("\t2. Create phone record");
-            Console.WriteLine("\t3. Search by name");
-            Console.WriteLine("\t4. Search by phone number");
-            Console.WriteLine("\t5. Update user");
-            Console.WriteLine("\t0. Exit");
-
-            ConsoleKeyInfo ck = Console.ReadKey();
-            try
-            {
-                switch (ck.Key)
-                {
-                    case ConsoleKey.D1:
-                    case ConsoleKey.NumPad1:
-                        ShowAllNumbers();
-                        break;
-                    case ConsoleKey.D2:
-                    case ConsoleKey.NumPad2:
-                        CreatePhoneNumber();
-                        break;
-                    case ConsoleKey.D3:
-                    case ConsoleKey.NumPad3:
-                        SearchByName();
-                        break;
-                    case ConsoleKey.D4:
-                    case ConsoleKey.NumPad4:
-                        SearchByPhoneNumber();
-                        break;
-                    case ConsoleKey.D5:
-                    case ConsoleKey.NumPad5:
-                        UpdateUser();
-                        break;
-                    case ConsoleKey.D0:
-                    case ConsoleKey.NumPad0:
-                        Exit();
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("number out of range");
-            }
-        }
-
-        private static void SearchByName()
-        {
-            Console.Clear();
-            Console.WriteLine("Search condition - if first/last name contains search term you will see it");
-
-            Console.WriteLine("Enter Search Term...");
-            var searchTerm = Console.ReadLine();
-
-            bool found = false;
-            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
-            {
-                if (firstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
-                    lastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-                {
-                    Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
-                    found = true;
-                }
-            }
-
-            if (!found)
-            {
-                Console.WriteLine("Not such users");
-            }
-
-            Wait();
-        }
-
-        private static void SearchByPhoneNumber()
-        {
-            Console.Clear();
-            Console.WriteLine("Search by the name.");
-            Console.WriteLine("Pls enter the phone nuber");
-           
-                var searchTerm = Console.ReadLine();
             
-            bool found = false;
-            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
-            {
-                if (phoneNumber.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-
-                {
-                    Console.WriteLine($"Found user {firstName} {lastName} with phone number: {phoneNumber}");
-                    found = true;
-                }
-            }
-            if (!found)
-            {
-                Console.WriteLine("Not such users");
-            }
-
-            Wait();
         }
 
-        private static void UpdateUser()
-        {
-            Console.Clear();
-
-
-            bool found = false;
-            // show header
-            Console.WriteLine($"{"First Name",-15}{"Last Name",-15}{"Phone Number",-15}");
-
-            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
-            {
-
-                Console.Write($"{firstName,-15}");
-                Console.Write($"{lastName,-15}");
-                Console.Write($"{phoneNumber,-15}");
-                Console.WriteLine();
-            }
-
-            Console.WriteLine("\nWrite user number to change phone number)\n");
-            var searchTerm = Console.ReadLine();
-
-
-            Console.Clear();
-
-
-            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
-            {
-                string fullName = firstName + " " + lastName;
-
-
-                if (fullName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-                {
-                    Console.WriteLine($"Found user {fullName} with phone number: {phoneNumber}");
-                    found = true;
-
-                    Console.WriteLine("New phone number:");
-                    var newPhoneNumber = Console.ReadLine();
-                    //var newPhoneNumber = ConvertToText(phoneNumber(Console.ReadLine()));
-
-                    File.WriteAllLines(Filename, new[] { $"{firstName},{lastName},{newPhoneNumber}" });
-
-                }
-            }
-            if (!found)
-            {
-                Console.WriteLine("User not found!");
-            }
-            if (true)
-            {
-
-            }
-
-
-
-            Wait();
-        }
-
-        private static void Exit()
-        {
-            Environment.Exit(0);
-        }
-
-        static void CreatePhoneNumber()
-        {
-            Console.Clear();
-            
-                Console.WriteLine("Enter First Name...");
-                var firstName = Console.ReadLine();
-           
-            Console.WriteLine("Enter Last Name...");
-            var lastName = Console.ReadLine();
-
-            Console.WriteLine("Enter Phone Number...");
-            var phoneNumber = Console.ReadLine();
-
-
-            File.AppendAllLines(Filename, new[] { $"{firstName},{lastName},{phoneNumber}" });
-        }
-
-        static void ShowAllNumbers()
-        {
-            Console.Clear();
-            try
-            {
-                // show header
-                Console.WriteLine($"{"First Name",-15}{"Last Name",-15}{"Phone Number",-15}");
-
-                foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
-                {
-
-                    Console.Write($"{firstName,-15}");
-                    Console.Write($"{lastName,-15}");
-                    Console.Write($"{phoneNumber,-15}");
-                    Console.WriteLine();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("User not fond");
-                Console.ReadLine();
-            }
-            Wait();
-            }
-
-        private static void Wait()
-        {
-            Console.WriteLine("To back to menu type Enter...");
-            Console.ReadLine();
-
-
-        }
-
-        static (string, string, string)[] ReadPhoneBook()
-        {
-            string[] lines = File.ReadAllLines(Filename);
-
-            var phoneBook = new (string, string, string)[lines.Length - 1];
-            for (int i = 1; i < lines.Length; i++)
-            {
-                string[] splitted = lines[i].Split(',');
-                phoneBook[i - 1] = (splitted[0], splitted[1], splitted[2]);
-            }
-
-            return phoneBook;
-        }
-
-        static string[] ConvertToText((string, string, string)[] data)
-        {
-            var content = new string[data.Length + 1];
-            content[0] = "FirstName,LastName,PhoneNumber";
-
-            for (int i = 0; i < data.Length; i++)
-            {
-                content[i + 1] = $"{data[i].Item1},{data[i].Item2},{data[i].Item3}";
-            }
-
-            return content;
-        }
+        
     }
 }
