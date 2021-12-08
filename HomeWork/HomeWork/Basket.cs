@@ -8,6 +8,28 @@ namespace HomeWork
 {
     public class Basket
     {
-        public string 
+        public int CustomerID { get; set; }
+        public Book[] Books { get; set; }
+        public float Amount { get; set; }
+        public void AddBook(int id)
+        {
+
+        }
+
+        public void RemoveBook(int id)
+        {
+
+        }
+
+        public void Order()
+        {
+
+        }
+
+        private void RecountAmount()
+        {
+
+        }
     }
-}
+
+    }

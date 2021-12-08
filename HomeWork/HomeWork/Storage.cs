@@ -21,5 +21,10 @@ namespace HomeWork
         {
 
         }
+
+        public static void LoadFromDB(DataType dataType)
+        {
+
+        }
     }
 }
