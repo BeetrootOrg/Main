@@ -1,49 +1,59 @@
 ﻿using System;
 namespace Course
 {
-    public class Lesson
+    enum BinaryOperationType
     {
-        public int Id { get; init; }
-        public string Name { get; set; }
+        Plus,
+        Minus
+    }
+    class UnaryOperation
+    {
+        public virtual int Operation(int num) => throw new NotImplementedException();
+    }
+    class UnaryPlusOperation : UnaryOperation
+    {
+        public override int Operation(int num) => num;
+    }
+    class UnaryMinusOperation : UnaryOperation
+    {
+        public override int Operation(int num) => -num;
     }
 
-    public class Schedule
+    class BinaryOperation
     {
-        public int Id { get; init; }
-        public Lesson[] Lessons { get; set; }
+        public virtual int Operation(int num1, int num2) => throw new NotImplementedException();
+    }
+    class PlusOperation : BinaryOperation
+    {
+        public override int Operation(int num1, int num2) => num1 + num2;
+    }
+    class MinusOperation : BinaryOperation
+    {
+        public override int Operation(int num1, int num2) => num1 - num2;
+        // factory method
+        public static BinaryOperation Create() => new MinusOperation();
     }
 
-    public class Pupil
+    class Calculator
     {
-        public int Id { get; init; }
-        public string FullName { get; set; }
-        public Class Class { get; set; }
-        private string PersonalCharacteristics { get; set; }
+        public int Calculate(BinaryOperation operation, int num1, int num2) => operation.Operation(num1, num2);
     }
-    public class Class
+    // abstract factory
+    class BinaryFactory
     {
-        public int Id { get; init; }
-        public Teacher ClassManager { get; set; }
-        public Pupil[] Pupils { get; set; }
-        public Schedule Schedule { get; set; }
-    }
-
-    public class Teacher
-    {
-        public int Id { get; init; }
-        public string FullName { get; set; }
-        public Lesson[] LessonsToTeach { get; set; }
-        private double AnnualIncome { get; set; }
-        public Schedule TeachersSchedule { get; set; }
-        private string PersonalCharacteristics { get; set; }
+        public BinaryOperation CreateOperation(BinaryOperationType binaryOperation) => binaryOperation switch
+        {
+            BinaryOperationType.Plus => new PlusOperation(),
+            BinaryOperationType.Minus => new MinusOperation(),
+            _ => throw new NotImplementedException(nameof(binaryOperation)),
+        };
     }
 
-    public class School
+    class Program
     {
-        public int Id { get; init; }
-        public string Name { get; set; }
-        public DateTime LaunchDate { get; init; }
-        public Class[] Classes { get; set; }
-        private Teacher[] Teachers { get; set; }
+        static void Main()
+        {
+
+        }
     }
 }
