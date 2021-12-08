@@ -55,7 +55,7 @@
                 Console.WriteLine("1. Find contact");
                 Console.WriteLine("2. Create contact");
                 Console.WriteLine("3. Show all");
-                Console.WriteLine("4. Show all");
+                Console.WriteLine("4. Update contact");
                 Console.WriteLine("5. Exit");
                 Console.WriteLine("-------------------");
                 var key = Console.ReadKey();
