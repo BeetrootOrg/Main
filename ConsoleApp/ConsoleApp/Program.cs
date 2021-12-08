@@ -4,102 +4,149 @@ namespace ConsoleApp
 {
     class Program
     {
-        //i.safontev/homework/06-strings
+        //i.safontev/classwork/12-inheritance
+
+        class Animal
+        {
+            public int NumOfPaws { get; set; }
+            public double Length { get; set; }
+            public virtual bool HasTail { get; set; }
+            public string Color { get; set; }
+
+            virtual public string MakeNoise() => "Unknown Animal says '???'";
+
+            public virtual string GetAnimalType() => "this is ?";
+            public void Eat() => Console.WriteLine("Unknown Animal eats '???'");
+
+            public override bool Equals(object obj) => Equals(obj as Animal);
+            protected virtual bool Equals(Animal animal)
+            {
+                if (animal == null)
+                {
+                    return false;
+                }
+                if (ReferenceEquals(this, animal))
+                {
+                    return true;
+                }
+                if (this.GetType() != animal.GetType())
+                {
+                    return false;
+                }
+
+                return (NumOfPaws == animal.NumOfPaws && Length == animal.Length && Color == animal.Color);
+            }
+
+            public override int GetHashCode() => NumOfPaws.GetHashCode() ^
+                Length.GetHashCode() ^
+                HasTail.GetHashCode() ^
+                Color.GetHashCode();
+
+            public override string ToString() => $"{nameof(NumOfPaws)} = {NumOfPaws}; " +
+               $" {nameof(Length)} = {Length}" +
+               $" {nameof(HasTail)} = {HasTail}" +
+               $" {nameof(Color)} = {Color}";
+
+        }
+
+        class Cat : Animal
+        {
+            public string Breed { get; set; }
+            public override bool HasTail { get => true; set => throw new NotImplementedException("Cannot change tail"); }
+
+            override public string MakeNoise() => "Cat says 'meow'";
+            public override string GetAnimalType() => $"this is a cat {Breed}";
+
+            public new void Eat() => Console.WriteLine("Car eats 'fish'");
+
+        }
+
+        class Dog : Animal
+        {
+            public override string GetAnimalType() => "this is a dog";
+        }
+
         static void Main(string[] args)
         {
-            Console.WriteLine($"Enter two strings: ");
-            string a = Console.ReadLine();
-            string b = Console.ReadLine();
-            Console.WriteLine($"Are these two strings equal: {Compare(a, b)}");
+            var animal = new Animal
+            {
+                Color = "red",
+                HasTale = true,
+                NumOfPaws = 9,
+                Length = -1,
+            };
 
-            Console.WriteLine($"\nEnter the line: ");
-            string c = Console.ReadLine();
-            Analyze(c);
+            var cat = new Cat
+            {
+                Color = "Black",
+                NumOfPaws = 4,
+                Length = 30,
+                Breed="Britanec",
+            };
 
-            Console.WriteLine($"\nEnter the line: ");
-            string d = Console.ReadLine();
-            Sort(d);
-            Console.WriteLine($"\nAfter sorting: {Sort(d)}");
+            Console.WriteLine($"{animal.MakeNoise()}");
+            Console.WriteLine($"{cat.MakeNoise()}");
 
-            Console.WriteLine($"\nEnter the line: ");
-            string e = Console.ReadLine();
-            char[] array1 = Duplicate(e);
-            int charArrayLength = array1.Length;
-            Console.WriteLine($"Duplicated chars is: ");
-            for(int i = 0; i < charArrayLength; i++)
+            ShowAnimal(animal);
+            ShowAnimal(cat);
+
+            Console.WriteLine(animal);
+            Console.WriteLine(cat);
+
+            var animal2 = new Animal
             {
-                Console.Write($"{array1[i]} ");
-            }
+                Color = "red",
+                NumOfPaws = 5,
+                Length = -1
+            };
+
+            Console.WriteLine(animal == animal2);
+            Console.WriteLine(animal.Equals(animal2));
+            Console.WriteLine(animal.Equals(new object()));
+            Console.WriteLine(animal.GetHashCode());
+            Console.WriteLine(animal2.GetHashCode());
+
+            Console.WriteLine(GetAnimalType1(cat));
+            Console.WriteLine(GetAnimalType1(new Dog()));
+
+            Console.WriteLine(GetAnimalType2(cat));
+            Console.WriteLine(GetAnimalType2(new Dog()));
+
+            Console.WriteLine(GetAnimalType3(animal));
+            Console.WriteLine(GetAnimalType3(cat));
+            Console.WriteLine(GetAnimalType3(new Dog()));
+
+
         }
-        static void Swap(ref char a, ref char b)
+
+        static void ShowAnimal(Animal animal)
         {
-            char temp = a;
-            a = b;
-            b = temp;
+            Console.WriteLine(animal.MakeNoise());
+            animal.Eat();
         }
-        static bool Compare(string a,string b)
+
+        //worse approach
+        static string GetAnimalType1(Animal animal)
         {
-            if (a.Length != b.Length) { return false; }
-            int length = a.Length;
-            for(int i = 0; i < length; i++)
+            if(animal is Cat cat)
             {
-                if (a[i] != b[i]) { return false; }
+                return $"this is a cat {cat.Breed}";
             }
-            return true;
-        }
-        static void Analyze(string a)
-        {
-            int alphabeticCharUpperCount = 0;
-            int alphabeticCharLowerCount = 0;
-            int digitsCount = 0;
-            int specialCharactersCount = 0;
-            foreach(var symbol in a)
+            if (animal is Dog dog)
             {
-                if (char.IsDigit(symbol)) { digitsCount++; }
-                else if (char.IsUpper(symbol)) { alphabeticCharUpperCount++; }
-                else if (char.IsLower(symbol)) { alphabeticCharLowerCount++; }
-                else { specialCharactersCount++; }
+                return $"this is a dog";
             }
-            Console.WriteLine($"Count of alphabetic upper chars is: {alphabeticCharUpperCount}");
-            Console.WriteLine($"Count of alphabetic lower chars is: {alphabeticCharLowerCount}");
-            Console.WriteLine($"Count of digits is: {digitsCount}");
-            Console.WriteLine($"Count of other special characters chars is: {specialCharactersCount}");
+
+            return "?";
         }
-        static string Sort(string a)
-        {
-            string lower = a.ToLower();
-            int length = lower.Length;
-            char[] array1 = lower.ToCharArray();
-            for (int i = 1; i < length; i++)
-            {
-                for(int j = 0; j < length - i; j++)
-                {
-                    if (array1[j] > array1[j + 1])
-                    {
-                        Swap(ref array1[j], ref array1[j+1]);
-                    }
-                }
-            }
-            return new string(array1);
-        }
-        static char[] Duplicate(string a)
-        {
-            string lower = a.ToLower();
-            int length = lower.Length;
-            char[] array1 = new char[length/2];
-            int k = 0;
-            for (int i = 0; i < length; i++)
-            {
-                for (int j = i+1; j < length - i; j++)
-                {
-                    if (lower[i]== lower[j]) 
-                    {
-                        array1[k] = lower[i];
-                        k++;
-                    }
-                }
-            }
-            return array1;
-        }
+
+        //2nd variant better approach - dynamic polimorphism
+        static string GetAnimalType2(Animal animal) => animal.GetAnimalType();
+
+        //good approach as 2nd varuant- 3rd variant - static polimorphism
+        //overload 
+        static string GetAnimalType3(Animal animal) => $"?";
+        static string GetAnimalType3(Cat cat) => $"this is a cat {cat.Breed}";
+        static string GetAnimalType3(Dog dog) => $"this is a dog";
     }
 }
