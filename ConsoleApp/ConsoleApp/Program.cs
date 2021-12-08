@@ -2,59 +2,53 @@
 
 namespace ConsoleApp
 {
-    public class Comment
+    public class Library
     {
-        public User Author { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public string Content { get; set; }
-
+        Book[] Books { get; set; }
+        Reader[] Readers { get; set; }
+        Personal[] Personal { get; set; }
+        Department[] Departments { get; set; }
+    }
+    public class Department
+    {
+        string Name { get; set; }
+        Personal[] Personal { get; set; }
+        Book[] Books { get; set; }
     }
 
-    public class User
+    public class Personal
     {
-        public string UserName { get; set; }
-        private string Password { get; set; }
-        public long Id { get; init; }
-        public string Email { get; set; }
-        public byte[] Avatar { get; set; }
-        public User[] Followers { get; set; }
+        string FirstName { get; init; }
+        string LastName { get; init; }
+        string FullName => $"{FirstName} {LastName}";
+        string PhoneNumber { get; set; }
+        string Email { get; set; }
+        string Adress { get; set; }
+        string Position { get; set; }
+        string DepartmentName { get; set; }
+
+    }
+    class Book
+    {
+        string Title { get; init; }
+        string AuthorFirstName { get; init; }
+        string AuthorLastName { get; init; }
+        string Author => $"{AuthorFirstName} {AuthorLastName}";
+        bool IsRere { get; init; }
+        bool IsForPublicUse { get; set; }
+        string InWhoseUse { get; set; }
     }
 
-    public class Post
+    class Reader
     {
-        public User User { get; set; }
-        public long Id { get; init; }
-        public DateTime CreatedAt { get; set; }
-        public byte[] Content { get; set; }
-        public string Description { get; set; }
-        public Comment[] Comment { get; set; }
-    }
-
-    public class Feed
-    {
-        public Post[] Posts { get; set; }
-        public User Owner { get; set; }
-    }
-
-    public class Updatable
-    {
-        private int _fieldA;
-        private int _fieldB;
-        public int FieldA
-        {
-            get
-            {
-                return _fieldA;
-            }
-            set
-            {
-                ++TimeUpdated;
-                _fieldA = value;
-            }
-
-        }
-        public string FieldB { get; set; }
-        public int TimeUpdated { get; private set; }
+        string FirstName { get; init; }
+        string LastName { get; init; }
+        string FullName => $"{FirstName} {LastName}";
+        string PhoneNumber { get; set; }
+        string Email { get; set; }
+        Book[] UsingBooksNow { get; set; }
+        Book[] History { get; set; }
+        bool IsInBlackList { get; set; }
     }
 
     public class Program
