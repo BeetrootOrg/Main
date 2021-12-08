@@ -17,6 +17,30 @@
   
         }
 
+        public static void Update(string firstName, string lastName)
+        {
+            for(int i = 0; i < phoneBook.GetLength(0); i++)
+            {
+                if(phoneBook[i,1] == firstName && phoneBook[i,2] == lastName)
+                {
+                    Update(i);
+                    Console.WriteLine("Updated succesfully");
+                    Console.ReadKey();
+                    break;
+                }
+                
+            }
+            Console.WriteLine("Not found");
+
+        }
+        static void Update(int id)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            Console.WriteLine("Input phone number in format '+38***'");
+            phoneBook[id, 0] = Console.ReadLine();
+            DbProcess(true);
+        }
+
         public static void MainMenu()
         {
             bool p = true;
@@ -31,7 +55,8 @@
                 Console.WriteLine("1. Find contact");
                 Console.WriteLine("2. Create contact");
                 Console.WriteLine("3. Show all");
-                Console.WriteLine("4. Exit");
+                Console.WriteLine("4. Show all");
+                Console.WriteLine("5. Exit");
                 Console.WriteLine("-------------------");
                 var key = Console.ReadKey();
                 switch (key.KeyChar)
@@ -55,6 +80,13 @@
                         }
                         break;
                     case '4':
+                        Console.WriteLine("Input first name");
+                        string first = Console.ReadLine();
+                        Console.WriteLine("Input last name");
+                        string last = Console.ReadLine();
+                        Update(first, last);
+                        break;
+                    case '5':
                         p=false;
                         break;
                 }
@@ -176,6 +208,22 @@
         /// <param name="update">if true , rewrite all data(not implemented)</param>
         public static void DbProcess(bool update = false)
         {
+            if (update)
+            {
+                string[] values = new string[phoneBook.Length / 3];
+                for(int i = 0;i < phoneBook.Length / 3; i++)
+                {
+                    StringBuilder stringBuilder2 = new StringBuilder();
+                    stringBuilder2.Append(phoneBook[i,0]);
+                    stringBuilder2.Append(';');
+                    stringBuilder2.Append(phoneBook[i, 1]);
+                    stringBuilder2.Append(';');
+                    stringBuilder2.Append(phoneBook[i, 2]);
+                    values[i] = stringBuilder2.ToString();
+                }
+                File.WriteAllLines(file, values);
+                
+            }
             string[] open;
             try
             {
@@ -222,6 +270,7 @@
             {
                 phoneBook = new string[0,0];
             }
+            
         }
 
         public static bool Sort(ref string[,] list)
