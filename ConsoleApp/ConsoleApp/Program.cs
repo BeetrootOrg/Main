@@ -80,6 +80,14 @@ namespace ConsoleApp
         };
     }
 
+    class Singleton
+    {
+        public static Singleton Instance => new Singleton();
+        private Singleton() { }
+
+        public int Method() => 42;
+    }
+
 
     // builder
     class AnimalBuilder
@@ -167,6 +175,9 @@ namespace ConsoleApp
 
             Console.WriteLine(animal);
             Console.WriteLine(copy);
+
+            var instance = Singleton.Instance;
+            Console.WriteLine(instance.Method());
         }
     }
 }
