@@ -11,6 +11,7 @@ namespace ConsoleApp
 
         public virtual string MakeNoise() => "Unknown Animal says ???";
         public void Eat() => Console.WriteLine("Unknwon Animal eats ???");
+        public virtual string GetAnimalType() => "?";
 
         public override bool Equals(object obj) => Equals(obj as Animal);
 
@@ -55,6 +56,13 @@ namespace ConsoleApp
 
         public override string MakeNoise() => "Cat says 'meow'";
         public new void Eat() => Console.WriteLine("Cat eats fish");
+
+        public override string GetAnimalType() => $"this is a cat {Breed}";
+    }
+
+    class Dog : Animal
+    {
+        public override string GetAnimalType() => "this is a dog";
     }
 
     class Program
@@ -98,6 +106,18 @@ namespace ConsoleApp
             Console.WriteLine(animal == animal2);
             Console.WriteLine(animal.Equals(animal2));
             Console.WriteLine(animal.Equals(new object()));
+            Console.WriteLine(animal.GetHashCode());
+            Console.WriteLine(animal2.GetHashCode());
+
+            Console.WriteLine(GetAnimalType1(cat));
+            Console.WriteLine(GetAnimalType1(new Dog()));
+
+            Console.WriteLine(GetAnimalType2(cat));
+            Console.WriteLine(GetAnimalType2(new Dog()));
+
+            Console.WriteLine(GetAnimalType3(animal));
+            Console.WriteLine(GetAnimalType3(cat));
+            Console.WriteLine(GetAnimalType3(new Dog()));
         }
 
         static void ShowAnimal(Animal animal)
@@ -105,5 +125,30 @@ namespace ConsoleApp
             Console.WriteLine(animal.MakeNoise());
             animal.Eat();
         }
+
+        // worse approach
+        static string GetAnimalType1(Animal animal)
+        {
+            if (animal is Cat cat)
+            {
+                return $"this is a cat {cat.Breed}";
+            }
+
+            if (animal is Dog)
+            {
+                return $"this is a dog";
+            }
+
+            return "?";
+        }
+
+        // better approach - dynamic polimorphism
+        static string GetAnimalType2(Animal animal) => animal.GetAnimalType();
+
+        // better approach - static polimorphism
+        // overload
+        static string GetAnimalType3(Animal animal) => "?";
+        static string GetAnimalType3(Cat cat) => $"this is a cat {cat.Breed}";
+        static string GetAnimalType3(Dog dog) => $"this is a dog";
     }
 }
