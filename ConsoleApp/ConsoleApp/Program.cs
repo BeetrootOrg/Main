@@ -72,8 +72,16 @@ namespace ConsoleApp
         public string Type { get; set; }
 
         public override string ToString() => $"Paws = {NumOfPaws}; Type = {Type}";
+
+        public Animal Prototype() => new Animal
+        {
+            NumOfPaws = NumOfPaws,
+            Type = Type
+        };
     }
 
+
+    // builder
     class AnimalBuilder
     {
         private string _type;
@@ -153,6 +161,12 @@ namespace ConsoleApp
                 .Build();
 
             Console.WriteLine(animal);
+
+            var copy = animal.Prototype();
+            copy.Type = "dog";
+
+            Console.WriteLine(animal);
+            Console.WriteLine(copy);
         }
     }
 }
