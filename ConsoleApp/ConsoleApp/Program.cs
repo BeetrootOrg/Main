@@ -1,94 +1,41 @@
-﻿using System;
-
-namespace ConsoleApp
+﻿namespace ConsoleApp
 {
-    public class Comment
+    class Animal
     {
-        public User Author { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public string Content { get; set; }
+        public int NumOfPaws { get; set; }
+        public int Length { get; set; }
+        public bool HasTale { get; set; }
+        public string Color { get; set; }
+
+        public string MakeNoise() => "Unknown Animal says ???";
     }
 
-    public class User
+    class Cat : Animal
     {
-        public string Username { get; set; }
-        private string Password { get; set; }
-        public long Id { get; init; }
-        private string Email { get; set; }
-        public byte[] Avatar { get; set; }
-        public User[] Followers { get; set; }
-    }
-
-    public class Post
-    {
-        public User User { get; set; }
-        public long Id { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public byte[] Content { get; set; }
-        public string Description { get; set; }
-        public Comment[] Comments { get; set; }
-    }
-
-    public class Feed
-    {
-        public Post[] Posts { get; set; }
-        public User Owner { get; set; }
-    }
-
-    public class Updatable
-    {
-        private int _fieldA;
-        private string _fieldB;
-
-        public int FieldA
-        {
-            get
-            {
-                return _fieldA;
-            }
-            set
-            {
-                ++TimesUpdated;
-                _fieldA = value;
-            }
-        }
-
-        public string FieldB
-        {
-            get
-            {
-                return _fieldB;
-            }
-            set
-            {
-                ++TimesUpdated;
-                _fieldB = value;
-            }
-        }
-
-        public int TimesUpdated { get; private set; }
-
-        public void ShowValues() => Console.WriteLine($"Updatable has next values: {GetFieldA()}; {GetFieldB()}; {GetUpdated()}");
-
-        private string GetFieldA() => $"{nameof(FieldA)} = {FieldA}";
-        private string GetFieldB() => $"{nameof(FieldB)} = {FieldB}";
-        private string GetUpdated() => $"{nameof(TimesUpdated)} = {TimesUpdated}";
     }
 
     class Program
     {
         static void Main()
         {
-            var obj = new Updatable
+            var animal = new Animal
             {
-                FieldA = 42,
-                FieldB = "42"
+                Color = "red",
+                HasTale = true,
+                NumOfPaws = 5,
+                Length = -1
             };
 
-            obj.FieldA = 43;
-            obj.FieldB = "45";
+            var cat = new Cat
+            {
+                Color = "black",
+                Length = 30,
+                NumOfPaws = 4,
+                HasTale = true
+            };
 
-            obj.ShowValues();
+            System.Console.WriteLine(animal.MakeNoise());
+            System.Console.WriteLine(cat.MakeNoise());
         }
     }
 }
