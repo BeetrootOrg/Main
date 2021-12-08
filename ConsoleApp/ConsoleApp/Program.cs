@@ -1,17 +1,25 @@
-﻿namespace ConsoleApp
+﻿using System;
+
+namespace ConsoleApp
 {
     class Animal
     {
         public int NumOfPaws { get; set; }
         public int Length { get; set; }
-        public bool HasTale { get; set; }
+        public virtual bool HasTale { get; set; }
         public string Color { get; set; }
 
-        public string MakeNoise() => "Unknown Animal says ???";
+        public virtual string MakeNoise() => "Unknown Animal says ???";
+        public void Eat() => Console.WriteLine("Unknwon Animal eats ???");
     }
 
     class Cat : Animal
     {
+        public string Breed { get; set; }
+        public override bool HasTale { get => true; set => throw new NotImplementedException("Cannot change tale"); }
+
+        public override string MakeNoise() => "Cat says 'meow'";
+        public new void Eat() => Console.WriteLine("Cat eats fish");
     }
 
     class Program
@@ -30,12 +38,22 @@
             {
                 Color = "black",
                 Length = 30,
-                NumOfPaws = 4,
-                HasTale = true
+                NumOfPaws = 4
             };
 
-            System.Console.WriteLine(animal.MakeNoise());
-            System.Console.WriteLine(cat.MakeNoise());
+            Console.WriteLine("ANIMAL");
+            ShowAnimal(animal);
+
+            Console.WriteLine("CAT");
+            ShowAnimal(cat);
+
+            Console.WriteLine(cat.HasTale);
+        }
+
+        static void ShowAnimal(Animal animal)
+        {
+            Console.WriteLine(animal.MakeNoise());
+            animal.Eat();
         }
     }
 }
