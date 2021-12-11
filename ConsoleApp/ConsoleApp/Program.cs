@@ -1,152 +1,197 @@
 ﻿using System;
 using System.Text;
+using System.IO;
 namespace ConsoleApp
 {
+    //i.safontev/homework/07-text
     class Program
     {
-        //i.safontev/classwork/12-inheritance
+        const string Filename = @"phonebook.csv";
 
-        class Animal
+        static void Main()
         {
-            public int NumOfPaws { get; set; }
-            public double Length { get; set; }
-            public virtual bool HasTail { get; set; }
-            public string Color { get; set; }
-
-            virtual public string MakeNoise() => "Unknown Animal says '???'";
-
-            public virtual string GetAnimalType() => "this is ?";
-            public void Eat() => Console.WriteLine("Unknown Animal eats '???'");
-
-            public override bool Equals(object obj) => Equals(obj as Animal);
-            protected virtual bool Equals(Animal animal)
+            while (true)
             {
-                if (animal == null)
-                {
-                    return false;
-                }
-                if (ReferenceEquals(this, animal))
-                {
-                    return true;
-                }
-                if (this.GetType() != animal.GetType())
-                {
-                    return false;
-                }
+                Menu();
+            }
+        }
 
-                return (NumOfPaws == animal.NumOfPaws && Length == animal.Length && Color == animal.Color);
+        static void Menu()
+        {
+            Console.Clear();
+            Console.WriteLine("Welcome to Phone Book Application!\n");
+            Console.WriteLine("\tMenu");
+            Console.WriteLine("\t1. Show all phone book");
+            Console.WriteLine("\t2. Create phone record");
+            Console.WriteLine("\t3. Search by name");
+            Console.WriteLine("\t4. Search by phone number");
+            Console.WriteLine("\t5. Refresh phone number by name/ surname");
+            Console.WriteLine("\t0. Exit");
+
+            ConsoleKeyInfo ck = Console.ReadKey();
+
+            switch (ck.Key)
+            {
+                case ConsoleKey.D1:
+                case ConsoleKey.NumPad1:
+                    ShowAllNumbers();
+                    break;
+                case ConsoleKey.D2:
+                case ConsoleKey.NumPad2:
+                    CreatePhoneNumber();
+                    break;
+                case ConsoleKey.D3:
+                case ConsoleKey.NumPad3:
+                    SearchByName();
+                    break;
+                case ConsoleKey.D4:
+                case ConsoleKey.NumPad4:
+                    SearchByPhoneNumber();
+                    break;
+                case ConsoleKey.D5:
+                case ConsoleKey.NumPad5:
+                    RefreshNumber();
+                    break;
+                case ConsoleKey.D0:
+                case ConsoleKey.NumPad0:
+                    Exit();
+                    break;
+            }
+        }
+
+        private static void SearchByName()
+        {
+            Console.Clear();
+            Console.WriteLine("Search condition - if first/last name contains search term you will see it");
+            Console.WriteLine("Enter Search Term...");
+            var searchTerm = Console.ReadLine();
+
+            bool found = false;
+            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+            {
+                if (firstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    lastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
+                    found = true;
+                }
             }
 
-            public override int GetHashCode() => NumOfPaws.GetHashCode() ^
-                Length.GetHashCode() ^
-                HasTail.GetHashCode() ^
-                Color.GetHashCode();
-
-            public override string ToString() => $"{nameof(NumOfPaws)} = {NumOfPaws}; " +
-               $" {nameof(Length)} = {Length}" +
-               $" {nameof(HasTail)} = {HasTail}" +
-               $" {nameof(Color)} = {Color}";
-
-        }
-
-        class Cat : Animal
-        {
-            public string Breed { get; set; }
-            public override bool HasTail { get => true; set => throw new NotImplementedException("Cannot change tail"); }
-
-            override public string MakeNoise() => "Cat says 'meow'";
-            public override string GetAnimalType() => $"this is a cat {Breed}";
-
-            public new void Eat() => Console.WriteLine("Car eats 'fish'");
-
-        }
-
-        class Dog : Animal
-        {
-            public override string GetAnimalType() => "this is a dog";
-        }
-
-        static void Main(string[] args)
-        {
-            var animal = new Animal
+            if (!found)
             {
-                Color = "red",
-                HasTale = true,
-                NumOfPaws = 9,
-                Length = -1,
-            };
-
-            var cat = new Cat
-            {
-                Color = "Black",
-                NumOfPaws = 4,
-                Length = 30,
-                Breed="Britanec",
-            };
-
-            Console.WriteLine($"{animal.MakeNoise()}");
-            Console.WriteLine($"{cat.MakeNoise()}");
-
-            ShowAnimal(animal);
-            ShowAnimal(cat);
-
-            Console.WriteLine(animal);
-            Console.WriteLine(cat);
-
-            var animal2 = new Animal
-            {
-                Color = "red",
-                NumOfPaws = 5,
-                Length = -1
-            };
-
-            Console.WriteLine(animal == animal2);
-            Console.WriteLine(animal.Equals(animal2));
-            Console.WriteLine(animal.Equals(new object()));
-            Console.WriteLine(animal.GetHashCode());
-            Console.WriteLine(animal2.GetHashCode());
-
-            Console.WriteLine(GetAnimalType1(cat));
-            Console.WriteLine(GetAnimalType1(new Dog()));
-
-            Console.WriteLine(GetAnimalType2(cat));
-            Console.WriteLine(GetAnimalType2(new Dog()));
-
-            Console.WriteLine(GetAnimalType3(animal));
-            Console.WriteLine(GetAnimalType3(cat));
-            Console.WriteLine(GetAnimalType3(new Dog()));
-
-
-        }
-
-        static void ShowAnimal(Animal animal)
-        {
-            Console.WriteLine(animal.MakeNoise());
-            animal.Eat();
-        }
-
-        //worse approach
-        static string GetAnimalType1(Animal animal)
-        {
-            if(animal is Cat cat)
-            {
-                return $"this is a cat {cat.Breed}";
-            }
-            if (animal is Dog dog)
-            {
-                return $"this is a dog";
+                Console.WriteLine("Not such users");
             }
 
-            return "?";
+            Wait();
         }
 
-        //2nd variant better approach - dynamic polimorphism
-        static string GetAnimalType2(Animal animal) => animal.GetAnimalType();
+        private static void Exit()
+        {
+            Environment.Exit(0);
+        }
 
-        //good approach as 2nd varuant- 3rd variant - static polimorphism
-        //overload 
-        static string GetAnimalType3(Animal animal) => $"?";
-        static string GetAnimalType3(Cat cat) => $"this is a cat {cat.Breed}";
-        static string GetAnimalType3(Dog dog) => $"this is a dog";
+        private static void CreatePhoneNumber()
+        {
+            Console.Clear();
+            Console.WriteLine("Enter First Name...");
+            var firstName = Console.ReadLine();
+
+            Console.WriteLine("Enter Last Name...");
+            var lastName = Console.ReadLine();
+
+            Console.WriteLine("Enter Phone Number...");
+            var phoneNumber = Console.ReadLine();
+
+            File.AppendAllLines(Filename, new[] { $"{firstName},{lastName},{phoneNumber}" });
+        }
+
+        private static void ShowAllNumbers()
+        {
+            Console.Clear();
+            Console.WriteLine($"{"First Name",-15}{"Last Name",-15}{"Phone Number",-15}");
+
+            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+            {
+                Console.Write($"{firstName,-15}");
+                Console.Write($"{lastName,-15}");
+                Console.Write($"{phoneNumber,-15}");
+                Console.WriteLine();
+            }
+
+            Wait();
+        }
+
+        private static void Wait()
+        {
+            Console.WriteLine("To back to menu type Enter...");
+            Console.ReadLine();
+        }
+
+        static (string, string, string)[] ReadPhoneBook()
+        {
+            string[] lines = File.ReadAllLines(Filename);
+
+            var phoneBook = new (string, string, string)[lines.Length - 1];
+            for (int i = 1; i < lines.Length; i++)
+            {
+                string[] splitted = lines[i].Split(',');
+                phoneBook[i - 1] = (splitted[0], splitted[1], splitted[2]);
+            }
+
+            return phoneBook;
+        }
+
+        private static void SearchByPhoneNumber() 
+        {
+            Console.Clear();
+            Console.WriteLine("Search condition - if phone numbert contains search term you will see it");
+            Console.WriteLine("Enter Search Term...");
+            var searchTerm = Console.ReadLine();
+
+            bool found = false;
+            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+            {
+                if (phoneNumber.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
+                    found = true;
+                }
+            }
+
+            if (!found)
+            {
+                Console.WriteLine("Not such users");
+            }
+
+            Wait();
+        }
+        
+        private static void RefreshNumber()
+        {
+            Console.Clear();
+            Console.WriteLine("Search condition - if first/last name contains search term you will see it");
+            Console.WriteLine("Enter Search Term...");
+            var searchTerm = Console.ReadLine();
+
+            bool found = false;
+            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+            {
+                if (firstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    lastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
+                    found = true;
+                    Console.WriteLine("Enter the new number: ");
+                    string newNumber = Console.ReadLine();
+                    File.WriteAllText(Filename, File.ReadAllText(Filename).Replace(phoneNumber, newNumber));
+                }
+            }
+            if (!found)
+            {
+                Console.WriteLine("Not such users");
+            }
+            Wait();
+        }
+
     }
 }
