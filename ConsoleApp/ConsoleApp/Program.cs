@@ -3,7 +3,7 @@ using System.Text;
 using System.IO;
 namespace ConsoleApp
 {
-    //i.safontev/homework/07-text
+    //i.safontev/homework/08-exceptions
     class Program
     {
         const string Filename = @"D:\MyFiles\C# Course\Main\ConsoleApp\ConsoleApp\phonebook.csv";
@@ -107,17 +107,23 @@ namespace ConsoleApp
 
         private static void ShowAllNumbers()
         {
-            Console.Clear();
-            Console.WriteLine($"{"First Name",-15}{"Last Name",-15}{"Phone Number",-15}");
-
-            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+            try
             {
-                Console.Write($"{firstName,-15}");
-                Console.Write($"{lastName,-15}");
-                Console.Write($"{phoneNumber,-15}");
-                Console.WriteLine();
-            }
+                Console.Clear();
+                Console.WriteLine($"{"First Name",-15}{"Last Name",-15}{"Phone Number",-15}");
 
+                foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+                {
+                    Console.Write($"{firstName,-15}");
+                    Console.Write($"{lastName,-15}");
+                    Console.Write($"{phoneNumber,-15}");
+                    Console.WriteLine();
+                }
+            }
+            catch (System.NullReferenceException)
+            {
+                Console.WriteLine("Exception: you passed the null object reference!");
+            }
             Wait();
         }
 
@@ -129,16 +135,23 @@ namespace ConsoleApp
 
         static (string, string, string)[] ReadPhoneBook()
         {
-            string[] lines = File.ReadAllLines(Filename);
-
-            var phoneBook = new (string, string, string)[lines.Length - 1];
-            for (int i = 1; i < lines.Length; i++)
+            try
             {
-                string[] splitted = lines[i].Split(',');
-                phoneBook[i - 1] = (splitted[0], splitted[1], splitted[2]);
-            }
+                string[] lines = File.ReadAllLines(Filename);
+                var phoneBook = new (string, string, string)[lines.Length - 1];
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    string[] splitted = lines[i].Split(',');
+                    phoneBook[i - 1] = (splitted[0], splitted[1], splitted[2]);
+                }
 
-            return phoneBook;
+                return phoneBook;
+            }
+            catch(System.IO.FileNotFoundException)
+            {
+                Console.WriteLine("Exception: File not found!");
+                return null;
+            }
         }
 
         private static void SearchByPhoneNumber() 
