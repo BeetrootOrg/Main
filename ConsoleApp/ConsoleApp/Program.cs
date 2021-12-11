@@ -6,7 +6,7 @@ namespace ConsoleApp
     //i.safontev/homework/07-text
     class Program
     {
-        const string Filename = @"phonebook.csv";
+        const string Filename = @"D:\MyFiles\C# Course\Main\ConsoleApp\ConsoleApp\phonebook.csv";
 
         static void Main()
         {
