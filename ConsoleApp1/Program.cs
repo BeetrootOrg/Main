@@ -1,5 +1,7 @@
-﻿using System;
+﻿
+using System;
 using System.IO;
+using System.Globalization;
 
 namespace ConsoleApp
 {
@@ -58,7 +60,7 @@ namespace ConsoleApp
             }
         }
 
-        private static void SearchByName(bool update=false)
+        private static void SearchByName(bool update = false)
         {
             Console.Clear();
             Console.WriteLine("Search condition - if first/last name contains search term you will see it");
@@ -68,14 +70,14 @@ namespace ConsoleApp
             var searchTerm = Console.ReadLine();
 
             bool found = false;
-            int i=0;
-            int j=0;
+            int i = 0;
+            int j = 0;
             foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
             {
                 i++;
                 if (firstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
                     lastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-                { 
+                {
                     j++;
                     Console.WriteLine($"{j}. Found user {firstName} {lastName} with phone {phoneNumber}");
                     found = true;
@@ -148,9 +150,9 @@ namespace ConsoleApp
         private static void SelectUser(List<int> x)
         {
             Console.WriteLine();
-            Console.WriteLine(" Type number from 1 to {0} corresponding to user, which phonenumber You want to change, or  type Enter To back to menu", x.Count );
+            Console.WriteLine(" Type number from 1 to {0} corresponding to user, which phonenumber You want to change, or  type Enter To back to menu", x.Count);
             //int selectedUser = Convert.ToInt16(Console.ReadLine());
-            string input= Console.ReadLine();
+            string input = Console.ReadLine();
             if (int.TryParse(input, out int result))
             {
                 int selectedUser = int.Parse(input);
@@ -166,12 +168,12 @@ namespace ConsoleApp
             }
 
         }
-        private static void PhoneNumberUpdate (int iD, string number)
+        private static void PhoneNumberUpdate(int iD, string number)
         {
             string[] lines = File.ReadAllLines(Filename);
             (string, string, string)[] phoneBook = ReadPhoneBook();
             phoneBook[iD].Item3 = number;
-            lines[iD+1] = String.Join(",", phoneBook[iD].Item1, phoneBook[iD].Item2, phoneBook[iD].Item3);
+            lines[iD + 1] = String.Join(",", phoneBook[iD].Item1, phoneBook[iD].Item2, phoneBook[iD].Item3);
             File.WriteAllLines(Filename, lines);
         }
 
@@ -207,18 +209,37 @@ namespace ConsoleApp
         private static void SearchByPhone(string search = null)
         {
             Console.Clear();
+
+        Begin:
             Console.WriteLine("Enter a phone number, please");
+
+
+
 
             if (search == null)
             {
-                search = Console.ReadLine().Trim();
+                search = Console.ReadLine();
+            }
+
+            try
+            {
+
+                string val = Convert.ToString(int.Parse(search, NumberStyles.AllowLeadingSign));
+
+            }
+
+            catch (Exception e)
+            {
+                Console.WriteLine("the entered value is not a valid phone number");
+                search = null;
+                goto Begin;
             }
 
             bool found = false;
             foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
 
             {
-                if (string.Equals(phoneNumber.Trim(), search))
+                if (string.Equals(phoneNumber.Trim(), search.Trim()))
                 {
                     Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
                     found = true;
