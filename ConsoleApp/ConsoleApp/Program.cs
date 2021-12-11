@@ -8,14 +8,16 @@ namespace ConsoleApp
     {
         private Client[] Clients { get; set; }
         private Book[] Books { get; set; }
-        private Librarians[] Librarian { get; set; }
+        private Librarian[] Librarians { get; set; }
+
     }
-    class Librarians
+    class Librarian
     {
         private string FirstName { get; set; }
         private string LastName { get; set; }
         private int Age { get; set; }
         private int WorkExperience { get; set; }
+        private double Salary { get; set; }
 
     }
     class Client
