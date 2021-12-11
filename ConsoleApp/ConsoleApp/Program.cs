@@ -6,6 +6,7 @@ namespace ConsoleApp
 {
     class Program
     {
+        const string WrongFilename = @"asda/phonebook.csv";
         const string Filename = @"phonebook.csv";
         const string Header = "FirstName,LastName,PhoneNumber";
         const int MaxStringLength = 14;
@@ -21,7 +22,7 @@ namespace ConsoleApp
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    Console.ReadLine();
+                    Wait();
                 }
             }
         }
@@ -71,44 +72,43 @@ namespace ConsoleApp
 
         private static void ChangeUserPhone()
         {
-            try
-            {
-                Console.Clear();
-                Console.WriteLine("Search condition - if first/last name equals search term you will see it");
-                Console.WriteLine("Enter full First/Last Name...");
-                var searchTerm = Console.ReadLine();
-                bool found = false;
-                string[] lines = File.ReadAllLines(Filename);
+            Console.Clear();
+            Console.WriteLine("Search condition - if first/last name equals search term you will see it");
+            Console.WriteLine("Enter full First/Last Name...");
+            var searchTerm = Console.ReadLine();
+            bool found = false;
+            string[] lines = File.ReadAllLines(Filename);
 
-                for (int i = 1; i < lines.Length; i++)
+            for (int i = 1; i < lines.Length; i++)
+            {
+                string[] splitted = lines[i].Split(',');
+                if (splitted[0].Equals(searchTerm, StringComparison.OrdinalIgnoreCase) || splitted[1].Equals(searchTerm, StringComparison.OrdinalIgnoreCase))
                 {
-                    string[] splitted = lines[i].Split(',');
-                    if (splitted[0].Equals(searchTerm, StringComparison.OrdinalIgnoreCase) || splitted[1].Equals(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    Console.WriteLine($"Found user {splitted[0]} {splitted[1]} with phone {splitted[2]}");
+                    Console.WriteLine("Enter New Phone Number...");
+                    var newPhoneNumber = Console.ReadLine();
+                    int number;
+                    bool checkIfNumber = int.TryParse(newPhoneNumber, out number);
+                    if (newPhoneNumber.Length > MaxStringLength)
                     {
-                        Console.WriteLine($"Found user {splitted[0]} {splitted[1]} with phone {splitted[2]}");
-                        Console.WriteLine("Enter New Phone Number...");
-                        var newPhoneNumber = Console.ReadLine();
-                        if (newPhoneNumber.Length > MaxStringLength)
-                        {
-                            throw new ArgumentException($"Max length of phone number is {MaxStringLength}", nameof(newPhoneNumber));
-                        }
-                        splitted[2] = newPhoneNumber;
-                        lines[i] = string.Join(",", splitted);
-                        found = true;
+                        throw new ArgumentException($"Max length of phone number is {MaxStringLength}", nameof(newPhoneNumber));
                     }
-                }
-                File.WriteAllLines(Filename, lines);
 
-                if (!found)
+                    if (!checkIfNumber)
+                    {
+                        throw new ArgumentException($"Only numbers allowed", nameof(newPhoneNumber));
+                    }
+                    splitted[2] = newPhoneNumber;
+                    lines[i] = string.Join(",", splitted);
+                    found = true;
+                }
+                else
                 {
-                    Console.WriteLine("No such users");
+                    SearchWait(ChangeUserPhone);
                 }
-            }
-            finally
-            {
-                Wait();
-            }
 
+            }
+            File.WriteAllLines(Filename, lines);
         }
 
         private static void SearchByPhoneNumber()
@@ -120,7 +120,7 @@ namespace ConsoleApp
                 Console.WriteLine("Enter Search Input...");
                 var searchTerm = Console.ReadLine();
                 bool found = false;
-                var phoneBook = ReadPhoneBook();
+                var phoneBook = ReadPhoneBook(Filename);
 
                 if (phoneBook == null)
                 {
@@ -158,7 +158,7 @@ namespace ConsoleApp
                 Console.WriteLine("Enter Search Term...");
                 var searchTerm = Console.ReadLine();
                 bool found = false;
-                var phoneBook = ReadPhoneBook();
+                var phoneBook = ReadPhoneBook(Filename);
 
                 if (phoneBook == null)
                 {
@@ -226,7 +226,7 @@ namespace ConsoleApp
         {
             Console.Clear();
 
-            var phoneBook = ReadPhoneBook();
+            var phoneBook = ReadPhoneBook(WrongFilename);
             if (phoneBook == null)
             {
                 Console.WriteLine("Error occured during file read, press Enter...");
@@ -264,9 +264,8 @@ namespace ConsoleApp
                 case ConsoleKey.NumPad9:
                     SearchType();
                     break;
-                case ConsoleKey.D0:
-                case ConsoleKey.NumPad0:
-                    Exit();
+                case ConsoleKey.Enter:
+                    Menu();
                     break;
             }
         }
@@ -275,11 +274,11 @@ namespace ConsoleApp
         /// Parse CSV file to Phone Book
         /// </summary>
         /// <returns>array if read was success, null if error occures</returns>
-        static (string, string, string)[] ReadPhoneBook()
+        static (string, string, string)[] ReadPhoneBook(string EnteredFilename)
         {
             try
             {
-                string[] lines = File.ReadAllLines(Filename);
+                string[] lines = File.ReadAllLines(EnteredFilename);
 
                 var phoneBook = new (string, string, string)[lines.Length - 1];
                 for (int i = 1; i < lines.Length; i++)
@@ -293,13 +292,12 @@ namespace ConsoleApp
             // throw new DirectoryNotFoundException(...) -> dnfe;
             catch (DirectoryNotFoundException dnfe)
             {
-                /* Console.WriteLine($"Hey, unfortunately this directory wasn't found");
-                 return new (string, string, string)[0];*/
-                throw;
+                Console.WriteLine($"Hey, unfortunately this directory wasn't found. Here is our default phonebook:\n");
+                return ReadPhoneBook(Filename);
             }
             catch (IOException)
             {
-                File.WriteAllText(Filename, $"{Header}\n");
+                File.WriteAllText(EnteredFilename, $"{Header}\n");
                 return new (string, string, string)[0];
             }
             catch
