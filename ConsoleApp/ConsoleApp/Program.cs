@@ -102,7 +102,7 @@ namespace ConsoleApp
             Console.WriteLine("Enter Phone Number...");
             var phoneNumber = Console.ReadLine();
 
-            File.AppendAllLines(Filename, new[] { $"{firstName}, {lastName}, {phoneNumber}" });
+            File.AppendAllLines(Filename, new[] { $"{firstName},{lastName},{phoneNumber}" });
         }
 
         private static void ShowAllNumbers()
