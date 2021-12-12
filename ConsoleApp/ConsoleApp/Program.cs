@@ -4,10 +4,10 @@ namespace ConsoleApp
 {
     class School
     {
-        string Name { get; set; }
-        Teacher[] teachers { get; set; }
-        Pupil[] pupils { get; set; }
-        Schedule schedule { get; set; }
+        string NameOfSchool { get; set; }
+        Teacher[] Teachers { get; set; }
+        Pupil[] Pupils { get; set; }
+        Schedule Schedule { get; set; }
     }
 
     class Schedule
@@ -36,6 +36,7 @@ namespace ConsoleApp
         string FullName => $"{FirstName} {LastName}";
         string PhoneNumber { get; set; }
         string Email { get; set; }
+        Class[] Classes { get; set; }
 
     }
 
