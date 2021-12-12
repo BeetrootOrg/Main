@@ -1,59 +1,65 @@
 ﻿using System;
-namespace Course
+
+namespace ConsoleApp
 {
-    enum BinaryOperationType
+    class Engine
     {
-        Plus,
-        Minus
-    }
-    class UnaryOperation
-    {
-        public virtual int Operation(int num) => throw new NotImplementedException();
-    }
-    class UnaryPlusOperation : UnaryOperation
-    {
-        public override int Operation(int num) => num;
-    }
-    class UnaryMinusOperation : UnaryOperation
-    {
-        public override int Operation(int num) => -num;
+        public string EngineType { get; set; }
+        public string FuelType { get; set; }
     }
 
-    class BinaryOperation
+    class ElectricEngine : Engine
     {
-        public virtual int Operation(int num1, int num2) => throw new NotImplementedException();
-    }
-    class PlusOperation : BinaryOperation
-    {
-        public override int Operation(int num1, int num2) => num1 + num2;
-    }
-    class MinusOperation : BinaryOperation
-    {
-        public override int Operation(int num1, int num2) => num1 - num2;
-        // factory method
-        public static BinaryOperation Create() => new MinusOperation();
+        public string ChargeCapacity { get; init; }
     }
 
-    class Calculator
+    class Tire
     {
-        public int Calculate(BinaryOperation operation, int num1, int num2) => operation.Operation(num1, num2);
-    }
-    // abstract factory
-    class BinaryFactory
-    {
-        public BinaryOperation CreateOperation(BinaryOperationType binaryOperation) => binaryOperation switch
-        {
-            BinaryOperationType.Plus => new PlusOperation(),
-            BinaryOperationType.Minus => new MinusOperation(),
-            _ => throw new NotImplementedException(nameof(binaryOperation)),
-        };
+        public double Diameter { get; set; }
+        public string Mark { get; set; }
+        public string Modle { get; set; }
     }
 
-    class Program
+    class Vehicle
     {
-        static void Main()
-        {
+        public Engine Engine { get; set; }
+        public string Color { get; set; }
+        public string TransmissionType { get; set; }
+        public int PassangersQuantity { get; init; }
+        public Tire[] Tires { get; set; }
+    }
 
-        }
+    class Truck : Vehicle
+    {
+        public int CargoMaxCapacity { get; init; }
+        public int SuspensionQuantity { get; init; }
+    }
+
+    class Car : Vehicle
+    {
+        public int DoorsQuantity { get; init; }
+        public bool WithRoof { get; set; }
+    }
+
+    class Worker
+    {
+        public string Name { get; set; }
+        public string JobPosition { get; set; }
+    }
+
+    class RepairTask
+    {
+        public string RepairName { get; set; }
+        public string RepairDescription { get; set; }
+        public Vehicle VehicleToRepair { get; init; }
+        public DateTime EndOfWorkTime { get; set; }
+        public Worker ResponsibleWorker { get; set; }
+    }
+
+    class AutoService
+    {
+        public string Name { get; set; }
+        public Worker[] Workers { get; set; }
+        private RepairTask[] RepairTasks { get; set; }
     }
 }
