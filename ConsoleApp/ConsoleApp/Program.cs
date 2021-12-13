@@ -98,6 +98,30 @@ namespace ConsoleApp
 
     #endregion
 
+    #region Barbara Liskov Principle
+
+    class WrongParent
+    {
+        public void Something() => Console.WriteLine("Something Parent");
+    }
+
+    class WrongChild : WrongParent
+    {
+        public void Something() => Console.WriteLine("Something Child");
+    }
+
+    class RightParent
+    {
+        public virtual void Something() => Console.WriteLine("Something Parent");
+    }
+
+    class RightChild : RightParent
+    {
+        public override void Something() => Console.WriteLine("Something Child");
+    }
+
+    #endregion
+
     class Program
     {
         static void Main()
@@ -106,6 +130,12 @@ namespace ConsoleApp
 
             SendEmail(userService.SignIn("USER", "PASS"), "USER");
             SendEmail(userService.SignIn("U", "P"), "U");
+
+            WrongParent wrongChild = new WrongChild();
+            wrongChild.Something();
+
+            RightParent rightChild = new RightChild();
+            rightChild.Something();
         }
 
         static void SendEmail(bool success, string username)
