@@ -2,22 +2,17 @@
 
 namespace ConsoleApp
 {
+    class EmailService
+    {
+        public void SendEmail(string username) => Console.WriteLine($"Email sent to {username}");
+    }
+
     class UserService
     {
         private const string _username = "USER";
         private const string _password = "PASS";
 
-        public void SignIn(string username, string password)
-        {
-            var success = Login(username, password);
-
-            if (success)
-            {
-                SendEmail(username);
-            }
-        }
-
-        private bool Login(string username, string password)
+        public bool SignIn(string username, string password)
         {
             if (username == _username && password == _password)
             {
@@ -28,17 +23,25 @@ namespace ConsoleApp
             Console.WriteLine("Wrong username or password used");
             return false;
         }
-
-        private void SendEmail(string username) => Console.WriteLine($"Email sent to {username}");
     }
 
     class Program
     {
         static void Main()
         {
-            var service = new UserService();
-            service.SignIn("USER", "PASS");
-            service.SignIn("U", "P");
+            var userService = new UserService();
+
+            SendEmail(userService.SignIn("USER", "PASS"), "USER");
+            SendEmail(userService.SignIn("U", "P"), "U");
+        }
+
+        static void SendEmail(bool success, string username)
+        {
+            if (success)
+            {
+                var emailService = new EmailService();
+                emailService.SendEmail(username);
+            }
         }
     }
 }
