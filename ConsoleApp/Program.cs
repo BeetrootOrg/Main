@@ -2,96 +2,153 @@
 
 namespace ConsoleApp
 {
-    public class Comment
+    class Animal
     {
-        public User Author { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public string Content { get; set; }
-    }
+        public int NumOfPaws { get; set; }
+        public int Length { get; set; }
+        public virtual bool HasTale { get; set; }
+        public string Color { get; set; }
 
-    public class User
-    {
-        public string UserName { get; set; }
-        private string Password { get; set; }
-        public int Id { get; init; }
+        public abstract string MakeNoise() => "Unknown Animal says ???";
+        public abstract void Eat() => Console.WriteLine("Unknwon Animal eats ???");
+        public abstract string GetAnimalType() => "?";
 
-        private string Email { get; set; }
+        public override bool Equals(object obj) => Equals(obj as Animal);
 
-        public byte[] Avatar { get; set; }
-
-        public User[] Followers { get; set; }
-
-    }
-
-    public class Post
-    {
-        public User User { get; set; }
-        public long Id { get; init; }
-        public DateTime CreatedAt { get; set; }
-        public string Description { get; set; }
-        public byte[] Content { get; set; }
-    }
-
-    public class Feed
-    { 
-        public Post[] Posts { get; set; }
-        public User Owner { get; set; } 
-     }
-
-    public class Updatable
-    {
-        private int _fieldA;
-        private string _fieldB;
-
-        public int FieldA
+        protected virtual bool Equals(Animal animal)
         {
-            get
+            if (animal == null)
             {
-                return _fieldA;
+                return false;
             }
-            set
+
+            if (ReferenceEquals(this, animal))
             {
-                ++TimesUpdated;
-                _fieldA = value;
+                return true;
             }
+
+            if (this.GetType() != animal.GetType())
+            {
+                return false;
+            }
+
+            return NumOfPaws == animal.NumOfPaws &&
+                Length == animal.Length &&
+                HasTale == animal.HasTale &&
+                Color == animal.Color;
         }
 
-        public string FieldB
-        {
-            get
-            {
-                return _fieldB;
-            }
-            set
-            {
-                ++TimesUpdated;
-                _fieldB = value;
-            }
-        }
-        public int TimesUpdated { get; private set; }
+        public override int GetHashCode() => NumOfPaws.GetHashCode() ^
+            Length.GetHashCode() ^
+            HasTale.GetHashCode() ^
+            Color.GetHashCode();
 
-        public void ShowValues() => Console.WriteLine($"Updatable has next values: {GetFieldA()}; {GetFieldB()}; {GetUpdated()}");
+        public override string ToString() => $"{nameof(NumOfPaws)} = {NumOfPaws}; " +
+            $"{nameof(Length)} = {Length}; " +
+            $"{nameof(HasTale)} = {HasTale}; " +
+            $"{nameof(Color)} = {Color}";
+    }
 
-        private string GetFieldA() => $"{nameof(FieldA)} = {FieldA}";
-        private string GetFieldB() => $"{nameof(FieldB)} = {FieldB}";
-        private string GetUpdated() => $"{nameof(TimesUpdated)} = {TimesUpdated}";
+    class Cat : Animal
+    {
+        public string Breed { get; set; }
+        public override bool HasTale { get => true; set => throw new NotImplementedException("Cannot change tale"); }
 
+        public override string MakeNoise() => "Cat says 'meow'";
+        public new void Eat() => Console.WriteLine("Cat eats fish");
+
+        public override string GetAnimalType() => $"this is a cat {Breed}";
+    }
+
+    class Dog : Animal
+    {
+        public override string GetAnimalType() => "this is a dog";
     }
 
     class Program
     {
         static void Main()
         {
-            var obj = new Updatable
+            var animal = new Animal
             {
-                FieldA = 42,
-                FieldB = "42"
+                Color = "red",
+                HasTale = true,
+                NumOfPaws = 5,
+                Length = -1
             };
 
-            obj.FieldA = 43;
-            obj.FieldB = "45";
+            var cat = new Cat
+            {
+                Color = "black",
+                Length = 30,
+                NumOfPaws = 4
+            };
 
-            obj.ShowValues();
+            Console.WriteLine("ANIMAL");
+            ShowAnimal(animal);
+
+            Console.WriteLine("CAT");
+            ShowAnimal(cat);
+
+            Console.WriteLine(cat.HasTale);
+
+            Console.WriteLine(animal);
+            Console.WriteLine(cat);
+
+            var animal2 = new Animal
+            {
+                Color = "red",
+                HasTale = true,
+                NumOfPaws = 5,
+                Length = -1
+            };
+
+            Console.WriteLine(animal == animal2);
+            Console.WriteLine(animal.Equals(animal2));
+            Console.WriteLine(animal.Equals(new object()));
+            Console.WriteLine(animal.GetHashCode());
+            Console.WriteLine(animal2.GetHashCode());
+
+            Console.WriteLine(GetAnimalType1(cat));
+            Console.WriteLine(GetAnimalType1(new Dog()));
+
+            Console.WriteLine(GetAnimalType2(cat));
+            Console.WriteLine(GetAnimalType2(new Dog()));
+
+            Console.WriteLine(GetAnimalType3(animal));
+            Console.WriteLine(GetAnimalType3(cat));
+            Console.WriteLine(GetAnimalType3(new Dog()));
         }
+
+        static void ShowAnimal(Animal animal)
+        {
+            Console.WriteLine(animal.MakeNoise());
+            animal.Eat();
+        }
+
+        // worse approach
+        static string GetAnimalType1(Animal animal)
+        {
+            if (animal is Cat cat)
+            {
+                return $"this is a cat {cat.Breed}";
+            }
+
+            if (animal is Dog)
+            {
+                return $"this is a dog";
+            }
+
+            return "?";
+        }
+
+        // better approach - dynamic polimorphism
+        static string GetAnimalType2(Animal animal) => animal.GetAnimalType();
+
+        // better approach - static polimorphism
+        // overload
+        static string GetAnimalType3(Animal animal) => "?";
+        static string GetAnimalType3(Cat cat) => $"this is a cat {cat.Breed}";
+        static string GetAnimalType3(Dog dog) => $"this is a dog";
     }
 }
