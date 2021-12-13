@@ -54,6 +54,9 @@ namespace ConsoleApp
         public string Breed { get; set; }
         public override bool HasTale { get => true; set => throw new NotImplementedException("Cannot change tale"); }
 
+        protected override bool Equals(Animal animal) => base.Equals(animal) && animal is Cat cat && Equals(cat);
+        protected virtual bool Equals(Cat cat) => Breed == cat.Breed;
+
         public override string MakeNoise() => "Cat says 'meow'";
         public override void Eat() => Console.WriteLine("Cat eats fish");
         public override string GetAnimalType() => $"this is a cat {Breed}";
@@ -81,15 +84,33 @@ namespace ConsoleApp
             {
                 Color = "black",
                 Length = 30,
+                NumOfPaws = 4,
+                Breed = "breed1"
+            };
+
+            var dog = new Dog
+            {
+                Color = "white",
+                Length = 35,
                 NumOfPaws = 4
             };
+
+            var cat1 = new Cat
+            {
+                Color = "black",
+                Length = 30,
+                NumOfPaws = 4,
+                Breed = "breed2"
+            };
+
+            cat.Equals(cat1);
 
             Console.WriteLine("CAT");
             ShowAnimal(cat);
 
             Console.WriteLine(cat.HasTale);
-
             Console.WriteLine(cat);
+            Console.WriteLine(cat.Equals(dog));
 
             Console.WriteLine(GetAnimalType1(cat));
             Console.WriteLine(GetAnimalType1(new Dog()));
