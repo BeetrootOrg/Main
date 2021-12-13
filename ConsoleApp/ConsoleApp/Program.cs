@@ -181,6 +181,21 @@ namespace ConsoleApp
     }
     #endregion
 
+    #region One Method Two Interfaces
+    interface IA
+    {
+        void Method();
+    }
+    interface IB
+    {
+        void Method();
+    }
+    public class AB : IA, IB
+    {
+        void IA.Method() => Console.WriteLine($"IA");
+        void IB.Method() => Console.WriteLine($"Ib");
+    }
+    #endregion
     class Program
     {
         static void Main()
@@ -197,10 +212,13 @@ namespace ConsoleApp
             RightParent rightChild = new RightChild();
             rightChild.Something();
 
-
-
+            var ab = new AB();
+            MethodA(ab);
+            MethodB(ab);
         }
-    
+        static void MethodA(IA a) => a.Method();
+        static void MethodB(IB b) => b.Method();
+
         static void SendEmail(bool success, string username)
         {
             if (success)
