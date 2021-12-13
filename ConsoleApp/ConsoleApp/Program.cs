@@ -122,6 +122,71 @@ namespace ConsoleApp
 
     #endregion
 
+    #region Interface Segregation
+
+    public interface IWrongBoss
+    {
+        void Lead();
+        void AssignTask(string task);
+        void WorkOnTask(string task);
+        void CreateTask(string task);
+    }
+
+    public class WrongBoss : IWrongBoss
+    {
+        public void AssignTask(string task) => Console.WriteLine($"Task {task} assigned by boss");
+        public void CreateTask(string task) => Console.WriteLine($"Task {task} created by boss");
+        public void Lead() => Console.WriteLine($"Boss leads you");
+        public void WorkOnTask(string task) => Console.WriteLine($"Boss works on {task}");
+    }
+
+    public interface ILeader
+    {
+        void Lead();
+    }
+
+    public interface IManager
+    {
+        void AssignTask(string task);
+    }
+
+    public interface IOnlyWorkEmployee
+    {
+        void WorkOnTask(string task);
+    }
+
+    public interface IFullEmployee : IOnlyWorkEmployee
+    {
+        void CreateTask(string task);
+    }
+
+    public class Boss : ILeader, IManager, IFullEmployee
+    {
+        public void AssignTask(string task) => Console.WriteLine($"Task {task} assigned by boss");
+        public void CreateTask(string task) => Console.WriteLine($"Task {task} created by boss");
+        public void Lead() => Console.WriteLine($"Boss leads you");
+        public void WorkOnTask(string task) => Console.WriteLine($"Boss works on {task}");
+    }
+
+    public class Programmer : IOnlyWorkEmployee
+    {
+        public void CreateTask(string task) => Console.WriteLine($"Task {task} created by programmer");
+        public void WorkOnTask(string task) => Console.WriteLine($"Programmer works on {task}");
+    }
+
+    public class WorkDay
+    {
+        public void StartWork(IFullEmployee employee)
+        {
+            var random = new Random((int)DateTime.UtcNow.Ticks);
+            employee.CreateTask(random.Next().ToString());
+            employee.WorkOnTask(random.Next().ToString());
+        }
+    }
+
+
+    #endregion
+
     class Program
     {
         static void Main()
