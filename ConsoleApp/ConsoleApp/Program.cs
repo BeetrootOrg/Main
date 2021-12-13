@@ -1,39 +1,44 @@
-﻿namespace ConsoleApp
+﻿using System;
+
+namespace ConsoleApp
 {
-    interface IAddTwoNumbers
+    class UserService
     {
-        int Add(int i1, int i2);
-    }
+        private const string _username = "USER";
+        private const string _password = "PASS";
 
-    interface IMultiplyTwoNumbers
-    {
-        int Mul(int i1, int i2);
-    }
+        public void SignIn(string username, string password)
+        {
+            var success = Login(username, password);
 
-    public class Calculator : IAddTwoNumbers, IMultiplyTwoNumbers
-    {
-        public int Add(int i1, int i2) => i1 + i2;
-        public int Mul(int i1, int i2) => i1 * i2;
-    }
+            if (success)
+            {
+                SendEmail(username);
+            }
+        }
 
-    public class WrongAddCalculator : IAddTwoNumbers
-    {
-        public int Add(int i1, int i2) => i1 - i2;
+        private bool Login(string username, string password)
+        {
+            if (username == _username && password == _password)
+            {
+                Console.WriteLine($"User {username} signed in");
+                return true;
+            } 
+
+            Console.WriteLine("Wrong username or password used");
+            return false;
+        }
+
+        private void SendEmail(string username) => Console.WriteLine($"Email sent to {username}");
     }
 
     class Program
     {
         static void Main()
         {
-            Calculator calculator = new Calculator();
-            WrongAddCalculator wrongCalculator = new WrongAddCalculator();
-            System.Console.WriteLine(AddTwoNumbers(calculator, 1, 2));
-            System.Console.WriteLine(AddTwoNumbers(wrongCalculator, 1, 2));
-
-            System.Console.WriteLine(MulTwoNumbers(calculator, 1, 2));
+            var service = new UserService();
+            service.SignIn("USER", "PASS");
+            service.SignIn("U", "P");
         }
-
-        static int AddTwoNumbers(IAddTwoNumbers addTwoNumbers, int i1, int i2) => addTwoNumbers.Add(i1, i2);
-        static int MulTwoNumbers(IMultiplyTwoNumbers addTwoNumbers, int i1, int i2) => addTwoNumbers.Mul(i1, i2);
     }
 }
