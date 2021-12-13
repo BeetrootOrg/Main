@@ -2,33 +2,212 @@
 
 namespace ConsoleApp
 {
-    //i.safontev/classwork/13-interfaces
-    interface IAddTwoNumbers
+
+    //i.safontev/classwork/13-solid
+
+    #region Single Responsibility     
+
+    class EmailService
     {
-        int Add(int i1, int i2);// public by default
-    }
-    interface IMultiplyTwoNumbers
-    {
-        int Mul(int i1, int i2);
+        public void SendEmail(string username) => Console.WriteLine($"Email sent to {username}");
     }
 
-    public class Calculator: IAddTwoNumbers, IMultiplyTwoNumbers
+    class UserService
     {
-        public int Add(int i1, int i2) => i1 + i2;
-        public int Mul(int i1, int i2) => i1 * i2;
+        private const string _username = "USER";
+        private const string _password = "PASS";
+
+        public bool SignIn(string username, string password)
+        {
+            if (username == _username && password == _password)
+            {
+                Console.WriteLine($"User {username} signed in");
+                return true;
+            }
+
+            Console.WriteLine("Wrong username or password used");
+            return false;
+        }
     }
+    #endregion
+
+    #region Open/Close
+    enum AnimalType
+    {
+        Cat,
+        Dog,
+        Fish
+    }
+
+    class WrongAnimal
+    {
+        public AnimalType AnimalType { get; set; }
+
+        public void MakeNoise()
+        {
+            Console.WriteLine($"{AnimalType} says {Noise()}");
+        }
+
+        private string Noise() => AnimalType switch
+        {
+            AnimalType.Cat => "meow",
+            AnimalType.Dog => "ruff",
+            AnimalType.Fish => "bulp",
+            _ => throw new ArgumentOutOfRangeException(nameof(AnimalType)),
+        };
+
+        public void Swim()
+        {
+            Console.WriteLine($"{AnimalType} swim like a {SwimLike()}");
+        }
+
+        private string SwimLike() => AnimalType switch
+        {
+            AnimalType.Cat => throw new NotImplementedException("Cat cannot swim"),
+            AnimalType.Dog => throw new NotImplementedException("Dog cannot swim"),
+            AnimalType.Fish => "fish",
+            _ => throw new ArgumentOutOfRangeException(nameof(AnimalType)),
+        };
+    }
+
+    abstract class RightAnimal
+    {
+        protected abstract string AnimalType { get; }
+
+        public void MakeNoise()
+        {
+            Console.WriteLine($"{AnimalType} says {Noise()}");
+        }
+
+        abstract protected string Noise();
+    }
+
+    class Cat : RightAnimal
+    {
+        protected override string AnimalType => "Cat";
+        protected override string Noise() => "meow";
+    }
+
+    class Fish : RightAnimal
+    {
+        protected override string AnimalType => "Fish";
+        protected override string Noise() => "bulp";
+
+
+        public void Swim() => Console.WriteLine($"Fish swim like a fish");
+    }
+
+    #endregion
+
+    #region Barbara Liskov Principle
+    class WrongParent
+    {
+        public void Something() => Console.WriteLine("Something Parent");
+    }
+
+    class WrongChild : WrongParent
+    {
+        public void Something() => Console.WriteLine("Something Child");
+    }
+
+    class RightParent
+    {
+        public virtual void Something() => Console.WriteLine("Something Parent");
+    }
+    class RightChild : RightParent
+    {
+        public override void Something() => Console.WriteLine("Something Parent");
+    }
+    #endregion
+
+    #region Interface Segregation
+    public interface IWrongBoss
+    {
+        void Lead();
+        void AssignTask(string task);
+        void WorkOnTask(string task);
+        void CreateTask(string task);
+    }
+    public class WrongBoss : IWrongBoss
+    {
+        public void Lead() => Console.WriteLine($"Boss leads you");
+        public void AssignTask(string task) => Console.WriteLine($"Task {task} assigned");
+        public void CreateTask(string task) => Console.WriteLine($"Task {task} created");
+        public void WorkOnTask(string task) => Console.WriteLine($"Boss works on {task}");
+    }
+
+    //Right
+    public interface ILeader
+    {
+        void Lead();
+    }
+
+    public interface IManager
+    {
+        void AssignTask(string task);
+    }
+
+    public interface IOnlyWorkEmployee
+    {
+        void WorkOnTask(string task);
+    }
+    public interface IFullEmployee: IOnlyWorkEmployee
+    {
+        void CreateTask(string task);
+    }
+
+    public class Boss: ILeader,IManager, IFullEmployee
+    {
+        public void Lead() => Console.WriteLine($"Boss leads you");
+        public void AssignTask(string task) => Console.WriteLine($"Task {task} assigned");
+        public void CreateTask(string task) => Console.WriteLine($"Task {task} created");
+        public void WorkOnTask(string task) => Console.WriteLine($"Boss works on {task}");
+    }
+
+    public class Programmer : IOnlyWorkEmployee
+    {
+        public void CreateTask(string task) => Console.WriteLine($"Task {task} created by programmer");
+        public void WorkOnTask(string task) => Console.WriteLine($"Programmer works on {task}");
+    }
+
+    public class WorkDay
+    {
+        public void StartWork(IFullEmployee employee)
+        {
+            var random = new Random((int)DateTime.UtcNow.Ticks);
+            employee.CreateTask(random.Next().ToString());
+            employee.WorkOnTask(random.Next().ToString());
+        }
+    }
+    #endregion
+
     class Program
     {
         static void Main()
         {
-            Calculator calculator = new Calculator();
-            System.Console.WriteLine(AddTwoNumbers(calculator, 1, 2));  
+            var userService = new UserService();
+    
+            SendEmail(userService.SignIn("USER", "PASS"), "USER");
+            SendEmail(userService.SignIn("U", "P"), "U");
+
+
+            WrongParent wrongChild = new WrongChild();
+            wrongChild.Something();
+
+            RightParent rightChild = new RightChild();
+            rightChild.Something();
+
+
 
         }
-
-        //for example, not necessary
-        //for all classes that inherits that interface
-        static int AddTwoNumbers(IAddTwoNumbers addTwoNumbers, int i1, int i2) => addTwoNumbers.Add(i1, i2);
-        static int MultiplyTwoNumbers(IMultiplyTwoNumbers mulTwoNumbers, int i1, int i2) => mulTwoNumbers.Mul(i1, i2);
+    
+        static void SendEmail(bool success, string username)
+        {
+            if (success)
+            {
+                var emailService = new EmailService();
+                emailService.SendEmail(username);
+            }
+        }
     }
 }
