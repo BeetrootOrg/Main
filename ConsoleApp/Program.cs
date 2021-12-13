@@ -1,232 +1,226 @@
 ﻿namespace ConsoleApp
 {
     using System;
+
+    enum CarName
+    {
+        Ford,
+        Mersedes,
+        Toyota,
+        Opel,
+        Renault
+    }
+    enum RepairType
+    {
+        Engine,
+        Wheels,
+        Transmition,
+        Doors,
+        Bumper
+    }
     class ConsoleApp
     {
-        enum Subject
+        abstract class RepairCarFactory
         {
-            Mathematics,
-            Literature,
-            History
+            public abstract CarFactory CreateRepairCarFactory(CarName Name);
+            public abstract void Repair();
+            public abstract CarName GetName();
         }
-
-        class Lesson
+        abstract class CarFactory : RepairCarFactory
         {
-            public DateTime dateTime;
-            public Subject subject;
-            public string Teacher;
-
-            public Lesson (DateTime dt, Subject sbj, string teacher)
+            public override CarFactory CreateRepairCarFactory(CarName Name)
             {
-                dateTime = dt;
-                subject = sbj;
-                Teacher = teacher;
-            }
-        }
-        class Schedule
-        {
-            private int _MaxGrade;
-            private int _DaysInYear;
-            private Lesson[,] _Lessons;
-            private Classes [] _ClassRoom;
-
-            public Schedule()
-            {
-                _Lessons = new Lesson[365, 11];
-                _ClassRoom = new Classes[11];
-            }
-            public Schedule (int daysInYear, int maxGrade, int classRooms)
-            {
-                _DaysInYear = daysInYear;
-                _MaxGrade = maxGrade;
-                _Lessons = new Lesson[_DaysInYear,_MaxGrade];
-                _ClassRoom = new Classes[classRooms];
-            }
-
-            private int GetDay(ref DateTime dateTime) { return 0; }
-            private Classes GetClassRoom(DateTime dateTime, Subject subject) { return null; }
-            private Classes GetClassRoom(DateTime dateTime, int Grade) { return null; }
-            private Classes GetClassRoom(DateTime dateTime, Teacher teacher) { return null; }
-
-            public void UpdateSchedule(DateTime dateTime, int grade, Subject subject, string teacherName, int roomID) 
-            { 
-                _Lessons[GetDay(ref dateTime), grade] = new Lesson(dateTime, subject, teacherName);
-                _ClassRoom[grade].RoomID = roomID;
-            }
-            
-            public (Teacher, int Grade, Classes) GetPupilsSchedule(DateTime dateTime, Subject subject) { return (null, 0, GetClassRoom(dateTime, subject)); }
-            public (Subject, int Grade, Classes) GetPupilsSchedule(DateTime dateTime, Teacher teacher) { return (0, 0, GetClassRoom(dateTime, teacher)); }
-            public (Subject, Teacher, Classes) GetPupilsSchedule(DateTime dateTime, int Grade) { return (0,null, GetClassRoom(dateTime, Grade)); }
-
-            public (Teacher, int Grade, Classes) GetTeacherSchedule(DateTime dateTime, Subject subject) { return (null, 0, GetClassRoom(dateTime, subject)); }
-            public (Subject, int Grade, Classes) GetTeacherSchedule(DateTime dateTime, Teacher teacher) { return (0, 0, GetClassRoom(dateTime, teacher)); }
-            public (Subject, Teacher, Classes) GetTeacherSchedule(DateTime dateTime, int Grade) { return (0,null, GetClassRoom(dateTime, Grade)); }
-        }
-        class Classes
-        {
-            public int RoomID  { get; set; }
-        }
-        class PupilsInformation
-        {
-            private Schedule schedule;
-            public PupilsInformation(ref Schedule sch)
-            {
-                schedule = sch;
-            }
-            public (Teacher, int Grade, Classes) GetScheduleInformation(DateTime dateTime, Subject subject) { return schedule.GetPupilsSchedule(dateTime, subject); }
-            public (Subject, int Grade, Classes) GetScheduleInformation(DateTime dateTime, Teacher teacher) { return schedule.GetPupilsSchedule(dateTime, teacher); }
-            public (Subject, Teacher, Classes) GetScheduleInformation(DateTime dateTime, int Grade) { return schedule.GetPupilsSchedule(dateTime, Grade); }
-        }
-        class Pupils
-        {
-            string Name;
-            Subject[] subject;
-            private PupilsInformation Information;
-
-            public Pupils(ref PupilsInformation info)
-            {
-                Information = info;
-            }
-            public void AddNewName(string name)
-            {
-                Name = name;
-            }
-            public void InitNumOfSubject(int maxSubjects)
-            {
-                subject = new Subject[maxSubjects];
-            }
-            public void AddNewSubject(int id, Subject sb)
-            {
-                subject[id] = sb;
-            }
-            public (Teacher, int Grade, Classes) GetScheduleInformation(DateTime dateTime, Subject subject) { return Information.GetScheduleInformation(dateTime, subject); }
-            public (Subject, int Grade, Classes) GetScheduleInformation(DateTime dateTime, Teacher teacher) { return Information.GetScheduleInformation(dateTime, teacher); }
-            public (Subject, Teacher, Classes) GetScheduleInformation(DateTime dateTime, int Grade) { return Information.GetScheduleInformation(dateTime, Grade); }
-        }
-        class Teacherformation
-        {
-            private Schedule schedule;
-            public Teacherformation(ref Schedule sch)
-            {
-                schedule = sch;
-            }
-
-            public (Subject, Teacher, Classes) GetScheduleInformation(DateTime dateTime, int Grade) { return schedule.GetTeacherSchedule(dateTime, Grade); }
-            public (Teacher, int Grade, Classes) GetScheduleInformation(DateTime dateTime, Subject subject) { return schedule.GetTeacherSchedule(dateTime, subject); }
-            public (Subject, int Grade, Classes) GetScheduleInformation(DateTime dateTime, Teacher teacher) { return schedule.GetTeacherSchedule(dateTime, teacher); }
-
-        }
-        class Teacher
-        {
-            int ID;
-            string Name;
-            Subject TeachSubject;
-            private Teacherformation teacherformation;
-            public Teacher(ref Teacherformation refInfo)
-            {
-                teacherformation = refInfo;
-            }
-            public (Subject, Teacher, Classes) GetTeacherformation(DateTime dateTime, int Grade) { return teacherformation.GetScheduleInformation(dateTime, Grade); }
-            public (Teacher, int Grade, Classes) GetTeacherformation(DateTime dateTime, Subject subject) { return teacherformation.GetScheduleInformation(dateTime, subject); }
-            public (Subject, int Grade, Classes) GetTeacherformation(DateTime dateTime, Teacher teacher) { return teacherformation.GetScheduleInformation(dateTime, teacher); }
-            public void AddNewName(string name)
-            {
-                Name = name;
-            }
-            public void UpdateIDe(int id)
-            {
-                ID = id;
-            }
-            public void UpdateTeachSubject(Subject sb)
-            {
-                TeachSubject = sb;
-            }
-        }
-        class School
-        {
-            const int DaysInYear = 365;
-            const int MaxGrade = 11;
-            const int MaxTeachers = 20;
-            const int MaxClassess = MaxGrade;
-
-
-            static Schedule schedule;
-
-            private Teacher[] _Teacher;
-            private Pupils[,] _Pupils;
-            private Classes[] _Classes;
-
-            public PupilsInformation pupilsInformation;
-            public Teacherformation teacherformation;
-
-            public School()
-            {
-                 schedule = new Schedule(DaysInYear, MaxGrade, MaxClassess);
-
-                _Teacher = new Teacher[MaxTeachers];
-                _Pupils = new Pupils[MaxGrade, 1];
-                _Classes = new Classes[MaxClassess];
-
-                pupilsInformation = new PupilsInformation(ref schedule);
-                teacherformation = new Teacherformation(ref schedule);
-
-                InitTeachersSchedule();
-                InitPupilsSchedule();
-            }
-
-            private void InitTeachersSchedule()
-            {
-                for (int i = 0; i < _Teacher.Length; i++)
+                Console.Write("Run Repair Your Car ... - ");
+                switch (Name)
                 {
-                    _Teacher[i] = new Teacher(ref teacherformation);
+                    case CarName.Ford:
+                        return new CarFord(Name);
+                    case CarName.Mersedes:
+                        return new CarMersedes(Name);
+                    case CarName.Toyota:
+                        return new CarToyota(Name);
+                    case CarName.Opel:
+                        return new CarOpel(Name);
+                    case CarName.Renault:
+                        return new CarRenault(Name);
+                    default:
+                        throw new ArgumentException("AutoService can't repair your Car!");
+                }                
+            }            
+        }
+        class CarFord : CarFactory
+        {
+            private CarName Name;
+            public CarFord(CarName Name)
+            {
+                if (Name == CarName.Ford)
+                {
+                    this.Name = Name;
+                }
+                else
+                {
+                    throw new ArgumentException("\"Ford\" AutoService can't repaire your car, you need to repair your car in \"" + Name + "\" AutoService");
                 }
             }
-            private void InitPupilsSchedule()
+            public override void Repair()
             {
-                for (int i = 0; i < MaxGrade; i++)
+                Random r = new Random((int)DateTime.Now.Ticks);
+                int rInt = r.Next(0, 4);
+
+                Console.Write("Your car is \"{0}\", The \"{1}\" is repaired\r\n", Name, (RepairType)rInt);
+            }
+            public override CarName GetName()
+            {
+                return Name;
+            }
+        }
+        class CarMersedes : CarFactory
+        {
+            private CarName Name;
+            public CarMersedes(CarName Name)
+            {
+                if (Name == CarName.Mersedes)
                 {
-                   _Pupils[i,0] = new Pupils(ref pupilsInformation);
+                    this.Name = Name;
+                }
+                else
+                {
+                    throw new ArgumentException("\"Mersedes\" AutoService can't repaire your car, you need to repair your car in \"" + Name + "\" AutoService");
                 }
             }
-            public void AddNewTecher(int id, string name)
+            public override void Repair()
             {
-                _Teacher[id].AddNewName(name);
+                Random r = new Random((int)DateTime.Now.Ticks);
+                int rInt = r.Next(0, 4);
+
+                Console.Write("Your car is \"{0}\", The \"{1}\" is repaired\r\n", Name, (RepairType)rInt);
             }
-            public void AddNewPupils(int grade, int id, string name)
+            public override CarName GetName()
             {
-                _Pupils[grade, id] = new Pupils(ref pupilsInformation);
-                _Pupils[grade,id].AddNewName(name);
+                return Name;
             }
-            public void InitMaxSubjectForPupil(int grade, int id, int max)
+        }
+        class CarToyota : CarFactory
+        {
+            private CarName Name;
+            public CarToyota(CarName Name)
             {
-                _Pupils[grade, id].InitNumOfSubject(max);
+                if (Name == CarName.Toyota)
+                {
+                    this.Name = Name;
+                }
+                else
+                {
+                    throw new ArgumentException("\"Toyota\" AutoService can't repaire your car, you need to repair your car in \"" + Name + "\" AutoService");
+                }
             }
-            public void AddNewSubjectForPupil(int grade, int id, int SubjectId, Subject sb)
+            public override void Repair()
             {
-                _Pupils[grade, id].AddNewSubject(SubjectId, sb);
+                Random r = new Random((int)DateTime.Now.Ticks);
+                int rInt = r.Next(0, 4);
+
+                Console.Write("Your car is \"{0}\", The \"{1}\" is repaired\r\n", Name, (RepairType)rInt);
             }
-            public void ShowTeasherInformation()
+            public override CarName GetName()
             {
-                _Teacher[0].GetTeacherformation(DateTime.Now, 1);
+                return Name;
             }
-            public void ShowPupilsInformation()
+        }
+        class CarOpel : CarFactory
+        {
+            private CarName Name;
+            public CarOpel(CarName Name)
             {
-                _Pupils[0,0].GetScheduleInformation(DateTime.Now, 1);
+                if (Name == CarName.Opel)
+                {
+                    this.Name = Name;
+                }
+                else
+                {
+                    throw new ArgumentException("\"Opel\" AutoService can't repaire your car, you need to repair your car in \"" + Name + "\" AutoService");
+                }
+            }
+            public override void Repair()
+            {
+                Random r = new Random((int)DateTime.Now.Ticks);
+                int rInt = r.Next(0, 4);
+
+                Console.Write("Your car is \"{0}\", The \"{1}\" is repaired\r\n", Name, (RepairType)rInt);
+            }
+            public override CarName GetName()
+            {
+                return Name;
+            }
+        }
+        class CarRenault : CarFactory
+        {
+            private CarName Name;
+            public CarRenault(CarName Name)
+            {
+                if (Name == CarName.Renault)
+                {
+                    this.Name = Name;
+                }
+                else
+                {
+                    throw new ArgumentException("\"Renault\" AutoService can't repaire your car, you need to repair your car in \"" + Name + "\" AutoService");
+                }
+            }
+            public override void Repair()
+            {
+                Random r = new Random((int)DateTime.Now.Ticks);
+                int rInt = r.Next(0, 4);
+
+                Console.Write("Your car is \"{0}\", The \"{1}\" is repaired\r\n", Name, (RepairType)rInt);
+            }
+            public override CarName GetName()
+            {
+                return Name;
+            }
+        }
+        class AutoService
+        {
+            private RepairCarFactory _carFactory;
+            // Constructor
+            public AutoService(RepairCarFactory factory)
+            {
+                _carFactory = factory.CreateRepairCarFactory(factory.GetName());
+            }
+            public void RunRepairCar()
+            {
+                _carFactory.Repair();
             }
         }
         static void Main(string[] args)
         {
-            Console.WriteLine("\r\n a.tkachenko/homework/11-Encapsulation \r\n");
+            Console.WriteLine("\r\n a.tkachenko/homework/12-AutoService \r\n");
+            
+            try
+            {
+                RepairCarFactory MyFord = new CarFord(CarName.Ford);
+                AutoService Service = new AutoService(MyFord);
+                Service.RunRepairCar();
 
-            School school = new School();
-            school.AddNewTecher(0,"Maria Ivanovna");
+                RepairCarFactory MyMersedes = new CarMersedes(CarName.Mersedes);
+                Service = new AutoService(MyMersedes);
+                Service.RunRepairCar();
 
-            school.AddNewPupils(0, 0, "Ivan Petrov");
-            school.InitMaxSubjectForPupil(0, 0, 10);
-            school.AddNewSubjectForPupil(0, 0, 0, Subject.Literature);
+                RepairCarFactory MyToyota = new CarToyota(CarName.Toyota);
+                Service = new AutoService(MyToyota);
+                Service.RunRepairCar();
 
-            school.ShowTeasherInformation();
-            school.ShowPupilsInformation();
+                RepairCarFactory MyOpel = new CarOpel(CarName.Opel);
+                Service = new AutoService(MyOpel);
+                Service.RunRepairCar();
+
+                RepairCarFactory MyRenault = new CarRenault(CarName.Renault);
+                Service = new AutoService(MyRenault);
+                Service.RunRepairCar();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }
