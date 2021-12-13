@@ -2,16 +2,16 @@
 
 namespace ConsoleApp
 {
-    class Animal
+    abstract class Animal
     {
         public int NumOfPaws { get; set; }
         public int Length { get; set; }
         public virtual bool HasTale { get; set; }
         public string Color { get; set; }
 
-        public abstract string MakeNoise() => "Unknown Animal says ???";
-        public abstract void Eat() => Console.WriteLine("Unknwon Animal eats ???");
-        public abstract string GetAnimalType() => "?";
+        public abstract string MakeNoise();
+        public abstract void Eat();
+        public abstract string GetAnimalType();
 
         public override bool Equals(object obj) => Equals(obj as Animal);
 
@@ -54,60 +54,63 @@ namespace ConsoleApp
         public string Breed { get; set; }
         public override bool HasTale { get => true; set => throw new NotImplementedException("Cannot change tale"); }
 
-        public override string MakeNoise() => "Cat says 'meow'";
-        public new void Eat() => Console.WriteLine("Cat eats fish");
+        protected override bool Equals(Animal animal) => base.Equals(animal) && animal is Cat cat && Equals(cat);
+        protected virtual bool Equals(Cat cat) => Breed == cat.Breed;
 
+        public override string MakeNoise() => "Cat says 'meow'";
+        public override void Eat() => Console.WriteLine("Cat eats fish");
         public override string GetAnimalType() => $"this is a cat {Breed}";
     }
 
     class Dog : Animal
     {
+        public override void Eat() => Console.WriteLine("Dog eats beef");
         public override string GetAnimalType() => "this is a dog";
+        public override string MakeNoise() => "ruff";
+    }
+
+    abstract class WeightAnimal : Animal
+    {
+        public int Weight { get; set; }
+
+        public override string GetAnimalType() => "Weight animal";
     }
 
     class Program
     {
         static void Main()
         {
-            var animal = new Animal
-            {
-                Color = "red",
-                HasTale = true,
-                NumOfPaws = 5,
-                Length = -1
-            };
-
             var cat = new Cat
             {
                 Color = "black",
                 Length = 30,
+                NumOfPaws = 4,
+                Breed = "breed1"
+            };
+
+            var dog = new Dog
+            {
+                Color = "white",
+                Length = 35,
                 NumOfPaws = 4
             };
 
-            Console.WriteLine("ANIMAL");
-            ShowAnimal(animal);
+            var cat1 = new Cat
+            {
+                Color = "black",
+                Length = 30,
+                NumOfPaws = 4,
+                Breed = "breed2"
+            };
+
+            cat.Equals(cat1);
 
             Console.WriteLine("CAT");
             ShowAnimal(cat);
 
             Console.WriteLine(cat.HasTale);
-
-            Console.WriteLine(animal);
             Console.WriteLine(cat);
-
-            var animal2 = new Animal
-            {
-                Color = "red",
-                HasTale = true,
-                NumOfPaws = 5,
-                Length = -1
-            };
-
-            Console.WriteLine(animal == animal2);
-            Console.WriteLine(animal.Equals(animal2));
-            Console.WriteLine(animal.Equals(new object()));
-            Console.WriteLine(animal.GetHashCode());
-            Console.WriteLine(animal2.GetHashCode());
+            Console.WriteLine(cat.Equals(dog));
 
             Console.WriteLine(GetAnimalType1(cat));
             Console.WriteLine(GetAnimalType1(new Dog()));
@@ -115,7 +118,6 @@ namespace ConsoleApp
             Console.WriteLine(GetAnimalType2(cat));
             Console.WriteLine(GetAnimalType2(new Dog()));
 
-            Console.WriteLine(GetAnimalType3(animal));
             Console.WriteLine(GetAnimalType3(cat));
             Console.WriteLine(GetAnimalType3(new Dog()));
         }
