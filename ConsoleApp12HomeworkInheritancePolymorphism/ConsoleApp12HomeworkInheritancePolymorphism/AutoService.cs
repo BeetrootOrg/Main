@@ -8,7 +8,12 @@ namespace ConsoleApp12HomeworkInheritancePolymorphism
 {
     public class AutoService
     {
-        public List<Client> Clients{ get; set; }
+        public List<Vehicle> Vehicles { get; set; }
+        public List<Client> Clients { get; set; }
+        public List<Order> Orders { get; set; }
+        public decimal Balance { get; set; }
+
+
         public Client AddClient() => throw new NotImplementedException();
         public Vehicle AddVehicle() => throw new NotImplementedException();
         public Order AddOrder() => throw new NotImplementedException();

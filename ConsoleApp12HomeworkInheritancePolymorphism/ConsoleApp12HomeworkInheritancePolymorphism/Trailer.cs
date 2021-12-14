@@ -8,5 +8,8 @@ namespace ConsoleApp12HomeworkInheritancePolymorphism
 {
     public class Trailer
     {
+        public string Type { get; set; }
+        public int Weight { get; set; }
+
     }
 }

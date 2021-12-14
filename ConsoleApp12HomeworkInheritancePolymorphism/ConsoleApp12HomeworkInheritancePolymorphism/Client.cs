@@ -8,5 +8,9 @@ namespace ConsoleApp12HomeworkInheritancePolymorphism
 {
     public class Client
     {
+        public string Name { get; set; }
+        public decimal Balance { get; set; }
+        public int VehicleID { get; set; }
+
     }
 }

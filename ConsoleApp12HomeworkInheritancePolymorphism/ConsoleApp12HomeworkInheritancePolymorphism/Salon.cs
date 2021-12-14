@@ -8,5 +8,8 @@ namespace ConsoleApp12HomeworkInheritancePolymorphism
 {
     public class Salon
     {
+        public string Color { get; set; }
+        public string Material { get; set; }
+
     }
 }

@@ -8,5 +8,12 @@ namespace ConsoleApp12HomeworkInheritancePolymorphism
 {
     public class Truck
     {
+        public string Brand { get; set; }
+        public Wheel Wheels { get; set; }
+        public Engine Engine { get; set; }
+        public Body Body { get; set; }
+        public Salon Salon { get; set; }
+        public Trailer Trailer { get; set; }
+
     }
 }

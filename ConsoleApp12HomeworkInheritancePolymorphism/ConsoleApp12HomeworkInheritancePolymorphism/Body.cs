@@ -8,5 +8,8 @@ namespace ConsoleApp12HomeworkInheritancePolymorphism
 {
     public class Body
     {
+        public string Color { get; set; }
+        public string Type { get; set; }
+
     }
 }
