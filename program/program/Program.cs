@@ -3,59 +3,54 @@ using System.IO;
 
 namespace ConsoleApp
 {
-    class Library
+    class Auto
     {
-        public string Name;
-    }
-
-    class Visitors
-    {
-        private int BirthDay { get; init; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public int AmountOfWheels { get; set; }
+        public string TypeOfEngine { get; set; }
+        public string TypeOfAuto { get; set; }
+        public string Color { get; set; }
 
     }
 
-    class VisitorsTiket
+    class TypeOfTheTransport
     {
-        private string Name { get; set; }
-        private int DateWhenTakeTheBook { get; set; }
-        public int NameOfTheBook { get; set; }
-        private int DateOfValidationTiket { get; set; }
-        private object Stamp { get; init; }
-        private object Sign { get; init; }
+        public string PassengerCar { get; set; }
+        public string Truck { get; set; }
+        public string Minivan { get; set; }
+        public string Motorcycle { get; set; }
+        public string ATV { get; set; }
+        public string MissleComplex { get; set; }
 
     }
 
-    class Archive
+    class TypeOfTheProblam
     {
-        public string NameOfBooks { get; init; }
-        public string AuthorOfBooks { get; init; }
-
-        public bool Availability { get; set; } //InStock, OutOfStock
-
-        public string VisitorsTiket { get; set; }
-    }
-
-    class BookShelves
-    {
-        private string Alphabeticality { get; set; }
-        private int Shelves { get; set; }
+        public string Scratch { get; set; }
+        public string EngineProblam { get; set; }
+        public string ProblamWithTheChassis { get; set; }
+        public string Painting { get; set; }
+        public string Crash { get; set; }
+        public string Electronics { get; set; }
 
     }
 
-    class Shelves
+    class Client
     {
-        public string Books { get; set; }
-        private string Alphabeticality { set; get; }
+        private string FirstName { get; set; }
+        private string LastName { get; set; }
+        private object DocumentCopy { get; set; }
+        private string Sex { get; set; }
+
     }
 
-    class Books
+    class Master
     {
-        public string Name { get; init; }
-        public string AuthorName { get; init; }
-        public int NumOfThePage { get; init; }
-        public string Content { get; init; }
+        private string FirstName { get; set; }
+        private string LastName { get; set; }
+        private int HowOld { get; set; }
+        public string Qualification { get; set; }
+        public string Proffession { get; set; }
+        public string Experience { get; set; }
     }
 
     class Program
