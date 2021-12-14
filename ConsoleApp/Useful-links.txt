@@ -1,0 +1,2 @@
+﻿1. https://refactoring.guru/ru/design-patterns
+2. https://www.dofactory.com/net/design-patterns
