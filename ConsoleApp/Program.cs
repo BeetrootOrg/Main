@@ -22,13 +22,13 @@
     {
         abstract class RepairCarFactory
         {
-            public abstract CarFactory CreateRepairCarFactory(CarName Name);
+            public abstract Vehicle CreateRepairCarFactory(CarName Name);
             public abstract void Repair();
             public abstract CarName GetName();
         }
-        abstract class CarFactory : RepairCarFactory
+        abstract class Vehicle : RepairCarFactory
         {
-            public override CarFactory CreateRepairCarFactory(CarName Name)
+            public override Vehicle CreateRepairCarFactory(CarName Name)
             {
                 Console.Write("Run Repair Your Car ... - ");
                 switch (Name)
@@ -45,10 +45,10 @@
                         return new CarRenault(Name);
                     default:
                         throw new ArgumentException("AutoService can't repair your Car!");
-                }                
-            }            
+                }
+            }
         }
-        class CarFord : CarFactory
+        class CarFord : Vehicle
         {
             private CarName Name;
             public CarFord(CarName Name)
@@ -74,7 +74,7 @@
                 return Name;
             }
         }
-        class CarMersedes : CarFactory
+        class CarMersedes : Vehicle
         {
             private CarName Name;
             public CarMersedes(CarName Name)
@@ -100,7 +100,7 @@
                 return Name;
             }
         }
-        class CarToyota : CarFactory
+        class CarToyota : Vehicle
         {
             private CarName Name;
             public CarToyota(CarName Name)
@@ -126,7 +126,7 @@
                 return Name;
             }
         }
-        class CarOpel : CarFactory
+        class CarOpel : Vehicle
         {
             private CarName Name;
             public CarOpel(CarName Name)
@@ -152,7 +152,7 @@
                 return Name;
             }
         }
-        class CarRenault : CarFactory
+        class CarRenault : Vehicle
         {
             private CarName Name;
             public CarRenault(CarName Name)
@@ -181,7 +181,6 @@
         class AutoService
         {
             private RepairCarFactory _carFactory;
-            // Constructor
             public AutoService(RepairCarFactory factory)
             {
                 _carFactory = factory.CreateRepairCarFactory(factory.GetName());
