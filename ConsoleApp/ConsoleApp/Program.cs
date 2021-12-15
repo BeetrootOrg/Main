@@ -63,10 +63,25 @@ namespace ConsoleApp
 
     #region IComparable
 
-    struct Number : IComparable<Number>
+    struct Number : IComparable<Number>, IFormattable
     {
-        public int Num { get; set; }
-        public int CompareTo(Number other) => Num - other.Num;
+        public double Num { get; set; }
+        public int CompareTo(Number other)
+        {
+            if (Num - other.Num < 0) return -1;
+            if (Num - other.Num > 0) return 1;
+            return 0;
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            if (format == "F")
+            {
+                return $"{Num:F3}";
+            }
+
+            return Num.ToString();
+        }
     }
 
     #endregion
@@ -100,6 +115,9 @@ namespace ConsoleApp
             Console.WriteLine(complex1[1]);
 
             Console.WriteLine(complex1);
+
+            var num = new Number { Num = 5.1234 };
+            Console.WriteLine($"{num:F}");
         }
     }
 }
