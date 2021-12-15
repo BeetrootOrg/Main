@@ -4,13 +4,19 @@ namespace ConsoleApp
 {
     struct Complex : IEquatable<Complex>
     {
-        public double Real { get; set; }
-        public double Imaginary { get; set; }
+        public double Real { get; init; }
+        public double Imaginary { get; init; }
 
         public Complex(double real, double imaginary)
         {
             Real = real;
             Imaginary = imaginary;
+        }
+
+        public Complex(Complex another)
+        {
+            Real = another.Real;
+            Imaginary = another.Imaginary;
         }
 
         public override bool Equals(object obj) => obj is Complex complex && Equals(complex);
@@ -46,7 +52,7 @@ namespace ConsoleApp
                     _ => throw new ArgumentOutOfRangeException(nameof(i)) 
                 }; 
             }
-            set 
+            /* set 
             { 
                 switch(i)
                 {
@@ -59,7 +65,7 @@ namespace ConsoleApp
                     default:
                         throw new ArgumentOutOfRangeException(nameof(i));
                 }
-            }
+            } */
         }
     }
 
@@ -104,7 +110,6 @@ namespace ConsoleApp
             Console.WriteLine(complex1[0]);
             Console.WriteLine(complex1[1]);
 
-            complex1[0] = 5;
             Console.WriteLine(complex1);
         }
     }
