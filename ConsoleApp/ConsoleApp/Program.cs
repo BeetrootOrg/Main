@@ -1,231 +1,118 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ConsoleApp
 {
 
-    //i.safontev/classwork/13-solid
-
-    #region Single Responsibility     
-
-    class EmailService
+    //i.safontev/classwork/14-structs
+    struct Complex: IEquatable<Complex>
     {
-        public void SendEmail(string username) => Console.WriteLine($"Email sent to {username}");
-    }
+        public double Real { get; set; }
+        public double Imaginary { get; set; }
 
-    class UserService
-    {
-        private const string _username = "USER";
-        private const string _password = "PASS";
-
-        public bool SignIn(string username, string password)
+        public Complex(double real, double imaginary)
         {
-            if (username == _username && password == _password)
+            Real = real;
+            Imaginary = imaginary;
+        }
+        public Complex(Complex another)
+        {
+            Real = another.Real;
+            Imaginary = another.Imaginary;
+        }
+
+        public override bool Equals(object obj) => obj is Complex complex && Equals(complex);
+        public bool Equals(Complex other) => Real == other.Real &&
+                   Imaginary == other.Imaginary;
+        public override int GetHashCode() => HashCode.Combine(Real, Imaginary);
+
+        public override string ToString() => $"{Real}+ {Imaginary}i";
+
+        public static Complex operator +(Complex complex1, Complex complex2) =>
+            new Complex(complex1.Real + complex2.Real, complex1.Imaginary + complex2.Imaginary);
+        public static Complex operator *(Complex complex1, Complex complex2) =>
+            new Complex(complex1.Real + complex2.Real - complex1.Imaginary * complex2.Imaginary,
+                        complex1.Real + complex2.Imaginary + complex1.Imaginary * complex2.Real);
+
+        public static bool operator ==(Complex complex1, Complex complex2) => complex1.Equals(complex2);
+        //complex1.Real == complex2.Real && complex1.Imaginary == complex2.Imaginary;
+        public static bool operator !=(Complex complex1, Complex complex2) => !complex1.Equals(complex2);
+
+        public static explicit operator double(Complex complex) =>//implicit- не явное приведение типа, explicit- явное (d=double(complex))
+            Math.Sqrt(Math.Pow(complex.Real, 2) + Math.Pow(complex.Imaginary, 2));
+
+        //complex[0]-> Real
+        //complex[1]-> Imaginary
+        //Realisatiion
+        //Indexation
+        public double this[int i]
+        {
+            get 
             {
-                Console.WriteLine($"User {username} signed in");
-                return true;
+                return  i switch 
+                { 
+                    0 => Real, 
+                    1 => Imaginary, 
+                    _ => throw new ArgumentOutOfRangeException(nameof(i)),
+                };
             }
-
-            Console.WriteLine("Wrong username or password used");
-            return false;
-        }
-    }
-    #endregion
-
-    #region Open/Close
-    enum AnimalType
-    {
-        Cat,
-        Dog,
-        Fish
-    }
-
-    class WrongAnimal
-    {
-        public AnimalType AnimalType { get; set; }
-
-        public void MakeNoise()
-        {
-            Console.WriteLine($"{AnimalType} says {Noise()}");
+            /*
+            set 
+            {
+                switch (i)
+                {
+                    case 0: 
+                        Real = value;
+                        break;
+                    case 1:
+                        Imaginary = value;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(i));
+                }
+            }
+            */
         }
 
-        private string Noise() => AnimalType switch
-        {
-            AnimalType.Cat => "meow",
-            AnimalType.Dog => "ruff",
-            AnimalType.Fish => "bulp",
-            _ => throw new ArgumentOutOfRangeException(nameof(AnimalType)),
-        };
-
-        public void Swim()
-        {
-            Console.WriteLine($"{AnimalType} swim like a {SwimLike()}");
-        }
-
-        private string SwimLike() => AnimalType switch
-        {
-            AnimalType.Cat => throw new NotImplementedException("Cat cannot swim"),
-            AnimalType.Dog => throw new NotImplementedException("Dog cannot swim"),
-            AnimalType.Fish => "fish",
-            _ => throw new ArgumentOutOfRangeException(nameof(AnimalType)),
-        };
     }
 
-    abstract class RightAnimal
-    {
-        protected abstract string AnimalType { get; }
-
-        public void MakeNoise()
-        {
-            Console.WriteLine($"{AnimalType} says {Noise()}");
-        }
-
-        abstract protected string Noise();
-    }
-
-    class Cat : RightAnimal
-    {
-        protected override string AnimalType => "Cat";
-        protected override string Noise() => "meow";
-    }
-
-    class Fish : RightAnimal
-    {
-        protected override string AnimalType => "Fish";
-        protected override string Noise() => "bulp";
-
-
-        public void Swim() => Console.WriteLine($"Fish swim like a fish");
-    }
-
-    #endregion
-
-    #region Barbara Liskov Principle
-    class WrongParent
-    {
-        public void Something() => Console.WriteLine("Something Parent");
-    }
-
-    class WrongChild : WrongParent
-    {
-        public void Something() => Console.WriteLine("Something Child");
-    }
-
-    class RightParent
-    {
-        public virtual void Something() => Console.WriteLine("Something Parent");
-    }
-    class RightChild : RightParent
-    {
-        public override void Something() => Console.WriteLine("Something Parent");
-    }
-    #endregion
-
-    #region Interface Segregation
-    public interface IWrongBoss
-    {
-        void Lead();
-        void AssignTask(string task);
-        void WorkOnTask(string task);
-        void CreateTask(string task);
-    }
-    public class WrongBoss : IWrongBoss
-    {
-        public void Lead() => Console.WriteLine($"Boss leads you");
-        public void AssignTask(string task) => Console.WriteLine($"Task {task} assigned");
-        public void CreateTask(string task) => Console.WriteLine($"Task {task} created");
-        public void WorkOnTask(string task) => Console.WriteLine($"Boss works on {task}");
-    }
-
-    //Right
-    public interface ILeader
-    {
-        void Lead();
-    }
-
-    public interface IManager
-    {
-        void AssignTask(string task);
-    }
-
-    public interface IOnlyWorkEmployee
-    {
-        void WorkOnTask(string task);
-    }
-    public interface IFullEmployee: IOnlyWorkEmployee
-    {
-        void CreateTask(string task);
-    }
-
-    public class Boss: ILeader,IManager, IFullEmployee
-    {
-        public void Lead() => Console.WriteLine($"Boss leads you");
-        public void AssignTask(string task) => Console.WriteLine($"Task {task} assigned");
-        public void CreateTask(string task) => Console.WriteLine($"Task {task} created");
-        public void WorkOnTask(string task) => Console.WriteLine($"Boss works on {task}");
-    }
-
-    public class Programmer : IOnlyWorkEmployee
-    {
-        public void CreateTask(string task) => Console.WriteLine($"Task {task} created by programmer");
-        public void WorkOnTask(string task) => Console.WriteLine($"Programmer works on {task}");
-    }
-
-    public class WorkDay
-    {
-        public void StartWork(IFullEmployee employee)
-        {
-            var random = new Random((int)DateTime.UtcNow.Ticks);
-            employee.CreateTask(random.Next().ToString());
-            employee.WorkOnTask(random.Next().ToString());
-        }
-    }
-    #endregion
-
-    #region One Method Two Interfaces
-    interface IA
-    {
-        void Method();
-    }
-    interface IB
-    {
-        void Method();
-    }
-    public class AB : IA, IB
-    {
-        void IA.Method() => Console.WriteLine($"IA");
-        void IB.Method() => Console.WriteLine($"Ib");
-    }
-    #endregion
     class Program
     {
         static void Main()
         {
-            var userService = new UserService();
-    
-            SendEmail(userService.SignIn("USER", "PASS"), "USER");
-            SendEmail(userService.SignIn("U", "P"), "U");
-
-
-            WrongParent wrongChild = new WrongChild();
-            wrongChild.Something();
-
-            RightParent rightChild = new RightChild();
-            rightChild.Something();
-
-            var ab = new AB();
-            MethodA(ab);
-            MethodB(ab);
-        }
-        static void MethodA(IA a) => a.Method();
-        static void MethodB(IB b) => b.Method();
-
-        static void SendEmail(bool success, string username)
-        {
-            if (success)
+            Complex complex1 = new Complex
             {
-                var emailService = new EmailService();
-                emailService.SendEmail(username);
-            }
+                Real = 2,
+                Imaginary = 1,
+            };
+            Complex complex2 = new Complex
+            {
+                Real = 2,
+                Imaginary = 1,
+            };
+            Complex complex3 = new Complex
+            {
+                Real = 2,
+                Imaginary = 1.5,
+            };
+
+            Console.WriteLine(complex1.Equals(complex2));
+            Console.WriteLine(complex3);
+
+            Console.WriteLine($"{complex1}+ {complex2}= {complex1 + complex2} ");
+
+            Console.WriteLine($"{complex1}* {complex2}= {complex1 * complex2} ");
+
+            Console.WriteLine(complex1 == complex2);
+
+            double d = (double)complex3;
+            Console.WriteLine(d);
+
+            Console.WriteLine(complex1[0]);
+            Console.WriteLine(complex2[1]);
+
+
         }
+
     }
 }
