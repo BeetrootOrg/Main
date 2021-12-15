@@ -1,65 +1,92 @@
-﻿using System;
+﻿using ICourse;
 
-namespace ConsoleApp
+namespace Course
 {
-    class Engine
+    class User : IUser
     {
-        public string EngineType { get; set; }
-        public string FuelType { get; set; }
-    }
+        private Order[] _orders;
 
-    class ElectricEngine : Engine
-    {
-        public string ChargeCapacity { get; init; }
-    }
+        public int Id { get; init; }
 
-    class Tire
-    {
-        public double Diameter { get; set; }
-        public string Mark { get; set; }
-        public string Modle { get; set; }
-    }
-
-    class Vehicle
-    {
-        public Engine Engine { get; set; }
-        public string Color { get; set; }
-        public string TransmissionType { get; set; }
-        public int PassangersQuantity { get; init; }
-        public Tire[] Tires { get; set; }
-    }
-
-    class Truck : Vehicle
-    {
-        public int CargoMaxCapacity { get; init; }
-        public int SuspensionQuantity { get; init; }
-    }
-
-    class Car : Vehicle
-    {
-        public int DoorsQuantity { get; init; }
-        public bool WithRoof { get; set; }
-    }
-
-    class Worker
-    {
         public string Name { get; set; }
-        public string JobPosition { get; set; }
+        public Order[] Orders { get => _orders; }
+
+        public void EditComment()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MakeOrder()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WriteComment()
+        {
+            throw new NotImplementedException();
+        }
     }
 
-    class RepairTask
+    class Admin : IAdmin
     {
-        public string RepairName { get; set; }
-        public string RepairDescription { get; set; }
-        public Vehicle VehicleToRepair { get; init; }
-        public DateTime EndOfWorkTime { get; set; }
-        public Worker ResponsibleWorker { get; set; }
-    }
+        private Order[] _orders;
 
-    class AutoService
-    {
+        public int Id { get; init; }
+
         public string Name { get; set; }
-        public Worker[] Workers { get; set; }
-        private RepairTask[] RepairTasks { get; set; }
+        public Order[] Orders { get => _orders; }
+
+        public void BanUser()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateProduct()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteProduct()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EditComment()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MakeOrder()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WriteComment()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    class Order : IOrder
+    {
+        public int Id { get; init; }
+        public User MadeBy { get; init; }
+        public Item[] Items { get; init; }
+    }
+
+    class Item : IItem
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+        public double Price { get; set; }
+    }
+
+    class OnlineShop
+    {
+        public int Id { get; init; }
+        private User[] Users { get; set; }
+        private Order[] Orders { get; set; }
+        private Admin[] Admins { get; set; }
     }
 }
