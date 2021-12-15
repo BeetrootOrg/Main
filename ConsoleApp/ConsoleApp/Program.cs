@@ -24,6 +24,13 @@ namespace ConsoleApp
 
         public static Complex operator +(Complex complex1, Complex complex2) =>
             new(complex1.Real + complex2.Real, complex1.Imaginary + complex2.Imaginary);
+
+        public static Complex operator *(Complex complex1, Complex complex2) =>
+            new(complex1.Real * complex2.Real - complex1.Imaginary * complex2.Imaginary,
+                complex1.Real * complex2.Imaginary + complex1.Imaginary * complex2.Real);
+
+        public static bool operator ==(Complex complex1, Complex complex2) => complex1.Equals(complex2);
+        public static bool operator !=(Complex complex1, Complex complex2) => !complex1.Equals(complex2);
     }
 
     class Program
@@ -55,6 +62,9 @@ namespace ConsoleApp
 
             var sum = complex1 + complex3;
             Console.WriteLine(sum);
+
+            Console.WriteLine($"{complex1}*{complex3}={complex1 * complex3}");
+            Console.WriteLine(complex1 == complex2);
         }
     }
 }
