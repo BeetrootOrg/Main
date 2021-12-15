@@ -44,6 +44,23 @@ namespace ConsoleApp
 
     #endregion
 
+    #region Sealed class
+
+    public sealed class A
+    {
+        public void MethodA()
+        {
+            Console.WriteLine("A");
+        }
+    }
+
+    // compilation error - cannot derive
+    //public class B : A
+    //{
+    //}
+
+    #endregion
+
 
     class Program
     {
