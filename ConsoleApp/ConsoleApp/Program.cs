@@ -6,7 +6,7 @@ namespace ConsoleApp
     {
         string NameOfSchool { get; set; }
         Teacher[] Teachers { get; set; }
-        Pupil[] PupilsInSchool { get; set; }
+        Pupil[] AllPupils { get; set; }
         Class[] Classes { get; set; }
         Schedule Schedule { get; set; }
     }
@@ -18,9 +18,9 @@ namespace ConsoleApp
     }
 
     class Lesson
-    {
-        string ClassNameLesson { get; set; }
-        string NameLesson { get; set; }
+    {        
+        string LessonName{ get; set; }
+        string InWhichClass { get; set; }
         TimeOnly TimeStart { get; set; }
         TimeOnly TimeEnd { get; set; }
 
