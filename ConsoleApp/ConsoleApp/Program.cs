@@ -32,8 +32,35 @@ namespace ConsoleApp
         public static bool operator ==(Complex complex1, Complex complex2) => complex1.Equals(complex2);
         public static bool operator !=(Complex complex1, Complex complex2) => !complex1.Equals(complex2);
 
-        public static explicit operator double(Complex complex) => 
+        public static explicit operator double(Complex complex) =>
             Math.Sqrt(Math.Pow(complex.Real, 2) + Math.Pow(complex.Imaginary, 2));
+
+        public double this[int i]
+        {
+            get 
+            { 
+                return i switch 
+                { 
+                    0 => Real, 
+                    1 => Imaginary, 
+                    _ => throw new ArgumentOutOfRangeException(nameof(i)) 
+                }; 
+            }
+            set 
+            { 
+                switch(i)
+                {
+                    case 0:
+                        Real = value;
+                        break;
+                    case 1:
+                        Imaginary = value;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(i));
+                }
+            }
+        }
     }
 
     class Program
@@ -71,6 +98,14 @@ namespace ConsoleApp
 
             double d = (double)complex1;
             Console.WriteLine(d);
+
+            // complex[0] -> real
+            // complex[1] -> imaginary
+            Console.WriteLine(complex1[0]);
+            Console.WriteLine(complex1[1]);
+
+            complex1[0] = 5;
+            Console.WriteLine(complex1);
         }
     }
 }
