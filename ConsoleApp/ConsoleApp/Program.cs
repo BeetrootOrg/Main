@@ -61,6 +61,16 @@ namespace ConsoleApp
 
     #endregion
 
+    #region IComparable
+
+    struct Number : IComparable<Number>
+    {
+        public int Num { get; set; }
+        public int CompareTo(Number other) => Num - other.Num;
+    }
+
+    #endregion
+
 
     class Program
     {
