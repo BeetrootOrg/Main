@@ -2,6 +2,8 @@
 
 namespace ConsoleApp
 {
+    #region Record
+
     record struct Complex(double Real, double Imaginary) : IEquatable<Complex>
     {
         public static Complex operator +(Complex complex1, Complex complex2) =>
@@ -27,6 +29,21 @@ namespace ConsoleApp
             }
         }
     }
+
+    #endregion
+
+    #region Readonly Struct
+
+    readonly struct ReadonlyStruct
+    {
+        public int MyProperty { get; }
+
+        // next line = compilation error
+        // public int MyProperty1 { get; set; }
+    }
+
+    #endregion
+
 
     class Program
     {
