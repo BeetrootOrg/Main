@@ -31,6 +31,9 @@ namespace ConsoleApp
 
         public static bool operator ==(Complex complex1, Complex complex2) => complex1.Equals(complex2);
         public static bool operator !=(Complex complex1, Complex complex2) => !complex1.Equals(complex2);
+
+        public static explicit operator double(Complex complex) => 
+            Math.Sqrt(Math.Pow(complex.Real, 2) + Math.Pow(complex.Imaginary, 2));
     }
 
     class Program
@@ -65,6 +68,9 @@ namespace ConsoleApp
 
             Console.WriteLine($"{complex1}*{complex3}={complex1 * complex3}");
             Console.WriteLine(complex1 == complex2);
+
+            double d = (double)complex1;
+            Console.WriteLine(d);
         }
     }
 }
