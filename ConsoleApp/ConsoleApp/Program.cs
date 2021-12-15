@@ -75,6 +75,70 @@ namespace ConsoleApp
             Wait();
         }
 
+        private static void SearchByPhone()
+        {
+            Console.Clear();
+            Console.WriteLine("Search condition - if phone number equals search term you will see it");
+
+            Console.WriteLine("Enter Search Term...");
+            var searchTerm = Console.ReadLine();
+
+            bool found = false;
+            foreach (var (firstName, lastName, phoneNumber) in ReadPhoneBook())
+            {
+                if (phoneNumber.Equals(searchTerm))
+                {
+                    Console.WriteLine($"Found user {firstName} {lastName} with phone {phoneNumber}");
+                    found = true;
+                }
+            }
+
+            if (!found)
+            {
+                Console.WriteLine("Not such users");
+            }
+
+            Wait();
+        }
+
+        private static void UpdateByName()
+        {
+            Console.Clear();
+            Console.WriteLine("Search condition - if first/last name equals search term you will see it");
+
+            Console.WriteLine("Enter Search Term...");
+            var searchTerm = Console.ReadLine();
+
+            Console.WriteLine("Enter new phone...");
+            var newPhoneNumber = Console.ReadLine();
+
+            bool found = false;
+            var phoneBook = ReadPhoneBook();
+            for (int i = 0; i < phoneBook.Length; i++)
+            {
+                var (firstName, lastName, _) = phoneBook[i];
+                var fullName = $"{firstName} {lastName}";
+
+                if (fullName.Equals(searchTerm, StringComparison.OrdinalIgnoreCase))
+                {
+                    phoneBook[i].Item3 = newPhoneNumber;
+                    found = true;
+                }
+            }
+
+            if (!found)
+            {
+                Console.WriteLine("No such users");
+            } 
+            else
+            {
+                var text = ConvertToText(phoneBook);
+                File.WriteAllLines(Filename, text);
+            }
+
+            Wait();
+        }
+
         private static void Exit()
         {
             Environment.Exit(0);
