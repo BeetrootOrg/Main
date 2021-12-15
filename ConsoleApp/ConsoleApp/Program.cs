@@ -2,7 +2,7 @@
 
 namespace ConsoleApp
 {
-    record Complex(double Real, double Imaginary) : IEquatable<Complex>
+    record struct Complex(double Real, double Imaginary) : IEquatable<Complex>
     {
         public static Complex operator +(Complex complex1, Complex complex2) =>
             new(complex1.Real + complex2.Real, complex1.Imaginary + complex2.Imaginary);
