@@ -1,118 +1,124 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ConsoleApp
 {
+    //i.safontev/classwork/14-records
+    #region Record
 
-    //i.safontev/classwork/14-structs
-    struct Complex: IEquatable<Complex>
+    record struct Complex(double Real, double Imaginary) : IEquatable<Complex>
     {
-        public double Real { get; set; }
-        public double Imaginary { get; set; }
-
-        public Complex(double real, double imaginary)
-        {
-            Real = real;
-            Imaginary = imaginary;
-        }
-        public Complex(Complex another)
-        {
-            Real = another.Real;
-            Imaginary = another.Imaginary;
-        }
-
-        public override bool Equals(object obj) => obj is Complex complex && Equals(complex);
-        public bool Equals(Complex other) => Real == other.Real &&
-                   Imaginary == other.Imaginary;
-        public override int GetHashCode() => HashCode.Combine(Real, Imaginary);
-
-        public override string ToString() => $"{Real}+ {Imaginary}i";
-
         public static Complex operator +(Complex complex1, Complex complex2) =>
-            new Complex(complex1.Real + complex2.Real, complex1.Imaginary + complex2.Imaginary);
+            new(complex1.Real + complex2.Real, complex1.Imaginary + complex2.Imaginary);
+
         public static Complex operator *(Complex complex1, Complex complex2) =>
-            new Complex(complex1.Real + complex2.Real - complex1.Imaginary * complex2.Imaginary,
-                        complex1.Real + complex2.Imaginary + complex1.Imaginary * complex2.Real);
+            new(complex1.Real * complex2.Real - complex1.Imaginary * complex2.Imaginary,
+                complex1.Real * complex2.Imaginary + complex1.Imaginary * complex2.Real);
 
-        public static bool operator ==(Complex complex1, Complex complex2) => complex1.Equals(complex2);
-        //complex1.Real == complex2.Real && complex1.Imaginary == complex2.Imaginary;
-        public static bool operator !=(Complex complex1, Complex complex2) => !complex1.Equals(complex2);
-
-        public static explicit operator double(Complex complex) =>//implicit- не явное приведение типа, explicit- явное (d=double(complex))
+        public static explicit operator double(Complex complex) =>
             Math.Sqrt(Math.Pow(complex.Real, 2) + Math.Pow(complex.Imaginary, 2));
 
-        //complex[0]-> Real
-        //complex[1]-> Imaginary
-        //Realisatiion
-        //Indexation
         public double this[int i]
         {
-            get 
+            get
             {
-                return  i switch 
-                { 
-                    0 => Real, 
-                    1 => Imaginary, 
-                    _ => throw new ArgumentOutOfRangeException(nameof(i)),
+                return i switch
+                {
+                    0 => Real,
+                    1 => Imaginary,
+                    _ => throw new ArgumentOutOfRangeException(nameof(i))
                 };
             }
-            /*
-            set 
-            {
-                switch (i)
-                {
-                    case 0: 
-                        Real = value;
-                        break;
-                    case 1:
-                        Imaginary = value;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(i));
-                }
-            }
-            */
+        }
+    }
+
+    #endregion
+
+    #region Readonly Struct
+
+    readonly struct ReadonlyStruct
+    {
+        public int MyProperty { get; }
+
+        // next line = compilation error
+        // public int MyProperty1 { get; set; }
+    }
+
+    #endregion
+
+    #region Sealed class
+
+    public sealed class A
+    {
+        public void MethodA()
+        {
+            Console.WriteLine("A");
+        }
+    }
+
+    // compilation error - cannot derive
+    //public class B : A
+    //{
+    //}
+
+    #endregion
+
+    #region IComparable
+
+    struct Number : IComparable<Number>, IFormattable
+    {
+        public double Num { get; set; }
+        public int CompareTo(Number other)
+        {
+            if (Num - other.Num < 0) return -1;
+            if (Num - other.Num > 0) return 1;
+            return 0;
         }
 
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            if (format == "F")
+            {
+                return $"{Num:F3}";
+            }
+
+            return Num.ToString();
+        }
     }
+
+    #endregion
+
 
     class Program
     {
         static void Main()
         {
-            Complex complex1 = new Complex
-            {
-                Real = 2,
-                Imaginary = 1,
-            };
-            Complex complex2 = new Complex
-            {
-                Real = 2,
-                Imaginary = 1,
-            };
-            Complex complex3 = new Complex
-            {
-                Real = 2,
-                Imaginary = 1.5,
-            };
+            Complex complex1 = new(1, 2);
+            Complex complex2 = new(1, 2);
+            Complex complex3 = new(1.5, 3);
 
             Console.WriteLine(complex1.Equals(complex2));
-            Console.WriteLine(complex3);
+            Console.WriteLine(complex2.Equals(complex3));
 
-            Console.WriteLine($"{complex1}+ {complex2}= {complex1 + complex2} ");
+            Console.WriteLine(complex1);
 
-            Console.WriteLine($"{complex1}* {complex2}= {complex1 * complex2} ");
+            var sum = complex1 + complex3;
+            Console.WriteLine(sum);
 
+            Console.WriteLine($"{complex1}*{complex3}={complex1 * complex3}");
             Console.WriteLine(complex1 == complex2);
 
-            double d = (double)complex3;
+            double d = (double)complex1;
             Console.WriteLine(d);
 
+            // complex[0] -> real
+            // complex[1] -> imaginary
             Console.WriteLine(complex1[0]);
-            Console.WriteLine(complex2[1]);
+            Console.WriteLine(complex1[1]);
 
+            Console.WriteLine(complex1);
 
+            var num = new Number { Num = 5.1234 };
+            Console.WriteLine($"{num:F}");
         }
-
     }
 }
