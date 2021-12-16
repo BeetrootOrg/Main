@@ -4,6 +4,12 @@
 
     class ConsoleApp
     {
+        enum ShopName
+        {
+            CarShop,
+            ATBShop,
+            TavriaShop
+        }
         class Product
         {
             public int ID { get; set; }
@@ -26,12 +32,6 @@
             public Product product { get; set; }
             public int TotalPrice;
         }
-        class Payement
-        {
-            int BuyerID;
-            string Name;
-            // int Cart
-        }
         interface IProduct
         {
             void AddProduct(int ID, string name, string Category, string Description, int Price);
@@ -44,8 +44,8 @@
         }
         class Admin : IProduct, IProductShow
         {
-            int ID;
-            string Name;
+            private int ID;
+            private string Name;
             private Product [] _product;
             public Admin(int id, string name)
             {
@@ -94,9 +94,9 @@
         class Buyer : IProductShow
         {
             public int id;
-            string _name;
-            string _address;
-            Cart _cart;
+            private string _name;
+            private string _address;
+            private Cart _cart;
             public Buyer(int id, string name, string address)
             {
                 this.id = id;
@@ -133,91 +133,31 @@
             }
 
         }
-        class InternetShop
-        {
-            private const int _maximumNumberOfProducts = 3;
-            private const int _maximumNumberOfBuyers = 10;
-            private Product[] _products { get; set; }
-            public Admin Admin { get; set; }
-            private Buyer[] buyers { get; set; }
-            public InternetShop()
-            {
-                _products = new Product[_maximumNumberOfProducts];
-                buyers = new Buyer[_maximumNumberOfBuyers];
-            }
-            public Product[] EnableDataBaseForAdmin(Admin admin)
-            {
-                if (this.Admin == admin)
-                {
-                    return _products;
-                }
-               else
-                {
-                    throw (new Exception("You do not have permission!"));
-                }
-            }
-            public int AddNewBuyer(string name, string addr)
-            {
-                for(int i = 0; i < _maximumNumberOfBuyers; i++)
-                {
-                    if (buyers[i] == null)
-                    {
-                        buyers[i] = new Buyer(i, name, addr);
-                        return i;
-                    }
-                }
-                throw (new Exception("Сan't add new user"));
-            }
-            public void DeleteBuyer(int i)
-            {
-                if(buyers.Length < i)
-                {
-                    buyers[i] = null;
-                }
-                else
-                {
-                    throw (new Exception("Wrong Buyer ID!"));
-                }
-            }
-        }
-        enum ShopName
-        {
-            CarShop,
-            ATB,
-            Tavria
-        }
-        enum RepairType
-        {
-            Engine,
-            Wheels,
-            Transmition,
-            Doors,
-            Bumper
-        }
         abstract class InternetShopFactory
         {
-            public abstract Internet_Shop CreateInternetShopFactory(ShopName Name);
+            public abstract InternetShop CreateInternetShopFactory(ShopName Name);
             public abstract ShopName GetName();
             public abstract void ConnectToDB(Product[] db);
             public abstract Product[] GetDataBaseObject();
             public abstract void EditDB(Product[] db);
         }
-        abstract class Internet_Shop : InternetShopFactory
+        abstract class InternetShop : InternetShopFactory
         {
-            public override Internet_Shop CreateInternetShopFactory(ShopName Name)
+            public override InternetShop CreateInternetShopFactory(ShopName Name)
             {
                 Console.WriteLine("Run \"{0}\"", Name);
                 switch (Name)
                 {
                     case ShopName.CarShop:
                         return new CarShop(Name);
+                    case ShopName.ATBShop:
+                        return new ATBShop(Name);
                     default:
-                        throw new ArgumentException("AutoService can't repair your Car!");
+                        throw new ArgumentException(" Error: Shop could not be created!");
                 }
             }
         }
-        
-        class CarShop : Internet_Shop
+        class CarShop : InternetShop
         {
             private ShopName Name;
             private Product[] DataBase;
@@ -230,6 +170,38 @@
                 else
                 {
                     throw new ArgumentException("Need connect to \"CarDateBase\"");
+                }
+            }
+            public override ShopName GetName()
+            {
+                return Name;
+            }
+            public override void ConnectToDB(Product[] db)
+            {
+                DataBase = db;
+            }
+            public override Product[] GetDataBaseObject()
+            {
+                return DataBase;
+            }
+            public override void EditDB(Product[] db)
+            {
+
+            }
+        }
+        class ATBShop : InternetShop
+        {
+            private ShopName Name;
+            private Product[] DataBase;
+            public ATBShop(ShopName Name)
+            {
+                if (Name == ShopName.ATBShop)
+                {
+                    this.Name = Name;
+                }
+                else
+                {
+                    throw new ArgumentException("Need connect to \"ATBDateBase\"");
                 }
             }
             public override ShopName GetName()
@@ -384,6 +356,18 @@
                 if (id < _buyers.Length)
                 {
                     Console.WriteLine("Delivery status: {0}", _delivery[id].Status);
+                    return _delivery[id].Status;
+                }
+                else
+                {
+                    throw (new Exception("Wrong Buyer ID!"));
+                }
+            }
+            public DeliveryStatus WaitDeliveryAndCheckStatus(int id)
+            {
+                if (id < _buyers.Length)
+                {
+                    Console.WriteLine("Delivery status: {0}", _delivery[id].Status);
                     _delivery[id].Status = _delivery[id].CheckStatus();
                     Console.WriteLine("Delivery status: {0}", _delivery[id].Status);
                     return _delivery[id].Status;
@@ -409,20 +393,12 @@
         {
             Console.WriteLine("\r\n a.tkachenko/homework/13-InternetShop \r\n");
 
-            InternetShop CarShop = new InternetShop();
-            Admin admin = new Admin(0, "admin");
-            CarShop.Admin = admin;
-            admin.InitProductDateBase(CarShop.EnableDataBaseForAdmin(CarShop.Admin));
-            admin.AddProduct(0, "Ford", "Car", "good car", 10000);
-            admin.AddProduct(1, "Opel", "Car", "good car", 12000);
-            admin.AddProduct(2, "Renault", "Car", "good car", 15000);
-
-
             Product[] SomeDatabase = new Product[3];
             Admin ShopAdmin;
             Buyer buyer;
             try
             {
+                Console.WriteLine("\r\n Car Shop:");
                 InternetShopFactory MyCarInternetShop = new CarShop(ShopName.CarShop);
                 Shop ShopService = new Shop(MyCarInternetShop);
                 ShopService.RunConnectToDB(SomeDatabase);
@@ -438,13 +414,35 @@
                 ShopService.BuyersShowCart(buyer.id);
                 ShopService.CheckDeliveryStatus(buyer.id);
                 ShopService.SendItemToBuyer(buyer.id);
-                ShopService.CheckDeliveryStatus(buyer.id);
-
-
+                ShopService.WaitDeliveryAndCheckStatus(buyer.id);
                 ShopService.BuyerDeleteCart(buyer.id);
                 ShopService.BuyersShowCart(buyer.id);
                 ShopService.DeleteBuyer(buyer.id);
                 buyer = null;
+
+                Console.WriteLine("\r\n ATB Shop:");
+                Product[] ATBeDatabase = new Product[3];
+                InternetShopFactory MyATBInternetShop = new ATBShop(ShopName.ATBShop);
+                ShopService = new Shop(MyATBInternetShop);
+                ShopService.RunConnectToDB(ATBeDatabase);
+                ShopAdmin = new Admin(0, "admin");
+                ShopService.AddAdmin(ShopAdmin);
+                ShopService.EnablePermissionForAdmin(ShopAdmin);
+                ShopService.Admin.AddProduct(0, "Milk", "Milk poduct", "2%", 30);
+                ShopService.Admin.AddProduct(1, "Yogurt", "Milk poduct", "3%", 40);
+                ShopService.Admin.AddProduct(2, "Bread", "Bread product", "Borodinsky", 50);
+                ShopService.Admin.ShowProduct();
+                buyer = ShopService.AddNewBuyer("Petya", "Lviv");
+                ShopService.BuyerAddNewItemToCart(buyer.id, ATBeDatabase[0]);
+                ShopService.BuyersShowCart(buyer.id);
+                ShopService.CheckDeliveryStatus(buyer.id);
+                ShopService.SendItemToBuyer(buyer.id);
+                ShopService.WaitDeliveryAndCheckStatus(buyer.id);
+                ShopService.BuyerDeleteCart(buyer.id);
+                ShopService.BuyersShowCart(buyer.id);
+                ShopService.DeleteBuyer(buyer.id);
+                buyer = null;
+
             }
             catch (Exception ex)
             {
