@@ -2,73 +2,67 @@
 
 namespace ConsoleApp
 {
-    enum Genre
+    enum Subject
     {
-        Scifi,
-        Fantasy,
-        Pulpfiction,
-        Documentary,
-        Historical,
-        Detective,
-        Horror,
-        Triller
+        Math,
+        Chemistry,
+        Biology,
+        Law,
+        History,
+        Literature
     }
 
-    class Author
+    class School
+    {
+        public string Number { get; init; }
+        public string Adress { get; init; }
+        public int QuantityOfRooms { get; set; }
+    
+    }
+
+    class Teacher
     {
         public string FirstName { get; init; }
-        public string LastName { get; init; }
-        public string FullName => $"{FirstName} {LastName}";
-        public int DayOfBirth { get; init; }
-        public bool IsAlive { get; set; }
-        public int DayOfDeath { get; set; }
-    }
-
-    class Book
-    {
-        public int ISBN { get; init; }
-        public string NameOfBook { get; set; }
-        public int DateOfCreating { get; init; }
-        public int[] DateOfPublication { get; set; }
-        public int CounsOfCopyInLibrary { get; set; }
-        public bool InLibrary { get; set; }    
-        public Genre Genre { get; init; }
-    }
-
-    class Reader
-    {
-        public string FirstName { get; init; }
-        public string LastName { get; init; }
-        public string FullName => $"{FirstName} {LastName}";
-        private string HomeAdress { get; init; }
-        private string WorkAdress { get; init; }
+        public string LastName { get; init;  }
+        private DateTime DateOfBirth{ get; init; }
+        public DateTime Experience { get; set; }
+        private string  HomeAdress{ get; set; }
+        
         private string PhoneNumber { get; set; }
-        private int CountOfBooksTakenInLibrary { get; set; }     
-    }
 
-    class Staff
-    {
-        public string FirstName { get; init; }
-        public string LastName { get; init; }
-        public string FullName => $"{FirstName} {LastName}";
-        private string HomeAdress { get; init; }
-        private string PhoneNumber { get; set; }
-        private string Position { get; set; }
-        private int DateStartWorking { get; init; }
-        private int DateOfBirth { get; init; }
+        public Subject subject { get; set; }
 
     }
 
-    class Library 
+    class Schedule
     {
-        public int DateOfBuilding { get; init; }
-        public string Adress { get; set; }
-        public int CountSitPlaces { get; init; }
-        public string PhoneNumber { get; init; }
-        public int QuantityOfBooks { get; set; }
-        private int QuantityOfStaff { get; init; }
+        public string Classes { get; set; }
+        public Subject Subjects { get; set; }
+        public int Rooms { get; set; }
+        public string Teahers {get;set;}
 
+  
+    }
 
+    class Class
+    {   
+        public int String{ get; init; }
+        public int Grade{ get; set; }
+        public string ClassTeacher { get; set; }
+        private int ClassRoom { get; set; }
+        
+    }
+
+    class Pupil 
+    {
+        public string FirstName{ get; init; }
+        public  string LastName     { get; init; }
+
+        public  DateTime DateOfBirth { get; init; }
+
+        public string HomeAdress { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Class { get; set; }
         
     }
 
