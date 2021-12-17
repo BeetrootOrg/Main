@@ -1953,7 +1953,7 @@
 											"top": 110,
 											"width": 207,
 											"height": 13,
-											"text": "+Price",
+											"text": "+ProductPrice",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3422,7 +3422,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF9vmOeNaXrKPI="
 							},
-							"name": "Price"
+							"name": "ProductPrice"
 						},
 						{
 							"_type": "UMLAttribute",
