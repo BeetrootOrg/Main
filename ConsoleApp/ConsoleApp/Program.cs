@@ -6,78 +6,55 @@ using System.Linq;
 
 namespace ConsoleApp
 {
-    //i.safontev/homework/10-encapsulation
-   
-    enum Subjects
-    {
-        Math,
-        History,
-        Biology,
-        Chemistry,
-        Programming,
-        PhysicalCulrite,
-    }
-    enum DayOfWek
-    {
-        Monday,
-        Tuesday,
-        Wednesday,
-        Thursday,
-        Friday,
-        Saturday,
-        Sunday
-    }
-    class School
+    //i.safontev/homework/11-polymoprhism
+
+    class AutoService
     {
         public string Name { get; set; }
-        public Teacher[] AllTeachers { get; set; }
-        public Student[] AllStudents { get; set; }
-        public Class[] AllClasses { get; set; }
+        public Client[] Clients { get; set; }
+
     }
 
-    class Teacher
+    class Vehicle
     {
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public string Gender { get; set; }
-        private int Age { get; set; }
-        private double Salary { get; set; }
-        public Subjects Subject { get; set; }
+        public string Color { get; set; }
+        public string Brand { get; set; }
+        public int Year { get; set; }
+        public bool IsFinished { get; set; }
+
+        public Engine Engine { get; set; }
+        public Wheel[] Wheels { get; set; }
+        public double MaxSpeed { get; set; }
+
+    }
+    class Engine
+    {
+        public string TypeOfPower { get; set; }
+        public int CountOfCylinders { get; set; }
+        public double Capacity { get; set; }
 
     }
 
-    class Student
+    class Wheel
+    {
+        public int CountOfWheel { get; set; }
+        public string TypeOfTire { get; set; }
+
+    }
+
+    class Client
     {
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string Gender { get; set; }
-        public Class Class { get; set; }
-        public int Age { get; set; }
+        public string OrderID { get; set; }
+        public Vehicle ClientVehicle { get; set; }
 
     }
-
-    class Class
-    {
-        public string Name { get; set; }
-        public Student[] Students { get; set; }
-        public Shedule Shedule { get; set; }
-
-    }
-
-    class Shedule
-    {
-        public DayOfWeek Day { get; set; }
-        public Subjects[] Subjects { get; set; }
-    }
-
     class Program
     {
         static void Main()
         {
-            
-
 
         }
-
     }
 }
