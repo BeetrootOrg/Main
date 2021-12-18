@@ -2,91 +2,136 @@
 
 namespace Course
 {
-    class User : IUser
+    #region Interfaces
+    public interface IList
     {
-        private Order[] _orders;
+        int Count { get; }
+        void Clear();
+    }
 
-        public int Id { get; init; }
+    public interface IReadOnlyList<out T>
+    {
+        T[] GetAll();
+        T this[int index] { get; }
+    }
 
-        public string Name { get; set; }
-        public Order[] Orders { get => _orders; }
+    public interface IWriteOnlyInterface<in T>
+    {
+        void Add (T item);
+        T this[int index] { set; }
+    }
+    #endregion
 
-        public void EditComment()
+    #region LinkedList
+
+    public class LinkedList<T> : IList, IReadOnlyList<T>, IWriteOnlyInterface<T>
+    {
+        private class ListItem
         {
-            throw new NotImplementedException();
+            public T Value { get; set; }
+            public ListItem Next { get; set; }
         }
 
-        public void MakeOrder()
+        private ListItem _head;
+        private ListItem _tail;
+        public int Count { get; set; }
+
+        public void Add(T item)
         {
-            throw new NotImplementedException();
+            var listItem = new ListItem
+            {
+                Value = item,
+                Next = null
+            };
+
+            if (_head == null)
+            {
+                // list is empty
+                _head = listItem;
+                _tail = listItem;
+            }
+            else
+            {
+                _tail.Next = listItem;
+                _tail = listItem;
+            }
+            Count++;
         }
 
-        public void WriteComment()
+        public T Get(int index)
         {
-            throw new NotImplementedException();
+            var item = GetByIndex(index);
+            return item.Value;
+        }
+
+        public void Clear()
+        {
+            _head = null;
+            _tail = null;
+            Count = 0;
+        }
+
+        public T[] GetAll()
+        {
+            var array = new T[Count];
+            var item = _head;
+            for (int i = 0; i < Count; i++)
+            {
+                array[i] = item.Value;
+                item = item.Next;
+            }
+
+            return Array.Empty<T>();
+        }
+
+        public T this[int index]
+        {
+            get => GetByIndex(index).Value;
+            set
+            {
+                GetByIndex(index).Value = value;
+            }
+        }
+
+        private ListItem GetByIndex(int index)
+        {
+            if (index < 0 && index >= Count)
+            {
+                throw new ArgumentOutOfRangeException($"List has only {Count} elements");
+            }
+            var item = _head;
+            for (var i = 0; i < index; i++)
+            {
+                item = item.Next;
+            }
+            return item;
         }
     }
 
-    class Admin : IAdmin
+    #endregion
+
+    class Course
     {
-        private Order[] _orders;
-
-        public int Id { get; init; }
-
-        public string Name { get; set; }
-        public Order[] Orders { get => _orders; }
-
-        public void BanUser()
+        static void Main()
         {
-            throw new NotImplementedException();
+            var int1 = 5;
+            var int2 = 7;
+            Swap(ref int1, ref int2);
+
+            ShowArray(new[] { 1, 2, 3, 4, 5 });
+
+            var list = new LinkedList<string>();
+            list.Add("element");
         }
 
-        public void CreateProduct()
+        static void Swap<T>(ref T val1, ref T val2)
         {
-            throw new NotImplementedException();
+            (val1, val2) = (val2, val1);
         }
 
-        public void DeleteProduct()
+        static void ShowArray<TElement>(TElement[] array)
         {
-            throw new NotImplementedException();
+            foreach (var element in array) Console.WriteLine(element);
         }
-
-        public void EditComment()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void MakeOrder()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void WriteComment()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    class Order : IOrder
-    {
-        public int Id { get; init; }
-        public User MadeBy { get; init; }
-        public Item[] Items { get; init; }
-    }
-
-    class Item : IItem
-    {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-        public double Price { get; set; }
-    }
-
-    class OnlineShop
-    {
-        public int Id { get; init; }
-        private User[] Users { get; set; }
-        private Order[] Orders { get; set; }
-        private Admin[] Admins { get; set; }
     }
 }
