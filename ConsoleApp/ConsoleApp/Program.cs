@@ -152,6 +152,80 @@ namespace ConsoleApp
 
     #endregion
 
+    #region Power Collection Enumerable
+
+    public class PowerCollectionEnumerable : IEnumerable<int>
+    {
+        private class PowerCollectionEnumerator : IEnumerator<int>
+        {
+            private readonly IEnumerator<int> _enumerator;
+            private readonly int _exponent;
+
+            private IEnumerator<int> _powerEnumerator;
+
+            public PowerCollectionEnumerator(IEnumerator<int> enumerator, int exponent)
+            {
+                _enumerator = enumerator;
+                _exponent = exponent;
+            }
+
+            public int Current { get; private set; }
+
+            object IEnumerator.Current => Current;
+
+            public void Dispose()
+            {
+            }
+
+            public bool MoveNext()
+            {
+                while (true)
+                {
+                    if (_powerEnumerator == null)
+                    {
+                        if (!_enumerator.MoveNext())
+                        {
+                            return false;
+                        }
+
+                        var powerEnumerable = new PowerEnumerable(_enumerator.Current, _exponent);
+                        _powerEnumerator = powerEnumerable.GetEnumerator();
+                    }
+
+                    
+                    while (_powerEnumerator.MoveNext())
+                    {
+                        Current = _powerEnumerator.Current;
+                        return true;
+                    }
+
+                    _powerEnumerator = null;
+                }
+
+            }
+
+            public void Reset()
+            {
+                _enumerator.Reset();
+                _powerEnumerator = null;
+            }
+        }
+
+        private readonly IEnumerable<int> _collection;
+        private readonly int _exponent;
+
+        public PowerCollectionEnumerable(IEnumerable<int> collection, int exponent)
+        {
+            _collection = collection;
+            _exponent = exponent;
+        }
+
+        public IEnumerator<int> GetEnumerator() => new PowerCollectionEnumerator(_collection.GetEnumerator(), _exponent);
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+
+    #endregion
+
     class Program
     {
         static void Main()
@@ -268,6 +342,8 @@ namespace ConsoleApp
             ShowAll(new EvenOnlyEnumerable(new[] { 1, 2, 3, 4, 5 }));
             ShowAll(new EvenOnlyEnumerable(Array.Empty<int>()));
             ShowAll(new EvenOnlyEnumerable(new[] { 1, 3 }));
+
+            ShowAll(new PowerCollectionEnumerable(new EvenOnlyEnumerable(new[] { 1, 2, 3 }), 3));
         }
 
         static void ShowAll<T>(IEnumerable<T> collection)
