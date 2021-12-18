@@ -24,12 +24,23 @@ namespace ConsoleApp
             //    new Person("First", "Last")
             //};
 
+            list.Add(new Person("F", "L"));
             list.Add(new Person("D", "M"));
+            list.Add(new Person("Dima", "Misik"));
+            list.Add(new Person("G", "T"));
+            list.Add(new Person("S", "P"));
 
             ShowAll(list);
 
             Console.WriteLine(list.Count);
             Console.WriteLine(list[1]);
+
+            var deleted = list.Remove(new Person("F", "L"));
+            Console.WriteLine(deleted);
+
+            list.RemoveAt(0);
+            list.RemoveRange(1, 2);
+            list.Clear();
         }
 
         static void ShowAll<T>(IEnumerable<T> collection)
