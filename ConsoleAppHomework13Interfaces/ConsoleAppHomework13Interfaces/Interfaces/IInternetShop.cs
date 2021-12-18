@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace ConsoleAppHomework13Interfaces.Interfaces
 {
-    internal interface IInternetShop
+    public interface IInternetShop
     {
-        Product AddProduct();
-        Client AddClient();
-        Check AddCheck();
-        Product GetProduct();
-        Client GetClient();
-        Check GetCheck();
+        //IProduct AddProduct();
+        //void AddCheck();
+        //IProduct GetProduct();
+        //IClient GetClient();
+        //ICheck GetCheck();
 
     }
 }

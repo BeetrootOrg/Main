@@ -9,9 +9,16 @@ namespace ConsoleAppHomework13Interfaces
 {
     public class Product: IProduct
     {
+        public int Id { get; set; }
         public string Name { get; set; } 
         public int Price { get; set; }
         public string Description { get; set; }
 
+        public Product(string name, int price, string description)
+        {
+            Name = name;
+            Price = price;
+            Description = description;
+        }
     }
 }

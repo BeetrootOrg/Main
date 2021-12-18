@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace ConsoleAppHomework13Interfaces.Interfaces
 {
-    internal interface ICheck
+    public interface ICheck
     {
-        public Client Client { get; set; }
-        public List<Product> Products { get; set; }
-        public int Date { get; set; }
         public int Id { get; set; }
+        public IClient Client { get; set; }
+        public List<IProduct> Products { get; set; }
+        public int Sum { get; set; }
+        public DateTime Date { get; set; }
     }
 }

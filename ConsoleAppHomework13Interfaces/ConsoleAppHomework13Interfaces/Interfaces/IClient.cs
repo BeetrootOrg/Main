@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace ConsoleAppHomework13Interfaces.Interfaces
 {
-    internal interface IClient
+    public interface IClient
     {
-        public string Name { get; set; }
-        public decimal Balance { get; set; }
         public int Id { get; set; }
+        public string Name { get; set; }
+        public int Balance { get; set; }
+        public string Password { get; set; }
     }
 }

@@ -7,6 +7,8 @@ namespace ConsoleAppHomework13Interfaces
     {
         static void Main(string[] args)
         {
+            var store = new InternetShop();
+            store.MainMenu();
         }
     }
 }
