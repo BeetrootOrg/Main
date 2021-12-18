@@ -1,11 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace ConsoleApp
 {
     record Person(string FirstName, string LastName)
     {
+    }
+
+    class TestClass
+    {
+        public int Number { get; set; }
+
+        public override string ToString() => Number.ToString();
+    }
+
+    class TestClassEqualityComparer : IEqualityComparer<TestClass>
+    {
+        public bool Equals(TestClass x, TestClass y)
+        {
+            if (ReferenceEquals(x, y))
+            {
+                return true;
+            }
+
+            if (x == null || y == null)
+            {
+                return false;
+            }
+
+            return x.Number == y.Number;
+        }
+
+        public int GetHashCode([DisallowNull] TestClass obj) => obj.Number.GetHashCode();
     }
 
     class Program
@@ -91,6 +119,14 @@ namespace ConsoleApp
             };
 
             ShowAll(dict2);
+
+            var dict3 = new Dictionary<TestClass, Person>(new TestClassEqualityComparer())
+            {
+                [new TestClass { Number = 1 }] = set.ElementAt(1),
+                [new TestClass { Number = 1 }] = set.ElementAt(2),
+            };
+
+            ShowAll(dict3);
         }
 
         static void ShowAll<T>(IEnumerable<T> collection)
