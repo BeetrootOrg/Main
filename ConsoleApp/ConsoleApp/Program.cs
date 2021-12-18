@@ -15,7 +15,17 @@ namespace ConsoleApp
         Biology,
         Chemistry,
         Programming,
-        PhysicalCulrite
+        PhysicalCulrite,
+    }
+    enum DayOfWek
+    {
+        Monday,
+        Tuesday,
+        Wednesday,
+        Thursday,
+        Friday,
+        Saturday,
+        Sunday
     }
     class School
     {
@@ -56,7 +66,7 @@ namespace ConsoleApp
 
     class Shedule
     {
-        public string Day { get; set; }
+        public DayOfWeek Day { get; set; }
         public Subjects[] Subjects { get; set; }
     }
 
