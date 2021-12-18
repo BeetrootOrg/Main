@@ -145,6 +145,8 @@ namespace ConsoleApp
 
             Console.WriteLine("Values");
             ShowAll(dict2.Values);
+
+            ShowAll(Power(2, 4));
         }
 
         static void ShowAll<T>(IEnumerable<T> collection)
@@ -152,6 +154,17 @@ namespace ConsoleApp
             foreach (var item in collection)
             {
                 Console.WriteLine(item);
+            }
+        }
+
+        static IEnumerable<int> Power(int number, int exponent)
+        {
+            int result = 1;
+
+            for (int i = 0; i < exponent; i++)
+            {
+                result = result * number;
+                yield return result;
             }
         }
     }
