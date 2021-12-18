@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApp
 {
@@ -65,6 +66,31 @@ namespace ConsoleApp
             ShowAll(set1);
 
             // list.Clear();
+
+            var dictionary = new Dictionary<int, string>
+            {
+                [1] = "one"
+            };
+
+            // the same as above
+            dictionary = new Dictionary<int, string>
+            {
+                { 1, "one" }
+            };
+
+            dictionary.Add(2, "two");
+            dictionary.TryAdd(2, "three");
+
+            dictionary.Add(10000, "ten thousand");
+
+            ShowAll(dictionary);
+
+            var dict2 = new Dictionary<string, Person>
+            {
+                ["+123455"] = set.ElementAt(1)
+            };
+
+            ShowAll(dict2);
         }
 
         static void ShowAll<T>(IEnumerable<T> collection)
