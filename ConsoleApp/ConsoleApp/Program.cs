@@ -40,20 +40,23 @@ namespace ConsoleApp
             ++Count;
         }
 
-        public T Get(int index)
+        public T this[int index]
         {
-            if (index >= Count)
+            get
             {
-                throw new ArgumentOutOfRangeException(nameof(index));
-            }
+                if (index >= Count)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
 
-            var item = _head;
-            for (int i = 0; i < index; i++)
-            {
-                item = item.Next;
-            }
+                var item = _head;
+                for (int i = 0; i < index; i++)
+                {
+                    item = item.Next;
+                }
 
-            return item.Value;
+                return item.Value;
+            }
         }
 
         public T[] GetAll()
@@ -95,10 +98,9 @@ namespace ConsoleApp
             list.Add("el3");
             ShowArray(list.GetAll());
 
-            Console.WriteLine(list.Get(0));
-            Console.WriteLine(list.Get(1));
-            Console.WriteLine(list.Get(2));
-            Console.WriteLine(list.Get(3));
+            Console.WriteLine(list[0]);
+            Console.WriteLine(list[1]);
+            Console.WriteLine(list[2]);
         }
 
         static void Swap<T>(ref T val1, ref T val2)
