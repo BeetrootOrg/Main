@@ -1,141 +1,228 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace ConsoleApp
 {
-    //i.safontev/classwork/15-generics
-    #region Interfaces
+    //i.safontev/classwork/16-collections
+    #region Classes
 
-    public interface IList
+    record Person(string FirstName, string LastName)
     {
-        int Count { get; }
-        void Clear();
-        void Remove(int index);
     }
 
-
-    public interface IReadOnlyList<out T> : IList
+    class TestClass
     {
-        T[] GetAll();
-        T this[int index] { get; }
+        public int Number { get; set; }
+
+        public override string ToString() => Number.ToString();
     }
 
-    public interface IWriteOnlyList<in T> : IList
+    class TestClassEqualityComparer : IEqualityComparer<TestClass>
     {
-        void Add(T item);
-        void Insert(T item, int index);
-        T this[int index] { set; }
+        public bool Equals(TestClass x, TestClass y)
+        {
+            if (ReferenceEquals(x, y))
+            {
+                return true;
+            }
+
+            if (x == null || y == null)
+            {
+                return false;
+            }
+
+            return x.Number == y.Number;
+        }
+
+        public int GetHashCode([DisallowNull] TestClass obj) => obj.Number.GetHashCode();
     }
 
     #endregion
 
-    #region LinkedList
+    #region Power Enumerable
 
-    public class LinkedList<T> : IReadOnlyList<T>, IWriteOnlyList<T>
+    public class PowerEnumerable : IEnumerable<int>
     {
-        private class ListItem
+        private class PowerEnumerator : IEnumerator<int>
         {
-            public T Value { get; set; }
-            public ListItem Next { get; set; }
-        }
+            private readonly int _number;
+            private readonly int _exponent;
 
-        private ListItem _head;
-        public int Count { get; private set; }
+            private int _currentExponent = 0;
 
-        public void Add(T item) => Insert(item, Count);
-
-        public T this[int index]
-        {
-            get => GetByIndex(index).Value;
-            set
+            public PowerEnumerator(int number, int exponent)
             {
-                var item = GetByIndex(index);
-                item.Value = value;
-            }
-        }
-
-        public T[] GetAll()
-        {
-            var array = new T[Count];
-            var item = _head;
-
-            for (int i = 0; i < Count; ++i)
-            {
-                array[i] = item.Value;
-                item = item.Next;
+                _number = number;
+                _exponent = exponent;
             }
 
-            return array;
-        }
+            public int Current { get; private set; } = 1;
 
-        public void Clear()
-        {
-            _head = null;
-            Count = 0;
-        }
+            object IEnumerator.Current => Current;
 
-        public void Remove(int index)
-        {
-            if (index == Count)
+            public void Dispose()
             {
-                throw new ArgumentOutOfRangeException(nameof(index));
             }
 
-            if (index == 0)
+            public bool MoveNext()
             {
-                _head = _head.Next;
-            }
-            else
-            {
-                var prev = GetByIndex(index - 1);
-                prev.Next = prev.Next.Next;
-            }
-
-            --Count;
-        }
-
-        public void Insert(T item, int index)
-        {
-            if (index == 0)
-            {
-                var listItem = new ListItem
+                if (_currentExponent < _exponent)
                 {
-                    Value = item,
-                    Next = _head
-                };
+                    Current *= _number;
+                    ++_currentExponent;
 
-                _head = listItem;
+                    return true;
+                }
+
+                return false;
             }
-            else
+
+            public void Reset()
             {
-                var prev = GetByIndex(index - 1);
-
-                var listItem = new ListItem
-                {
-                    Value = item,
-                    Next = prev.Next
-                };
-
-                prev.Next = listItem;
+                Current = 1;
+                _currentExponent = 0;
             }
-
-            ++Count;
         }
 
-        private ListItem GetByIndex(int index)
+        private readonly int _number;
+        private readonly int _exponent;
+
+        public PowerEnumerable(int number, int exponent)
         {
-            if (index < 0 || index >= Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index));
-            }
-
-            var item = _head;
-            for (int i = 0; i < index; i++)
-            {
-                item = item.Next;
-            }
-
-            return item;
+            _number = number;
+            _exponent = exponent;
         }
+
+        public IEnumerator<int> GetEnumerator() => new PowerEnumerator(_number, _exponent);
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+
+    #endregion
+
+    #region Even Only Enumerable
+
+    public class EvenOnlyEnumerable : IEnumerable<int>
+    {
+        private class EvenOnlyEnumerator : IEnumerator<int>
+        {
+            public int Current { get; private set; }
+
+            object IEnumerator.Current => Current;
+
+            private readonly IEnumerator<int> _enumerator;
+
+            public EvenOnlyEnumerator(IEnumerator<int> enumerator)
+            {
+                _enumerator = enumerator;
+            }
+
+            public void Dispose() => _enumerator.Dispose();
+
+            public bool MoveNext()
+            {
+                while (_enumerator.MoveNext())
+                {
+                    var current = _enumerator.Current;
+                    if (current % 2 == 0)
+                    {
+                        Current = current;
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            public void Reset() => _enumerator.Reset();
+        }
+
+        private readonly IEnumerable<int> _collection;
+
+        public EvenOnlyEnumerable(IEnumerable<int> collection)
+        {
+            _collection = collection;
+        }
+
+        public IEnumerator<int> GetEnumerator() => new EvenOnlyEnumerator(_collection.GetEnumerator());
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+
+    #endregion
+
+    #region Power Collection Enumerable
+
+    public class PowerCollectionEnumerable : IEnumerable<int>
+    {
+        private class PowerCollectionEnumerator : IEnumerator<int>
+        {
+            private readonly IEnumerator<int> _enumerator;
+            private readonly int _exponent;
+
+            private IEnumerator<int> _powerEnumerator;
+
+            public PowerCollectionEnumerator(IEnumerator<int> enumerator, int exponent)
+            {
+                _enumerator = enumerator;
+                _exponent = exponent;
+            }
+
+            public int Current { get; private set; }
+
+            object IEnumerator.Current => Current;
+
+            public void Dispose()
+            {
+            }
+
+            public bool MoveNext()
+            {
+                while (true)
+                {
+                    if (_powerEnumerator == null)
+                    {
+                        if (!_enumerator.MoveNext())
+                        {
+                            return false;
+                        }
+
+                        var powerEnumerable = new PowerEnumerable(_enumerator.Current, _exponent);
+                        _powerEnumerator = powerEnumerable.GetEnumerator();
+                    }
+
+
+                    while (_powerEnumerator.MoveNext())
+                    {
+                        Current = _powerEnumerator.Current;
+                        return true;
+                    }
+
+                    _powerEnumerator = null;
+                }
+
+            }
+
+            public void Reset()
+            {
+                _enumerator.Reset();
+                _powerEnumerator = null;
+            }
+        }
+
+        private readonly IEnumerable<int> _collection;
+        private readonly int _exponent;
+
+        public PowerCollectionEnumerable(IEnumerable<int> collection, int exponent)
+        {
+            _collection = collection;
+            _exponent = exponent;
+        }
+
+        public IEnumerator<int> GetEnumerator() => new PowerCollectionEnumerator(_collection.GetEnumerator(), _exponent);
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
     #endregion
@@ -144,78 +231,139 @@ namespace ConsoleApp
     {
         static void Main()
         {
-            var int1 = 5;
-            var int2 = 7;
+            var list = new List<Person>
+            {
+                new Person("F", "L"),
+                new Person("First", "Last")
+            };
 
-            Swap(ref int1, ref int2);
+            // almost analogue to above
+            //new Person[]
+            //{
+            //    new Person("F", "L"),
+            //    new Person("First", "Last")
+            //};
 
-            var str1 = "string";
-            var str2 = "hello";
-            Swap(ref str1, ref str2);
+            list.Add(new Person("F", "L"));
+            list.Add(new Person("D", "M"));
+            list.Add(new Person("Dima", "Misik"));
+            list.Add(new Person("G", "T"));
+            list.Add(new Person("S", "P"));
 
-            // ShowArray(new[] { 1, 2, 3 });
-            // ShowArray(new[] { "hello", "Dima" });
+            ShowAll(list);
 
-            var list = new LinkedList<string>();
-            list.Add("el1");
-            list.Add("el2");
-            list.Add("el3");
-            ShowArray(list.GetAll());
-
-            list[0] = "el4";
-
-            Console.WriteLine(list[0]);
+            Console.WriteLine(list.Count);
             Console.WriteLine(list[1]);
-            Console.WriteLine(list[2]);
 
-            ShowArray(list.GetAll());
+            var deleted = list.Remove(new Person("F", "L"));
+            Console.WriteLine(deleted);
 
-            // ShowRandomListElement(list);
-            // SetRandomListElement(list, "element");
+            list.RemoveAt(0);
+            list.RemoveRange(1, 2);
 
-            list[0] = "el0";
-            list[1] = "el1";
-            list[2] = "el2";
+            list.AddRange(list);
+            list.Insert(2, new Person("Y", "L"));
+            list.InsertRange(3, list);
 
-            list.Remove(0);
-            list.Add("el3");
-            list.Remove(2);
-            list.Add("el4");
-            list.Remove(1);
+            // need to implement IComparable on Person to work
+            // list.Sort();
+            list.Reverse();
 
-            Console.WriteLine("AFTER REMOVE");
-            ShowArray(list.GetAll());
+            var contains = list.Contains(new Person("F", "L"));
+            Console.WriteLine(contains);
 
-            list.Insert("insert0", 0);
-            list.Insert("insert1", 3);
-            list.Insert("insert2", 2);
+            var set = new HashSet<Person>(list);
+            ShowAll(set);
 
-            list.Clear();
+            var added = set.Add(new Person("F", "L"));
+            Console.WriteLine(added);
+
+            var set1 = new HashSet<int>(new[] { 1, 2, 3 });
+            var set2 = new HashSet<int>(new[] { 3, 4 });
+
+            set1.SymmetricExceptWith(set2);
+            ShowAll(set1);
+
+            // list.Clear();
+
+            var dictionary = new Dictionary<int, string>
+            {
+                [1] = "one"
+            };
+
+            // the same as above
+            dictionary = new Dictionary<int, string>
+            {
+                { 1, "one" }
+            };
+
+            dictionary.Add(2, "two");
+            dictionary.TryAdd(2, "three");
+
+            dictionary.Add(10000, "ten thousand");
+
+            ShowAll(dictionary);
+
+            const string phoneNumber1 = "+123455";
+            const string phoneNumber2 = "+123456";
+            var dict2 = new Dictionary<string, Person>
+            {
+                [phoneNumber1] = set.ElementAt(1),
+                [phoneNumber2] = set.ElementAt(1),
+            };
+
+            ShowAll(dict2);
+
+            var dict3 = new Dictionary<TestClass, Person>(new TestClassEqualityComparer())
+            {
+                [new TestClass { Number = 1 }] = set.ElementAt(1),
+                [new TestClass { Number = 1 }] = set.ElementAt(2),
+            };
+
+            ShowAll(dict3);
+
+            if (dict2.TryGetValue(phoneNumber1, out var person1) &&
+                dict2.TryGetValue(phoneNumber2, out var person2))
+            {
+                Console.WriteLine($"Equals: {person1.Equals(person2)}");
+            }
+
+            var result = dict2[phoneNumber1];
+            dict2.Remove(phoneNumber1);
+
+            Console.WriteLine("Keys");
+            ShowAll(dict2.Keys);
+
+            Console.WriteLine("Values");
+            ShowAll(dict2.Values);
+
+            ShowAll(Power(2, 4));
+            ShowAll(new PowerEnumerable(2, 4));
+
+            ShowAll(new EvenOnlyEnumerable(new[] { 1, 2, 3, 4, 5 }));
+            ShowAll(new EvenOnlyEnumerable(Array.Empty<int>()));
+            ShowAll(new EvenOnlyEnumerable(new[] { 1, 3 }));
+
+            ShowAll(new PowerCollectionEnumerable(new EvenOnlyEnumerable(new[] { 1, 2, 3 }), 3));
         }
 
-        static void Swap<T>(ref T val1, ref T val2)
+        static void ShowAll<T>(IEnumerable<T> collection)
         {
-            (val1, val2) = (val2, val1);
-        }
-
-        static void ShowArray<TElement>(TElement[] array)
-        {
-            foreach (var item in array)
+            foreach (var item in collection)
             {
                 Console.WriteLine(item);
             }
         }
 
-        static void ShowRandomListElement<T>(IReadOnlyList<T> list)
+        static IEnumerable<int> Power(int number, int exponent)
         {
-            var index = new Random((int)DateTime.Now.Ticks).Next(0, list.Count);
-            Console.WriteLine(list[index]);
-        }
+            int result = 1;
 
-        static void SetRandomListElement<T>(IWriteOnlyList<T> list, T element)
-        {
-            var index = new Random((int)DateTime.Now.Ticks).Next(0, list.Count);
-            list[index] = element;
+            for (int i = 0; i < exponent; i++)
+            {
+                result = result * number;
+                yield return result;
+            }
         }
     }
 }
