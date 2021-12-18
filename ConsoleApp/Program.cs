@@ -37,7 +37,7 @@ namespace ConsoleApp
         public string Classes { get; set; }
         public Subject Subjects { get; set; }
         public int Rooms { get; set; }
-        public string Teahers {get;set;}
+        public string Teachers {get;set;}
 
   
     }
