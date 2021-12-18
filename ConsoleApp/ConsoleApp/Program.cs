@@ -13,29 +13,48 @@ namespace ConsoleApp
         }
 
         private ListItem _head;
-
-        public LinkedList()
-        {
-            _head = null;
-        }
+        public int Count { get; private set; }
 
         public void Add(T item)
         {
-            _head = new ListItem
+            var listItem = new ListItem
             {
                 Value = item,
                 Next = null
             };
+
+            if (_head == null)
+            {
+                // list is empty - assign head
+                _head = listItem;
+            } 
+            else
+            {
+                // list is not empty - go to last element
+                var last = _head;
+                while (last.Next != null)
+                {
+                    last = last.Next;
+                }
+
+                last.Next = listItem;
+            }
+
+            ++Count;
         }
 
         public T[] GetAll()
         {
-            if (_head != null)
+            var array = new T[Count];
+            var item = _head;
+
+            for (int i = 0; i < Count; i++)
             {
-                return new T[] { _head.Value };
+                array[i] = item.Value;
+                item = item.Next;
             }
 
-            return Array.Empty<T>();
+            return array;
         }
     }
 
@@ -58,7 +77,9 @@ namespace ConsoleApp
             // ShowArray(new[] { "hello", "Dima" });
 
             var list = new LinkedList<string>();
-            list.Add("element");
+            list.Add("el1");
+            list.Add("el2");
+            list.Add("el3");
             ShowArray(list.GetAll());
         }
 
