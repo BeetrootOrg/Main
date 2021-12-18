@@ -64,9 +64,16 @@ namespace ConsoleApp
             return array;
         }
 
+        public void Clear()
+        {
+            _head = null;
+            _tail = null;
+            Count = 0;
+        }
+
         private ListItem GetByIndex(int index)
         {
-            if (index >= Count)
+            if (index < 0 || index >= Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(index));
             }
@@ -110,6 +117,9 @@ namespace ConsoleApp
             Console.WriteLine(list[0]);
             Console.WriteLine(list[1]);
             Console.WriteLine(list[2]);
+
+            list.Clear();
+            ShowArray(list.GetAll());
         }
 
         static void Swap<T>(ref T val1, ref T val2)
