@@ -8,7 +8,7 @@ namespace ConsoleApp
     {
         private class ListItem
         {
-            public T Value { get; init; }
+            public T Value { get; set; }
             public ListItem Next { get; set; }
         }
 
@@ -42,20 +42,11 @@ namespace ConsoleApp
 
         public T this[int index]
         {
-            get
+            get => GetByIndex(index).Value;
+            set
             {
-                if (index >= Count)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index));
-                }
-
-                var item = _head;
-                for (int i = 0; i < index; i++)
-                {
-                    item = item.Next;
-                }
-
-                return item.Value;
+                var item = GetByIndex(index);
+                item.Value = value;
             }
         }
 
@@ -71,6 +62,22 @@ namespace ConsoleApp
             }
 
             return array;
+        }
+
+        private ListItem GetByIndex(int index)
+        {
+            if (index >= Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            var item = _head;
+            for (int i = 0; i < index; i++)
+            {
+                item = item.Next;
+            }
+
+            return item;
         }
     }
 
@@ -97,6 +104,8 @@ namespace ConsoleApp
             list.Add("el2");
             list.Add("el3");
             ShowArray(list.GetAll());
+
+            list[0] = "el4";
 
             Console.WriteLine(list[0]);
             Console.WriteLine(list[1]);
