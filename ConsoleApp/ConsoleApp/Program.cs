@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace ConsoleApp
 {
+    #region Classes
+
     record Person(string FirstName, string LastName)
     {
     }
@@ -35,6 +38,68 @@ namespace ConsoleApp
 
         public int GetHashCode([DisallowNull] TestClass obj) => obj.Number.GetHashCode();
     }
+
+    #endregion
+
+    #region Power Enumerable
+
+    public class PowerEnumerable : IEnumerable<int>
+    {
+        private class PowerEnumerator : IEnumerator<int>
+        {
+            private readonly int _number;
+            private readonly int _exponent;
+
+            private int _currentExponent = 0;
+
+            public PowerEnumerator(int number, int exponent)
+            {
+                _number = number;
+                _exponent = exponent;
+            }
+
+            public int Current { get; private set; } = 1;
+
+            object IEnumerator.Current => Current;
+
+            public void Dispose()
+            {
+            }
+
+            public bool MoveNext()
+            {
+                if (_currentExponent < _exponent)
+                {
+                    Current *= _number;
+                    ++_currentExponent;
+
+                    return true;
+                }
+
+                return false;
+            }
+
+            public void Reset()
+            {
+                Current = 1;
+                _currentExponent = 0;
+            }
+        }
+
+        private readonly int _number;
+        private readonly int _exponent;
+
+        public PowerEnumerable(int number, int exponent)
+        {
+            _number = number;
+            _exponent = exponent;
+        }
+
+        public IEnumerator<int> GetEnumerator() => new PowerEnumerator(_number, _exponent);
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+
+    #endregion
 
     class Program
     {
@@ -147,6 +212,7 @@ namespace ConsoleApp
             ShowAll(dict2.Values);
 
             ShowAll(Power(2, 4));
+            ShowAll(new PowerEnumerable(2, 4));
         }
 
         static void ShowAll<T>(IEnumerable<T> collection)
