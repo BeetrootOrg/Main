@@ -2,6 +2,45 @@
 
 namespace ConsoleApp
 {
+    #region LinkedList
+
+    public class LinkedList<T>
+    {
+        private class ListItem
+        {
+            public T Value { get; init; }
+            public ListItem Next { get; set; }
+        }
+
+        private ListItem _head;
+
+        public LinkedList()
+        {
+            _head = null;
+        }
+
+        public void Add(T item)
+        {
+            _head = new ListItem
+            {
+                Value = item,
+                Next = null
+            };
+        }
+
+        public T[] GetAll()
+        {
+            if (_head != null)
+            {
+                return new T[] { _head.Value };
+            }
+
+            return Array.Empty<T>();
+        }
+    }
+
+    #endregion
+
     class Program
     {
         static void Main()
@@ -15,8 +54,12 @@ namespace ConsoleApp
             var str2 = "hello";
             Swap(ref str1, ref str2);
 
-            ShowArray(new[] { 1, 2, 3 });
-            ShowArray(new[] { "hello", "Dima" });
+            // ShowArray(new[] { 1, 2, 3 });
+            // ShowArray(new[] { "hello", "Dima" });
+
+            var list = new LinkedList<string>();
+            list.Add("element");
+            ShowArray(list.GetAll());
         }
 
         static void Swap<T>(ref T val1, ref T val2)
