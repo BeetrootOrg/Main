@@ -2,153 +2,182 @@
 
 namespace ConsoleApp
 {
+    enum BinaryOperationType
+    {
+        Plus,
+        Minus,
+        Multiply
+    }
+
+    class UnaryOperation
+    {
+        public virtual int Operation(int num) => throw new NotImplementedException();
+    }
+
+    class UnaryPlusOperation : UnaryOperation
+    {
+        public override int Operation(int num) => num;
+    }
+
+    class UnaryMinusOperation : UnaryOperation
+    {
+        public override int Operation(int num) => -num;
+    }
+
+    class BinaryOperation
+    {
+        public virtual int Operation(int num1, int num2) => throw new NotImplementedException();
+    }
+
+    // 1st strategy
+    class AddOperation : BinaryOperation
+    {
+        public override int Operation(int num1, int num2) => num1 + num2;
+    }
+
+    // 2nd strategy
+    class MinusOperation : BinaryOperation
+    {
+        public override int Operation(int num1, int num2) => num1 - num2;
+
+        // factory method
+        public static BinaryOperation Create() => new MinusOperation();
+    }
+
+    class MultiplyOperation : BinaryOperation
+    {
+        public override int Operation(int num1, int num2) => num1 * num2;
+    }
+
+    class Calculator
+    {
+        public int Calculate(BinaryOperation operation, int num1, int num2) => operation.Operation(num1, num2);
+    }
+
+    // abstract factory
+    class BinaryFactory
+    {
+        public BinaryOperation CreateOperation(BinaryOperationType binaryOperation) => binaryOperation switch
+        {
+            BinaryOperationType.Plus => new AddOperation(),
+            BinaryOperationType.Minus => new MinusOperation(),
+            BinaryOperationType.Multiply => new MultiplyOperation(),
+            _ => throw new ArgumentOutOfRangeException(nameof(binaryOperation)),
+        };
+    }
+
     class Animal
     {
         public int NumOfPaws { get; set; }
-        public int Length { get; set; }
-        public virtual bool HasTale { get; set; }
-        public string Color { get; set; }
+        public string Type { get; set; }
 
-        public virtual string MakeNoise() => "Unknown Animal says ???";
-        public void Eat() => Console.WriteLine("Unknwon Animal eats ???");
-        public virtual string GetAnimalType() => "?";
+        public override string ToString() => $"Paws = {NumOfPaws}; Type = {Type}";
 
-        public override bool Equals(object obj) => Equals(obj as Animal);
-
-        protected virtual bool Equals(Animal animal)
+        public Animal Prototype() => new Animal
         {
-            if (animal == null)
+            NumOfPaws = NumOfPaws,
+            Type = Type
+        };
+    }
+
+    class Singleton
+    {
+        public static Singleton Instance => new Singleton();
+        private Singleton() { }
+
+        public int Method() => 42;
+    }
+
+
+    // builder
+    class AnimalBuilder
+    {
+        private string _type;
+        private int? _numOfPaws;
+
+        public AnimalBuilder SetNumOfPaws(int num)
+        {
+            if (_numOfPaws == null)
             {
-                return false;
+                if (num < 0)
+                {
+                    throw new ArgumentOutOfRangeException("Num of paws must be positive");
+                }
+
+                _numOfPaws = num;
+            }
+            else
+            {
+                throw new Exception("Num of paws already initialized");
             }
 
-            if (ReferenceEquals(this, animal))
-            {
-                return true;
-            }
-
-            if (this.GetType() != animal.GetType())
-            {
-                return false;
-            }
-
-            return NumOfPaws == animal.NumOfPaws &&
-                Length == animal.Length &&
-                HasTale == animal.HasTale &&
-                Color == animal.Color;
+            return this;
         }
 
-        public override int GetHashCode() => NumOfPaws.GetHashCode() ^
-            Length.GetHashCode() ^
-            HasTale.GetHashCode() ^
-            Color.GetHashCode();
+        public AnimalBuilder SetType(string type)
+        {
+            if (_type != null)
+            {
+                throw new Exception("Type already initialized");
+            }
 
-        public override string ToString() => $"{nameof(NumOfPaws)} = {NumOfPaws}; " +
-            $"{nameof(Length)} = {Length}; " +
-            $"{nameof(HasTale)} = {HasTale}; " +
-            $"{nameof(Color)} = {Color}";
-    }
+            _type = type;
 
-    class Cat : Animal
-    {
-        public string Breed { get; set; }
-        public override bool HasTale { get => true; set => throw new NotImplementedException("Cannot change tale"); }
+            if (type == "cat" || type == "dog")
+            {
+                if (_numOfPaws != null && _numOfPaws != 4)
+                {
+                    throw new Exception("Are you idiot?");
+                }
 
-        public override string MakeNoise() => "Cat says 'meow'";
-        public new void Eat() => Console.WriteLine("Cat eats fish");
+                _numOfPaws = 4;
+            }
 
-        public override string GetAnimalType() => $"this is a cat {Breed}";
-    }
+            return this;
+        }
 
-    class Dog : Animal
-    {
-        public override string GetAnimalType() => "this is a dog";
+        public Animal Build()
+        {
+            if (_numOfPaws == null || _type == null)
+            {
+                throw new Exception("Please provide values");
+            }
+
+            return new Animal
+            {
+                NumOfPaws = _numOfPaws.Value,
+                Type = _type
+            };
+        }
     }
 
     class Program
     {
         static void Main()
         {
-            var animal = new Animal
-            {
-                Color = "red",
-                HasTale = true,
-                NumOfPaws = 5,
-                Length = -1
-            };
+            var calculator = new Calculator();
+            var factory = new BinaryFactory();
 
-            var cat = new Cat
-            {
-                Color = "black",
-                Length = 30,
-                NumOfPaws = 4
-            };
+            Console.WriteLine(calculator.Calculate(factory.CreateOperation(BinaryOperationType.Multiply),
+                5,
+                new UnaryMinusOperation().Operation(3)));
 
-            Console.WriteLine("ANIMAL");
-            ShowAnimal(animal);
+            var animalBuilder = new AnimalBuilder();
 
-            Console.WriteLine("CAT");
-            ShowAnimal(cat);
-
-            Console.WriteLine(cat.HasTale);
+            Animal animal = animalBuilder
+                .SetType("cat")
+                .Build();
 
             Console.WriteLine(animal);
-            Console.WriteLine(cat);
 
-            var animal2 = new Animal
-            {
-                Color = "red",
-                HasTale = true,
-                NumOfPaws = 5,
-                Length = -1
-            };
+            var copy = animal.Prototype();
+            copy.Type = "dog";
 
-            Console.WriteLine(animal == animal2);
-            Console.WriteLine(animal.Equals(animal2));
-            Console.WriteLine(animal.Equals(new object()));
-            Console.WriteLine(animal.GetHashCode());
-            Console.WriteLine(animal2.GetHashCode());
+            Console.WriteLine(animal);
+            Console.WriteLine(copy);
 
-            Console.WriteLine(GetAnimalType1(cat));
-            Console.WriteLine(GetAnimalType1(new Dog()));
-
-            Console.WriteLine(GetAnimalType2(cat));
-            Console.WriteLine(GetAnimalType2(new Dog()));
-
-            Console.WriteLine(GetAnimalType3(animal));
-            Console.WriteLine(GetAnimalType3(cat));
-            Console.WriteLine(GetAnimalType3(new Dog()));
+            var instance = Singleton.Instance;
+            Console.WriteLine(instance.Method());
         }
-
-        static void ShowAnimal(Animal animal)
-        {
-            Console.WriteLine(animal.MakeNoise());
-            animal.Eat();
-        }
-
-        // worse approach
-        static string GetAnimalType1(Animal animal)
-        {
-            if (animal is Cat cat)
-            {
-                return $"this is a cat {cat.Breed}";
-            }
-
-            if (animal is Dog)
-            {
-                return $"this is a dog";
-            }
-
-            return "?";
-        }
-
-        // better approach - dynamic polimorphism
-        static string GetAnimalType2(Animal animal) => animal.GetAnimalType();
-
-        // better approach - static polimorphism
-        // overload
-        static string GetAnimalType3(Animal animal) => "?";
-        static string GetAnimalType3(Cat cat) => $"this is a cat {cat.Breed}";
-        static string GetAnimalType3(Dog dog) => $"this is a dog";
     }
 }
