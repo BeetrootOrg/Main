@@ -40,6 +40,11 @@ namespace ConsoleApp
 
             list.RemoveAt(0);
             list.RemoveRange(1, 2);
+
+            list.AddRange(list);
+            list.Insert(2, new Person("Y", "L"));
+            list.InsertRange(3, list);
+
             list.Clear();
         }
 
