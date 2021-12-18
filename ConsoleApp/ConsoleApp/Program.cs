@@ -8,6 +8,7 @@ namespace ConsoleApp
     {
         int Count { get; }
         void Clear();
+        void Remove(int index);
     }
 
 
@@ -20,6 +21,7 @@ namespace ConsoleApp
     public interface IWriteOnlyList<in T> : IList
     {
         void Add(T item);
+        void Insert(T item, int index);
         T this[int index] { set; }
     }
 
@@ -36,32 +38,9 @@ namespace ConsoleApp
         }
 
         private ListItem _head;
-        private ListItem _tail;
         public int Count { get; private set; }
 
-        public void Add(T item)
-        {
-            var listItem = new ListItem
-            {
-                Value = item,
-                Next = null
-            };
-
-            if (_head == null)
-            {
-                // list is empty - assign head & tail
-                _head = listItem;
-                _tail = listItem;
-            } 
-            else
-            {
-                // list is not empty - reassign tail
-                _tail.Next = listItem;
-                _tail = listItem;
-            }
-
-            ++Count;
-        }
+        public void Add(T item) => Insert(item, Count);
 
         public T this[int index]
         {
@@ -78,7 +57,7 @@ namespace ConsoleApp
             var array = new T[Count];
             var item = _head;
 
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < Count; ++i)
             {
                 array[i] = item.Value;
                 item = item.Next;
@@ -90,8 +69,55 @@ namespace ConsoleApp
         public void Clear()
         {
             _head = null;
-            _tail = null;
             Count = 0;
+        }
+
+        public void Remove(int index)
+        {
+            if (index == Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            if (index == 0)
+            {
+                _head = _head.Next;
+            }
+            else
+            {
+                var prev = GetByIndex(index - 1);
+                prev.Next = prev.Next.Next;
+            }
+
+            --Count;
+        }
+
+        public void Insert(T item, int index)
+        {
+            if (index == 0)
+            {
+                var listItem = new ListItem
+                {
+                    Value = item,
+                    Next = _head
+                };
+
+                _head = listItem;
+            } 
+            else
+            {
+                var prev = GetByIndex(index - 1);
+
+                var listItem = new ListItem
+                {
+                    Value = item,
+                    Next = prev.Next
+                };
+
+                prev.Next = listItem;
+            }
+
+            ++Count;
         }
 
         private ListItem GetByIndex(int index)
@@ -141,11 +167,29 @@ namespace ConsoleApp
             Console.WriteLine(list[1]);
             Console.WriteLine(list[2]);
 
-            list.Clear();
             ShowArray(list.GetAll());
 
-            ShowRandomListElement(list);
-            SetRandomListElement(list, "element");
+            // ShowRandomListElement(list);
+            // SetRandomListElement(list, "element");
+
+            list[0] = "el0";
+            list[1] = "el1";
+            list[2] = "el2";
+
+            list.Remove(0);
+            list.Add("el3");
+            list.Remove(2);
+            list.Add("el4");
+            list.Remove(1);
+
+            Console.WriteLine("AFTER REMOVE");
+            ShowArray(list.GetAll());
+
+            list.Insert("insert0", 0);
+            list.Insert("insert1", 3);
+            list.Insert("insert2", 2);
+
+            list.Clear();
         }
 
         static void Swap<T>(ref T val1, ref T val2)
