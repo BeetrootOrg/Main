@@ -101,6 +101,57 @@ namespace ConsoleApp
 
     #endregion
 
+    #region Even Only Enumerable
+
+    public class EvenOnlyEnumerable : IEnumerable<int>
+    {
+        private class EvenOnlyEnumerator : IEnumerator<int>
+        {
+            public int Current { get; private set; }
+
+            object IEnumerator.Current => Current;
+
+            private readonly IEnumerator<int> _enumerator;
+
+            public EvenOnlyEnumerator(IEnumerator<int> enumerator)
+            {
+                _enumerator = enumerator;
+            }
+
+            public void Dispose() => _enumerator.Dispose();
+
+            public bool MoveNext()
+            {
+                while (_enumerator.MoveNext())
+                {
+                    var current = _enumerator.Current;
+                    if (current % 2 == 0)
+                    {
+                        Current = current;
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            public void Reset() => _enumerator.Reset();
+        }
+
+        private readonly IEnumerable<int> _collection;
+
+        public EvenOnlyEnumerable(IEnumerable<int> collection)
+        {
+            _collection = collection;
+        }
+
+        public IEnumerator<int> GetEnumerator() => new EvenOnlyEnumerator(_collection.GetEnumerator());
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+
+    #endregion
+
     class Program
     {
         static void Main()
@@ -213,6 +264,10 @@ namespace ConsoleApp
 
             ShowAll(Power(2, 4));
             ShowAll(new PowerEnumerable(2, 4));
+
+            ShowAll(new EvenOnlyEnumerable(new[] { 1, 2, 3, 4, 5 }));
+            ShowAll(new EvenOnlyEnumerable(Array.Empty<int>()));
+            ShowAll(new EvenOnlyEnumerable(new[] { 1, 3 }));
         }
 
         static void ShowAll<T>(IEnumerable<T> collection)
