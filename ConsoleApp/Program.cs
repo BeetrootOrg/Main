@@ -1,116 +1,66 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ConsoleApp
 {
-    struct Complex : IEquatable<Complex>
+    record Person(string FirstName, string LastName)
     {
-        public double Real { get; init; }
-        public double Imaginary { get; init; }
-
-        public Complex(double real, double imaginary)
-        {
-            Real = real;
-            Imaginary = imaginary;
-        }
-
-        public Complex(Complex another)
-        {
-            Real = another.Real;
-            Imaginary = another.Imaginary;
-        }
-
-        public override bool Equals(object obj) => obj is Complex complex && Equals(complex);
-
-        public bool Equals(Complex other) => Real == other.Real &&
-                   Imaginary == other.Imaginary;
-
-        public override int GetHashCode() => HashCode.Combine(Real, Imaginary);
-
-        public override string ToString() => $"{Real}+{Imaginary}i";
-
-        public static Complex operator +(Complex complex1, Complex complex2) =>
-            new(complex1.Real + complex2.Real, complex1.Imaginary + complex2.Imaginary);
-
-        public static Complex operator *(Complex complex1, Complex complex2) =>
-            new(complex1.Real * complex2.Real - complex1.Imaginary * complex2.Imaginary,
-                complex1.Real * complex2.Imaginary + complex1.Imaginary * complex2.Real);
-
-        public static bool operator ==(Complex complex1, Complex complex2) => complex1.Equals(complex2);
-        public static bool operator !=(Complex complex1, Complex complex2) => !complex1.Equals(complex2);
-
-        public static explicit operator double(Complex complex) =>
-            Math.Sqrt(Math.Pow(complex.Real, 2) + Math.Pow(complex.Imaginary, 2));
-
-        public double this[int i]
-        {
-            get
-            {
-                return i switch
-                {
-                    0 => Real,
-                    1 => Imaginary,
-                    _ => throw new ArgumentOutOfRangeException(nameof(i))
-                };
-            }
-            /* set 
-            { 
-                switch(i)
-                {
-                    case 0:
-                        Real = value;
-                        break;
-                    case 1:
-                        Imaginary = value;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(i));
-                }
-            } */
-        }
     }
 
     class Program
     {
         static void Main()
         {
-            Complex complex1 = new()
+            var list = new List<Person>
             {
-                Imaginary = 1,
-                Real = 2
+                new Person("F", "L"),
+                new Person("First", "Last")
             };
 
-            Complex complex2 = new()
+            // almost analogue to above
+            //new Person[]
+            //{
+            //    new Person("F", "L"),
+            //    new Person("First", "Last")
+            //};
+
+            list.Add(new Person("F", "L"));
+            list.Add(new Person("D", "M"));
+            list.Add(new Person("Dima", "Misik"));
+            list.Add(new Person("G", "T"));
+            list.Add(new Person("S", "P"));
+
+            ShowAll(list);
+
+            Console.WriteLine(list.Count);
+            Console.WriteLine(list[1]);
+
+            var deleted = list.Remove(new Person("F", "L"));
+            Console.WriteLine(deleted);
+
+            list.RemoveAt(0);
+            list.RemoveRange(1, 2);
+
+            list.AddRange(list);
+            list.Insert(2, new Person("Y", "L"));
+            list.InsertRange(3, list);
+
+            // need to implement IComparable on Person to work
+            // list.Sort();
+            list.Reverse();
+
+            var contains = list.Contains(new Person("F", "L"));
+            Console.WriteLine(contains);
+
+            list.Clear();
+        }
+
+        static void ShowAll<T>(IEnumerable<T> collection)
+        {
+            foreach (var item in collection)
             {
-                Imaginary = 1,
-                Real = 2
-            };
-
-            Complex complex3 = new()
-            {
-                Imaginary = 1.5,
-                Real = 3
-            };
-
-            Console.WriteLine(complex1.Equals(complex2));
-            Console.WriteLine(complex2.Equals(complex3));
-
-            Console.WriteLine(complex1);
-
-            var sum = complex1 + complex3;
-            Console.WriteLine(sum);
-
-            Console.WriteLine($"{complex1}*{complex3}={complex1 * complex3}");
-            Console.WriteLine(complex1 == complex2);
-
-            double d = (double)complex1;
-            Console.WriteLine(d);
-
-            // complex[0] -> real
-            // complex[1] -> imaginary
-            Console.WriteLine(complex1[0]);
-            Console.WriteLine(complex1[1]);
-
-            Console.WriteLine(complex1);
+                Console.WriteLine(item);
+            }
         }
     }
-}
+}   
