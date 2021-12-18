@@ -113,9 +113,12 @@ namespace ConsoleApp
 
             ShowAll(dictionary);
 
+            const string phoneNumber1 = "+123455";
+            const string phoneNumber2 = "+123456";
             var dict2 = new Dictionary<string, Person>
             {
-                ["+123455"] = set.ElementAt(1)
+                [phoneNumber1] = set.ElementAt(1),
+                [phoneNumber2] = set.ElementAt(1),
             };
 
             ShowAll(dict2);
@@ -127,6 +130,21 @@ namespace ConsoleApp
             };
 
             ShowAll(dict3);
+
+            if (dict2.TryGetValue(phoneNumber1, out var person1) &&
+                dict2.TryGetValue(phoneNumber2, out var person2))
+            {
+                Console.WriteLine($"Equals: {person1.Equals(person2)}");
+            }
+
+            var result = dict2[phoneNumber1];
+            dict2.Remove(phoneNumber1);
+
+            Console.WriteLine("Keys");
+            ShowAll(dict2.Keys);
+
+            Console.WriteLine("Values");
+            ShowAll(dict2.Values);
         }
 
         static void ShowAll<T>(IEnumerable<T> collection)
