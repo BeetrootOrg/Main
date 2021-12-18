@@ -45,6 +45,13 @@ namespace ConsoleApp
             list.Insert(2, new Person("Y", "L"));
             list.InsertRange(3, list);
 
+            // need to implement IComparable on Person to work
+            // list.Sort();
+            list.Reverse();
+
+            var contains = list.Contains(new Person("F", "L"));
+            Console.WriteLine(contains);
+
             list.Clear();
         }
 
