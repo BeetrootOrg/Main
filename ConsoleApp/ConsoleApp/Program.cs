@@ -2,9 +2,32 @@
 
 namespace ConsoleApp
 {
+    #region Interfaces
+
+    public interface IList
+    {
+        int Count { get; }
+        void Clear();
+    }
+
+
+    public interface IReadOnlyList<out T> : IList
+    {
+        T[] GetAll();
+        T this[int index] { get; }
+    }
+
+    public interface IWriteOnlyList<in T> : IList
+    {
+        void Add(T item);
+        T this[int index] { set; }
+    }
+
+    #endregion
+
     #region LinkedList
 
-    public class LinkedList<T>
+    public class LinkedList<T> : IReadOnlyList<T>, IWriteOnlyList<T>
     {
         private class ListItem
         {
@@ -120,6 +143,9 @@ namespace ConsoleApp
 
             list.Clear();
             ShowArray(list.GetAll());
+
+            ShowRandomListElement(list);
+            SetRandomListElement(list, "element");
         }
 
         static void Swap<T>(ref T val1, ref T val2)
@@ -133,6 +159,18 @@ namespace ConsoleApp
             {
                 Console.WriteLine(item);
             }
+        }
+
+        static void ShowRandomListElement<T>(IReadOnlyList<T> list)
+        {
+            var index = new Random((int)DateTime.Now.Ticks).Next(0, list.Count);
+            Console.WriteLine(list[index]);
+        }
+
+        static void SetRandomListElement<T>(IWriteOnlyList<T> list, T element)
+        {
+            var index = new Random((int)DateTime.Now.Ticks).Next(0, list.Count);
+            list[index] = element;
         }
     }
 }
