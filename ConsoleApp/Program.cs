@@ -28,7 +28,7 @@ namespace ConsoleApp
         public DateTime Experience { get; set; }
         private string  HomeAdress{ get; set; }
         private string PhoneNumber { get; set; }
-        public Subject subject { get; set; }
+        public Subject Subject { get; set; }
 
     }
 
@@ -53,24 +53,13 @@ namespace ConsoleApp
 
     class Student
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public string FirstName { get; init; }
+        public string LastName { get; init; }
+        public DateTime DateOfBirth { get; init; }
         public string HomeAdress { get; set; }
         public string PhoneNumber { get; set; }
         public string Class { get; set; }
 
-        public void AddStudent(string firstName, string lastName, DateTime dateOfBirth, string className, string homeAdress ="", string phoneNumber="")
-        {
-            
-            FirstName = firstName;
-            LastName = lastName;
-            DateOfBirth = dateOfBirth;
-            HomeAdress = homeAdress;
-            PhoneNumber = phoneNumber;
-            Class = className;
-
-        }
      
     }
 
