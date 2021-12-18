@@ -52,7 +52,19 @@ namespace ConsoleApp
             var contains = list.Contains(new Person("F", "L"));
             Console.WriteLine(contains);
 
-            list.Clear();
+            var set = new HashSet<Person>(list);
+            ShowAll(set);
+
+            var added = set.Add(new Person("F", "L"));
+            Console.WriteLine(added);
+
+            var set1 = new HashSet<int>(new[] { 1, 2, 3 });
+            var set2 = new HashSet<int>(new[] { 3, 4 });
+
+            set1.SymmetricExceptWith(set2);
+            ShowAll(set1);
+
+            // list.Clear();
         }
 
         static void ShowAll<T>(IEnumerable<T> collection)
