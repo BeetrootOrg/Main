@@ -11,12 +11,25 @@ namespace ConsoleApp
     {
         static void Main()
         {
-            var list = new List<Person>();
+            var list = new List<Person>
+            {
+                new Person("F", "L"),
+                new Person("First", "Last")
+            };
 
-            list.Add(new Person("F", "L"));
-            list.Add(new Person("First", "Last"));
+            // almost analogue to above
+            //new Person[]
+            //{
+            //    new Person("F", "L"),
+            //    new Person("First", "Last")
+            //};
+
+            list.Add(new Person("D", "M"));
 
             ShowAll(list);
+
+            Console.WriteLine(list.Count);
+            Console.WriteLine(list[1]);
         }
 
         static void ShowAll<T>(IEnumerable<T> collection)
