@@ -13,6 +13,7 @@ namespace ConsoleApp
         }
 
         private ListItem _head;
+        private ListItem _tail;
         public int Count { get; private set; }
 
         public void Add(T item)
@@ -25,19 +26,15 @@ namespace ConsoleApp
 
             if (_head == null)
             {
-                // list is empty - assign head
+                // list is empty - assign head & tail
                 _head = listItem;
+                _tail = listItem;
             } 
             else
             {
-                // list is not empty - go to last element
-                var last = _head;
-                while (last.Next != null)
-                {
-                    last = last.Next;
-                }
-
-                last.Next = listItem;
+                // list is not empty - reassign tail
+                _tail.Next = listItem;
+                _tail = listItem;
             }
 
             ++Count;
