@@ -17,13 +17,15 @@
             public string Category { get; set; }
             public string Description { get; set; }
             public int Price { get; set; }
-            public Product(int id, string name, string category, string description, int price)
+            public int Quantity { get; set; }
+            public Product(int id, string name, string category, string description, int price, int quantity)
             {
                 this.ID = id;
                 this.Name = name;
                 this.Category = category;
                 this.Description = description;
                 this.Price = price;
+                this.Quantity = quantity;
             }
         }
         class Cart
@@ -34,8 +36,8 @@
         }
         interface IProduct
         {
-            void AddProduct(int ID, string name, string Category, string Description, int Price);
-            public void EditProduct(ref Product product, int id, string name, string category, string description, int price);
+            void AddProduct(int ID, string name, string Category, string Description, int Price, int quantity);
+            public void EditProduct(ref Product product, int id, string name, string category, string description, int price, int quantity);
             bool DeleteProduct(ref Product product, int ID);
         }
         interface IProductShow
@@ -56,12 +58,12 @@
             {
                 _product = prduct;
             }
-            public void AddProduct(int id, string name, string category, string description, int price)
+            public void AddProduct(int id, string name, string category, string description, int price, int quantity)
             {
-                _product[id] = new Product(id, name, category, description, price);
+                _product[id] = new Product(id, name, category, description, price, quantity);
             }
 
-            public void EditProduct(ref Product product, int id, string name, string category, string description, int price)
+            public void EditProduct(ref Product product, int id, string name, string category, string description, int price, int quantity)
             {
                 product.ID = id;
                 product.Name = name;
@@ -86,7 +88,8 @@
                         Console.Write("Name: {0}, ", _product[i].Name);
                         Console.Write("Category: {0}, ", _product[i].Category);
                         Console.Write("Description: {0}, ", _product[i].Description);
-                        Console.Write("Price: {0}\r\n", _product[i].Price);
+                        Console.Write("Price: {0}, ", _product[i].Price);
+                        Console.Write("Quantity: {0}\r\n", _product[i].Quantity);
                     }
                 }
             }
@@ -391,7 +394,7 @@
         }
         static void Main(string[] args)
         {
-            Console.WriteLine("\r\n a.tkachenko/homework/13-InternetShop \r\n");
+            Console.WriteLine("\r\n a.tkachenko/homework/14-InternetShop \r\n");
 
             Product[] SomeDatabase = new Product[3];
             Admin ShopAdmin;
@@ -405,9 +408,9 @@
                 ShopAdmin = new Admin(0, "admin");
                 ShopService.AddAdmin(ShopAdmin);
                 ShopService.EnablePermissionForAdmin(ShopAdmin);
-                ShopService.Admin.AddProduct(0, "Ford", "Car", "good car", 10000);
-                ShopService.Admin.AddProduct(1, "Opel", "Car", "good car", 11000);
-                ShopService.Admin.AddProduct(2, "Renault", "Car", "good car", 12000);
+                ShopService.Admin.AddProduct(0, "Ford", "Car", "good car", 10000 ,1);
+                ShopService.Admin.AddProduct(1, "Opel", "Car", "good car", 11000, 2);
+                ShopService.Admin.AddProduct(2, "Renault", "Car", "good car", 12000, 3);
                 ShopService.Admin.ShowProduct();
                 buyer = ShopService.AddNewBuyer("Petya", "Lviv");
                 ShopService.BuyerAddNewItemToCart(buyer.id, SomeDatabase[0]);
@@ -428,9 +431,9 @@
                 ShopAdmin = new Admin(0, "admin");
                 ShopService.AddAdmin(ShopAdmin);
                 ShopService.EnablePermissionForAdmin(ShopAdmin);
-                ShopService.Admin.AddProduct(0, "Milk", "Milk poduct", "2%", 30);
-                ShopService.Admin.AddProduct(1, "Yogurt", "Milk poduct", "3%", 40);
-                ShopService.Admin.AddProduct(2, "Bread", "Bread product", "Borodinsky", 50);
+                ShopService.Admin.AddProduct(0, "Milk", "Milk poduct", "2%", 30, 100);
+                ShopService.Admin.AddProduct(1, "Yogurt", "Milk poduct", "3%", 40, 200);
+                ShopService.Admin.AddProduct(2, "Bread", "Bread product", "Borodinsky", 50, 300);
                 ShopService.Admin.ShowProduct();
                 buyer = ShopService.AddNewBuyer("Petya", "Lviv");
                 ShopService.BuyerAddNewItemToCart(buyer.id, ATBeDatabase[0]);
