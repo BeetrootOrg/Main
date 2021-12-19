@@ -12,9 +12,10 @@ namespace ICourse
         int Id { get; }
         string Name { get; set; }
         Order[] Orders { get; }
-        void MakeOrder();
-        void WriteComment();
-        void EditComment();
+        bool Banned { get; set; }
+        void MakeOrder(Order orderToCreate);
+        void WriteComment(Item itemToAdd, string commentText);
+        void EditComment(string Text);
     }
 
     internal interface IOrder
@@ -29,12 +30,14 @@ namespace ICourse
         int Id { get; }
         string Name { get; set; }
         double Price { get; set; }
+        Comment[] Comments { get; }
+        void AddComment(string commentText, User writtenBy);
     }
 
     internal interface IAdmin : IUser
     {
-        void CreateProduct();
-        void DeleteProduct();
-        void BanUser();
+        void CreateProduct(string productName, double productPrice);
+        void DeleteProduct(Item itemToDelete);
+        void BanUser(User userToBan);
     }
 }
