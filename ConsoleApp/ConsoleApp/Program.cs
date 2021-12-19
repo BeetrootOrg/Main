@@ -7,9 +7,9 @@ namespace ConsoleApp
         class InternetShop
         {
             Product[] Products;
-            Personal[] Personal;
-            RegisterBuyers[] Buyers;
-            Sales[] Sales;
+            private Personal[] Personal;
+            private RegisterBuyers[] Buyers;
+            private Sales[] Sales;
         }
 
         class Product
@@ -35,14 +35,15 @@ namespace ConsoleApp
             public string LastName { get; init; }
             public string FullName => $"{FirstName} {LastName}";
             public string PhoneNumber { get; set; }
-            Product[] Purchases { get; set; }
+            Product[] Purchases { get; init; }
         }
 
         class Sales
         {
-            Product[] SoldItem { get; set; }
-            Personal Seller { get; set; }
-            RegisterBuyers Buyer { get; set; }
+            Product[] SoldItem { get; init; }
+            Personal Seller { get; init; }
+            RegisterBuyers Buyer { get; init; }
+            DateOnly SaleDate { get; init; }
         }
 
         static void Main()
