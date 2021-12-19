@@ -1,7 +1,8 @@
 ﻿using System;
-namespace ConsoleApp14Struct
+
+namespace Demo
 {
-    class Program
+    internal class Program
     {
         static void Main(string[] args)
         {
