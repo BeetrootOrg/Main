@@ -2,45 +2,41 @@
 
 namespace ConsoleApp
 {
-    class InternetShop
+    class AutoService
     {
-        Product[] Products;
-        Personal[] Personal;
-        RegisterBuyers[] Buyers;
-        Sales[] Sales;
+        Vehicle[] Vehicles { get; set; }
+        Wheel[] Wheels { get; set; }
+        Engine[] Engines { get; set; }
+        Transmission[] Transmissions { get; set; }
     }
 
-    class Product
+    class Vehicle
     {
-        public string ProductName { get; set; }
-        public string ProductDescription { get; set; }
-        public int Price { get; set; }
-        public string ProductQuantity { get; set; }
+        string Brand { get; init; }
+        string CarClass { get; init; }
+        string EngineType { get; init; }
     }
 
-    class Personal
+    class Wheel
     {
-        public string FirstName { get; init;}
-        public string LastName { get; init; }
-        public string FullName => $"{FirstName} {LastName}"; 
-        public string PhoneNumber { get; set; }
-        
+        int Diagonal { get; set; }
+        string TypeOfRubber { get; set; }
+
     }
 
-    class RegisterBuyers
+    class Engine
     {
-        public string FirstName { get; init; }
-        public string LastName { get; init; }
-        public string FullName => $"{FirstName} {LastName}";
-        public string PhoneNumber { get; set; }
-        Product[] Purchases { get; set; }
+        int Power { get; set; }
+        string EngineType { get; init; }
+        int CylindersCount { get; set; }
     }
 
-    class Sales
+    class Transmission
     {
-        Product[] SoldItem { get; set;}
-        Personal Seller { get; set; }
-        RegisterBuyers Buyer { get; set; }
+        byte NumberOfGears { get; init; }
+        string TypeOfTransmission { get; init; }
+
+    }
 
     public class Program
     {
