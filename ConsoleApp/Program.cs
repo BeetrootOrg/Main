@@ -97,42 +97,46 @@
         class Buyer : IProductShow
         {
             public int id;
-            private string _name;
-            private string _address;
-            private Cart _cart;
+            public string name { get; set; }
+            public string address { get; set; }
+            public Cart cart;
             public Buyer(int id, string name, string address)
             {
                 this.id = id;
-                this._name = name;
-                this._address = address;
+                this.name = name;
+                this.address = address;
             }
             public void ShowProduct() 
             {
                 Console.Write("Show Buyers Cart:");
-                if (_cart.product != null)
+                if (cart.product != null)
                 {
                     Console.Write("\r\n");
-                    Console.Write("Id: {0}, ", _cart.product.ID);
-                    Console.Write("Name: {0}, ", _cart.product.Name);
-                    Console.Write("Category: {0}, ", _cart.product.Category);
-                    Console.Write("Description: {0}, ", _cart.product.Description);
-                    Console.Write("Price: {0}\r\n", _cart.product.Price);
+                    Console.Write("Id: {0}, ", cart.product.ID);
+                    Console.Write("Name: {0}, ", cart.product.Name);
+                    Console.Write("Category: {0}, ", cart.product.Category);
+                    Console.Write("Description: {0}, ", cart.product.Description);
+                    Console.Write("Price: {0}, ", cart.product.Price);
+                    Console.Write("Quantity: {0}, ", cart.product.Quantity);
+                    Console.Write("TotalPrice: {0}\r\n", cart.TotalPrice);
                 }
                 else
                 {
                     Console.Write(" - Cart is empty\r\n");
                 }
             }
-            public void AddProductToCart(Product product) 
+            public Cart AddProductToCart(Product product, int quantity) 
             {
-                _cart = new Cart();
-                _cart.ID = 0;
-                _cart.product = product;
-                _cart.TotalPrice = product.Price;
+                cart = new Cart();
+                cart.ID = 0;
+                cart.product = product;
+                cart.product.Quantity = quantity;
+                cart.TotalPrice = product.Price * quantity;
+                return cart;
             }
             public void DeleteProductFromCart() 
             {
-                _cart.product = null;
+                cart.product = null;
             }
 
         }
@@ -253,12 +257,41 @@
                 return DeliveryStatus.Succes;
             }
         }
+        class Receipt : IProductShow
+        {
+            public DateTime date { get; set; }
+            public Buyer buyer { get; set; }
+            public DeliveryStatus Status { get; set; }
+
+            public void ShowProduct()
+            {
+                Console.Write("Show Buyers Receipt:");
+                if (buyer.cart.product != null)
+                {
+                    Console.Write("\r\n");
+                    Console.Write("DateTime: {0}, ", date);
+                    Console.Write("Buyer: {0}, ", buyer.name);
+                    Console.Write("Address: {0}, ", buyer.address);
+                    Console.Write("Id: {0}, ", buyer.cart.product.ID);
+                    Console.Write("Name: {0}, ", buyer.cart.product.Name);
+                    Console.Write("Category: {0}, ", buyer.cart.product.Category);
+                    Console.Write("Price: {0}, ", buyer.cart.product.Price);
+                    Console.Write("Quantity: {0}, ", buyer.cart.product.Quantity);
+                    Console.Write("TotalPrice: {0}\r\n", buyer.cart.TotalPrice);
+                }
+                else
+                {
+                    Console.Write(" - Cart is empty\r\n");
+                }
+            }
+        }
         class Shop
         {
             private InternetShopFactory _carFactory;
             public Admin Admin { get; set; }
             private const int _maximumNumberOfBuyers = 10;
             private Buyer[] _buyers;
+            private Receipt[] _receipts;
             Delivery [] _delivery;
             public Shop(InternetShopFactory factory)
             {
@@ -266,6 +299,7 @@
                 _carFactory = factory.CreateInternetShopFactory(factory.GetName());
                 _buyers = new Buyer[_maximumNumberOfBuyers];
                 _delivery = new Delivery[_maximumNumberOfBuyers];
+                _receipts = new Receipt[_maximumNumberOfBuyers];
             }
             public void RunConnectToDB(Product[] db)
             {
@@ -320,11 +354,15 @@
                     throw (new Exception("Wrong Buyer ID!"));
                 }
             }
-            public void BuyerAddNewItemToCart(int id, Product product)
+            public void BuyerAddNewItemToCart(int id, Product product, int quantity)
             {
                 if (id < _buyers.Length)
                 {
-                    _buyers[id].AddProductToCart(product);
+                    _receipts[id] = new Receipt();
+                    _receipts[id].date = DateTime.Now;
+                    _receipts[id].buyer = _buyers[id];
+                    _receipts[id].buyer.cart = _buyers[id].AddProductToCart(product, quantity);
+                    _receipts[id].Status = DeliveryStatus.Initial;
                 }
                 else
                 {
@@ -336,6 +374,17 @@
                 if (id < _buyers.Length)
                 {
                     _buyers[id].ShowProduct();
+                }
+                else
+                {
+                    throw (new Exception("Wrong Buyer ID!"));
+                }
+            }
+            public void BuyersShowReceipt(int id)
+            {
+                if (id < _receipts.Length)
+                {
+                    _receipts[id].ShowProduct();
                 }
                 else
                 {
@@ -413,15 +462,12 @@
                 ShopService.Admin.AddProduct(2, "Renault", "Car", "good car", 12000, 3);
                 ShopService.Admin.ShowProduct();
                 buyer = ShopService.AddNewBuyer("Petya", "Lviv");
-                ShopService.BuyerAddNewItemToCart(buyer.id, SomeDatabase[0]);
+                ShopService.BuyerAddNewItemToCart(buyer.id, SomeDatabase[0], 1);
                 ShopService.BuyersShowCart(buyer.id);
+                ShopService.BuyersShowReceipt(buyer.id);
                 ShopService.CheckDeliveryStatus(buyer.id);
                 ShopService.SendItemToBuyer(buyer.id);
                 ShopService.WaitDeliveryAndCheckStatus(buyer.id);
-                ShopService.BuyerDeleteCart(buyer.id);
-                ShopService.BuyersShowCart(buyer.id);
-                ShopService.DeleteBuyer(buyer.id);
-                buyer = null;
 
                 Console.WriteLine("\r\n ATB Shop:");
                 Product[] ATBeDatabase = new Product[3];
@@ -436,16 +482,12 @@
                 ShopService.Admin.AddProduct(2, "Bread", "Bread product", "Borodinsky", 50, 300);
                 ShopService.Admin.ShowProduct();
                 buyer = ShopService.AddNewBuyer("Petya", "Lviv");
-                ShopService.BuyerAddNewItemToCart(buyer.id, ATBeDatabase[0]);
+                ShopService.BuyerAddNewItemToCart(buyer.id, ATBeDatabase[0], 5);
                 ShopService.BuyersShowCart(buyer.id);
+                ShopService.BuyersShowReceipt(buyer.id);
                 ShopService.CheckDeliveryStatus(buyer.id);
                 ShopService.SendItemToBuyer(buyer.id);
                 ShopService.WaitDeliveryAndCheckStatus(buyer.id);
-                ShopService.BuyerDeleteCart(buyer.id);
-                ShopService.BuyersShowCart(buyer.id);
-                ShopService.DeleteBuyer(buyer.id);
-                buyer = null;
-
             }
             catch (Exception ex)
             {
