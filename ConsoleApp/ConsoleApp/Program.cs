@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace ConsoleApp
 {
+    delegate bool Dima(int number);
+
     class Program
     {
         static void Main()
@@ -12,7 +14,7 @@ namespace ConsoleApp
             ShowAll(FilterValues(array, (int item) => item > 5));
         }
 
-        public static IEnumerable<int> FilterValues(IEnumerable<int> collection, Func<int, bool> predicate)
+        public static IEnumerable<int> FilterValues(IEnumerable<int> collection, Dima predicate)
         {
             foreach (var item in collection)
             {
