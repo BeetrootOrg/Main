@@ -161,6 +161,11 @@ namespace ConsoleApp
 
             Console.WriteLine(Any(new[] { "str1", "str2" }, (item) => item.Contains("str")));
             Console.WriteLine(Any(new[] { "str1", "str2" }, (item) => item.Contains("3")));
+
+            Console.SetCursorPosition(5, 5);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine('*');
+
         }
 
         public static IEnumerable<int> FilterValues(IEnumerable<int> collection, UnicalName predicate)
