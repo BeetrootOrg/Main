@@ -6,8 +6,7 @@ namespace ConsoleApp
 {
     delegate bool Dima(int number);
 
-
-
+    #region Changes
     public class ChangesObservable<T>
     {
         public delegate void ChangeEventHandler(object sender, ChangeEvetArgs args);
@@ -37,6 +36,67 @@ namespace ConsoleApp
         protected virtual void RaiseChangedEvent(T old, T @new) => ChangeEvent?.Invoke(this, new ChangeEvetArgs(old, @new));
 
     }
+    #endregion
+
+    #region Where Enumerable
+
+    public class WhereEnumerable<T> : IEnumerable<T>
+    {
+        private readonly IEnumerable<T> _collection;
+        private readonly Func<T, bool> _predicate;
+
+        public WhereEnumerable(IEnumerable<T> collection, Func<T, bool> predicate)
+        {
+            _collection = collection;
+            _predicate = predicate;
+        }
+
+        public IEnumerator<T> GetEnumerator() => new WhereEnumerator(_collection.GetEnumerator(), _predicate);
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
+
+        private class WhereEnumerator : IEnumerator<T>
+        {
+            private readonly IEnumerator<T> _enumerator;
+            private readonly Func<T, bool> _predicate;
+
+            public WhereEnumerator(IEnumerator<T> enumerator, Func<T, bool> predicate)
+            {
+                _enumerator = enumerator;
+                _predicate = predicate;
+            }
+
+            public T Current { get; private set; }
+
+            object System.Collections.IEnumerator.Current => Current;
+
+            public void Dispose()
+            {
+                _enumerator.Dispose();
+            }
+
+            public bool MoveNext()
+            {
+                while (_enumerator.MoveNext())
+                {
+                    if (_predicate(_enumerator.Current))
+                    {
+                        Current = _enumerator.Current;
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            public void Reset()
+            {
+                _enumerator.Reset();
+            }
+        }
+    }
+
+    #endregion
 
     class Program
     {
@@ -95,6 +155,11 @@ namespace ConsoleApp
 
             observable1.Value = 1;
             observable2.Value = 2;
+
+            ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item % 2 == 1));
+            ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item > 5));
+            ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item % 2 == 0));
+            ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item % 3 == 0));
         }
 
         public static IEnumerable<int> FilterValues(IEnumerable<int> collection, Dima predicate)
