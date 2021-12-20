@@ -18,6 +18,8 @@ namespace ConsoleApp
 
         private T _value;
 
+        public string Name { get; init; }
+
         public T Value
         {
             get
@@ -79,20 +81,20 @@ namespace ConsoleApp
             Console.WriteLine(num1);
             Console.WriteLine(num2);
 
-            var observable = new ChangesObservable<int>();
-            observable.ChangeEvent += (sender, args) =>
-            {
-                Console.WriteLine($"Value changed from {args.PreviousValue} to {args.NewValue}");
-            };
+            var observable1 = new ChangesObservable<int> { Name = "First" };
+            var observable2 = new ChangesObservable<int> { Name = "Second" };
 
-            observable.ChangeEvent += (sender, args) =>
+            ChangesObservable<int>.ChangeEventHandler handler = (sender, args) =>
             {
-                Console.WriteLine($"ANOTHER HANDLER: Value changed from {args.PreviousValue} to {args.NewValue}");
+                var changesObservable = sender as ChangesObservable<int>;
+                Console.WriteLine($"Value changed inside {changesObservable.Name} from {args.PreviousValue} to {args.NewValue}");
             };
+            
+            observable1.ChangeEvent += handler;
+            observable2.ChangeEvent += handler;
 
-            observable.Value = 1;
-            observable.Value = 2;
-            observable.Value = 3;
+            observable1.Value = 1;
+            observable2.Value = 2;
         }
 
         public static IEnumerable<int> FilterValues(IEnumerable<int> collection, Dima predicate)
