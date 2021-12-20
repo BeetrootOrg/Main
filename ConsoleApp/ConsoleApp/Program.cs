@@ -160,6 +160,15 @@ namespace ConsoleApp
             ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item > 5));
             ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item % 2 == 0));
             ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item % 3 == 0));
+
+            Console.WriteLine(FirstOrDefault(new[] { 1, 2 }, (item) => item > 1));
+            Console.WriteLine(FirstOrDefault(new[] { 1, 2 }, (item) => item > 2));
+
+            Console.WriteLine(FirstOrDefault(new[] { "str1", "str2" }, (item) => item.Contains("str")));
+            Console.WriteLine(FirstOrDefault(new[] { "str1", "str2" }, (item) => item.Contains("3")));
+
+            Console.WriteLine(Any(new[] { "str1", "str2" }, (item) => item.Contains("str")));
+            Console.WriteLine(Any(new[] { "str1", "str2" }, (item) => item.Contains("3")));
         }
 
         public static IEnumerable<int> FilterValues(IEnumerable<int> collection, Dima predicate)
@@ -171,6 +180,32 @@ namespace ConsoleApp
                     yield return item;
                 }
             }
+        }
+
+        public static T FirstOrDefault<T>(IEnumerable<T> collection, Func<T, bool> predicate)
+        {
+            foreach (var item in collection)
+            {
+                if (predicate(item))
+                {
+                    return item;
+                }
+            }
+
+            return default;
+        }
+
+        public static bool Any<T>(IEnumerable<T> collection, Func<T, bool> predicate)
+        {
+            foreach (var item in collection)
+            {
+                if (predicate(item))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static void ShowAll<T>(IEnumerable<T> collection)
