@@ -15,6 +15,8 @@ namespace ConsoleApp
             //    Console.WriteLine($"{i / --j}");
             //});
 
+            Trim(null);
+
             DoWorkEvery5Seconds((state) => Console.WriteLine("message"));
 
             Thread.Sleep(5000);
@@ -40,5 +42,8 @@ namespace ConsoleApp
             Thread.Sleep(TimeSpan.FromSeconds(5));
             Console.WriteLine("FINISHED");
         }
+
+        // str == null ? null : str.Trim() the same
+        private static string Trim(string str) => str?.Trim();
     }
 }
