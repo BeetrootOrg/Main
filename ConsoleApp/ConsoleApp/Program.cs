@@ -19,7 +19,27 @@ namespace ConsoleApp
             ShowAll(FilterValues(array, evenOnly));
 
             // 2nd option - declare anonymous method
-            bool OddOnly(int item) => item % 2 == 1;
+            static bool OddOnly(int item) => item % 2 == 1;
+
+            var number = 0;
+            Func<int, int> calculate = (i) =>
+            {
+                number += i;
+                return number;
+            };
+
+            Func<int, int> calculate2 = (i) =>
+            {
+                var number = 0;
+                number += i;
+                return number;
+            };
+
+            calculate2(5);
+            calculate2(2);
+
+            Console.WriteLine("NUMBER");
+            Console.WriteLine(number);
         }
 
         public static IEnumerable<int> FilterValues(IEnumerable<int> collection, Dima predicate)
