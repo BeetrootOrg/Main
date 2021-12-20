@@ -153,7 +153,14 @@ namespace ConsoleApp
             ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item > 5));
             ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item % 2 == 0));
             ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item % 3 == 0));
+            
 
+            Console.WriteLine(FirstOrDefault(new[] { 1, 2, 3 }, (item) => item > 1));
+            Console.WriteLine(FirstOrDefault(new[] { "str1", "str2", "str3" }, (item) => item.Contains("str")));
+            Console.WriteLine(FirstOrDefault(new[] { "str1", "str2", "str3" }, (item) => item.Contains("4")));
+
+            Console.WriteLine(Any(new[] { "str1", "str2" }, (item) => item.Contains("str")));
+            Console.WriteLine(Any(new[] { "str1", "str2" }, (item) => item.Contains("3")));
         }
 
         public static IEnumerable<int> FilterValues(IEnumerable<int> collection, UnicalName predicate)
@@ -174,6 +181,28 @@ namespace ConsoleApp
                 Console.WriteLine(item);
             }
         }
+        public static bool Any<T>(IEnumerable<T> collection, Func<T, bool> predicate)
+        {
+            foreach (var item in collection)
+            {
+                if (predicate(item))
+                {
+                    return true;
+                }
+            }
 
+            return false;
+        }
+        public static T FirstOrDefault<T>(IEnumerable<T> collection, Func<T,bool> predicate)
+        {
+            foreach(var item in collection)
+            {
+                if (predicate(item))
+                {
+                    return item;
+                }
+            }
+            return default; //if T is int we cant return null
+        }
     }
 }
