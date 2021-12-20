@@ -3,177 +3,56 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-
+using System.Threading;
 namespace ConsoleApp
 {
-    //i.safontev/classwork/17-delegates
-    delegate bool UnicalName(int number);
-    #region Changes
-    class ChangesObservable<T>
-    {
-        public delegate void ChangeEventHandler(object sender, ChangeEventArgs args);
-        public record ChangeEventArgs(T PreviousValue, T NewValue);
-
-        public event ChangeEventHandler ChangeEvent;
-
-        private T _value;
-        public string Name { get; init; }
-        public T Value  
-        {
-            get 
-            {
-                return _value;
-            }
-            set 
-            {
-                var oldValue = _value;
-                _value = value;
-                RaiseChangedEvent(oldValue, value);
-            }
-        }
-        protected virtual void RaiseChangedEvent(T old, T @new) => ChangeEvent?.Invoke(this, new ChangeEventArgs(old, @new));
-
-    }
-    #endregion
-
-    #region Where Enumerable
-    public class WhereEnumerable<T> : IEnumerable<T>
-    {
-        private readonly IEnumerable<T> _collection;
-        private readonly Func<T, bool> _predicate;
-
-        public WhereEnumerable(IEnumerable<T> collection, Func<T, bool> predicate)
-        {
-            _collection = collection;
-            _predicate = predicate;
-        }
-
-        public IEnumerator<T> GetEnumerator() => new WhereEnumerator(_collection.GetEnumerator(), _predicate);
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
-
-        private class WhereEnumerator : IEnumerator<T>
-        {
-            private readonly IEnumerator<T> _enumerator;
-            private readonly Func<T, bool> _predicate;
-
-            public WhereEnumerator(IEnumerator<T> enumerator, Func<T, bool> predicate)
-            {
-                _enumerator = enumerator;
-                _predicate = predicate;
-            }
-
-            public T Current { get; private set; }
-
-            object System.Collections.IEnumerator.Current => Current;
-
-            public void Dispose()
-            {
-                _enumerator.Dispose();
-            }
-
-            public bool MoveNext()
-            {
-                while (_enumerator.MoveNext())
-                {
-                    if (_predicate(_enumerator.Current))
-                    {
-                        Current = _enumerator.Current;
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-
-            public void Reset()
-            {
-                _enumerator.Reset();
-            }
-        }
-    }
-
-    #endregion
+    //i.safontev/classwork/17-timer
 
     class Program
     {
         static void Main()
         {
-            var array = Enumerable.Range(0, 10);
-            ShowAll(FilterValues(array, (int item) => { return item > 5; }));
-            ShowAll(FilterValues(array, OddOnly));
+            /*
+            var i = 5;
+            var j = 2;
 
-            //1st opion - declare delegate
-            UnicalName evenOnly = (int item) => item % 2 == 0;
-            ShowAll(FilterValues(array, evenOnly));
-
-            //2nd option - declare anonymous method
-            static bool OddOnly(int item) => item % 2 == 1;
-
-            var number = 0;
-            Func<int, int> calculate = (i) =>
-             {
-                 number += i;
-                 return number;
-             };
-            calculate(5);
-            calculate(2);
-
-            Console.WriteLine("Closure Number");
-            Console.WriteLine(number);
-
-
-            Func<int, int> calculate2 = (i) =>
+            DoWorkEvery5Seconds((state) =>
             {
-                var number = 0;
-                number += i;
-                return number;
-            };
-            calculate2(5);
-            calculate2(2);
+                Console.WriteLine($"{i / --j}");
+            });
+            */
 
-            Console.WriteLine("Non Closure Number");
-            Console.WriteLine(number);
+            DoWorkEvery5Seconds((state) => Console.WriteLine("message"));
 
-            var observable1 = new ChangesObservable<int> { Name = "First" };
-            var observable2 = new ChangesObservable<int> { Name = "Second" };
-            ChangesObservable<int>.ChangeEventHandler handler = (sender, args) =>
-            {
-                var changesObservable = sender as ChangesObservable<int>;
-                Console.WriteLine($"Value changed inside {changesObservable.Name} from {args.PreviousValue} to {args.NewValue}");
-            };
+            Trim(null);
 
-            observable1.ChangeEvent += handler;
-            observable2.ChangeEvent += handler;
-
-            observable1.Value = 1;
-            observable2.Value = 2;
-
-            ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item % 2 == 1));
-            ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item > 5));
-            ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item % 2 == 0));
-            ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item % 3 == 0));
-
+            Thread.Sleep(5000);
         }
 
-        public static IEnumerable<int> FilterValues(IEnumerable<int> collection, UnicalName predicate)
-        {
-            foreach(var item in collection)
+        private static void DoWorkEvery5Seconds(TimerCallback callback)
+        {   
+            /*
+            Timer timer;
+            try 
             {
-                if (predicate(item))
-                {
-                    yield return item;
-                }
+                timer = new Timer(callback, null, 0, 1000);
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+                Console.WriteLine($"Finished");
             }
-
-        }
-        public static void ShowAll<T>(IEnumerable<T> collection)
-        {
-            foreach (var item in collection)
+            finally
             {
-                Console.WriteLine(item);
+                timer?.Dispose();
             }
-        }
+            */
 
+            //the same as:
+            using var timer = new Timer(callback, null, Timeout.Infinite, 0);
+            timer.Change(TimeSpan.Zero, TimeSpan.FromSeconds(1));
+            Thread.Sleep(TimeSpan.FromSeconds(5));
+            Console.WriteLine($"Finished");
+
+        }
+        // str == null ? null : str.Trim() the same as 
+        private static string Trim(string str) => str?.Trim();
     }
 }
