@@ -52,7 +52,7 @@
                     break;
                 case ConsoleKey.D3:
                 case ConsoleKey.NumPad3:
-                    // SearchByName();
+                    ShowPools(true);
                     break;
                 case ConsoleKey.D0:
                 case ConsoleKey.NumPad0:
@@ -81,7 +81,7 @@
             Wait();
         }
 
-        private static void ShowPools()
+        private static void ShowPools(bool isVoting = false)
         {
             Console.Clear();
             var index = 1;
@@ -92,13 +92,15 @@
                     Console.WriteLine($"{index}. {pool.Name}");
                     ++index;
                 }
-                Console.WriteLine("\n \nPlease, type the pool number which you would like to see");
-                bool isIndexValid = int.TryParse(Console.ReadLine(), out int selectedPoolIndex);
-                if (!isIndexValid || selectedPoolIndex > _pools.Count)
-                {
-                    throw new Exception("The value is not a number or you've selected the non-existing pool");
+                Console.WriteLine($"\n \nPlease, type the pool number which you would like to {(isVoting ? "participate" : "see")}");
+                CheckIndexValidity(_pools.Count, out int selectedPoolIndex);
+                if (isVoting) {
+                    VoteInPool(selectedPoolIndex - 1);
                 }
-                ShowPool(selectedPoolIndex - 1);
+                else
+                {
+                    ShowPool(selectedPoolIndex - 1);
+                }
             }
             else
             {
@@ -118,6 +120,24 @@
             Wait();
         }
 
+        private static void VoteInPool(int poolIndex)
+        {
+            Console.Clear();
+            Console.WriteLine($"{_pools[poolIndex].Name}\n");
+            var index = 1;
+            foreach (var option in _pools[poolIndex].Body)
+            {
+                Console.WriteLine($"{index}. {option.Key}");
+                ++index;
+            }
+            Console.WriteLine("\nPlease, type a number of specific option.");
+            CheckIndexValidity(_pools[poolIndex].Body.Count, out int selectedPoolIndex);
+            var selectedOptionName = _pools[poolIndex].Body.Keys.ToArray()[selectedPoolIndex - 1];
+            _pools[poolIndex].Body[selectedOptionName] = ++_pools[poolIndex].Body[selectedOptionName];
+            Console.WriteLine("Your vote has been counted. Thank you!");
+            Wait();
+        }
+
         private static bool CheckPoolValidity(string name, string[] options)
         {
             if (name.Length == 0) return false;
@@ -128,6 +148,16 @@
             return true;
         }
 
+        private static void CheckIndexValidity(int maxCountToCompare, out int parsedIndex)
+        {
+            bool isIndexValid = int.TryParse(Console.ReadLine(), out int selectedPoolIndex);
+            if (!isIndexValid || selectedPoolIndex > maxCountToCompare)
+            {
+                throw new Exception("The value is not a number or you've selected the non-existing option");
+            }
+            parsedIndex = selectedPoolIndex;
+        }
+
         private static void Exit()
         {
             Environment.Exit(0);
@@ -135,7 +165,7 @@
         
         private static void Wait()
         {
-            Console.WriteLine("To back to menu type Enter...");
+            Console.WriteLine("\nTo back to menu type Enter...");
             Console.ReadLine();
         }
     }
