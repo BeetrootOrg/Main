@@ -18,10 +18,18 @@
 
     class Course
     {
-        public static List<Pool> _pools;
+        public static List<Pool> _pools = new List<Pool>();
         static void Main()
         {
 
+            while (true)
+            {
+                Menu();
+            }
+        }
+
+        private static void Menu()
+        {
             Console.Clear();
             Console.WriteLine("Welcome to Phone Book Application!\n");
             Console.WriteLine("\tMenu");
@@ -61,14 +69,15 @@
             Console.WriteLine("Please, enter coma-separated options for your pool");
             var poolOptionsText = Console.ReadLine();
             var poolOptions = poolOptionsText.Split(",");
-            Console.WriteLine($"title is {poolName} and options length is {poolOptions.Length}");
-            if (CheckPoolOptionsValidity(poolOptions))
+            if (!CheckPoolValidity(poolOptionsText, poolOptions))
             {
-                throw new Exception("You have entered invalid options. Add more options or use unique ones.");
+                throw new Exception("Pool data is invalid." +
+                    "The pool name must contain at least one symbol." +
+                    "The options must be unique and contains at least two.");
             }
             var pool = new VotePool(poolName, poolOptions);
             _pools.Add(pool);
-            Console.WriteLine("Your pool was created. Thank you!");
+            Console.WriteLine("\nYour pool was created. Thank you!");
             Wait();
         }
 
@@ -89,7 +98,7 @@
                 {
                     throw new Exception("The value is not a number or you've selected the non-existing pool");
                 }
-                ShowPool(selectedPoolIndex);
+                ShowPool(selectedPoolIndex - 1);
             }
             else
             {
@@ -101,15 +110,17 @@
         private static void ShowPool(int poolIndex)
         {
             Console.Clear();
-            Console.WriteLine(_pools[poolIndex].Name);
+            Console.WriteLine($"{_pools[poolIndex].Name}\n");
             foreach (var option in _pools[poolIndex].Body)
             {
-                Console.WriteLine(option);
+                Console.WriteLine($"Option - {option.Key}. Votes - {option.Value}");
             }
+            Wait();
         }
 
-        private static bool CheckPoolOptionsValidity(string[] options)
+        private static bool CheckPoolValidity(string name, string[] options)
         {
+            if (name.Length == 0) return false;
             if (options.Length < 2) return false;
             string[] uniqueOptions = options.Distinct<string>().ToArray();
             if (options.Length != uniqueOptions.Length) return false;
