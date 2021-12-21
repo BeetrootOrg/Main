@@ -69,7 +69,7 @@
             Console.WriteLine("Please, enter coma-separated options for your pool");
             var poolOptionsText = Console.ReadLine();
             var poolOptions = poolOptionsText.Split(",");
-            if (!CheckPoolValidity(poolOptionsText, poolOptions))
+            if (!CheckPoolValidity(poolName, poolOptions))
             {
                 throw new Exception("Pool data is invalid." +
                     "The pool name must contain at least one symbol." +
