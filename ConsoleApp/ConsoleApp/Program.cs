@@ -127,6 +127,17 @@ namespace ConsoleApp
                 yield return current;
             }
         }
+
+        public static int Age(this DateTime birthday)
+        {
+            var now = DateTime.Now;
+            if (birthday > now)
+            {
+                throw new ArgumentOutOfRangeException(nameof(birthday), "You are debil");
+            }
+
+            return (DateTime.MinValue + (DateTime.Now - birthday)).Year - 1;
+        }
     }
 
     class Program
@@ -153,6 +164,11 @@ namespace ConsoleApp
             Console.WriteLine("EMPTY");
             ShowAll(now.DatesUntil(now, TimeSpan.FromHours(5)));
             ShowAll(now.DatesUntil(now, TimeSpan.FromHours(5).Negate()));
+
+            Console.WriteLine("BIRTHDAY");
+            Console.WriteLine(new DateTime(1996, 7, 11).Age());
+            Console.WriteLine(new DateTime(2020, 12, 22).Age());
+            Console.WriteLine(new DateTime(2022, 12, 22).Age());
         }
 
         public static IEnumerable<T> Take<T>(IEnumerable<T> collection, int? count = null) => 
