@@ -100,7 +100,7 @@ namespace ConsoleApp
 
     static class StringExtensions
     {
-        public static int CountWords(this string str) => str.Split(' ').Length;
+        public static int CountWords(this string str) => string.IsNullOrEmpty(str) ? 0 : str.Split(' ').Length;
     }
 
     class Program
@@ -109,7 +109,10 @@ namespace ConsoleApp
         {
             Console.WriteLine("This is a string".CountWords());
             Console.WriteLine("Word".CountWords());
-            // Console.WriteLine(((string)null).CountWords());
+            Console.WriteLine(((string)null).CountWords());
+            Console.WriteLine("".CountWords());
+
+            Console.WriteLine("TAKE FROM ARRAY");
 
             ShowAll(Take(new[] { 1, 2, 3 }, 2));
             ShowAll(Take(new[] { 1, 2, 3 }, null));
