@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace ConsoleApp
 {
-    //i.safontev/classwork/16-collections
+    //i.safontev/classwork/18-collections
     #region Classes
 
     record Person(string FirstName, string LastName)
@@ -227,6 +227,17 @@ namespace ConsoleApp
 
     #endregion
 
+    #region Extensions
+
+    public static class EnumerableExtensions
+    {
+        public static IEnumerable<int> EvenOnly(this IEnumerable<int> collection)
+            => new EvenOnlyEnumerable(collection);
+        public static IEnumerable<int> Power(this IEnumerable<int> collection, int exponent)
+            => new PowerCollectionEnumerable(collection, exponent);
+    }
+
+    #endregion
     class Program
     {
         static void Main()
@@ -345,6 +356,14 @@ namespace ConsoleApp
             ShowAll(new EvenOnlyEnumerable(new[] { 1, 3 }));
 
             ShowAll(new PowerCollectionEnumerable(new EvenOnlyEnumerable(new[] { 1, 2, 3 }), 3));
+
+            //18-collection
+            Console.WriteLine($"\nEXTENSIONS\n");
+            var collection = new[] { 1, 2, 3 };
+            ShowAll(collection
+                .EvenOnly()
+                .Power(3)
+            );
         }
 
         static void ShowAll<T>(IEnumerable<T> collection)
