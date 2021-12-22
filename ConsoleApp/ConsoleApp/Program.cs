@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace ConsoleApp
 {
-    //i.safontev/classwork/17-delegates
+    //i.safontev/classwork/18-extensions
     delegate bool UnicalName(int number);
     #region Changes
     class ChangesObservable<T>
@@ -95,77 +95,41 @@ namespace ConsoleApp
 
     #endregion
 
+    static class StringExtensions
+    {
+        // ?? 0 is like:
+        // var result = str?.Split(' ').Length;
+        // return result == null ? 0 : result;
+        //public static int? CountWords(this string str) => str?.Split(' ').Length ?? 0;
+
+        public static int? CountWords(this string str) => string.IsNullOrEmpty(str) ? 0 : str.Split(' ').Length;
+    }
     class Program
     {
         static void Main()
         {
-            var array = Enumerable.Range(0, 10);
-            ShowAll(FilterValues(array, (int item) => { return item > 5; }));
-            ShowAll(FilterValues(array, OddOnly));
+            Console.WriteLine($"This is a string".CountWords());
+            Console.WriteLine($"Word".CountWords());
+            Console.WriteLine(((string)null).CountWords());
+            Console.WriteLine($"".CountWords());
 
-            //1st opion - declare delegate
-            UnicalName evenOnly = (int item) => item % 2 == 0;
-            ShowAll(FilterValues(array, evenOnly));
+            ShowAll(Take(new[] { 1, 2, 3 }, 2));
+            ShowAll(Take(new[] { 1, 2, 3 }, null));
+        }
 
-            //2nd option - declare anonymous method
-            static bool OddOnly(int item) => item % 2 == 1;
+        public static IEnumerable<T> Take<T>(IEnumerable<T> collection, Nullable<int> count = null) =>//Nullable<int> count == int? count
+            count.HasValue ? Take(collection, count.Value) : collection;
 
-            var number = 0;
-            Func<int, int> calculate = (i) =>
-             {
-                 number += i;
-                 return number;
-             };
-            calculate(5);
-            calculate(2);
+        public static IEnumerable<T> Take<T>(IEnumerable<T> collection, int count )
+        {
+            using var enumerator = collection.GetEnumerator();//using- auto Dispose()
+            var returned = 0;
 
-            Console.WriteLine("Closure Number");
-            Console.WriteLine(number);
-
-
-            Func<int, int> calculate2 = (i) =>
+            while (returned < count && enumerator.MoveNext())
             {
-                var number = 0;
-                number += i;
-                return number;
-            };
-            calculate2(5);
-            calculate2(2);
-
-            Console.WriteLine("Non Closure Number");
-            Console.WriteLine(number);
-
-            var observable1 = new ChangesObservable<int> { Name = "First" };
-            var observable2 = new ChangesObservable<int> { Name = "Second" };
-            ChangesObservable<int>.ChangeEventHandler handler = (sender, args) =>
-            {
-                var changesObservable = sender as ChangesObservable<int>;
-                Console.WriteLine($"Value changed inside {changesObservable.Name} from {args.PreviousValue} to {args.NewValue}");
-            };
-
-            observable1.ChangeEvent += handler;
-            observable2.ChangeEvent += handler;
-
-            observable1.Value = 1;
-            observable2.Value = 2;
-
-            ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item % 2 == 1));
-            ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item > 5));
-            ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item % 2 == 0));
-            ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item % 3 == 0));
-            
-
-            Console.WriteLine(FirstOrDefault(new[] { 1, 2, 3 }, (item) => item > 1));
-            Console.WriteLine(FirstOrDefault(new[] { "str1", "str2", "str3" }, (item) => item.Contains("str")));
-            Console.WriteLine(FirstOrDefault(new[] { "str1", "str2", "str3" }, (item) => item.Contains("4")));
-
-            Console.WriteLine(Any(new[] { "str1", "str2" }, (item) => item.Contains("str")));
-            Console.WriteLine(Any(new[] { "str1", "str2" }, (item) => item.Contains("3")));
-
-            Console.SetCursorPosition(5, 5);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine('*');
-
+                yield return enumerator.Current;
+                ++returned;
+            }
         }
 
         public static IEnumerable<int> FilterValues(IEnumerable<int> collection, UnicalName predicate)
