@@ -138,6 +138,13 @@ namespace ConsoleApp
 
             return (DateTime.MinValue + (DateTime.Now - birthday)).Year - 1;
         }
+
+        public static DateTime NextWorkingDay(this DateTime dateTime) => dateTime.DayOfWeek switch
+        {
+            DayOfWeek.Friday => dateTime.Date.AddDays(3),
+            DayOfWeek.Saturday => dateTime.Date.AddDays(2),
+            _ => dateTime.Date.AddDays(1)
+        };
     }
 
     class Program
@@ -168,7 +175,14 @@ namespace ConsoleApp
             Console.WriteLine("BIRTHDAY");
             Console.WriteLine(new DateTime(1996, 7, 11).Age());
             Console.WriteLine(new DateTime(2020, 12, 22).Age());
-            Console.WriteLine(new DateTime(2022, 12, 22).Age());
+            Console.WriteLine(new DateTime(1976, 08, 19).Age());
+
+            Console.WriteLine("WORKING DAY");
+            Console.WriteLine(new DateTime(2021, 12, 22).NextWorkingDay());
+            Console.WriteLine(new DateTime(2021, 12, 23).NextWorkingDay());
+            Console.WriteLine(new DateTime(2021, 12, 24).NextWorkingDay());
+            Console.WriteLine(new DateTime(2021, 12, 25).NextWorkingDay());
+            Console.WriteLine(new DateTime(2021, 12, 26).NextWorkingDay());
         }
 
         public static IEnumerable<T> Take<T>(IEnumerable<T> collection, int? count = null) => 
