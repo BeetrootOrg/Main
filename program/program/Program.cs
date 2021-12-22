@@ -86,15 +86,10 @@ namespace ConsoleApp
 
     }
 
-    class Archive : Archive
+    class ArchiveSCU : Archive
     {
         const string Data = "archive.csv";
 
-        private static void SerchByName
-        {
-            
-        }
-    
         private void ArchiveData() => File.AppendAllLines(Data, contents: new[] { $"{IProduct.Name} , {IProduct.Scu}" });
 
         private static (string, string)[] ReadArchive()
@@ -109,6 +104,31 @@ namespace ConsoleApp
             }
 
             return archive;
+
+        }
+
+        private void SerchByName()
+        {
+            SerchByName(IProduct);
+        }
+
+        void SerchByName(IProduct name)
+        {
+            string searchTerm = name;
+
+            bool found = false;
+            foreach (var (IProduct.Name, IProduct.Scu) in Data())
+            {
+                if (IProduct.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) 
+                {
+                    return;
+                }
+            }
+
+            if (!found)
+            {
+                
+            }
         }
     }
     
