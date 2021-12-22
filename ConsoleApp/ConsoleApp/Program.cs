@@ -98,77 +98,36 @@ namespace ConsoleApp
 
     #endregion
 
+    static class StringExtensions
+    {
+        public static int CountWords(this string str) => str.Split(' ').Length;
+    }
+
     class Program
     {
         static void Main()
         {
-            var array = Enumerable.Range(0, 10);
-            ShowAll(FilterValues(array, (int item) => item > 5));
-            ShowAll(FilterValues(array, OddOnly));
+            Console.WriteLine("This is a string".CountWords());
+            Console.WriteLine("Word".CountWords());
+            // Console.WriteLine(((string)null).CountWords());
 
-            // 1st option - decalre delegate
-            Dima evenOnly = (int item) => item % 2 == 0;
-            ShowAll(FilterValues(array, evenOnly));
+            ShowAll(Take(new[] { 1, 2, 3 }, 2));
+            ShowAll(Take(new[] { 1, 2, 3 }, null));
+        }
 
-            // 2nd option - declare anonymous method
-            static bool OddOnly(int item) => item % 2 == 1;
+        public static IEnumerable<T> Take<T>(IEnumerable<T> collection, int? count = null) => 
+            count.HasValue ? Take(collection, count.Value) : collection;
 
-            var number = 0;
-            Func<int, int> calculate = (i) =>
+        public static IEnumerable<T> Take<T>(IEnumerable<T> collection, int count)
+        {
+            using var enumerator = collection.GetEnumerator();
+            var returned = 0;
+
+            while (returned < count && enumerator.MoveNext())
             {
-                number += i;
-                return number;
-            };
-
-            Func<int, int> calculate2 = (i) =>
-            {
-                var number = 0;
-                number += i;
-                return number;
-            };
-
-            calculate(5);
-            calculate(2);
-
-            Console.WriteLine("CLOSURE NUMBER");
-            Console.WriteLine(number);
-
-            var num1 = calculate2(5);
-            var num2 = calculate2(2);
-
-            Console.WriteLine("NON CLOSURE NUMBER");
-            Console.WriteLine(number);
-            Console.WriteLine(num1);
-            Console.WriteLine(num2);
-
-            var observable1 = new ChangesObservable<int> { Name = "First" };
-            var observable2 = new ChangesObservable<int> { Name = "Second" };
-
-            ChangesObservable<int>.ChangeEventHandler handler = (sender, args) =>
-            {
-                var changesObservable = sender as ChangesObservable<int>;
-                Console.WriteLine($"Value changed inside {changesObservable.Name} from {args.PreviousValue} to {args.NewValue}");
-            };
-            
-            observable1.ChangeEvent += handler;
-            observable2.ChangeEvent += handler;
-
-            observable1.Value = 1;
-            observable2.Value = 2;
-
-            ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item % 2 == 1));
-            ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item > 5));
-            ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item % 2 == 0));
-            ShowAll(new WhereEnumerable<int>(new[] { 1, 2, 3, 4, 0, 8, 11, 1998 }, (item) => item % 3 == 0));
-
-            Console.WriteLine(FirstOrDefault(new[] { 1, 2 }, (item) => item > 1));
-            Console.WriteLine(FirstOrDefault(new[] { 1, 2 }, (item) => item > 2));
-
-            Console.WriteLine(FirstOrDefault(new[] { "str1", "str2" }, (item) => item.Contains("str")));
-            Console.WriteLine(FirstOrDefault(new[] { "str1", "str2" }, (item) => item.Contains("3")));
-
-            Console.WriteLine(Any(new[] { "str1", "str2" }, (item) => item.Contains("str")));
-            Console.WriteLine(Any(new[] { "str1", "str2" }, (item) => item.Contains("3")));
+                yield return enumerator.Current;
+                ++returned;
+            }
         }
 
         public static IEnumerable<int> FilterValues(IEnumerable<int> collection, Dima predicate)
