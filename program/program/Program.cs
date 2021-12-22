@@ -3,41 +3,63 @@ using System.IO;
 
 namespace ConsoleApp
 {
-    //const string Filename = @"discription.csv";
+    
+    interface IBuyers
+    {
+        string FullName (string firstName, string lastName);
+        int Age { get; set; }
+        string Sex { get; set; }
+        int Id { get; }
+        string Adress { get; set; }
+        string Email { get; set; }
+
+    }
+    interface IAdmin:IBuyers
+    {        
+        string EmployeePosition { get; set; }
+        void CreateProduct(string productName, double Price);
+    }
+
+    interface Archive: IProduct
+    {
+       string Archive { get; set; }
+       string SerchByName();
+    }
+
+    interface IProduct : IPrice
+    {
+        int Scu { get; }
+        string Name { get; set; }
+        string Discription { get; set; }
+        int Amount { get; set; }   
+        
+        bool StockStatus()
+        {
+            bool StockStatus = false;
+            if (Amount > 0)
+            {
+                StockStatus = true;
+            }
+            else
+            {
+                StockStatus = false;
+            }
+            return StockStatus;
+        }
+    }
+
+    
 
     interface IPrice
     {
         double ProductPrice(double oldPrice, double discount);
-                
     }
     
-    interface IAmountOfProduct
+    class Price : IPrice
     {
-        int AmountOfProduct(int amountOfProdut);
-    }
-    interface IStockStatus
-    {
-        string StockStatus(string Stock);
-    }
-
-    interface IID
-    {
-        int Gtin13(int Gtin13);
-        int Mpn(int Mpn);
-        int Scu(int Scu);
-    }
-    interface IName
-    {
-        string NameOfTheProduct(string NameOfTheProduct);
-        string Brand (string BrandName);
-       
-    }
-
-    class Product : IPrice
-    {
-        double discountPrice;
+       double discountPrice = 0;
        public double ProductPrice(double oldPrice, double discount)
-        //=> oldPrice * discount;
+        
         {
             if (discount > 0 && discount <=99)
             {
@@ -52,53 +74,55 @@ namespace ConsoleApp
              
     }
 
-    class Availability : IAmountOfProduct
+    class User: IBuyers
     {
+        public string FullName(string firstName, string lastName) => $"{firstName} {lastName}";
+        
+        public int Age { get; set; }
+        public string Sex { get; set; }
+        public int Id { get; init; }
+        public string Adress { get; set; }
+        public string Email { get; set; }
 
-        public int AmountOfProduct(int amountOfProdut)
+    }
+
+    class Archive : Archive
+    {
+        const string Data = "archive.csv";
+
+        private static void SerchByName
         {
-            string stockStatus;
-
             
-            return amountOfProdut;
         }
-    }
+    
+        private void ArchiveData() => File.AppendAllLines(Data, contents: new[] { $"{IProduct.Name} , {IProduct.Scu}" });
 
-    class StockStatus : Availability, IStockStatus
-    {
-        string IStockStatus.StockStatus(string Stock)
+        private static (string, string)[] ReadArchive()
         {
-            throw new NotImplementedException();
+            string[] lines = File.ReadAllLines(Data);
+
+            var archive = new (string, string)[lines.Length - 1];
+            for (int i = 1; i < lines.Length; i++)
+            {
+                string[] splitted = lines[i].Split(',');
+                archive[i - 1] = (splitted[0], splitted[1]);
+            }
+
+            return archive;
         }
     }
-
-    //class Specs : IName, IID, IPrice
-    //{
-    //    public string Brand(string BrandName)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-
-    //    public string NameOfTheProduct(string NameOfTheProduct)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
-
+    
 
     class Program
     {        
+        
         static void Main()
         {
-            Product product = new Product();
-            Availability availability = new Availability(); 
+            Price product = new Price();
             Console.WriteLine(Price(product,10,70));
-            Console.WriteLine(Availability(availability,10));
-
-            
         }
 
         static double Price(IPrice price, double oldPrice, double discount) => price.ProductPrice(oldPrice, discount);
-        static double Availability(IAmountOfProduct availability, int amountOfProdut) => availability.AmountOfProduct(amountOfProdut);
+        
     }
 }
