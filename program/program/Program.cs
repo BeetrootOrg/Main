@@ -24,6 +24,7 @@ namespace ConsoleApp
     {
        string Archive { get; set; }
        string SerchByName();
+       
     }
 
     interface IProduct : IPrice
@@ -89,8 +90,8 @@ namespace ConsoleApp
     class ArchiveSCU : Archive
     {
         const string Data = "archive.csv";
-
-        private void ArchiveData() => File.AppendAllLines(Data, contents: new[] { $"{IProduct.Name} , {IProduct.Scu}" });
+        string archiveSCUName = { $"{IProduct.Name} = {IProduct.Scu}" };
+        private void ArchiveData() => File.AppendAllLines(Data, contents: new[] { archiveSCUName });
 
         private static (string, string)[] ReadArchive()
         {
@@ -112,22 +113,23 @@ namespace ConsoleApp
             SerchByName(IProduct);
         }
 
-        void SerchByName(IProduct name)
+        string SerchByName(IProduct name)
         {
-            string searchTerm = name;
+            string searchTerm = IProduct.Name;
 
             bool found = false;
-            foreach (var (IProduct.Name, IProduct.Scu) in Data())
+            foreach (var archiveSCUName in Data())
             {
-                if (IProduct.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) 
+                if (!archiveSCUName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) 
                 {
-                    return;
+                    return archiveSCUName;
                 }
             }
 
             if (!found)
             {
-                
+               archiveSCUName = { $"{IProduct.Name} = {searchTerm}" };
+               return archiveSCUName;
             }
         }
     }
