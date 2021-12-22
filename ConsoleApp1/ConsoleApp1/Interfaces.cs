@@ -8,9 +8,10 @@ namespace Console
 {
     #region Interfaces
     public interface IBuyer
-    {       
+    {
         string Name { get; }
         string LastName { get; }
+        
     }
 
     public interface ICreateBasket

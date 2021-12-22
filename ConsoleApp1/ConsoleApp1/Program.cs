@@ -17,10 +17,166 @@
 
     }
 
+    #region Menu
+    public static class Menu
+    {
+        public static void Login()
+        {
+
+        }
+
+        public static void MainMenu()
+        {
+
+        }
+
+        public static void OrderMenu()
+        {
+
+        }
+
+        public static void CustomerDetails()
+        {
+
+        }
+
+        public static void GetBill()
+        {
+
+        }
+    }
+
+    #endregion
+
+    #region FileInterFaces
+
+    public class FileIO
+    {
+        public FileIO(ref Shop shop, bool init)
+        {
+            if (!init)
+            {
+                List<string> prdList = new List<string>();
+                foreach(var prd in shop.Products)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(prd.Code);
+                    sb.Append(';');
+                    sb.Append(prd.Name);
+                    sb.Append(';');
+                    sb.Append(prd.Price);
+                    prdList.Add(sb.ToString());
+                }
+                List<string> cartProducts = new List<string>();
+                List<string> receipt = new List<string>();
+                List<string> customers = new List<string>();
+                foreach (var cust in shop.Customers)
+                {
+                    foreach(var rec in cust.Receipts)
+                    {
+                        foreach(CartProduct prd in rec.Basket)
+                        {
+                            StringBuilder sb = new StringBuilder();
+                            sb.Append(prd.OrderID);
+                            sb.Append(';');
+                            sb.Append(prd.Code);
+                            sb.Append(';');
+                            sb.Append(prd.Name);
+                            sb.Append(';');
+                            sb.Append(prd.Price);
+                            sb.Append(';');
+                            sb.Append(prd.Quantity);
+                            cartProducts.Add(sb.ToString());
+                        }
+                        StringBuilder sb2 = new StringBuilder();
+                        sb2.Append(rec.ID);
+                        sb2.Append(';');
+                        sb2.Append(rec.CustomerID);
+                        sb2.Append(';');
+                        sb2.Append(rec.Status);
+                        receipt.Add(sb2.ToString());
+                    }
+                    StringBuilder sb3 = new StringBuilder();
+                    sb3.Append(cust.CustomerID);
+                    sb3.Append(';');
+                    sb3.Append(cust.Name);
+                    sb3.Append(';');
+                    sb3.Append(cust.LastName);
+                    customers.Add(sb3.ToString());
+                    
+                }
+                File.WriteAllLines("orDetail.csv",prdList.ToArray());
+                File.WriteAllLines("orders.csv", receipt.ToArray());
+                File.WriteAllLines("customer.csv",customers.ToArray());
+            }
+        }
+        public void OperateProducts(ref Shop shop, bool init)
+        {
+            if (init)
+            {
+                var content = File.ReadAllLines("products.csv");
+                foreach(var item in content)
+                {
+                    var line = item.Split(';');
+                    Product product = new Product();
+                    product.Code = line[0];
+                    product.Name = line[1];
+                    product.Price = (float)Convert.ToDouble(line[2]);
+                }
+            }
+        }
+
+        public void OperateOrders(ref Shop shop, bool init)
+        {
+            if (init)
+            {
+                var content2 = File.ReadAllLines("orDetail.csv");
+                List<CartProduct> cartProducts = new List<CartProduct>();
+                foreach(var item in content2)
+                {
+                    var line = item.Split(';');
+                    CartProduct product = new CartProduct();
+                    product.OrderID = Convert.ToInt32(line[0]);
+                    product.Code = line[1];
+                    product.Name = line[2];
+                    product.Price= (float)Convert.ToDouble(line[3]);
+                    product.Quantity = (float)Convert.ToDouble(line[4]);
+                }
+                var content = File.ReadAllLines("orders.csv");
+                foreach (var item in content)
+                {
+                    var line = item.Split(';');
+                    Receipt receipt = new Receipt();
+                    receipt.ID = Convert.ToInt32(line[0]);
+                    receipt.CustomerID = Convert.ToInt32(line[1]);
+                    receipt.Status = line[2];
+                    List<CartProduct> carts = new List<CartProduct>();
+                    foreach(var cp in cartProducts)
+                    {
+                        if(cp.OrderID == receipt.ID)
+                        {
+                            carts.Add(cp);
+                        }
+                    }
+                    receipt.Basket = carts.ToArray();
+                }
+            }
+        }
+
+        public void OperateCustomers(ref Shop shop, bool init)
+        {
+
+        }
+    }
+
+    #endregion
+
     #region abstract Bill
 
     public abstract class Bill
     {
+        public virtual int ID { get; set; }
+        public virtual int CustomerID { get; set; }
         public virtual float TotalAmount { get; set; }
         public virtual iCartProduct[] Basket { get; set; } 
 
@@ -47,6 +203,7 @@
         public string Name { get; set; }
         public string Code { get; set; }
         public float Price { get; set; }
+        public int OrderID { get; set; }
     }
 
     #endregion
@@ -151,6 +308,7 @@
 
     public class Customer : IBuyer
     {   
+        public int CustomerID { get; set; }
         public string Name { get; init; }
 
         public string LastName { get; init; }
