@@ -226,6 +226,19 @@ namespace ConsoleApp
 
     #endregion
 
+    #region Extensions
+
+    public static class EnumerableExtensions
+    {
+        public static IEnumerable<int> EvenOnly(this IEnumerable<int> collection)
+            => new EvenOnlyEnumerable(collection);
+
+        public static IEnumerable<int> Power(this IEnumerable<int> collection, int exponent)
+            => new PowerCollectionEnumerable(collection, exponent);
+    }
+
+    #endregion
+
     class Program
     {
         static void Main()
@@ -344,6 +357,13 @@ namespace ConsoleApp
             ShowAll(new EvenOnlyEnumerable(new[] { 1, 3 }));
 
             ShowAll(new PowerCollectionEnumerable(new EvenOnlyEnumerable(new[] { 1, 2, 3 }), 3));
+
+            Console.WriteLine("EXTENSIONS");
+            var collection = new[] { 1, 2, 3 };
+            ShowAll(collection
+                .EvenOnly()
+                .Power(3)
+            );
         }
 
         static void ShowAll<T>(IEnumerable<T> collection)
