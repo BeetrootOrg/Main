@@ -103,6 +103,32 @@ namespace ConsoleApp
         public static int CountWords(this string str) => string.IsNullOrEmpty(str) ? 0 : str.Split(' ').Length;
     }
 
+    static class DateTimeExtensions
+    {
+        public static IEnumerable<DateTime> DatesUntil(this DateTime from, DateTime to, TimeSpan step)
+        {
+            if (from < to && step < TimeSpan.Zero ||
+                from > to && step > TimeSpan.Zero)
+            {
+                throw new ArgumentException("Incorrect input");
+            }
+
+            if (from == to)
+            {
+                yield break;
+            }
+
+            Func<DateTime, bool> predicate = from < to
+                ? (dateTime) => dateTime <= to
+                : (dateTime) => dateTime >= to;
+
+            for (DateTime current = from; predicate(current); current = current.Add(step))
+            {
+                yield return current;
+            }
+        }
+    }
+
     class Program
     {
         static void Main()
@@ -116,6 +142,17 @@ namespace ConsoleApp
 
             ShowAll(Take(new[] { 1, 2, 3 }, 2));
             ShowAll(Take(new[] { 1, 2, 3 }, null));
+
+            var now = DateTime.Now;
+            Console.WriteLine("FROM MIN TO MAX");
+            ShowAll(now.DatesUntil(now.AddDays(7), TimeSpan.FromHours(5)));
+
+            Console.WriteLine("FROM MAX TO MIN");
+            ShowAll(now.AddDays(7).DatesUntil(now, TimeSpan.FromHours(5).Negate()));
+
+            Console.WriteLine("EMPTY");
+            ShowAll(now.DatesUntil(now, TimeSpan.FromHours(5)));
+            ShowAll(now.DatesUntil(now, TimeSpan.FromHours(5).Negate()));
         }
 
         public static IEnumerable<T> Take<T>(IEnumerable<T> collection, int? count = null) => 
