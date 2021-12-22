@@ -4,109 +4,90 @@ namespace ConsoleApp
 {
     public class Program
     {
-        interface IShopMethods
+        #region LenkedList
+        public class LenkedList<T>
         {
-            void AddNewProduct(string productName, string productDescription, int price, int quantity);
-            int ChangeQuantity(Product someProduct, int newQuantity);
-            void AddNewSale(Product[] soldItem, Personal seller, RegisterBuyer buyer);
-            void AddNewBuyer(string firstName, string lastName, string phoneNumber);
-        }
-        class InternetShop : IShopMethods
-        {
-            Product[] Products;
-            private Personal[] Personal;
-            private RegisterBuyer[] Buyers;
-            private Sale[] Sales;
-
-            public InternetShop() { }
-
-            public int ChangeQuantity(Product someProduct, int newQuantity) => someProduct.Quantity = newQuantity;
-
-            public void AddNewBuyer(string firstName, string lastName, string phoneNumber)
+            private class ListItem
             {
-                Array.Resize(ref Buyers, Buyers.Length + 1);
-                Buyers[Buyers.Length - 1] = new RegisterBuyer(firstName, lastName, phoneNumber); 
+                public T Value { get; init; }
+                public ListItem Next { get; set; }
             }
 
-            public void AddNewProduct(string productName, string productDescription, int price, int quantity)
+            private ListItem _head;
+            public int Count { get; private set; }
+
+            public void Add(T item)
             {
-                Array.Resize(ref Products, Products.Length + 1);
-                Products[Products.Length - 1] = new Product(productName, productDescription, price, quantity);
+                var listItem = new ListItem
+                {
+                    Value = item,
+                    Next = null
+                };
+
+                if(_head == null)
+                {
+                    _head = listItem;
+                }
+                else
+                {
+                    var last = _head;
+                    while(last.Next != null)
+                    {
+                        last = last.Next;
+                    }
+                    last.Next = listItem;
+                }
+
+                ++Count;
             }
 
-            public void AddNewSale(Product[] soldItem, Personal seller, RegisterBuyer buyer)
+            public T[] GetAll()
             {
-                Array.Resize(ref Sales, Sales.Length + 1);
-                Sales[Sales.Length - 1] = new Sale(soldItem, seller, buyer);
-            }
-        }
+                var array = new T[Count];
+                var item = _head;
 
-        class Product
-        {
-            public Product(string productName, string productDescription, int price, int quantity)
-            {
-                ProductName = productName;
-                ProductDescription = productDescription;
-                Price = price;
-                Quantity = quantity;
+                for(int i = 0; i < Count; i++)
+                {
+                    array[i] = item.Value;
+                    item = item.Next;
+                }
+                return array;
             }
-
-            public string ProductName { get; set; }
-            public string ProductDescription { get; set; }
-            public int Price { get; set; }
-            public int Quantity { get; set; }
         }
 
-        class Personal
-        {
-            public Personal(string firstName, string lastName, string phoneNumber)
-            {
-                FirstName = firstName;
-                LastName = lastName;
-                PhoneNumber = phoneNumber;
-            }
-
-            public string FirstName { get; init; }
-            public string LastName { get; init; }
-            public string FullName => $"{FirstName} {LastName}";
-            public string PhoneNumber { get; set; }
-
-        }
-
-        class RegisterBuyer
-        {
-            public RegisterBuyer(string firstName, string lastName, string phoneNumber)
-            {
-                FirstName = firstName;
-                LastName = lastName;
-                PhoneNumber = phoneNumber;
-            }
-
-            public string FirstName { get; init; }
-            public string LastName { get; init; }
-            public string FullName => $"{FirstName} {LastName}";
-            public string PhoneNumber { get; set; }
-        }
-
-        class Sale
-        {
-            public Sale(Product[] soldItem, Personal seller, RegisterBuyer buyer)
-            {
-                SoldItem = soldItem;
-                Seller = seller;
-                Buyer = buyer;
-                SaleDate = DateTime.Now;
-            }
-
-            Product[] SoldItem { get; init; }
-            Personal Seller { get; init; }
-            RegisterBuyer Buyer { get; init; }
-            DateTime SaleDate { get; init; }
-        }
-
+        #endregion
         static void Main()
         {
-            Console.WriteLine("Hello, World!");
+            var int1 = 5;
+            var int2 = 7;
+
+            Swap(ref int1,ref int2);
+
+            var string1 = "string";
+            var string2 = "hello";
+
+            Swap(ref string1,ref string2);
+
+            //ShowArray(new[] { 1, 2, 3 });
+            //ShowArray(new[] { "Hello", "Dima" });
+
+
+            var list = new LenkedList<string>();
+            list.Add("element");
+            ShowArray(list.GetAll());
+        }
+         
+        static void Swap<T>(ref T val1,ref T val2)
+        {
+            (val1, val2) = (val2, val1);
+        }
+
+        static void ShowArray<TElement>(TElement[] array)
+        {
+            foreach(var item in array)
+            {
+                Console.WriteLine(item);
+            }
         }
     }
 }
