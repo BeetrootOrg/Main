@@ -8,6 +8,7 @@ namespace ConsoleApp
 {
     //i.safontev/classwork/18-extensions
     delegate bool UnicalName(int number);
+
     #region Changes
     class ChangesObservable<T>
     {
@@ -104,6 +105,50 @@ namespace ConsoleApp
 
         public static int? CountWords(this string str) => string.IsNullOrEmpty(str) ? 0 : str.Split(' ').Length;
     }
+    static class DateTimeExtensions
+    {
+        public static IEnumerable<DateTime> DatesUntill(this DateTime from, DateTime to, TimeSpan step)
+        {
+            if (from < to && step < TimeSpan.Zero || from > to && step > TimeSpan.Zero)
+            {
+                throw new ArgumentException($"Incorrect input");
+            }
+
+            if (from == to)
+            {
+                yield break;    
+            }
+
+            Func<DateTime, bool> predicate = from < to
+                ? (dateTime) => dateTime <= to
+                : (dateTime) => dateTime >= to;
+
+            for (DateTime current = from; predicate(current); current = current.Add(step))
+            {
+                yield return current;
+            }
+        }
+
+        public static int Age(this DateTime birthday)
+        {
+            var now = DateTime.Now;
+            if (birthday > now)
+            {
+                throw new ArgumentOutOfRangeException(nameof(birthday), "You are an idiot");
+            }
+
+            return (DateTime.MinValue + (now - birthday)).Year - 1;
+        }
+
+        public static DateTime NextWorkingDay(this DateTime dateTime) => dateTime.DayOfWeek switch
+        {
+            DayOfWeek.Friday => dateTime.Date.AddDays(3),
+            DayOfWeek.Saturday => dateTime.Date.AddDays(2),
+            _ => dateTime.Date.AddDays(1)
+        };
+
+    }
+
     class Program
     {
         static void Main()
@@ -115,6 +160,27 @@ namespace ConsoleApp
 
             ShowAll(Take(new[] { 1, 2, 3 }, 2));
             ShowAll(Take(new[] { 1, 2, 3 }, null));
+
+            var now = DateTime.Now;
+            Console.WriteLine("FROM MIN TO MAX");
+            ShowAll(now.DatesUntill(now.AddDays(7), TimeSpan.FromHours(5)));
+
+            Console.WriteLine("FROM MAX TO MIN");
+            ShowAll(now.AddDays(7).DatesUntill(now, TimeSpan.FromHours(5).Negate()));
+
+            Console.WriteLine("EMPTY");
+            ShowAll(now.DatesUntill(now, TimeSpan.FromHours(5)));
+            ShowAll(now.DatesUntill(now, TimeSpan.FromHours(5).Negate()));
+
+            Console.WriteLine($"\n");
+            Console.WriteLine(new DateTime(2003, 01, 17).Age());
+            //Console.WriteLine(new DateTime(2023, 01, 17).Age());
+
+            Console.WriteLine(new DateTime(2021, 12, 22).NextWorkingDay());
+            Console.WriteLine(new DateTime(2021, 12, 23).NextWorkingDay());
+            Console.WriteLine(new DateTime(2021, 12, 24).NextWorkingDay());
+            Console.WriteLine(new DateTime(2021, 12, 25).NextWorkingDay());
+
         }
 
         public static IEnumerable<T> Take<T>(IEnumerable<T> collection, Nullable<int> count = null) =>//Nullable<int> count == int? count
