@@ -22,11 +22,16 @@ internal class StudentsService : IStudentsService
     private readonly IKey _key;
 
     public StudentsService(ICacheClient cacheClient, ISlackApiClient slackApiClient, IMapper mapper, string key = "users")
+        : this(cacheClient, slackApiClient, mapper, new StringKey(key))
+    {
+    }
+
+    private StudentsService(ICacheClient cacheClient, ISlackApiClient slackApiClient, IMapper mapper, IKey key)
     {
         _cacheClient = cacheClient;
         _slackApiClient = slackApiClient;
         _mapper = mapper;
-        _key = new StringKey(key);
+        _key = key;
     }
 
     public async Task<User> GetRandomStudent(CancellationToken cancellationToken = default)
