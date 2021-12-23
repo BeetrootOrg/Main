@@ -1,55 +1,73 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using AutoMapper;
+using ConsoleApp.Profiles;
+using ConsoleApp.Services;
+using Microsoft.Extensions.Configuration;
+using StackExchange.Redis;
 
-namespace ConsoleApp
+namespace ConsoleApp;
+
+internal class Program
 {
-    class Program
+    private static async Task Main(string[] args)
     {
-        static async Task Main()
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", false)
+            .AddEnvironmentVariables()
+            .AddCommandLine(args)
+            .Build();
+
+        var config = configuration.Get<Configuration>();
+
+        var redisConfig = new ConfigurationOptions
         {
-            const string slackBotToken = "SLACK_BOT_TOKEN";
-            using var httpClient = new HttpClient
+            EndPoints =
             {
-                BaseAddress = new Uri("https://slack.com"),
-            };
-
-            var token = Environment.GetEnvironmentVariable(slackBotToken);
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            var settings = new JsonSerializerSettings
-            {
-                ContractResolver = new DefaultContractResolver
-                {
-                    NamingStrategy = new SnakeCaseNamingStrategy()
-                }
-            };
-
-            var slackClient = new SlackApiClient(httpClient, settings);
-            var result = await slackClient.GetMembers();
-
-            if (!result.Ok)
-            {
-                throw new Exception("Slack API returned not OK");
+                config.RedisConnectionString
             }
+        };
+        
+        using var redis = await ConnectionMultiplexer.ConnectAsync(redisConfig);
 
-            var students = result.Members
-                .Where(member => !member.IsBot && !member.IsAdmin && !member.IsOwner && !member.IsAppUser && !member.IsPrimaryOwner)
-                .ToArray();
+        var database = redis.GetDatabase();
+        var serializer = new MsgPackSerializer();
 
-            if (!students.Any())
+        ICacheClient cacheClient = new RedisCacheClient(database, serializer, serializer, config.Ttl);
+        
+        var mapper = new MapperConfiguration((mapperConfig =>
+        {
+            mapperConfig.AddProfile(new AppProfile());
+        })).CreateMapper();
+
+        const string slackUrl = "https://slack.com";
+        const string tokenType = "Bearer";
+        
+        using var httpClient = new HttpClient
+        {
+            BaseAddress = new Uri(slackUrl),
+        };
+        
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(tokenType, config.SlackToken);
+
+        var settings = new JsonSerializerSettings
+        {
+            ContractResolver = new DefaultContractResolver
             {
-                throw new Exception("No students in workspace");
+                NamingStrategy = new SnakeCaseNamingStrategy()
             }
+        };
 
-            var random = new Random((int)DateTime.Now.Ticks);
-            var user = students[random.Next(0, students.Length)];
+        ISlackApiClient slackClient = new SlackApiClient(httpClient, settings);
+        IStudentsService studentsService = new StudentsService(cacheClient, slackClient, mapper);
+        
+        var user = await studentsService.GetRandomStudent();
 
-            Console.WriteLine($"{user.Name} ({user.RealName}), you've killed!");
-        }
+        Console.WriteLine($"{user.Name} ({user.RealName}), you've killed!");
     }
+    
 }
