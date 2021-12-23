@@ -3,6 +3,7 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using ConsoleApp.Profiles;
@@ -16,6 +17,14 @@ internal class Program
 {
     private static async Task Main(string[] args)
     {
+        using var cts = new CancellationTokenSource();
+        var token = cts.Token;
+
+        Console.CancelKeyPress += (_, _) =>
+        {
+            cts.Cancel();
+        };
+        
         var configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", false)
             .AddEnvironmentVariables()
@@ -63,9 +72,9 @@ internal class Program
         };
 
         ISlackApiClient slackClient = new SlackApiClient(httpClient, settings);
-        IStudentsService studentsService = new StudentsService(cacheClient, slackClient, mapper);
+        IStudentsService studentsService = new StudentsService(cacheClient, slackClient, mapper, config.RedisKey);
         
-        var user = await studentsService.GetRandomStudent();
+        var user = await studentsService.GetRandomStudent(token);
 
         Console.WriteLine($"{user.Name} ({user.RealName}), you've killed!");
     }

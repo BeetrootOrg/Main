@@ -7,4 +7,5 @@ internal class Configuration
     public string SlackToken { get; set; }
     public string RedisConnectionString { get; set; }
     public TimeSpan? Ttl { get; set; }
+    public string RedisKey { get; set; } = "users";
 }

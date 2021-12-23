@@ -19,17 +19,19 @@ internal class StudentsService : IStudentsService
     private readonly ICacheClient _cacheClient;
     private readonly ISlackApiClient _slackApiClient;
     private readonly IMapper _mapper;
+    private readonly IKey _key;
 
-    public StudentsService(ICacheClient cacheClient, ISlackApiClient slackApiClient, IMapper mapper)
+    public StudentsService(ICacheClient cacheClient, ISlackApiClient slackApiClient, IMapper mapper, string key = "users")
     {
         _cacheClient = cacheClient;
         _slackApiClient = slackApiClient;
         _mapper = mapper;
+        _key = new StringKey(key);
     }
 
     public async Task<User> GetRandomStudent(CancellationToken cancellationToken = default)
     {
-        var users = await _cacheClient.GetOrSet(new StringKey("users"), 
+        var users = await _cacheClient.GetOrSet(_key, 
             async token => await GetUsersFromSlack(token), cancellationToken);
         
         var students = users.Where(UserExtensions.IsStudent).ToArray();

@@ -23,6 +23,7 @@ public class StudentsServiceTests
     private readonly Faker _faker;
     private readonly Faker<User> _userFaker;
 
+    private string _key;
     private StudentsService _studentsService;
 
     public StudentsServiceTests()
@@ -41,15 +42,16 @@ public class StudentsServiceTests
             .RuleFor(x => x.IsBot, f => f.Random.Bool())
             .RuleFor(x => x.IsAppUser, f => f.Random.Bool())
             .RuleFor(x => x.IsOwner, f => f.Random.Bool());
-        
-        _studentsService = new StudentsService(_cacheClientMock.Object, _slackApiClientMock.Object, _mapperMock.Object);
+
+        _key = _faker.Random.Utf16String();
+        _studentsService = new StudentsService(_cacheClientMock.Object, _slackApiClientMock.Object, _mapperMock.Object, _key);
     }
 
     [Fact]
     public async Task GetRandomStudentShouldGetItWithoutApi()
     {
         // Arrange
-        var key = new StringKey("users");
+        var key = new StringKey(_key);
         var users = _userFaker.GenerateBetween(0, 20).Append(new User
         {
             Name = _faker.Person.UserName,
@@ -71,7 +73,7 @@ public class StudentsServiceTests
     public async Task GetRandomStudentShouldUseSlackApi()
     {
         // Arrange
-        var key = new StringKey("users");
+        var key = new StringKey(_key);
         var users = _userFaker.GenerateBetween(0, 20).Append(new User
         {
             Name = _faker.Person.UserName,
@@ -106,7 +108,7 @@ public class StudentsServiceTests
     public async Task GetRandomStudentShouldThrowIfNotOk()
     {
         // Arrange
-        var key = new StringKey("users");
+        var key = new StringKey(_key);
         var response = new UsersResponse
         {
             Members = null,
@@ -132,7 +134,7 @@ public class StudentsServiceTests
     public async Task GetRandomStudentShouldThrowIfNoStudents()
     {
         // Arrange
-        var key = new StringKey("users");
+        var key = new StringKey(_key);
 
         var response = new UsersResponse
         {
