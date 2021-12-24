@@ -1,0 +1,11 @@
+﻿1. https://refactoring.guru/ru/design-patterns
+2. https://www.dofactory.com/net/design-patterns
+3. https://www.digitalocean.com/community/conceptual_articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design
+   SOLID stands for:
+   S - Single-responsiblity Principle
+   O - Open-closed Principle
+   L - Liskov Substitution Principle
+   I - Interface Segregation Principle
+   D - Dependency Inversion Principle
+4. https://www.wolframalpha.com/
+5. http://www.quizful.net/interview/csharp?page=0
