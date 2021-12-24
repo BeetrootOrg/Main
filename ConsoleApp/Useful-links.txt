@@ -8,3 +8,4 @@
    I - Interface Segregation Principle
    D - Dependency Inversion Principle
 4. https://www.wolframalpha.com/
+5. http://www.quizful.net/interview/csharp?page=0
