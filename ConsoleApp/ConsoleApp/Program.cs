@@ -4,17 +4,6 @@ using System.IO;
 namespace ConsoleApp
 {
     //i.safontev/homework/12-abstractions
-    /*
-    Опишите с помощью UML-домена "интернет-магазин".
-    Он должен включать продукты (с указанием цены, количества и т. Д.),
-    Покупателей (личная информация),
-    квитанции (что и кому было продано) и т. Д.
-
-    Реализуйте все сущности в программе C #
-
-    Предоставьте консольный интерфейс для регистрации нового продукта,
-    добавления количества к существующему, продажи продукта, регистрации покупателя.
-    */
     #region Internet Shop
 
     class InternetShop
@@ -26,7 +15,7 @@ namespace ConsoleApp
 
     class Staff
     {
-        private string StaffID { get; set; }
+        private string ID { get; set; }
         private string FirstName { get; set; }
         private string LastName { get; set; }
         private string PhoneNumber { get; set; }
@@ -36,7 +25,8 @@ namespace ConsoleApp
 
     class Product
     {
-        public string ProductID { get; set; }
+        public string ID { get; set; }
+        public string Name { get; set; }
         public double Price { get; set; }
         public int CommonCount { get; set; }
 
@@ -44,7 +34,7 @@ namespace ConsoleApp
 
     class Buyer
     {
-        private string BuyerID { get; set; }
+        private string ID { get; set; }
         private string FirstName { get; set; }
         private string LastName { get; set; }
         private string PhoneNumber { get; set; }
@@ -61,25 +51,25 @@ namespace ConsoleApp
 
     #region Interfaces
 
-    interface IBuyer
+    interface IAddBuyer
     {
-        void AddNewBuyer();
+        void AddNewBuyer(string ID, string FirstName, string LastName, string PhoneNumber);
         void RefreshBuyer();
     }
 
     interface INewProduct
     {
-        void AddNewProduct();
+        void RegistrateNewProduct(string ID, string Name, double Price, int Count);
     }
 
-    interface IAddProduct
+    interface IAddNProduct
     {
-
+        void AddNProduct(int Count, int n);
     }
 
     interface ISellProduct
     {
-
+        void SellProduct(int Count, int n);
     }
 
     #endregion
