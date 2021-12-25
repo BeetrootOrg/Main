@@ -10,17 +10,6 @@ namespace ConsoleApp
     {
         public Product[] Products { get; set; }
         public Buyer[] Buyers { get; set; }
-        public Staff[] Staff { get; set; }
-    }
-
-    class Staff
-    {
-        private string ID { get; set; }
-        private string FirstName { get; set; }
-        private string LastName { get; set; }
-        private string PhoneNumber { get; set; }
-        private string Position { get; set;}
-
     }
 
     class Product
