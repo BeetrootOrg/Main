@@ -3,219 +3,100 @@
 namespace ConsoleApp
 {
     //i.safontev/classwork/15-generics
-    #region Interfaces
-
-    public interface IList
+    public class Stack<T>
     {
-        int Count { get; }
-        void Clear();
-        void Remove(int index);
-    }
+        public T[] Arr { get; set; }
+        public int Top { get; set; }
+        public int Count { get; set; }
 
-
-    public interface IReadOnlyList<out T> : IList
-    {
-        T[] GetAll();
-        T this[int index] { get; }
-    }
-
-    public interface IWriteOnlyList<in T> : IList
-    {
-        void Add(T item);
-        void Insert(T item, int index);
-        T this[int index] { set; }
-    }
-
-    #endregion
-
-    #region LinkedList
-
-    public class LinkedList<T> : IReadOnlyList<T>, IWriteOnlyList<T>
-    {
-        private class ListItem
+        public Stack(int Count)
         {
-            public T Value { get; set; }
-            public ListItem Next { get; set; }
+            this.Count = Count;
+            Arr = new T[Count];
         }
 
-        private ListItem _head;
-        public int Count { get; private set; }
-
-        public void Add(T item) => Insert(item, Count);
-
-        public T this[int index]
+        public void Push(T Element) 
         {
-            get => GetByIndex(index).Value;
-            set
+            int k = 1;
+            if (Top == Count)
             {
-                var item = GetByIndex(index);
-                item.Value = value;
+                T[] newArray = new T[Top + 1];
+                Array.Copy(Arr, 0, newArray, 0, Top);
+                Arr = newArray;
+                k = 0;
             }
+            Arr[Top] = Element;
+            Top += k;
         }
 
-        public T[] GetAll()
+        public T Pop()
         {
-            var array = new T[Count];
-            var item = _head;
-
-            for (int i = 0; i < Count; ++i)
+            if (Top > 0)
             {
-                array[i] = item.Value;
-                item = item.Next;
+                Console.WriteLine(Top);
+                T lastElement = Arr[Top];
+                Top--;
+                return lastElement;
             }
-
-            return array;
+            return default(T);
         }
 
         public void Clear()
         {
-            _head = null;
-            Count = 0;
+            Arr = default(T[]);
+            Top = 0;
         }
 
-        public void Remove(int index)
+        public T Peek()
         {
-            if (index == Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index));
-            }
-
-            if (index == 0)
-            {
-                _head = _head.Next;
-            }
-            else
-            {
-                var prev = GetByIndex(index - 1);
-                prev.Next = prev.Next.Next;
-            }
-
-            --Count;
+            return Arr[Top];
         }
 
-        public void Insert(T item, int index)
+        public T[] CopyTo()
         {
-            if (index == 0)
-            {
-                var listItem = new ListItem
-                {
-                    Value = item,
-                    Next = _head
-                };
-
-                _head = listItem;
-            }
-            else
-            {
-                var prev = GetByIndex(index - 1);
-
-                var listItem = new ListItem
-                {
-                    Value = item,
-                    Next = prev.Next
-                };
-
-                prev.Next = listItem;
-            }
-
-            ++Count;
+            T[] newArray = new T[Top];
+            Array.Copy(Arr, 0, newArray, 0, Top);
+            return newArray;    
         }
 
-        private ListItem GetByIndex(int index)
+        public override string ToString()
         {
-            if (index < 0 || index >= Count)
+            string s = null;
+            for(int i = 0; i <= Top; i++)
             {
-                throw new ArgumentOutOfRangeException(nameof(index));
+                s += " " + Arr[i];
             }
-
-            var item = _head;
-            for (int i = 0; i < index; i++)
-            {
-                item = item.Next;
-            }
-
-            return item;
+            return $"Arr={s}\n";
         }
     }
-
-    #endregion
-
     class Program
     {
         static void Main()
         {
-            var int1 = 5;
-            var int2 = 7;
+            Stack<int> arr1 = new Stack<int>(3);
 
-            Swap(ref int1, ref int2);
+            arr1.Push(1);
+            arr1.Push(2);
+            arr1.Push(3);
+            arr1.Push(4);
 
-            var str1 = "string";
-            var str2 = "hello";
-            Swap(ref str1, ref str2);
+            Console.WriteLine(arr1);
 
-            // ShowArray(new[] { 1, 2, 3 });
-            // ShowArray(new[] { "hello", "Dima" });
+            int t = arr1.Peek();
+            Console.WriteLine($"Last element is: {t}");
+            Console.WriteLine(arr1);
 
-            var list = new LinkedList<string>();
-            list.Add("el1");
-            list.Add("el2");
-            list.Add("el3");
-            ShowArray(list.GetAll());
+            t = arr1.Pop();
+            Console.WriteLine($"Last element is: {t}");
+            Console.WriteLine(arr1);
 
-            list[0] = "el4";
+            int[] arr2;
+            arr2 = arr1.CopyTo();
 
-            Console.WriteLine(list[0]);
-            Console.WriteLine(list[1]);
-            Console.WriteLine(list[2]);
+            arr1.Clear();
 
-            ShowArray(list.GetAll());
-
-            // ShowRandomListElement(list);
-            // SetRandomListElement(list, "element");
-
-            list[0] = "el0";
-            list[1] = "el1";
-            list[2] = "el2";
-
-            list.Remove(0);
-            list.Add("el3");
-            list.Remove(2);
-            list.Add("el4");
-            list.Remove(1);
-
-            Console.WriteLine("AFTER REMOVE");
-            ShowArray(list.GetAll());
-
-            list.Insert("insert0", 0);
-            list.Insert("insert1", 3);
-            list.Insert("insert2", 2);
-
-            list.Clear();
         }
 
-        static void Swap<T>(ref T val1, ref T val2)
-        {
-            (val1, val2) = (val2, val1);
-        }
 
-        static void ShowArray<TElement>(TElement[] array)
-        {
-            foreach (var item in array)
-            {
-                Console.WriteLine(item);
-            }
-        }
-
-        static void ShowRandomListElement<T>(IReadOnlyList<T> list)
-        {
-            var index = new Random((int)DateTime.Now.Ticks).Next(0, list.Count);
-            Console.WriteLine(list[index]);
-        }
-
-        static void SetRandomListElement<T>(IWriteOnlyList<T> list, T element)
-        {
-            var index = new Random((int)DateTime.Now.Ticks).Next(0, list.Count);
-            list[index] = element;
-        }
     }
 }
