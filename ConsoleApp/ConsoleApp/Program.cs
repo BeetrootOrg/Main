@@ -2,7 +2,7 @@
 
 namespace ConsoleApp
 {
-    //i.safontev/classwork/15-generics
+    //i.safontev/homework/14-generics
     public class Stack<T>
     {
         public T[] Arr { get; set; }
