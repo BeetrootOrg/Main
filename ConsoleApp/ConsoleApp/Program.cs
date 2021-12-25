@@ -1,63 +1,109 @@
 ﻿using System;
 namespace ConsoleApp
 {
-    enum Genre
+    enum Sex
     {
-        Detective,
-        Fantasy,
-        Horror,
-        Other,
+        Male,
+        Female,
     }
-
-    class Library
+    enum Material
     {
-        public int BookShelf { get; set; }
-        public int Visitor { get; set; }
-        public Staff Staff { get; init; }
+        Wood,
+        Metal,
+        Plastic,
     }
-    class Visitor
+    enum Position
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public int Age { get; init; }
-        public Genre FavGeneres { get; set; }
+        HeadTeacher,
+        Director,
+    }
+    enum Subjects
+    {
+        Math,
+        Physics,
+        Chemistry,
+        PE,
+        Geography,
+    }
+    class School
+    {
+        public Staff Staff { get; set; }
+        public Classrooms Classrooms { get; set; }
+        public Students Students { get; set; }
     }
     class Staff
     {
-        public Librarian Librarian { get; set; }
+        public Cleaner Cleaner { get; set; }
         public SecurityGuard SecurityGuard { get; set; }
-        public Cleaner Cleaner { get; init; }
+        public Administration Administration { get; set; }
+        public Teacher Teacher { get; set; }
+
     }
     class Cleaner
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public int Payment { get; set; }
         public int Age { get; init; }
-        public int Payment{ get; set; }
     }
     class SecurityGuard
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int Age { get; init; }
         public int Payment { get; set; }
+        public int Age { get; init; }
     }
-    class Librarian
+    class Administration
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int Age { get; init; }
         public int Payment { get; set; }
+        public Position Position { get; set; }
+        public int Age { get; init; }
     }
-    class BookShelf
+    class Teacher
     {
-        public Book Book { get; set; }
-        public string GenrePointers { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public int Payment { get; set; }
+        public Subjects Subjects { get; set; }
+        public int Age { get; init; }
     }
-    class Book
+    class Students
     {
-        public Genre Genere { get; set; }
-        public string Author { get; set; }
-        public string Title { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public int Grade{ get; set; }
+        public int Age { get; init; }
+        public Sex Sex { get; init; }
+    }
+    class Classrooms
+    {
+        public Table Table { get; init; }
+        public Chair Chair { get; init; }
+        public Blackboard Blackboard { get; init; }
+        public SubjectClassrom SubjectClassrom { get; init; }
+        public int ClassroomsNumber{ get; init; }
+
+    }
+    class Table
+    {
+        public Material Material { get; init; }
+        public int Amount{ get; init; }
+    }
+    class Chair
+    {
+        public Material Material { get; init; }
+        public int Amount{ get; init; }
+    }
+    class Blackboard
+    {
+        public Material Material { get; init; }
+        public int Amount{ get; init; }
+    }
+    class SubjectClassrom
+    {
+        public Subjects Subjects { get; init; }
+        public Teacher Teacher { get; init; }
     }
 }
