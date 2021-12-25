@@ -6,36 +6,55 @@ namespace ConsoleApp
     //i.safontev/homework/12-abstractions
     #region Internet Shop
 
-    class InternetShop
+    public class InternetShop
     {
         public Product[] Products { get; set; }
         public Buyer[] Buyers { get; set; }
     }
 
-    class Product : IAddNProduct, INewProduct, ISellProduct
+    public class Product : IAddNProduct, INewProduct, ISellProduct
     {
         public string ID { get; set; }
         public string Name { get; set; }
         public double Price { get; set; }
         public int CommonCount { get; set; }
 
-        public void AddNProduct(int Count, int n) { }
-        public void RegistrateNewProduct(string ID, string Name, double Price, int Count) { }
-        public void SellProduct(int Count, int n) { }
+        public void AddNProduct(int n) { CommonCount += n; }
+        public Product RegistrateNewProduct(string ID, string Name, double Price, int Count)
+        {
+            Product newProduct = new Product
+            {
+                ID = ID,
+                Name = Name,
+                Price = Price,
+                CommonCount = Count,
+            };
+            return newProduct;
+        }
+        public void SellProduct(int n) { CommonCount -= n; }
     }
 
-    class Buyer : IAddBuyer
+    public class Buyer : IAddBuyer
     {
         private string ID { get; set; }
         private string FirstName { get; set; }
         private string LastName { get; set; }
         private string PhoneNumber { get; set; }
 
-        public void AddNewBuyer(string ID, string FirstName, string LastName, string PhoneNumber) { }
-        public void RefreshBuyer() { }
+        public Buyer AddNewBuyer(string ID, string FirstName, string LastName, string PhoneNumber)
+        {
+            Buyer newBuyer = new Buyer
+            {
+                ID = ID,
+                FirstName = FirstName,
+                LastName = LastName,
+                PhoneNumber = PhoneNumber,
+            };
+            return newBuyer;
+        }
     }
 
-    class Receipts
+    public class Receipts
     {
         public Buyer Buyer { get; set; }
         public Product[] Products { get; set; }
@@ -48,23 +67,22 @@ namespace ConsoleApp
 
     public interface IAddBuyer
     {
-        void AddNewBuyer(string ID, string FirstName, string LastName, string PhoneNumber);
-        void RefreshBuyer();
+        Buyer AddNewBuyer(string ID, string FirstName, string LastName, string PhoneNumber);
     }
 
     public interface INewProduct
     {
-        void RegistrateNewProduct(string ID, string Name, double Price, int Count);
+        Product RegistrateNewProduct(string ID, string Name, double Price, int Count);
     }
 
     public interface IAddNProduct
     {
-        void AddNProduct(int Count, int n);
+        void AddNProduct(int n);
     }
 
     public interface ISellProduct
     {
-        void SellProduct(int Count, int n);
+        void SellProduct(int n);
     }
 
     #endregion
