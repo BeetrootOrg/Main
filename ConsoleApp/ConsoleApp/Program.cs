@@ -38,7 +38,7 @@ namespace ConsoleApp
     class Receipts
     {
         public Buyer Buyer { get; set; }
-        public Product Product { get; set; }
+        public Product[] Products { get; set; }
 
     }
 
