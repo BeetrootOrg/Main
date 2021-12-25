@@ -3,7 +3,7 @@ using System.Text;
 using System.IO;
 namespace ConsoleApp
 {
-    //i.safontev/homework/12-abstractions
+    //i.safontev/homework/13-structs
     #region Internet Shop
 
     public class InternetShop : INewProduct, IAddBuyer
