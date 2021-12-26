@@ -6,13 +6,59 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("\r\n a.tkachenko/homework/16-Vote \r\n");
+            /*Console.WriteLine("\r\n a.tkachenko/homework/16-Vote \r\n");
 
             Vote vote = new Vote();
             while (true)
             {
                 Menu(ref vote);
-            }
+            }*/
+
+            Console.WriteLine("\r\n a.tkachenko/homework/17-SnakeGame \r\n");
+
+            SnakeGame snakeGame = new SnakeGame();
+            // snakeGame.ShowField();
+            // snakeGame.SetPointInField(10, 10, '*');
+            // snakeGame.ShowField();
+
+            /*
+            // DoWorkEvery5Seconds((state) => Console.WriteLine("message"));
+
+            // устанавливаем метод обратного вызова
+            TimerCallback tm = new TimerCallback(Count);
+            // создаем таймер
+            DoWorkEvery5Seconds(tm);
+            // using Timer timer = new Timer(tm, num, 0, 2000);*/
+
+        }
+        public static void Count(object obj)
+        {
+            //int x = (int)obj;
+            //for (int i = 1; i < 9; i++, x++)
+            //{
+            //    Console.WriteLine($"{x * i}");
+            //}
+            Console.WriteLine("Message");
+        }
+        private static void DoWorkEvery5Seconds(TimerCallback callback)
+        {
+            //Timer timer;
+            //try
+            //{
+            //    timer = new Timer(callback, null, 0, 1000);
+            //    Thread.Sleep(TimeSpan.FromSeconds(5));
+            //    Console.WriteLine("FINISHED");
+            //}
+            //finally
+            //{
+            //    timer?.Dispose();
+            //}
+
+            // the same as above
+            using var timer = new Timer(callback, null, Timeout.Infinite, 0);
+            timer.Change(TimeSpan.Zero, TimeSpan.FromSeconds(1));
+            Thread.Sleep(TimeSpan.FromSeconds(5));
+            Console.WriteLine("FINISHED");
         }
         static void Menu(ref Vote v)
         {            
