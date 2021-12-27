@@ -2,115 +2,219 @@
 
 namespace ConsoleApp
 {
-    struct Complex : IEquatable<Complex>
+    #region Interfaces
+
+    public interface IList
     {
-        public double Real { get; init; }
-        public double Imaginary { get; init; }
+        int Count { get; }
+        void Clear();
+        void Remove(int index);
+    }
 
-        public Complex(double real, double imaginary)
+
+    public interface IReadOnlyList<out T> : IList
+    {
+        T[] GetAll();
+        T this[int index] { get; }
+    }
+
+    public interface IWriteOnlyList<in T> : IList
+    {
+        void Add(T item);
+        void Insert(T item, int index);
+        T this[int index] { set; }
+    }
+
+    #endregion
+
+    #region LinkedList
+
+    public class LinkedList<T> : IReadOnlyList<T>, IWriteOnlyList<T>
+    {
+        private class ListItem
         {
-            Real = real;
-            Imaginary = imaginary;
+            public T Value { get; set; }
+            public ListItem Next { get; set; }
         }
 
-        public Complex(Complex another)
+        private ListItem _head;
+        public int Count { get; private set; }
+
+        public void Add(T item) => Insert(item, Count);
+
+        public T this[int index]
         {
-            Real = another.Real;
-            Imaginary = another.Imaginary;
-        }
-
-        public override bool Equals(object obj) => obj is Complex complex && Equals(complex);
-
-        public bool Equals(Complex other) => Real == other.Real &&
-                   Imaginary == other.Imaginary;
-
-        public override int GetHashCode() => HashCode.Combine(Real, Imaginary);
-
-        public override string ToString() => $"{Real}+{Imaginary}i";
-
-        public static Complex operator +(Complex complex1, Complex complex2) =>
-            new(complex1.Real + complex2.Real, complex1.Imaginary + complex2.Imaginary);
-
-        public static Complex operator *(Complex complex1, Complex complex2) =>
-            new(complex1.Real * complex2.Real - complex1.Imaginary * complex2.Imaginary,
-                complex1.Real * complex2.Imaginary + complex1.Imaginary * complex2.Real);
-
-        public static bool operator ==(Complex complex1, Complex complex2) => complex1.Equals(complex2);
-        public static bool operator !=(Complex complex1, Complex complex2) => !complex1.Equals(complex2);
-
-        public static explicit operator double(Complex complex) =>
-            Math.Sqrt(Math.Pow(complex.Real, 2) + Math.Pow(complex.Imaginary, 2));
-
-        public double this[int i]
-        {
-            get
+            get => GetByIndex(index).Value;
+            set
             {
-                return i switch
-                {
-                    0 => Real,
-                    1 => Imaginary,
-                    _ => throw new ArgumentOutOfRangeException(nameof(i))
-                };
+                var item = GetByIndex(index);
+                item.Value = value;
             }
-            /* set 
-            { 
-                switch(i)
+        }
+
+        public T[] GetAll()
+        {
+            var array = new T[Count];
+            var item = _head;
+
+            for (int i = 0; i < Count; ++i)
+            {
+                array[i] = item.Value;
+                item = item.Next;
+            }
+
+            return array;
+        }
+
+        public void Clear()
+        {
+            _head = null;
+            Count = 0;
+        }
+
+        public void Remove(int index)
+        {
+            if (index == Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            if (index == 0)
+            {
+                _head = _head.Next;
+            }
+            else
+            {
+                var prev = GetByIndex(index - 1);
+                prev.Next = prev.Next.Next;
+            }
+
+            --Count;
+        }
+
+        public void Insert(T item, int index)
+        {
+            if (index == 0)
+            {
+                var listItem = new ListItem
                 {
-                    case 0:
-                        Real = value;
-                        break;
-                    case 1:
-                        Imaginary = value;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(i));
-                }
-            } */
+                    Value = item,
+                    Next = _head
+                };
+
+                _head = listItem;
+            }
+            else
+            {
+                var prev = GetByIndex(index - 1);
+
+                var listItem = new ListItem
+                {
+                    Value = item,
+                    Next = prev.Next
+                };
+
+                prev.Next = listItem;
+            }
+
+            ++Count;
+        }
+
+        private ListItem GetByIndex(int index)
+        {
+            if (index < 0 || index >= Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            var item = _head;
+            for (int i = 0; i < index; i++)
+            {
+                item = item.Next;
+            }
+
+            return item;
         }
     }
+
+    #endregion
 
     class Program
     {
         static void Main()
         {
-            Complex complex1 = new()
+            var int1 = 5;
+            var int2 = 7;
+
+            Swap(ref int1, ref int2);
+
+            var str1 = "string";
+            var str2 = "hello";
+            Swap(ref str1, ref str2);
+
+            // ShowArray(new[] { 1, 2, 3 });
+            // ShowArray(new[] { "hello", "Dima" });
+
+            var list = new LinkedList<string>();
+            list.Add("el1");
+            list.Add("el2");
+            list.Add("el3");
+            ShowArray(list.GetAll());
+
+            list[0] = "el4";
+
+            Console.WriteLine(list[0]);
+            Console.WriteLine(list[1]);
+            Console.WriteLine(list[2]);
+
+            ShowArray(list.GetAll());
+
+            // ShowRandomListElement(list);
+            // SetRandomListElement(list, "element");
+
+            list[0] = "el0";
+            list[1] = "el1";
+            list[2] = "el2";
+
+            list.Remove(0);
+            list.Add("el3");
+            list.Remove(2);
+            list.Add("el4");
+            list.Remove(1);
+
+            Console.WriteLine("AFTER REMOVE");
+            ShowArray(list.GetAll());
+
+            list.Insert("insert0", 0);
+            list.Insert("insert1", 3);
+            list.Insert("insert2", 2);
+
+            list.Clear();
+        }
+
+        static void Swap<T>(ref T val1, ref T val2)
+        {
+            (val1, val2) = (val2, val1);
+        }
+
+        static void ShowArray<TElement>(TElement[] array)
+        {
+            foreach (var item in array)
             {
-                Imaginary = 1,
-                Real = 2
-            };
+                Console.WriteLine(item);
+            }
+        }
 
-            Complex complex2 = new()
-            {
-                Imaginary = 1,
-                Real = 2
-            };
+        static void ShowRandomListElement<T>(IReadOnlyList<T> list)
+        {
+            var index = new Random((int)DateTime.Now.Ticks).Next(0, list.Count);
+            Console.WriteLine(list[index]);
+        }
 
-            Complex complex3 = new()
-            {
-                Imaginary = 1.5,
-                Real = 3
-            };
-
-            Console.WriteLine(complex1.Equals(complex2));
-            Console.WriteLine(complex2.Equals(complex3));
-
-            Console.WriteLine(complex1);
-
-            var sum = complex1 + complex3;
-            Console.WriteLine(sum);
-
-            Console.WriteLine($"{complex1}*{complex3}={complex1 * complex3}");
-            Console.WriteLine(complex1 == complex2);
-
-            double d = (double)complex1;
-            Console.WriteLine(d);
-
-            // complex[0] -> real
-            // complex[1] -> imaginary
-            Console.WriteLine(complex1[0]);
-            Console.WriteLine(complex1[1]);
-
-            Console.WriteLine(complex1);
+        static void SetRandomListElement<T>(IWriteOnlyList<T> list, T element)
+        {
+            var index = new Random((int)DateTime.Now.Ticks).Next(0, list.Count);
+            list[index] = element;
         }
     }
 }
