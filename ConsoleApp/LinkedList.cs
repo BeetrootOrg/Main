@@ -42,7 +42,7 @@ namespace ConsoleApp
         public int Count { get; private set; }
         public void Push(T item)
         {
-            Console.WriteLine("Push: {0}", item.GetType());
+            // Console.WriteLine("Push: {0}", item.GetType());
             Insert(item, Count);
         }
         public T this[int index]
