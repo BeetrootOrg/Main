@@ -4,6 +4,11 @@
     
     class ConsoleApp
     {
+        static void PrintTime(object state)
+        {
+            Console.Clear();
+            Console.WriteLine("Time:  " + DateTime.Now.ToLongTimeString());
+        }
         static void Main(string[] args)
         {
             /*Console.WriteLine("\r\n a.tkachenko/homework/16-Vote \r\n");
@@ -16,7 +21,29 @@
 
             Console.WriteLine("\r\n a.tkachenko/homework/17-SnakeGame \r\n");
 
+            //////// Делегат для типа Timer
+            //////TimerCallback timeCB = new TimerCallback(PrintTime);
+
+            //////using Timer time = new Timer(timeCB, null, 0, 200);
+            //////Console.WriteLine("Press Any Key for Exit...");
+            //////Console.ReadLine();
+
             SnakeGame snakeGame = new SnakeGame();
+
+            TimerCallback timeCB = new TimerCallback(snakeGame.SnackField);
+            using Timer time = new Timer(timeCB, null, 0, 200);
+
+            ////Console.WriteLine("Press Any Key for Exit...");
+            ////Console.ReadLine();
+            while (true)
+            {
+                ConsoleKeyInfo ck = Console.ReadKey();
+                if ((ck.Key == ConsoleKey.D4) || (ck.Key == ConsoleKey.NumPad4))
+                {
+                    Exit();
+                }
+                snakeGame.SetDirection(ck);
+            }
             // snakeGame.ShowField();
             // snakeGame.SetPointInField(10, 10, '*');
             // snakeGame.ShowField();

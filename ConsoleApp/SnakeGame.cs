@@ -51,18 +51,23 @@ namespace ConsoleApp
                 value = s.value;
             }
         }
+        private ConsoleKeyInfo ck;
         private Move _LastModeMove;
         private Move _modeMove;
         private int _axeX;
         private int _axeY;
+        private int _maxX;
+        private int _maxY;
         private Point _point;
         private (int x, int y) _headPosition;
-        LinkedList <Snack> _stack;
+        private LinkedList <Snack> _stack;
 
         public SnakeGame()
         {
             _axeX = 50;
             _axeY = 20;
+            _maxX = (_axeX - 2);
+            _maxY = (_axeY - 2);
             _LastModeMove = Move.INITIAL;
             _modeMove = Move.RIGHT;
             _point = new Point(50, 20);
@@ -85,7 +90,15 @@ namespace ConsoleApp
             _stack.Push(new Snack(_headPosition.x, _headPosition.y, '7'));
             // TimerCallback tm = new TimerCallback(Count);
             // DoWorkEvery1Second(tm);
-            DoWorkEvery1Second(new TimerCallback(SnackField));
+
+            //// Delegat for Timer
+            //// TimerCallback timeCB = new TimerCallback(SetDirection);
+            //// using Timer time = new Timer(timeCB, null, 0, 1000);
+            //// DoWorkReadConsoleKeyEvery200mSecond(new TimerCallback(SetDirection));
+
+            //////TimerCallback timeCB = new TimerCallback(SnackField);
+            //////using Timer time = new Timer(timeCB, null, 0, 200);
+            //DoWorkEvery1Second(new TimerCallback(SnackField));
         }
         public SnakeGame(int x, int y)
         {
@@ -95,6 +108,52 @@ namespace ConsoleApp
             _modeMove = Move.RIGHT;
             _point = new Point(x, y);
             FillField();
+        }
+        public void SetDirection(object obj)
+        {
+            /*if(obj == null)
+            {
+                return;
+            }*/
+            ConsoleKeyInfo ck = Console.ReadKey();
+            switch (ck.Key)
+            {
+                case ConsoleKey.D1:
+                case ConsoleKey.NumPad1:
+                    // ...
+                    break;
+                case ConsoleKey.D2:
+                case ConsoleKey.NumPad2:
+                    // ...
+                    break;
+                case ConsoleKey.D3:
+                case ConsoleKey.NumPad3:
+                    // ...
+                    break;
+                case ConsoleKey.D4:
+                case ConsoleKey.NumPad4:
+                    //Exit();
+                    break;
+
+
+                case ConsoleKey.UpArrow:
+                    if (_modeMove != Move.DOWN) { _modeMove = Move.UP; }
+                    break;
+                case ConsoleKey.DownArrow:
+                    if (_modeMove != Move.UP) { _modeMove = Move.DOWN; }
+                    break;
+                case ConsoleKey.LeftArrow:
+                    if (_modeMove != Move.RIGHT) { _modeMove = Move.LEFT; }
+                    break;
+                case ConsoleKey.RightArrow:
+                    if (_modeMove != Move.LEFT) { _modeMove = Move.RIGHT; }
+                    break;
+
+
+
+                default:
+                    break;
+            }
         }
         public void FillField()
         {
@@ -134,12 +193,18 @@ namespace ConsoleApp
                 Console.Write("\r\n");
             }
         }
-        private void SnackField(object obj)
+        public void SnackField(object obj)
         {
             int i;
-            Snack[] _stackCopy = new Snack[_stack.Count];
+            Snack[] _stackCopy;
             Snack _head;
 
+            if(_stack.Count <= 0)
+            {
+                return;
+            }
+
+            _stackCopy = new Snack[_stack.Count];
             _stack.CopyTo(_stackCopy);
             _stack.Clear();
 
@@ -188,92 +253,175 @@ namespace ConsoleApp
 
         private void _handlerMoveRight(Snack _head)
         {
-            if (_head._position.x < (_axeX - 2))
+            if (_head._position.y == 1)
+            {
+                if (_head._position.x < _maxX)
+                {
+                    _head._position.x++;
+                }
+                else
+                {
+                    _head._position.y = 2;
+                    _LastModeMove = _modeMove;
+                    _modeMove = Move.DOWN;
+                }
+            }
+            else if (_head._position.y == _maxY)
+            {
+                if (_head._position.x < _maxX)
+                {
+                    _head._position.x++;
+                }
+                else
+                {
+                    _head._position.y = _maxY - 1;
+                    _LastModeMove = _modeMove;
+                    _modeMove = Move.UP;
+                }
+            }
+            else if (((_head._position.y > 1) && (_head._position.y < _maxX)) && (_head._position.x < _maxX))
             {
                 _head._position.x++;
             }
-            else if ((_head._position.x == (_axeX - 2)) && (_head._position.y < _axeY))
+            else
             {
-                _LastModeMove = _modeMove;
-                _modeMove = Move.UP;
-                _head._position.y--;
-            }
-            else if ((_head._position.x == (_axeX - 2)) && (_head._position.y == _axeY))
-            {
+                _head._position.y++;
                 _LastModeMove = _modeMove;
                 _modeMove = Move.DOWN;
-                _head._position.y++;
             }
-            else {; }
         }
 
         private void _handlerMoveLeft(Snack _head)
         {
-            if (_head._position.x > 1)
+            if (_head._position.y == 1)
+            {
+                if (_head._position.x > 1)
+                {
+                    _head._position.x--;
+                }
+                else
+                {
+                    _head._position.y = 2;
+                    _LastModeMove = _modeMove;
+                    _modeMove = Move.DOWN;
+                }
+            }
+            else if (_head._position.y == _maxY)
+            {
+                if (_head._position.x > 1)
+                {
+                    _head._position.x--;
+                }
+                else
+                {
+                    _head._position.y = _maxY - 1;
+                    _LastModeMove = _modeMove;
+                    _modeMove = Move.UP;
+                }
+            }
+            else if (((_head._position.y > 1) && (_head._position.y < _maxX)) && (_head._position.x > 1))
             {
                 _head._position.x--;
             }
-            else if ((_head._position.x == 1) && (_head._position.y > 1))
+            else
             {
-                _LastModeMove = _modeMove;
-                _modeMove = Move.UP;
-                _head._position.y--;
-            }
-            else if ((_head._position.x == 1) && (_head._position.y == 1))
-            {
+                _head._position.y++;
                 _LastModeMove = _modeMove;
                 _modeMove = Move.DOWN;
-                _head._position.y++;
             }
-            else {; }
         }
 
         private void _handlerMoveDown(Snack _head)
         {
-            if (_head._position.y < (_axeY - 2))
+            if (_head._position.x == 1)
+            {
+                if (_head._position.y < _maxY)
+                {
+                    _head._position.y++;
+                }
+                else
+                {
+                    _head._position.x = 2;
+                    _LastModeMove = _modeMove;
+                    _modeMove = Move.RIGHT;
+                }
+            }
+            else if (_head._position.x == _maxX)
+            {
+                if (_head._position.y < _maxY)
+                {
+                    _head._position.y++;
+                }
+                else
+                {
+                    _head._position.x = _maxX - 1;
+                    _LastModeMove = _modeMove;
+                    _modeMove = Move.LEFT;
+                }
+            }
+            else if (((_head._position.x > 1) && (_head._position.x < _maxX)) && (_head._position.y < _maxY))
             {
                 _head._position.y++;
             }
-            else if ((_head._position.y == (_axeY - 2)) && (_head._position.x < (_axeX - 2)))
+            else
             {
+                _head._position.x++;
                 _LastModeMove = _modeMove;
                 _modeMove = Move.RIGHT;
-                _head._position.x++;
             }
-            else if ((_head._position.y == (_axeY - 2)) && (_head._position.x >= (_axeX - 2)))
-            {
-                _LastModeMove = _modeMove;
-                _modeMove = Move.LEFT;
-                _head._position.x--;
-            }
-            else {; }
         }
 
         private void _handlerMoveUp(Snack _head)
         {
-            if (_head._position.y > 1)
+            if (_head._position.x == 1)
+            {
+                if (_head._position.y > 1)
+                {
+                    _head._position.y--;
+                }
+                else
+                {
+                    _head._position.x = 2;
+                    _LastModeMove = _modeMove;
+                    _modeMove = Move.RIGHT;
+                }
+            }
+            else if (_head._position.x == _maxX)
+            {
+                if (_head._position.y > 1)
+                {
+                    _head._position.y--;
+                }
+                else
+                {
+                    _head._position.x = _maxX - 1;
+                    _LastModeMove = _modeMove;
+                    _modeMove = Move.LEFT;
+                }
+            }
+            else if (((_head._position.x > 1) && (_head._position.x < _maxX)) && (_head._position.y > 1))
             {
                 _head._position.y--;
             }
-            else if ((_head._position.y == 1) && (_head._position.x >= 1))
+            else
             {
-                _LastModeMove = _modeMove;
-                _modeMove = Move.LEFT;
-                _head._position.x--;
-            }
-            else if ((_head._position.y == 1) && (_head._position.x == _axeX))
-            {
+                _head._position.x++;
                 _LastModeMove = _modeMove;
                 _modeMove = Move.RIGHT;
-                _head._position.x++;
             }
-            else {; }
         }
 
         private static void DoWorkEvery1Second(TimerCallback callback)
         {
             using var timer = new Timer(callback, null, Timeout.Infinite, 0);
             timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(200));
+            Thread.Sleep(TimeSpan.FromSeconds(50));
+            Console.WriteLine("FINISHED");
+        }
+        private static void DoWorkReadConsoleKeyEvery200mSecond(TimerCallback callback)
+        {
+             var timer = new Timer(callback, null, Timeout.Infinite, 0);
+            timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(1000));
             Thread.Sleep(TimeSpan.FromSeconds(50));
             Console.WriteLine("FINISHED");
         }
