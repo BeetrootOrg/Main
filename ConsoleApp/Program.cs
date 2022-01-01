@@ -31,7 +31,10 @@
             SnakeGame snakeGame = new SnakeGame();
 
             TimerCallback timeCB = new TimerCallback(snakeGame.SnackField);
-            using Timer time = new Timer(timeCB, null, 0, 200);
+            using Timer time = new Timer(timeCB, null, 2000, 100);
+
+            TimerCallback timeDirectionCB = new TimerCallback(snakeGame.SetNewDirection);
+            using Timer timeDirection = new Timer(timeDirectionCB, null, 2000, 500);
 
             ////Console.WriteLine("Press Any Key for Exit...");
             ////Console.ReadLine();
@@ -43,6 +46,7 @@
                     Exit();
                 }
                 snakeGame.SetDirection(ck);
+                // snakeGame.SnackField(null);
             }
             // snakeGame.ShowField();
             // snakeGame.SetPointInField(10, 10, '*');

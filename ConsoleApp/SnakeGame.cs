@@ -8,11 +8,11 @@ namespace ConsoleApp
 {
     enum Move
     {
-        UP, 
-        DOWN, 
-        LEFT, 
-        RIGHT,
-        INITIAL
+        UP = 0, 
+        DOWN = 1, 
+        LEFT = 2, 
+        RIGHT = 3,
+        INITIAL = 4
     }
     class SnakeGame
     {
@@ -60,6 +60,8 @@ namespace ConsoleApp
         private int _maxY;
         private Point _point;
         private (int x, int y) _headPosition;
+        private Snack[] _food;
+        private int _foodLength { set; get; }
         private LinkedList <Snack> _stack;
 
         public SnakeGame()
@@ -70,24 +72,56 @@ namespace ConsoleApp
             _maxY = (_axeY - 2);
             _LastModeMove = Move.INITIAL;
             _modeMove = Move.RIGHT;
-            _point = new Point(50, 20);
+            _point = new Point(_axeX, _axeY);
+            _food = new Snack[_axeY];
+            _foodLength = 0;
             FillField();
-            _headPosition.x = 41; // _axeX / 2;
+            _headPosition.x = 20; // _axeX / 2;
             _headPosition.y = _axeY / 2;
             _stack = new LinkedList<Snack>();
-            _stack.Push(new Snack(_headPosition.x, _headPosition.y, '1'));
+
+            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 's'));
             _headPosition.x++;
-            _stack.Push(new Snack(_headPosition.x, _headPosition.y, '2'));
+            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 's'));
             _headPosition.x++;
-            _stack.Push(new Snack(_headPosition.x, _headPosition.y, '3'));
+            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 's'));
             _headPosition.x++;
-            _stack.Push(new Snack(_headPosition.x, _headPosition.y, '4'));
+            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 's'));
             _headPosition.x++;
-            _stack.Push(new Snack(_headPosition.x, _headPosition.y, '5'));
+            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 's'));
             _headPosition.x++;
-            _stack.Push(new Snack(_headPosition.x, _headPosition.y, '6'));
+            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 's'));
             _headPosition.x++;
-            _stack.Push(new Snack(_headPosition.x, _headPosition.y, '7'));
+            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 's'));
+            _headPosition.x++;
+
+            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '1'));
+            //_headPosition.x++;
+            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '2'));
+            //_headPosition.x++;
+            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '3'));
+            //_headPosition.x++;
+            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '4'));
+            //_headPosition.x++;
+            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '5'));
+            //_headPosition.x++;
+            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '6'));
+            //_headPosition.x++;
+            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '7'));
+            //_headPosition.x++;
+            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '8'));
+            //_headPosition.x++;
+            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '9'));
+            //_headPosition.x++;
+            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '0'));
+            //_headPosition.x++;
+            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '1'));
+            //_headPosition.x++;
+            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '2'));
+
+            ShowField();
+
+
             // TimerCallback tm = new TimerCallback(Count);
             // DoWorkEvery1Second(tm);
 
@@ -174,16 +208,54 @@ namespace ConsoleApp
                         _point.Position[y, x] = ' ';
                     }
                 }
+                _generateAndSetFood(y);
             }
+        }
+        private void _generateAndSetFood(int index)
+        {
+            if((index < 1) || (index > (_maxY)))
+            {
+                return;
+            }
+
+            Random x, r;
+            x = new Random();
+            r = new Random();
+
+            int rX = x.Next(0, 49);
+            char rMove = (char)r.Next((int)'0', (int)'9');
+            _food[index] = new Snack(rX, index, rMove);
+            /*_food[index]._position.y = index;
+            _food[index]._position.x = rX;
+            _food[index].value = rMove;*/
+
+            // _food[index] = rMove;
+            //  = _food[index];
+
+            _point.Position[index, rX] = rMove;
         }
         public void SetPointInField(int y, int x, char data)
         {
-            _point.Position[y, x] = data;
+            // _point.Position[y, x] = data;
+            // Console.SetCursorPosition(x, y);
+            // Console.Write(data);
+        }
+        public void ShowField()
+        {
+            Console.Clear();            
+            for (int y = 0; y < _point.Y.Length; y++)
+            {
+                for (int x = 0; x < _point.X.Length; x++)
+                {
+                    Console.Write(_point.Position[y, x]);
+                }
+                Console.Write("\r\n");
+            }
+            // Console.WriteLine("{0} x {1}, LASTM:{2} Mode:{3}", _point.X.Length, _point.Y.Length, _LastModeMove, _modeMove);
         }
         public void ShowField(Snack _head)
         {
-            Console.Clear();
-            Console.WriteLine("{0} x {1}, Head X:{2} Y:{3} Value:{4} lASTMode:{5} Mode:{6}", _point.X.Length, _point.Y.Length, _head._position.x, _head._position.y, _head.value, _LastModeMove, _modeMove);
+            Console.Clear();            
             for (int y = 0; y < _point.Y.Length; y++)
             {
                 for (int x = 0; x < _point.X.Length; x++)
@@ -192,42 +264,106 @@ namespace ConsoleApp
                 }
                 Console.Write("\r\n");
             }
+            Console.WriteLine("{0} x {1}, Head X:{2} Y:{3} Value:{4} LASTM:{5} Mode:{6}", _point.X.Length, _point.Y.Length, _head._position.x, _head._position.y, _head.value, _LastModeMove, _modeMove);
         }
         public void SnackField(object obj)
         {
             int i;
             Snack[] _stackCopy;
             Snack _head;
+            // Snack _head_1;
 
-            if(_stack.Count <= 0)
+            if (_stack.Count <= 0)
             {
                 return;
             }
 
             _stackCopy = new Snack[_stack.Count];
+            // _head_1 = new Snack(0, 0, ' ');
+
+            _head = new Snack(0, 0, ' ');
+            _head = _stack.Peek();
+            if (_food[_head._position.y] != null)
+            {
+                if ((_food[_head._position.y]._position.x == _head._position.x) &&
+                    (_food[_head._position.y]._position.y == _head._position.y))
+                {
+                    _stack.Push(new Snack(_head._position.x, _head._position.y, _food[_head._position.y].value));
+                    _foodLength++;
+                    _food[_head._position.y] = null;
+                    return;
+                }
+            }
+
+            //           _moveTo(_head);
+
             _stack.CopyTo(_stackCopy);
             _stack.Clear();
+            // _setNewDirection();
+
+
+            //ShowField();
 
             _head = new Snack(_stackCopy[_stackCopy.Length - 1]._position.x, _stackCopy[_stackCopy.Length - 1]._position.y, _stackCopy[_stackCopy.Length - 1].value);
-            for (i = 0; i < _stackCopy.Length; i++)
-            {
-                SetPointInField(_stackCopy[i]._position.y, _stackCopy[i]._position.x, _stackCopy[i].value);
-            }
+            // for (i = 0; i < _stackCopy.Length; i++)
+            // {
+            // SetPointInField(_stackCopy[i]._position.y, _stackCopy[i]._position.x, _stackCopy[i].value);
+            // }
 
             // ShowField(ref _head);
             // SetPointInField(_stackCopy[0]._position.y, _stackCopy[0]._position.x, ' ');
 
+            
             _moveTo(_head);
 
-            ShowField(_head);
-            SetPointInField(_stackCopy[0]._position.y, _stackCopy[0]._position.x, ' ');
+            // ShowField(_head);
+            //             ShowField();
+            //            int _getLeftCursor = Console.CursorLeft;
+            //            int _getTopCursor = Console.CursorTop;
+
+            // SetPointInField(_stackCopy[0]._position.y, _stackCopy[0]._position.x, ' ');
+            Console.SetCursorPosition(_stackCopy[0]._position.x, _stackCopy[0]._position.y);
+            Console.Write(' ');
+
+            Console.SetCursorPosition(_head._position.x, _head._position.y);
+            Console.Write(_head.value);
 
             for (i = 0; i < _stackCopy.Length - 1; i++)
             {
 
                 _stack.Push(new Snack(_stackCopy[i + 1]._position.x, _stackCopy[i + 1]._position.y, _stackCopy[i].value));
+                Console.SetCursorPosition(_stackCopy[i + 1]._position.x, _stackCopy[i + 1]._position.y);
+                Console.Write(_stackCopy[i].value);
             }
             _stack.Push(new Snack(_head._position.x, _head._position.y, _head.value));
+
+            Console.SetCursorPosition(0, 21);
+            // Console.WriteLine("{0} x {1}, LASTM:{2} Mode:{3}\r\n", _point.X.Length, _point.Y.Length, _LastModeMove, _modeMove);
+            Console.WriteLine("{0} x {1} : {2} x {3} ", _point.X.Length, _point.Y.Length, _head._position.x, _head._position.y);
+            Console.WriteLine("Mode: {0}    ", _modeMove);
+            Console.WriteLine("Snack Length: {0}    ", _stackCopy.Length);
+        }
+        public void SetNewDirection(object obj)
+        {
+            Random r = new Random();
+            Move rMove = (Move)r.Next(0, 3);
+            switch (rMove)
+            {
+                case Move.UP:
+                    if (_modeMove != Move.DOWN) { _modeMove = rMove; }
+                    break;
+                case Move.DOWN:
+                    if (_modeMove != Move.UP) { _modeMove = rMove; }
+                    break;
+                case Move.LEFT:
+                    if (_modeMove != Move.RIGHT) { _modeMove = rMove; }
+                    break;
+                case Move.RIGHT:
+                    if (_modeMove != Move.LEFT) { _modeMove = rMove; }
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void _moveTo(Snack _head)
@@ -249,6 +385,14 @@ namespace ConsoleApp
                 default:
                     break;
             }
+            //if (_food[_head._position.y] != null)
+            //{
+            //    if ((_food[_head._position.y]._position.x == _head._position.x) && (_food[_head._position.y]._position.y == _head._position.y))
+            //    {
+            //        _foodLength++;
+            //        _food[_head._position.y] = null;
+            //    }
+            //}
         }
 
         private void _handlerMoveRight(Snack _head)
