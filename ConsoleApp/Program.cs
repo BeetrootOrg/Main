@@ -38,7 +38,7 @@ CopyTo(arr) - copies stack to array
             }
         }
 
-        public T[] GetAll()
+        public void CopyTo(out T[] arr)
         {
             var array = new T[Count];
             var item = _base;
@@ -49,14 +49,9 @@ CopyTo(arr) - copies stack to array
                 item = item.Next;
             }
 
-            return array;
+            arr=array;
         }
 
-        public T[] CopyToArr(T[] arr)
-        {
-            arr = GetAll();
-            return arr;
-        }
 
         public void Clear()
         {
@@ -138,15 +133,20 @@ CopyTo(arr) - copies stack to array
         static void Main()
         {
 
-            var stack = new Stack<int>();
-            stack.Push(1);
-            stack.Push(2);
-            stack.Push(3);
-            stack.Push(0);
-        
+            var stack = new Stack<string>();
+            stack.Push("el0");
+            stack.Push("el1");
+            stack.Push("el2");
+            stack.Push("el3");
+            Console.WriteLine(stack.Peek());
+            Console.WriteLine(stack.Count);
+            Console.WriteLine(stack.Pop());
+            Console.WriteLine(stack.Count);
 
+            var arr = new string [stack.Count];
 
-
+            stack.CopyTo(out arr);
+            ShowArray(arr);
         }
 
 
