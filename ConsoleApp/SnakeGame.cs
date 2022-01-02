@@ -95,44 +95,7 @@ namespace ConsoleApp
             _stack.Push(new Snack(_headPosition.x, _headPosition.y, 's'));
             _headPosition.x++;
 
-            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '1'));
-            //_headPosition.x++;
-            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '2'));
-            //_headPosition.x++;
-            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '3'));
-            //_headPosition.x++;
-            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '4'));
-            //_headPosition.x++;
-            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '5'));
-            //_headPosition.x++;
-            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '6'));
-            //_headPosition.x++;
-            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '7'));
-            //_headPosition.x++;
-            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '8'));
-            //_headPosition.x++;
-            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '9'));
-            //_headPosition.x++;
-            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '0'));
-            //_headPosition.x++;
-            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '1'));
-            //_headPosition.x++;
-            //_stack.Push(new Snack(_headPosition.x, _headPosition.y, '2'));
-
             ShowField();
-
-
-            // TimerCallback tm = new TimerCallback(Count);
-            // DoWorkEvery1Second(tm);
-
-            //// Delegat for Timer
-            //// TimerCallback timeCB = new TimerCallback(SetDirection);
-            //// using Timer time = new Timer(timeCB, null, 0, 1000);
-            //// DoWorkReadConsoleKeyEvery200mSecond(new TimerCallback(SetDirection));
-
-            //////TimerCallback timeCB = new TimerCallback(SnackField);
-            //////using Timer time = new Timer(timeCB, null, 0, 200);
-            //DoWorkEvery1Second(new TimerCallback(SnackField));
         }
         public SnakeGame(int x, int y)
         {
@@ -145,10 +108,6 @@ namespace ConsoleApp
         }
         public void SetDirection(object obj)
         {
-            /*if(obj == null)
-            {
-                return;
-            }*/
             ConsoleKeyInfo ck = Console.ReadKey();
             switch (ck.Key)
             {
@@ -222,16 +181,9 @@ namespace ConsoleApp
             x = new Random();
             r = new Random();
 
-            int rX = x.Next(0, 49);
+            int rX = x.Next(1, _maxX);
             char rMove = (char)r.Next((int)'0', (int)'9');
             _food[index] = new Snack(rX, index, rMove);
-            /*_food[index]._position.y = index;
-            _food[index]._position.x = rX;
-            _food[index].value = rMove;*/
-
-            // _food[index] = rMove;
-            //  = _food[index];
-
             _point.Position[index, rX] = rMove;
         }
         public void SetPointInField(int y, int x, char data)
@@ -251,7 +203,6 @@ namespace ConsoleApp
                 }
                 Console.Write("\r\n");
             }
-            // Console.WriteLine("{0} x {1}, LASTM:{2} Mode:{3}", _point.X.Length, _point.Y.Length, _LastModeMove, _modeMove);
         }
         public void ShowField(Snack _head)
         {
@@ -271,15 +222,9 @@ namespace ConsoleApp
             int i;
             Snack[] _stackCopy;
             Snack _head;
-            // Snack _head_1;
-
-            if (_stack.Count <= 0)
-            {
-                return;
-            }
+            if (_stack.Count <= 0) { return; }
 
             _stackCopy = new Snack[_stack.Count];
-            // _head_1 = new Snack(0, 0, ' ');
 
             _head = new Snack(0, 0, ' ');
             _head = _stack.Peek();
@@ -295,54 +240,41 @@ namespace ConsoleApp
                 }
             }
 
-            //           _moveTo(_head);
-
             _stack.CopyTo(_stackCopy);
             _stack.Clear();
-            // _setNewDirection();
-
-
-            //ShowField();
-
             _head = new Snack(_stackCopy[_stackCopy.Length - 1]._position.x, _stackCopy[_stackCopy.Length - 1]._position.y, _stackCopy[_stackCopy.Length - 1].value);
-            // for (i = 0; i < _stackCopy.Length; i++)
-            // {
-            // SetPointInField(_stackCopy[i]._position.y, _stackCopy[i]._position.x, _stackCopy[i].value);
-            // }
 
-            // ShowField(ref _head);
-            // SetPointInField(_stackCopy[0]._position.y, _stackCopy[0]._position.x, ' ');
-
-            
             _moveTo(_head);
 
-            // ShowField(_head);
-            //             ShowField();
-            //            int _getLeftCursor = Console.CursorLeft;
-            //            int _getTopCursor = Console.CursorTop;
-
-            // SetPointInField(_stackCopy[0]._position.y, _stackCopy[0]._position.x, ' ');
             Console.SetCursorPosition(_stackCopy[0]._position.x, _stackCopy[0]._position.y);
             Console.Write(' ');
-
             Console.SetCursorPosition(_head._position.x, _head._position.y);
             Console.Write(_head.value);
 
             for (i = 0; i < _stackCopy.Length - 1; i++)
             {
-
                 _stack.Push(new Snack(_stackCopy[i + 1]._position.x, _stackCopy[i + 1]._position.y, _stackCopy[i].value));
                 Console.SetCursorPosition(_stackCopy[i + 1]._position.x, _stackCopy[i + 1]._position.y);
                 Console.Write(_stackCopy[i].value);
             }
             _stack.Push(new Snack(_head._position.x, _head._position.y, _head.value));
+            ShowDebugData(_stackCopy, _head);
+        }
 
+        private void ShowDebugData(Snack[] _stackCopy, Snack _head)
+        {
+            int i;
             Console.SetCursorPosition(0, 21);
-            // Console.WriteLine("{0} x {1}, LASTM:{2} Mode:{3}\r\n", _point.X.Length, _point.Y.Length, _LastModeMove, _modeMove);
             Console.WriteLine("{0} x {1} : {2} x {3} ", _point.X.Length, _point.Y.Length, _head._position.x, _head._position.y);
             Console.WriteLine("Mode: {0}    ", _modeMove);
-            Console.WriteLine("Snack Length: {0}    ", _stackCopy.Length);
+            Console.Write("Snack Data: \"");
+            for (i = _stackCopy.Length - 1; i >= 0; i--)
+            {
+                Console.Write(_stackCopy[i].value);
+            }
+            Console.Write("\", Length: {0}    \r\n", _stackCopy.Length);
         }
+
         public void SetNewDirection(object obj)
         {
             Random r = new Random();
@@ -385,14 +317,6 @@ namespace ConsoleApp
                 default:
                     break;
             }
-            //if (_food[_head._position.y] != null)
-            //{
-            //    if ((_food[_head._position.y]._position.x == _head._position.x) && (_food[_head._position.y]._position.y == _head._position.y))
-            //    {
-            //        _foodLength++;
-            //        _food[_head._position.y] = null;
-            //    }
-            //}
         }
 
         private void _handlerMoveRight(Snack _head)
@@ -511,7 +435,8 @@ namespace ConsoleApp
             {
                 _head._position.x++;
                 _LastModeMove = _modeMove;
-                _modeMove = Move.RIGHT;
+                _modeMove = Move.LEFT;
+                // _modeMove = Move.RIGHT;
             }
         }
 
@@ -552,6 +477,7 @@ namespace ConsoleApp
                 _head._position.x++;
                 _LastModeMove = _modeMove;
                 _modeMove = Move.RIGHT;
+                // _modeMove = Move.LEFT;
             }
         }
 

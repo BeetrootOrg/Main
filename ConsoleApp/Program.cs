@@ -31,10 +31,10 @@
             SnakeGame snakeGame = new SnakeGame();
 
             TimerCallback timeCB = new TimerCallback(snakeGame.SnackField);
-            using Timer time = new Timer(timeCB, null, 2000, 100);
+            using Timer time = new Timer(timeCB, null, 2000, 250);
 
             TimerCallback timeDirectionCB = new TimerCallback(snakeGame.SetNewDirection);
-            using Timer timeDirection = new Timer(timeDirectionCB, null, 2000, 500);
+            using Timer timeDirection = new Timer(timeDirectionCB, null, 2000, 1000);
 
             ////Console.WriteLine("Press Any Key for Exit...");
             ////Console.ReadLine();
