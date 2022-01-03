@@ -14,6 +14,20 @@ namespace ConsoleApp
         RIGHT = 3,
         INITIAL = 4
     }
+    public class Log
+    {
+        public int Up { get; set; }
+        public int Down { get; set; }
+        public int Left { get; set; }
+        public int Right { get; set; }
+        public Log()
+        {
+            Up = 0;
+            Down = 0;
+            Left = 0;
+            Right = 0;
+        }
+    }
     class SnakeGame
     {
         public class Point
@@ -51,8 +65,11 @@ namespace ConsoleApp
                 value = s.value;
             }
         }
+        private Log _log;
         private ConsoleKeyInfo ck;
-        private Move _LastModeMove;
+        private Move _beforeLastModeMove;
+        private Move _lastModeMove;
+        private Move _setModeMove;
         private Move _modeMove;
         private int _axeX;
         private int _axeY;
@@ -64,49 +81,38 @@ namespace ConsoleApp
         private int _foodLength { set; get; }
         private LinkedList <Snack> _stack;
 
-        public SnakeGame()
+        public SnakeGame(int xSize, int ySize)
         {
-            _axeX = 50;
-            _axeY = 20;
+            _axeX = xSize;
+            _axeY = ySize;
             _maxX = (_axeX - 2);
             _maxY = (_axeY - 2);
-            _LastModeMove = Move.INITIAL;
+            _lastModeMove = Move.INITIAL;
+            _setModeMove = Move.RIGHT;
             _modeMove = Move.RIGHT;
             _point = new Point(_axeX, _axeY);
             _food = new Snack[_axeY];
             _foodLength = 0;
+            _log = new Log();
             FillField();
             _headPosition.x = 20; // _axeX / 2;
             _headPosition.y = _axeY / 2;
             _stack = new LinkedList<Snack>();
 
-            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 's'));
+            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 'k'));
             _headPosition.x++;
-            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 's'));
+            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 'c'));
             _headPosition.x++;
-            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 's'));
+            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 'a'));
             _headPosition.x++;
-            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 's'));
-            _headPosition.x++;
-            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 's'));
-            _headPosition.x++;
-            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 's'));
+            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 'n'));
             _headPosition.x++;
             _stack.Push(new Snack(_headPosition.x, _headPosition.y, 's'));
             _headPosition.x++;
 
             ShowField();
         }
-        public SnakeGame(int x, int y)
-        {
-            _axeX = x;
-            _axeY = y;
-            _LastModeMove = Move.INITIAL;
-            _modeMove = Move.RIGHT;
-            _point = new Point(x, y);
-            FillField();
-        }
-        public void SetDirection(object obj)
+        /*public void SetDirection(object obj)
         {
             ConsoleKeyInfo ck = Console.ReadKey();
             switch (ck.Key)
@@ -130,16 +136,20 @@ namespace ConsoleApp
 
 
                 case ConsoleKey.UpArrow:
-                    if (_modeMove != Move.DOWN) { _modeMove = Move.UP; }
+                    // if (_modeMove != Move.DOWN) { _modeMove = Move.UP; }
+                    _setModeMove = Move.UP;
                     break;
                 case ConsoleKey.DownArrow:
-                    if (_modeMove != Move.UP) { _modeMove = Move.DOWN; }
+                    // if (_modeMove != Move.UP) { _modeMove = Move.DOWN; }
+                    _setModeMove = Move.DOWN;
                     break;
                 case ConsoleKey.LeftArrow:
-                    if (_modeMove != Move.RIGHT) { _modeMove = Move.LEFT; }
+                    // if (_modeMove != Move.RIGHT) { _modeMove = Move.LEFT; }
+                    _setModeMove = Move.LEFT;
                     break;
                 case ConsoleKey.RightArrow:
-                    if (_modeMove != Move.LEFT) { _modeMove = Move.RIGHT; }
+                    // if (_modeMove != Move.LEFT) { _modeMove = Move.RIGHT; }
+                    _setModeMove = Move.RIGHT;
                     break;
 
 
@@ -147,7 +157,7 @@ namespace ConsoleApp
                 default:
                     break;
             }
-        }
+        }*/
         public void FillField()
         {
             for (int y = 0; y < _axeY; y++)
@@ -215,7 +225,7 @@ namespace ConsoleApp
                 }
                 Console.Write("\r\n");
             }
-            Console.WriteLine("{0} x {1}, Head X:{2} Y:{3} Value:{4} LASTM:{5} Mode:{6}", _point.X.Length, _point.Y.Length, _head._position.x, _head._position.y, _head.value, _LastModeMove, _modeMove);
+            Console.WriteLine("{0} x {1}, Head X:{2} Y:{3} Value:{4} LASTM:{5} Mode:{6}", _point.X.Length, _point.Y.Length, _head._position.x, _head._position.y, _head.value, _lastModeMove, _modeMove);
         }
         public void SnackField(object obj)
         {
@@ -241,244 +251,491 @@ namespace ConsoleApp
             }
 
             _stack.CopyTo(_stackCopy);
-            _stack.Clear();
             _head = new Snack(_stackCopy[_stackCopy.Length - 1]._position.x, _stackCopy[_stackCopy.Length - 1]._position.y, _stackCopy[_stackCopy.Length - 1].value);
 
-            _moveTo(_head);
-
-            Console.SetCursorPosition(_stackCopy[0]._position.x, _stackCopy[0]._position.y);
-            Console.Write(' ');
-            Console.SetCursorPosition(_head._position.x, _head._position.y);
-            Console.Write(_head.value);
-
-            for (i = 0; i < _stackCopy.Length - 1; i++)
+            try
             {
-                _stack.Push(new Snack(_stackCopy[i + 1]._position.x, _stackCopy[i + 1]._position.y, _stackCopy[i].value));
-                Console.SetCursorPosition(_stackCopy[i + 1]._position.x, _stackCopy[i + 1]._position.y);
-                Console.Write(_stackCopy[i].value);
+                if (_moveTo(_head, ref _stackCopy) != true)
+                {
+                    return;
+                }
+
+                Console.SetCursorPosition(_stackCopy[0]._position.x, _stackCopy[0]._position.y);
+                Console.Write(' ');
+                Console.SetCursorPosition(_head._position.x, _head._position.y);
+                Console.Write(_head.value);
+
+                _stack.Clear();
+                for (i = 0; i < _stackCopy.Length - 1; i++)
+                {
+                    _stack.Push(new Snack(_stackCopy[i + 1]._position.x, _stackCopy[i + 1]._position.y, _stackCopy[i].value));
+                    Console.SetCursorPosition(_stackCopy[i + 1]._position.x, _stackCopy[i + 1]._position.y);
+                    Console.Write(_stackCopy[i].value);
+                }
+                _stack.Push(new Snack(_head._position.x, _head._position.y, _head.value));
+                ShowDebugData(_stackCopy, _head);
             }
-            _stack.Push(new Snack(_head._position.x, _head._position.y, _head.value));
-            ShowDebugData(_stackCopy, _head);
+            catch (Exception ex)
+            {
+                ShowDebugData(_stackCopy, _head);
+                Console.WriteLine(ex.ToString());
+            }
         }
 
         private void ShowDebugData(Snack[] _stackCopy, Snack _head)
         {
             int i;
-            Console.SetCursorPosition(0, 21);
+            Console.SetCursorPosition(0, _axeY+1);
             Console.WriteLine("{0} x {1} : {2} x {3} ", _point.X.Length, _point.Y.Length, _head._position.x, _head._position.y);
-            Console.WriteLine("Mode: {0}    ", _modeMove);
+            Console.WriteLine("Counts: Up:{0}, Down:{1}, Left:{2}, Right:{3}     ", _log.Up, _log.Down, _log.Left, _log.Right);
+            Console.WriteLine("Set:  {0}     ", _setModeMove);
+            Console.WriteLine("Mode: {0}, Last: {1}, BeforeLast: {2}     ", _modeMove, _lastModeMove, _beforeLastModeMove);
             Console.Write("Snack Data: \"");
             for (i = _stackCopy.Length - 1; i >= 0; i--)
             {
                 Console.Write(_stackCopy[i].value);
             }
-            Console.Write("\", Length: {0}    \r\n", _stackCopy.Length);
+            Console.Write("\", Length: {0}    \r\n\r\n", _stackCopy.Length);
         }
 
         public void SetNewDirection(object obj)
         {
             Random r = new Random();
-            Move rMove = (Move)r.Next(0, 3);
+            Move rMove = (Move)r.Next(0, 4);
+            _setModeMove = rMove;
+        }
+        private bool _moveTo(Snack _head, ref Snack[] stackCopy)
+        {
+            bool _enableMove = false;
+
+            switch (_setModeMove)
+            {
+                case Move.UP:
+                    {
+                        _modeMove = Move.UP;
+                        _enableMove = _handlerMoveUp(ref _head, ref stackCopy);
+                        if (_enableMove != true)
+                        {
+                            _modeMove = Move.DOWN;
+                            _enableMove = _handlerMoveDown(ref _head, ref stackCopy);
+                            if (_enableMove != true)
+                            {
+                                _modeMove = Move.RIGHT;
+                                _enableMove = _handlerMoveRight(ref _head, ref stackCopy);
+                                if (_enableMove != true)
+                                {
+                                    _modeMove = Move.LEFT;
+                                    _enableMove = _handlerMoveLeft(ref _head, ref stackCopy);
+                                }
+                            }                            
+                        }
+                        break;
+                    }
+                case Move.DOWN:
+                    {
+                        _modeMove = Move.DOWN;
+                        _enableMove = _handlerMoveDown(ref _head, ref stackCopy);
+                        if (_enableMove != true)
+                        {
+                            _modeMove = Move.UP;
+                            _enableMove = _handlerMoveUp(ref _head, ref stackCopy);
+                            if (_enableMove != true)
+                            {
+                                _modeMove = Move.RIGHT;
+                                _enableMove = _handlerMoveRight(ref _head, ref stackCopy);
+                                if (_enableMove != true)
+                                {
+                                    _modeMove = Move.LEFT;
+                                    _enableMove = _handlerMoveLeft(ref _head, ref stackCopy);
+                                }
+                            }
+                        }
+                        break;
+                    }
+                case Move.LEFT:
+                    {
+                        _modeMove = Move.LEFT;
+                        _enableMove = _handlerMoveLeft(ref _head, ref stackCopy);
+                        if (_enableMove != true)
+                        {
+                            _modeMove = Move.RIGHT;
+                            _enableMove = _handlerMoveRight(ref _head, ref stackCopy);
+                            if (_enableMove != true)
+                            {
+                                _modeMove = Move.UP;
+                                _enableMove = _handlerMoveUp(ref _head, ref stackCopy);
+                                if (_enableMove != true)
+                                {
+                                    _modeMove = Move.DOWN;
+                                    _enableMove = _handlerMoveDown(ref _head, ref stackCopy);
+                                }
+                            }
+                        }
+                        break;
+                    }
+                case Move.RIGHT:
+                    {
+                        _modeMove = Move.RIGHT;
+                        _enableMove = _handlerMoveRight(ref _head, ref stackCopy);
+                        if (_enableMove != true)
+                        {
+                            _modeMove = Move.LEFT;
+                            _enableMove = _handlerMoveLeft(ref _head, ref stackCopy);
+                            if (_enableMove != true)
+                            {
+                                _modeMove = Move.UP;
+                                _enableMove = _handlerMoveUp(ref _head, ref stackCopy);
+                                if (_enableMove != true)
+                                {
+                                    _modeMove = Move.DOWN;
+                                    _enableMove = _handlerMoveDown(ref _head, ref stackCopy);
+                                }
+                            }
+                        }
+                        break;
+                    }
+                default:
+                    break;
+            }
+            return _enableMove;
+        }
+
+        private bool _handlerMoveRight(ref Snack _head, ref Snack[] stackCopy)
+        {
+            bool _enableMove = false;
+
+            _log.Right++;
+            if (_head._position.y == 1)
+            {
+                if (_head._position.x < _maxX)
+                {
+                    if (_detectSnackBody(ref _head, ref stackCopy, Move.RIGHT) != true)
+                    {
+                        _head._position.x++;
+                        _enableMove = true;
+                    }
+                }
+                else
+                {
+                    // need to detect...
+                    _head._position.y = 2;
+                    _saveLog();
+                    _modeMove = Move.DOWN;
+                    _enableMove = true;
+                }
+            }
+            else if (_head._position.y == _maxY)
+            {
+                if (_head._position.x < _maxX)
+                {
+                    if (_detectSnackBody(ref _head, ref stackCopy, Move.RIGHT) != true)
+                    {
+                        _head._position.x++;
+                        _enableMove = true;
+                    }
+                }
+                else
+                {
+                    // need to detect...
+                    _head._position.y = _maxY - 1;
+                    _saveLog();
+                    _modeMove = Move.UP;
+                    _enableMove = true;
+                }
+            }
+            else if ((_head._position.y > 1) && (_head._position.y < _maxY))
+            {
+                if ((_detectSnackBody(ref _head, ref stackCopy, Move.RIGHT) != true)  && (_head._position.x < _maxX))
+                {
+                    _head._position.x++;
+                    _enableMove = true;
+                }
+            }
+            else
+            {
+                // need to detect...
+                _head._position.y++;
+                _saveLog();
+                _modeMove = Move.DOWN;
+                _enableMove = true;
+            }
+            
+            return _enableMove;
+        }
+
+        private bool _handlerMoveLeft(ref Snack _head, ref Snack[] stackCopy)
+        {
+            bool _enableMove = false;
+
+            _log.Left++;
+            if (_head._position.y == 1)
+            {
+                if (_head._position.x > 1)
+                {
+                    if (_detectSnackBody(ref _head, ref stackCopy, Move.LEFT) != true)
+                    {
+                        _head._position.x--;
+                        _enableMove = true;
+                    }
+                }
+                else
+                {
+                    // need to detect...
+                    _head._position.y = 2;
+                    _saveLog();
+                    _modeMove = Move.DOWN;
+                    _enableMove = true;
+                }
+            }
+            else if (_head._position.y == _maxY)
+            {
+                if (_head._position.x > 1)
+                {
+                    if (_detectSnackBody(ref _head, ref stackCopy, Move.LEFT) != true)
+                    {
+                        _head._position.x--;
+                        _enableMove = true;
+                    }
+                }
+                else
+                {
+                    _head._position.y = _maxY - 1;
+                    _saveLog();
+                    _modeMove = Move.UP;
+                    _enableMove = true;
+                }
+            }
+            else if ((_head._position.y > 1) && (_head._position.y < _maxY))
+            {
+                if ((_detectSnackBody(ref _head, ref stackCopy, Move.LEFT) != true) && (_head._position.x > 1))
+                {
+                    _head._position.x--;
+                    _enableMove = true;
+                }
+            }
+            else
+            {
+                _head._position.y++;
+                _saveLog();
+                _modeMove = Move.DOWN;
+                _enableMove = true;
+            }
+            return _enableMove;
+        }
+        private bool _handlerMoveDown(ref Snack _head, ref Snack[] stackCopy)
+        {
+            bool _enableMove = false;
+
+            _log.Down++;
+            if (_head._position.x == 1)
+            {
+                if (_head._position.y < _maxY)
+                {
+                    if (_detectSnackBody(ref _head, ref stackCopy, Move.DOWN) != true)
+                    {
+                        _head._position.y++;
+                        _enableMove = true;
+                    }
+                }
+                else
+                {
+                    // need to detect...
+                    _head._position.x = 2;
+                    _saveLog();
+                    _modeMove = Move.RIGHT;
+                    _enableMove = true;
+                }
+            }
+            else if (_head._position.x == _maxX)
+            {
+                if (_head._position.y < _maxY)
+                {
+                    if (_detectSnackBody(ref _head, ref stackCopy, Move.DOWN) != true)
+                    {
+                        _head._position.y++;
+                        _enableMove = true;
+                    }
+                }
+                else
+                {
+                    // need to detect...
+                    _head._position.x = _maxX - 1;
+                    _beforeLastModeMove = _lastModeMove;
+                    _lastModeMove = _modeMove;
+                    _modeMove = Move.LEFT;
+                    _enableMove = true;
+                }
+            }
+            else if ((_head._position.x > 1) && (_head._position.x < _maxX))
+            {
+                if ((_detectSnackBody(ref _head, ref stackCopy, Move.DOWN) != true) && (_head._position.y < _maxY))
+                {
+                    _head._position.y++;
+                    _enableMove = true;
+                }
+                /*else
+                {
+                    if ((_detectSnackBody(ref _head, ref stackCopy, Move.UP) != true) && (_head._position.y > 1))
+                    {
+                        _head._position.y--;
+                        _log.Up++;
+                        _enableMove = true;
+                    }
+                }*/
+            }
+            else
+            {
+                // need to detect...
+                _head._position.x++;
+                _saveLog();
+                _modeMove = Move.LEFT;
+                // _modeMove = Move.RIGHT;
+                _enableMove = true;
+            }
+            return _enableMove;
+        }
+        private bool _handlerMoveUp(ref Snack _head, ref Snack[] stackCopy)
+        {
+            bool _enableMove = false;
+            _log.Up++;
+            if (_head._position.x == 1) // moving on left side
+            {
+                if (_head._position.y > 1)
+                {
+                    if (_detectSnackBody(ref _head, ref stackCopy, Move.UP) != true)
+                    {
+                        _head._position.y--;
+                        _enableMove = true;
+                    }
+                }
+                else
+                {
+                    // need to detect...
+                    _head._position.x = 2;
+                    _saveLog();
+                    _modeMove = Move.RIGHT;
+                    _enableMove = true;
+                }
+            }
+            else if (_head._position.x == _maxX) // moving on right side
+            {
+                if (_head._position.y > 1)
+                {
+                    if (_detectSnackBody(ref _head, ref stackCopy, Move.UP) != true)
+                    {
+                        _head._position.y--;
+                        _enableMove = true;
+                    }
+                }
+                else
+                {
+                    // need to detect...
+                    _head._position.x = _maxX - 1;
+                    _saveLog();
+                    _modeMove = Move.LEFT;
+                    _enableMove = true;
+                }
+            }
+            else if ((_head._position.x > 1) && (_head._position.x < _maxX))
+            {
+                if ((_detectSnackBody(ref _head, ref stackCopy, Move.UP) != true) && (_head._position.y > 1))
+                {
+                    _head._position.y--;
+                    _enableMove = true;
+                }
+                /*else
+                {
+                    if ((_detectSnackBody(ref _head, ref stackCopy, Move.DOWN) != true) && (_head._position.y < _maxY))
+                    {
+                        _head._position.y++;
+                        _log.Up--;
+                        _enableMove = true;
+                    }
+                }*/
+            }
+            else
+            {
+                // need to detect...
+                _head._position.x++;
+                _saveLog();
+                _modeMove = Move.RIGHT;
+                // _modeMove = Move.LEFT;
+                _enableMove = true;
+            }
+            return _enableMove;
+        }
+        private bool _detectSnackBody(ref Snack _head, ref Snack[] stackCopy, Move rMove)
+        {
+            int i;
+
             switch (rMove)
             {
                 case Move.UP:
-                    if (_modeMove != Move.DOWN) { _modeMove = rMove; }
+                    /*for (i = 0; i < stackCopy.Length; i++)
+                    {
+                        if ((_head._position.x == stackCopy[i]._position.x) &&
+                           ((_head._position.y-1) == stackCopy[i]._position.y))
+                        {
+                            return true;
+                        }
+                    }*/
+                    if ((_head._position.x == stackCopy[stackCopy.Length-2]._position.x) && ((_head._position.y - 1) == stackCopy[stackCopy.Length-2]._position.y))
+                    {
+                        return true;
+                    }
                     break;
                 case Move.DOWN:
-                    if (_modeMove != Move.UP) { _modeMove = rMove; }
+                    /*for (i = 0; i < stackCopy.Length; i++)
+                    {
+                        if ((_head._position.x == stackCopy[i]._position.x) &&
+                           ((_head._position.y+1) == stackCopy[i]._position.y))
+                        {
+                            return true;
+                        }
+                    }*/
+                    if ((_head._position.x == stackCopy[stackCopy.Length - 2]._position.x) && ((_head._position.y + 1) == stackCopy[stackCopy.Length - 2]._position.y))
+                    {
+                        return true;
+                    }
                     break;
                 case Move.LEFT:
-                    if (_modeMove != Move.RIGHT) { _modeMove = rMove; }
+                    /*for (i = 0; i < stackCopy.Length; i++)
+                    {
+                        if (((_head._position.x - 1) == stackCopy[i]._position.x) &&
+                             (_head._position.y == stackCopy[i]._position.y))
+                        {
+                            return true;
+                        }
+                    }*/
+                    if (((_head._position.x - 1) == stackCopy[stackCopy.Length - 2]._position.x) && (_head._position.y == stackCopy[stackCopy.Length - 2]._position.y))
+                    {
+                        return true;
+                    }
                     break;
                 case Move.RIGHT:
-                    if (_modeMove != Move.LEFT) { _modeMove = rMove; }
+                    /*for (i = 0; i < stackCopy.Length; i++)
+                    {
+                        if (((_head._position.x+1) == stackCopy[i]._position.x) &&
+                           (_head._position.y == stackCopy[i]._position.y))
+                        {
+                            return true;
+                        }
+                    }*/
+                    if (((_head._position.x + 1) == stackCopy[stackCopy.Length - 2]._position.x) && (_head._position.y == stackCopy[stackCopy.Length - 2]._position.y))
+                    {
+                        return true;
+                    }
                     break;
-                default:
+                default:                    
                     break;
             }
+            return false;
         }
 
-        private void _moveTo(Snack _head)
+        private void _saveLog()
         {
-            switch (_modeMove)
-            {
-                case Move.UP:
-                    _handlerMoveUp(_head);
-                    break;
-                case Move.DOWN:
-                    _handlerMoveDown(_head);
-                    break;
-                case Move.LEFT:
-                    _handlerMoveLeft(_head);
-                    break;
-                case Move.RIGHT:
-                    _handlerMoveRight(_head);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private void _handlerMoveRight(Snack _head)
-        {
-            if (_head._position.y == 1)
-            {
-                if (_head._position.x < _maxX)
-                {
-                    _head._position.x++;
-                }
-                else
-                {
-                    _head._position.y = 2;
-                    _LastModeMove = _modeMove;
-                    _modeMove = Move.DOWN;
-                }
-            }
-            else if (_head._position.y == _maxY)
-            {
-                if (_head._position.x < _maxX)
-                {
-                    _head._position.x++;
-                }
-                else
-                {
-                    _head._position.y = _maxY - 1;
-                    _LastModeMove = _modeMove;
-                    _modeMove = Move.UP;
-                }
-            }
-            else if (((_head._position.y > 1) && (_head._position.y < _maxX)) && (_head._position.x < _maxX))
-            {
-                _head._position.x++;
-            }
-            else
-            {
-                _head._position.y++;
-                _LastModeMove = _modeMove;
-                _modeMove = Move.DOWN;
-            }
-        }
-
-        private void _handlerMoveLeft(Snack _head)
-        {
-            if (_head._position.y == 1)
-            {
-                if (_head._position.x > 1)
-                {
-                    _head._position.x--;
-                }
-                else
-                {
-                    _head._position.y = 2;
-                    _LastModeMove = _modeMove;
-                    _modeMove = Move.DOWN;
-                }
-            }
-            else if (_head._position.y == _maxY)
-            {
-                if (_head._position.x > 1)
-                {
-                    _head._position.x--;
-                }
-                else
-                {
-                    _head._position.y = _maxY - 1;
-                    _LastModeMove = _modeMove;
-                    _modeMove = Move.UP;
-                }
-            }
-            else if (((_head._position.y > 1) && (_head._position.y < _maxX)) && (_head._position.x > 1))
-            {
-                _head._position.x--;
-            }
-            else
-            {
-                _head._position.y++;
-                _LastModeMove = _modeMove;
-                _modeMove = Move.DOWN;
-            }
-        }
-
-        private void _handlerMoveDown(Snack _head)
-        {
-            if (_head._position.x == 1)
-            {
-                if (_head._position.y < _maxY)
-                {
-                    _head._position.y++;
-                }
-                else
-                {
-                    _head._position.x = 2;
-                    _LastModeMove = _modeMove;
-                    _modeMove = Move.RIGHT;
-                }
-            }
-            else if (_head._position.x == _maxX)
-            {
-                if (_head._position.y < _maxY)
-                {
-                    _head._position.y++;
-                }
-                else
-                {
-                    _head._position.x = _maxX - 1;
-                    _LastModeMove = _modeMove;
-                    _modeMove = Move.LEFT;
-                }
-            }
-            else if (((_head._position.x > 1) && (_head._position.x < _maxX)) && (_head._position.y < _maxY))
-            {
-                _head._position.y++;
-            }
-            else
-            {
-                _head._position.x++;
-                _LastModeMove = _modeMove;
-                _modeMove = Move.LEFT;
-                // _modeMove = Move.RIGHT;
-            }
-        }
-
-        private void _handlerMoveUp(Snack _head)
-        {
-            if (_head._position.x == 1)
-            {
-                if (_head._position.y > 1)
-                {
-                    _head._position.y--;
-                }
-                else
-                {
-                    _head._position.x = 2;
-                    _LastModeMove = _modeMove;
-                    _modeMove = Move.RIGHT;
-                }
-            }
-            else if (_head._position.x == _maxX)
-            {
-                if (_head._position.y > 1)
-                {
-                    _head._position.y--;
-                }
-                else
-                {
-                    _head._position.x = _maxX - 1;
-                    _LastModeMove = _modeMove;
-                    _modeMove = Move.LEFT;
-                }
-            }
-            else if (((_head._position.x > 1) && (_head._position.x < _maxX)) && (_head._position.y > 1))
-            {
-                _head._position.y--;
-            }
-            else
-            {
-                _head._position.x++;
-                _LastModeMove = _modeMove;
-                _modeMove = Move.RIGHT;
-                // _modeMove = Move.LEFT;
-            }
+            _beforeLastModeMove = _lastModeMove;
+            _lastModeMove = _modeMove;
         }
 
         private static void DoWorkEvery1Second(TimerCallback callback)

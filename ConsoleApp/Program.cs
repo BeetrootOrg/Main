@@ -21,23 +21,14 @@
 
             Console.WriteLine("\r\n a.tkachenko/homework/17-SnakeGame \r\n");
 
-            //////// Делегат для типа Timer
-            //////TimerCallback timeCB = new TimerCallback(PrintTime);
-
-            //////using Timer time = new Timer(timeCB, null, 0, 200);
-            //////Console.WriteLine("Press Any Key for Exit...");
-            //////Console.ReadLine();
-
-            SnakeGame snakeGame = new SnakeGame();
+            SnakeGame snakeGame = new SnakeGame(50, 22);
 
             TimerCallback timeCB = new TimerCallback(snakeGame.SnackField);
-            using Timer time = new Timer(timeCB, null, 2000, 250);
+            using Timer time = new Timer(timeCB, null, 2000, 50);
 
             TimerCallback timeDirectionCB = new TimerCallback(snakeGame.SetNewDirection);
-            using Timer timeDirection = new Timer(timeDirectionCB, null, 2000, 1000);
+            using Timer timeDirection = new Timer(timeDirectionCB, null, 2150, 300);
 
-            ////Console.WriteLine("Press Any Key for Exit...");
-            ////Console.ReadLine();
             while (true)
             {
                 ConsoleKeyInfo ck = Console.ReadKey();
@@ -45,21 +36,8 @@
                 {
                     Exit();
                 }
-                snakeGame.SetDirection(ck);
-                // snakeGame.SnackField(null);
+                // snakeGame.SetDirection(ck);
             }
-            // snakeGame.ShowField();
-            // snakeGame.SetPointInField(10, 10, '*');
-            // snakeGame.ShowField();
-
-            /*
-            // DoWorkEvery5Seconds((state) => Console.WriteLine("message"));
-
-            // устанавливаем метод обратного вызова
-            TimerCallback tm = new TimerCallback(Count);
-            // создаем таймер
-            DoWorkEvery5Seconds(tm);
-            // using Timer timer = new Timer(tm, num, 0, 2000);*/
 
         }
         public static void Count(object obj)
