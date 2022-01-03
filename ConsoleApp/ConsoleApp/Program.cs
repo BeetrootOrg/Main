@@ -53,14 +53,47 @@ namespace ConsoleApp
                 return firstElement;
             }
 
+            public T Peek()
+            {
+                if (_head == null)
+                {
+                    throw new ArgumentNullException(nameof(_head));
+                }
+
+                var firstElement = _head.Value;
+
+                return firstElement;
+            }
+            
             public void ShowAll()
             {
+                if (Count == 0)
+                {
+                    Console.WriteLine("Stack Is Empty!!!");
+                }
+                else
+                {
+                    var item = _head;
+                    for (int i = 0; i < Count; ++i)
+                    {
+                        Console.WriteLine(item.Value);
+                        item = item.Next;
+                    }
+                }
+            }
+
+            public T[] CopyToArray()
+            {
+                var array = new T[Count];
                 var item = _head;
+
                 for (int i = 0; i < Count; ++i)
                 {
-                    Console.WriteLine(item.Value);
+                    array[i] = item.Value;
                     item = item.Next;
                 }
+
+                return array;
             }
 
             public void Clear()
@@ -73,20 +106,39 @@ namespace ConsoleApp
         #endregion
         static void Main()
         {
-            var int1 = 5;
-            var int2 = 7;
-            var int3 = 8;
+            var int1 = 1;
+            var int2 = 2;
+            var int3 = 3;
+            var int4 = 4;
 
             Stack<int> stack = new Stack<int>();
             stack.Push(int1);
             stack.Push(int2);
             stack.Push(int3);
+            stack.Push(int4);
             
             stack.ShowAll();
+
             int a = stack.Pop();
 
             Console.WriteLine($"Stack.Pop() = {a}");
             Console.WriteLine("After Pop():");
+            stack.ShowAll();
+
+            a = stack.Peek();
+            Console.WriteLine($"Stack.Peek() = {a}");
+            Console.WriteLine("After Peek():");
+            stack.ShowAll();
+
+            Console.WriteLine("\nIn Array");
+            var arr = stack.CopyToArray();
+
+            for (int i = 0; i < arr.Length; i++)
+            {
+                Console.WriteLine(arr[i]);
+            }
+
+            stack.Clear();
             stack.ShowAll();
 
         }
