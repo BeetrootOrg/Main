@@ -1,148 +1,54 @@
-﻿using System.Diagnostics;
-using static System.Console;
+﻿using static System.Console;
 
 namespace Course
 {
-    public enum Direction
+
+    static class DateExtention
     {
-        Up,
-        Down,
-        Right,
-        Left
+        public static bool IsWeekend (this DateTime date)
+        {
+            return (date.DayOfWeek == DayOfWeek.Saturday) || (date.DayOfWeek == DayOfWeek.Sunday);
+        }
+
+        public static bool IsWorkday (this DateTime date)
+        {
+            return (date.DayOfWeek != DayOfWeek.Saturday) && (date.DayOfWeek != DayOfWeek.Sunday);
+        }
     }
-    
+
+    static class CollectionExtention<T>
+    {
+        public static List<List<T>> ChunkBy(List<T> list, int itemsInList)
+        {
+            var newList = new List<List<T>>();
+            for (int i = 0; i < list.Count; i += itemsInList)
+            {
+                newList.Add(list.GetRange(i, Math.Min(itemsInList, list.Count - i)));
+            }
+
+            return newList;
+        }
+    }
+
     class Program
     {
-        private const int _mapWidth = 90;
-        private const int _mapHeight = 30;
-
-        private const int _frameMilliseconds = 200;
-
-        private const ConsoleColor _borderColor = ConsoleColor.Gray;
-
-        private const ConsoleColor _foodColor = ConsoleColor.Red;
-
-        private const ConsoleColor _snakeColor = ConsoleColor.Green;
-
-        private static readonly Random _random = new Random();
-
         static void Main()
         {
-            SetWindowSize(_mapWidth, _mapHeight);
-            SetBufferSize(_mapWidth, _mapHeight);
-            CursorVisible = false;
-
-            while (true)
+            var list = new List<int>{ 1,2,3,4,5,6,7,8,9,10 };
+            var chunks = CollectionExtention<int>.ChunkBy(list, 3);
+            foreach (var chunk in chunks)
             {
-                StartGame();
-                ReadKey();
+                Console.WriteLine("New chunk");
+                ShowAll<int>(chunk);
             }
         }
 
-        static void StartGame()
+        public static void ShowAll<T>(List<T> list)
         {
-            int score = 0;
-
-            Clear();
-            DrawBorder();
-
-            Snake snake = new Snake(10, 5, _snakeColor);
-
-            Pixel food = GenFood(snake);
-            food.Draw();
-
-            Direction currentMovement = Direction.Right;
-
-            var sw = new Stopwatch();
-
-            while (true)
+            foreach (T item in list)
             {
-                sw.Restart();
-                Direction oldMovement = currentMovement;
-
-                while (sw.ElapsedMilliseconds <= _frameMilliseconds)
-                {
-                    if (currentMovement == oldMovement)
-                        currentMovement = ReadMovement(currentMovement);
-                }
-
-                if (snake.Head.X == food.X && snake.Head.Y == food.Y)
-                {
-                    snake.Move(currentMovement, true);
-                    food = GenFood(snake);
-                    food.Draw();
-
-                    score++;
-                }
-                else
-                {
-                    snake.Move(currentMovement);
-                }
-
-                if (snake.Head.X == _mapWidth - 1
-                    || snake.Head.X == 0
-                    || snake.Head.Y == _mapHeight - 1
-                    || snake.Head.Y == 0
-                    || snake.Body.Any(b => b.X == snake.Head.X && b.Y == snake.Head.Y))
-                    break;
-            }
-
-            snake.Clear();
-            food.Clear();
-
-            SetCursorPosition(_mapWidth / 3, _mapHeight / 2);
-            WriteLine($"Game over, Score: {score}");
-        }
-
-        static void DrawBorder()
-        {
-            for (int i = 0; i < _mapWidth; i++)
-            {
-                new Pixel(i, 0, _borderColor, '#').Draw();
-                new Pixel(i, _mapHeight - 1, _borderColor, '#').Draw();
-            }
-
-            for (int i = 0; i < _mapHeight; i++)
-            {
-                new Pixel(0, i, _borderColor, '#').Draw();
-                new Pixel(_mapWidth - 1, i, _borderColor, '#').Draw();
+                Console.WriteLine(item);
             }
         }
-
-        static Pixel GenFood(Snake snake)
-        {
-            Pixel food;
-
-            do
-            {
-                food = new Pixel(_random.Next(1, _mapWidth - 1), _random.Next(1, _mapHeight - 1), _foodColor, 'O');
-            } while (snake.Head.X == food.X && snake.Head.Y == food.Y ||
-                     snake.Body.Any(b => b.X == food.X && b.Y == food.Y));
-
-            return food;
-        }
-
-        static Direction ReadMovement(Direction currentDirection)
-        {
-            if (!KeyAvailable)
-                return currentDirection;
-
-            ConsoleKey key = ReadKey(true).Key;
-
-            currentDirection = key switch
-            {
-                ConsoleKey.W when currentDirection != Direction.Down => Direction.Up,
-                ConsoleKey.A when currentDirection != Direction.Right => Direction.Left,
-                ConsoleKey.S when currentDirection != Direction.Up => Direction.Down,
-                ConsoleKey.D when currentDirection != Direction.Left => Direction.Right,
-                ConsoleKey.UpArrow when currentDirection != Direction.Down => Direction.Up,
-                ConsoleKey.LeftArrow when currentDirection != Direction.Right => Direction.Left,
-                ConsoleKey.DownArrow when currentDirection != Direction.Up => Direction.Down,
-                ConsoleKey.RightArrow when currentDirection != Direction.Left => Direction.Right,
-                _ => currentDirection
-            };
-
-            return currentDirection;
-        }
-    }
+    }    
 }
