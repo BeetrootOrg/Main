@@ -2,68 +2,41 @@
 
 namespace ConsoleApp
 {
-    #region Interfaces
-
-    public interface IList
+    public class Stack<T>
     {
-        int Count { get; }
-        void Clear();
-        void Remove(int index);
-    }
-
-
-    public interface IReadOnlyList<out T> : IList
-    {
-        T[] GetAll();
-        T this[int index] { get; }
-    }
-
-    public interface IWriteOnlyList<in T> : IList
-    {
-        void Add(T item);
-        void Insert(T item, int index);
-        T this[int index] { set; }
-    }
-
-    #endregion
-
-    #region LinkedList
-
-    public class LinkedList<T> : IReadOnlyList<T>, IWriteOnlyList<T>
-    {
-        private class ListItem
-        {
-            public T Value { get; set; }
-            public ListItem Next { get; set; }
+        private class StackItem
+        { 
+            public T Value { get; init; }
+            public StackItem Next { get; set; }
         }
 
-        private ListItem _head;
+        private StackItem _head;
         public int Count { get; private set; }
 
-        public void Add(T item) => Insert(item, Count);
-
-        public T this[int index]
+        public void Push(T item)
         {
-            get => GetByIndex(index).Value;
-            set
+            var head = new StackItem
             {
-                var item = GetByIndex(index);
-                item.Value = value;
-            }
+                Value = item,
+                Next = _head
+            };
+
+            _head = head;
+            ++Count;
         }
 
-        public T[] GetAll()
+        public T Pop()
         {
-            var array = new T[Count];
-            var item = _head;
-
-            for (int i = 0; i < Count; ++i)
+            if (Count == 0)
             {
-                array[i] = item.Value;
-                item = item.Next;
+                throw new ArgumentException("Stack is empty");
             }
 
-            return array;
+            var item = _head;
+            _head = _head.Next;
+            --Count;
+
+            return item.Value;
         }
 
         public void Clear()
@@ -72,149 +45,45 @@ namespace ConsoleApp
             Count = 0;
         }
 
-        public void Remove(int index)
+        public T Peek()
         {
-            if (index == Count)
+            if (Count == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(index));
+                throw new ArgumentException("Stack is empty");
             }
 
-            if (index == 0)
-            {
-                _head = _head.Next;
-            }
-            else
-            {
-                var prev = GetByIndex(index - 1);
-                prev.Next = prev.Next.Next;
-            }
-
-            --Count;
+            return _head.Value;
         }
 
-        public void Insert(T item, int index)
+        public void CopyTo(T[] arr)
         {
-            if (index == 0)
+            var length = Math.Min(Count, arr.Length);
+
+            var current = _head;
+            for (int i = 0; i < length; i++)
             {
-                var listItem = new ListItem
-                {
-                    Value = item,
-                    Next = _head
-                };
-
-                _head = listItem;
-            } 
-            else
-            {
-                var prev = GetByIndex(index - 1);
-
-                var listItem = new ListItem
-                {
-                    Value = item,
-                    Next = prev.Next
-                };
-
-                prev.Next = listItem;
+                arr[i] = current.Value;
+                current = current.Next;
             }
-
-            ++Count;
-        }
-
-        private ListItem GetByIndex(int index)
-        {
-            if (index < 0 || index >= Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index));
-            }
-
-            var item = _head;
-            for (int i = 0; i < index; i++)
-            {
-                item = item.Next;
-            }
-
-            return item;
         }
     }
-
-    #endregion
 
     class Program
     {
         static void Main()
         {
-            var int1 = 5;
-            var int2 = 7;
+            var stack = new Stack<int>();
 
-            Swap(ref int1, ref int2);
+            stack.Push(1);
+            stack.Push(2);
 
-            var str1 = "string";
-            var str2 = "hello";
-            Swap(ref str1, ref str2);
+            var item = stack.Pop();
+            item = stack.Peek();
+            item = stack.Peek();
 
-            // ShowArray(new[] { 1, 2, 3 });
-            // ShowArray(new[] { "hello", "Dima" });
-
-            var list = new LinkedList<string>();
-            list.Add("el1");
-            list.Add("el2");
-            list.Add("el3");
-            ShowArray(list.GetAll());
-
-            list[0] = "el4";
-
-            Console.WriteLine(list[0]);
-            Console.WriteLine(list[1]);
-            Console.WriteLine(list[2]);
-
-            ShowArray(list.GetAll());
-
-            // ShowRandomListElement(list);
-            // SetRandomListElement(list, "element");
-
-            list[0] = "el0";
-            list[1] = "el1";
-            list[2] = "el2";
-
-            list.Remove(0);
-            list.Add("el3");
-            list.Remove(2);
-            list.Add("el4");
-            list.Remove(1);
-
-            Console.WriteLine("AFTER REMOVE");
-            ShowArray(list.GetAll());
-
-            list.Insert("insert0", 0);
-            list.Insert("insert1", 3);
-            list.Insert("insert2", 2);
-
-            list.Clear();
-        }
-
-        static void Swap<T>(ref T val1, ref T val2)
-        {
-            (val1, val2) = (val2, val1);
-        }
-
-        static void ShowArray<TElement>(TElement[] array)
-        {
-            foreach (var item in array)
-            {
-                Console.WriteLine(item);
-            }
-        }
-
-        static void ShowRandomListElement<T>(IReadOnlyList<T> list)
-        {
-            var index = new Random((int)DateTime.Now.Ticks).Next(0, list.Count);
-            Console.WriteLine(list[index]);
-        }
-
-        static void SetRandomListElement<T>(IWriteOnlyList<T> list, T element)
-        {
-            var index = new Random((int)DateTime.Now.Ticks).Next(0, list.Count);
-            list[index] = element;
+            stack.CopyTo(new int[0]);
+            stack.CopyTo(new int[1]);
+            stack.CopyTo(new int[2]);
         }
     }
 }
