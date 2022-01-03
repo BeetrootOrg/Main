@@ -27,10 +27,7 @@ namespace ConsoleApp
 
         public T Pop()
         {
-            if (Count == 0)
-            {
-                throw new ArgumentException("Stack is empty");
-            }
+            ValidateAnyElement();
 
             var item = _head;
             _head = _head.Next;
@@ -47,11 +44,7 @@ namespace ConsoleApp
 
         public T Peek()
         {
-            if (Count == 0)
-            {
-                throw new ArgumentException("Stack is empty");
-            }
-
+            ValidateAnyElement();
             return _head.Value;
         }
 
@@ -64,6 +57,14 @@ namespace ConsoleApp
             {
                 arr[i] = current.Value;
                 current = current.Next;
+            }
+        }
+
+        private void ValidateAnyElement()
+        {
+            if (Count == 0)
+            {
+                throw new ArgumentException("Stack is empty");
             }
         }
     }
