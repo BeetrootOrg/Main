@@ -27,7 +27,7 @@ namespace ConsoleApp
 
         public T Pop()
         {
-            ValidatHasElements();
+            ValidateHasElements();
 
             var item = _head;
             _head = _head.Next;
@@ -44,7 +44,7 @@ namespace ConsoleApp
 
         public T Peek()
         {
-            ValidatHasElements();
+            ValidateHasElements();
             return _head.Value;
         }
 
@@ -60,7 +60,7 @@ namespace ConsoleApp
             }
         }
 
-        private void ValidatHasElements()
+        private void ValidateHasElements()
         {
             if (Count == 0)
             {
