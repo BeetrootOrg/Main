@@ -32,9 +32,13 @@
 
     }
 
+    public interface ICreateNewProduct
+    {
+        void CreateProduct(Product product);
+    }
     public interface IAddProducts
     {
-
+        void AddProduct(Product product, int Quantity);
     }
 
     class Program
