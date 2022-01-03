@@ -138,6 +138,7 @@ namespace ConsoleApp
                 Console.WriteLine(arr[i]);
             }
 
+            Console.WriteLine($"Count elements = {stack.Count}");
             stack.Clear();
             stack.ShowAll();
 
