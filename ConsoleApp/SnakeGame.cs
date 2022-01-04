@@ -95,10 +95,10 @@ namespace ConsoleApp
             _foodLength = 0;
             _log = new Log();
             FillField();
-            _headPosition.x = 20; // _axeX / 2;
+            _headPosition.x = 20;
             _headPosition.y = _axeY / 2;
             _stack = new LinkedList<Snack>();
-
+            
             _stack.Push(new Snack(_headPosition.x, _headPosition.y, 'k'));
             _headPosition.x++;
             _stack.Push(new Snack(_headPosition.x, _headPosition.y, 'c'));
@@ -112,52 +112,6 @@ namespace ConsoleApp
 
             ShowField();
         }
-        /*public void SetDirection(object obj)
-        {
-            ConsoleKeyInfo ck = Console.ReadKey();
-            switch (ck.Key)
-            {
-                case ConsoleKey.D1:
-                case ConsoleKey.NumPad1:
-                    // ...
-                    break;
-                case ConsoleKey.D2:
-                case ConsoleKey.NumPad2:
-                    // ...
-                    break;
-                case ConsoleKey.D3:
-                case ConsoleKey.NumPad3:
-                    // ...
-                    break;
-                case ConsoleKey.D4:
-                case ConsoleKey.NumPad4:
-                    //Exit();
-                    break;
-
-
-                case ConsoleKey.UpArrow:
-                    // if (_modeMove != Move.DOWN) { _modeMove = Move.UP; }
-                    _setModeMove = Move.UP;
-                    break;
-                case ConsoleKey.DownArrow:
-                    // if (_modeMove != Move.UP) { _modeMove = Move.DOWN; }
-                    _setModeMove = Move.DOWN;
-                    break;
-                case ConsoleKey.LeftArrow:
-                    // if (_modeMove != Move.RIGHT) { _modeMove = Move.LEFT; }
-                    _setModeMove = Move.LEFT;
-                    break;
-                case ConsoleKey.RightArrow:
-                    // if (_modeMove != Move.LEFT) { _modeMove = Move.RIGHT; }
-                    _setModeMove = Move.RIGHT;
-                    break;
-
-
-
-                default:
-                    break;
-            }
-        }*/
         public void FillField()
         {
             for (int y = 0; y < _axeY; y++)
@@ -196,12 +150,6 @@ namespace ConsoleApp
             _food[index] = new Snack(rX, index, rMove);
             _point.Position[index, rX] = rMove;
         }
-        public void SetPointInField(int y, int x, char data)
-        {
-            // _point.Position[y, x] = data;
-            // Console.SetCursorPosition(x, y);
-            // Console.Write(data);
-        }
         public void ShowField()
         {
             Console.Clear();            
@@ -213,19 +161,6 @@ namespace ConsoleApp
                 }
                 Console.Write("\r\n");
             }
-        }
-        public void ShowField(Snack _head)
-        {
-            Console.Clear();            
-            for (int y = 0; y < _point.Y.Length; y++)
-            {
-                for (int x = 0; x < _point.X.Length; x++)
-                {
-                     Console.Write(_point.Position[y, x]);
-                }
-                Console.Write("\r\n");
-            }
-            Console.WriteLine("{0} x {1}, Head X:{2} Y:{3} Value:{4} LASTM:{5} Mode:{6}", _point.X.Length, _point.Y.Length, _head._position.x, _head._position.y, _head.value, _lastModeMove, _modeMove);
         }
         public void SnackField(object obj)
         {
@@ -284,14 +219,10 @@ namespace ConsoleApp
 
         private void ShowDebugData(Snack[] _stackCopy, Snack _head)
         {
-            int i;
             Console.SetCursorPosition(0, _axeY+1);
-            Console.WriteLine("{0} x {1} : {2} x {3} ", _point.X.Length, _point.Y.Length, _head._position.x, _head._position.y);
-            Console.WriteLine("Counts: Up:{0}, Down:{1}, Left:{2}, Right:{3}     ", _log.Up, _log.Down, _log.Left, _log.Right);
-            Console.WriteLine("Set:  {0}     ", _setModeMove);
-            Console.WriteLine("Mode: {0}, Last: {1}, BeforeLast: {2}     ", _modeMove, _lastModeMove, _beforeLastModeMove);
+            Console.WriteLine("{0} x {1} : {2} x {3}  Mode: {4}   ", _point.X.Length, _point.Y.Length, _head._position.x, _head._position.y, _modeMove);
             Console.Write("Snack Data: \"");
-            for (i = _stackCopy.Length - 1; i >= 0; i--)
+            for (int i = _stackCopy.Length - 1; i >= 0; i--)
             {
                 Console.Write(_stackCopy[i].value);
             }
@@ -320,13 +251,17 @@ namespace ConsoleApp
                             _enableMove = _handlerMoveDown(ref _head, ref stackCopy);
                             if (_enableMove != true)
                             {
-                                _modeMove = Move.RIGHT;
-                                _enableMove = _handlerMoveRight(ref _head, ref stackCopy);
-                                if (_enableMove != true)
+                                if(_head._position.x > (_maxX / 2))
                                 {
                                     _modeMove = Move.LEFT;
                                     _enableMove = _handlerMoveLeft(ref _head, ref stackCopy);
                                 }
+                                else
+                                {
+                                    _modeMove = Move.RIGHT;
+                                    _enableMove = _handlerMoveRight(ref _head, ref stackCopy);
+                                }                               
+                                
                             }                            
                         }
                         break;
@@ -341,13 +276,17 @@ namespace ConsoleApp
                             _enableMove = _handlerMoveUp(ref _head, ref stackCopy);
                             if (_enableMove != true)
                             {
-                                _modeMove = Move.RIGHT;
-                                _enableMove = _handlerMoveRight(ref _head, ref stackCopy);
-                                if (_enableMove != true)
+                                if (_head._position.x > (_maxX / 2))
                                 {
                                     _modeMove = Move.LEFT;
                                     _enableMove = _handlerMoveLeft(ref _head, ref stackCopy);
                                 }
+                                else
+                                {
+                                    _modeMove = Move.RIGHT;
+                                    _enableMove = _handlerMoveRight(ref _head, ref stackCopy);
+                                }
+
                             }
                         }
                         break;
@@ -362,9 +301,12 @@ namespace ConsoleApp
                             _enableMove = _handlerMoveRight(ref _head, ref stackCopy);
                             if (_enableMove != true)
                             {
-                                _modeMove = Move.UP;
-                                _enableMove = _handlerMoveUp(ref _head, ref stackCopy);
-                                if (_enableMove != true)
+                                if (_head._position.y > (_maxY / 2))
+                                {
+                                    _modeMove = Move.UP;
+                                    _enableMove = _handlerMoveUp(ref _head, ref stackCopy);
+                                }
+                                else
                                 {
                                     _modeMove = Move.DOWN;
                                     _enableMove = _handlerMoveDown(ref _head, ref stackCopy);
@@ -383,9 +325,12 @@ namespace ConsoleApp
                             _enableMove = _handlerMoveLeft(ref _head, ref stackCopy);
                             if (_enableMove != true)
                             {
-                                _modeMove = Move.UP;
-                                _enableMove = _handlerMoveUp(ref _head, ref stackCopy);
-                                if (_enableMove != true)
+                                if (_head._position.y > (_maxY / 2))
+                                {
+                                    _modeMove = Move.UP;
+                                    _enableMove = _handlerMoveUp(ref _head, ref stackCopy);
+                                }
+                                else
                                 {
                                     _modeMove = Move.DOWN;
                                     _enableMove = _handlerMoveDown(ref _head, ref stackCopy);
@@ -417,7 +362,6 @@ namespace ConsoleApp
                 }
                 else
                 {
-                    // need to detect...
                     _head._position.y = 2;
                     _saveLog();
                     _modeMove = Move.DOWN;
@@ -436,7 +380,6 @@ namespace ConsoleApp
                 }
                 else
                 {
-                    // need to detect...
                     _head._position.y = _maxY - 1;
                     _saveLog();
                     _modeMove = Move.UP;
@@ -453,7 +396,6 @@ namespace ConsoleApp
             }
             else
             {
-                // need to detect...
                 _head._position.y++;
                 _saveLog();
                 _modeMove = Move.DOWN;
@@ -480,7 +422,6 @@ namespace ConsoleApp
                 }
                 else
                 {
-                    // need to detect...
                     _head._position.y = 2;
                     _saveLog();
                     _modeMove = Move.DOWN;
@@ -539,7 +480,6 @@ namespace ConsoleApp
                 }
                 else
                 {
-                    // need to detect...
                     _head._position.x = 2;
                     _saveLog();
                     _modeMove = Move.RIGHT;
@@ -558,7 +498,6 @@ namespace ConsoleApp
                 }
                 else
                 {
-                    // need to detect...
                     _head._position.x = _maxX - 1;
                     _beforeLastModeMove = _lastModeMove;
                     _lastModeMove = _modeMove;
@@ -573,23 +512,12 @@ namespace ConsoleApp
                     _head._position.y++;
                     _enableMove = true;
                 }
-                /*else
-                {
-                    if ((_detectSnackBody(ref _head, ref stackCopy, Move.UP) != true) && (_head._position.y > 1))
-                    {
-                        _head._position.y--;
-                        _log.Up++;
-                        _enableMove = true;
-                    }
-                }*/
             }
             else
             {
-                // need to detect...
                 _head._position.x++;
                 _saveLog();
                 _modeMove = Move.LEFT;
-                // _modeMove = Move.RIGHT;
                 _enableMove = true;
             }
             return _enableMove;
@@ -643,88 +571,66 @@ namespace ConsoleApp
                     _head._position.y--;
                     _enableMove = true;
                 }
-                /*else
-                {
-                    if ((_detectSnackBody(ref _head, ref stackCopy, Move.DOWN) != true) && (_head._position.y < _maxY))
-                    {
-                        _head._position.y++;
-                        _log.Up--;
-                        _enableMove = true;
-                    }
-                }*/
             }
             else
             {
-                // need to detect...
                 _head._position.x++;
                 _saveLog();
                 _modeMove = Move.RIGHT;
-                // _modeMove = Move.LEFT;
                 _enableMove = true;
             }
             return _enableMove;
         }
         private bool _detectSnackBody(ref Snack _head, ref Snack[] stackCopy, Move rMove)
         {
-            int i;
+            int index = stackCopy.Length - 2;
+            int i = (stackCopy.Length - 6) > 4 ? stackCopy.Length - 2 : 4;
 
             switch (rMove)
             {
                 case Move.UP:
-                    /*for (i = 0; i < stackCopy.Length; i++)
+                    do
                     {
-                        if ((_head._position.x == stackCopy[i]._position.x) &&
-                           ((_head._position.y-1) == stackCopy[i]._position.y))
+                        if ((_head._position.x == stackCopy[index]._position.x) && ((_head._position.y - 1) == stackCopy[index]._position.y))
                         {
                             return true;
                         }
-                    }*/
-                    if ((_head._position.x == stackCopy[stackCopy.Length-2]._position.x) && ((_head._position.y - 1) == stackCopy[stackCopy.Length-2]._position.y))
-                    {
-                        return true;
-                    }
+                        index--;
+                        i--;
+                    } while (i > 0);
                     break;
                 case Move.DOWN:
-                    /*for (i = 0; i < stackCopy.Length; i++)
+                    do
                     {
-                        if ((_head._position.x == stackCopy[i]._position.x) &&
-                           ((_head._position.y+1) == stackCopy[i]._position.y))
+                        if ((_head._position.x == stackCopy[index]._position.x) && ((_head._position.y + 1) == stackCopy[index]._position.y))
                         {
                             return true;
                         }
-                    }*/
-                    if ((_head._position.x == stackCopy[stackCopy.Length - 2]._position.x) && ((_head._position.y + 1) == stackCopy[stackCopy.Length - 2]._position.y))
-                    {
-                        return true;
-                    }
+                        index--;
+                        i--;
+                    } while (i > 0);
                     break;
                 case Move.LEFT:
-                    /*for (i = 0; i < stackCopy.Length; i++)
+                    do
                     {
-                        if (((_head._position.x - 1) == stackCopy[i]._position.x) &&
-                             (_head._position.y == stackCopy[i]._position.y))
+                        if (((_head._position.x - 1) == stackCopy[index]._position.x) && (_head._position.y == stackCopy[index]._position.y))
                         {
                             return true;
                         }
-                    }*/
-                    if (((_head._position.x - 1) == stackCopy[stackCopy.Length - 2]._position.x) && (_head._position.y == stackCopy[stackCopy.Length - 2]._position.y))
-                    {
-                        return true;
-                    }
+                        index--;
+                        i--;
+                    } while (i > 0);
                     break;
                 case Move.RIGHT:
-                    /*for (i = 0; i < stackCopy.Length; i++)
+                    do
                     {
-                        if (((_head._position.x+1) == stackCopy[i]._position.x) &&
-                           (_head._position.y == stackCopy[i]._position.y))
+                        if (((_head._position.x + 1) == stackCopy[index]._position.x) && (_head._position.y == stackCopy[index]._position.y))
                         {
                             return true;
                         }
-                    }*/
-                    if (((_head._position.x + 1) == stackCopy[stackCopy.Length - 2]._position.x) && (_head._position.y == stackCopy[stackCopy.Length - 2]._position.y))
-                    {
-                        return true;
-                    }
+                        index--;
+                        i--;
+                    } while (i > 0);
                     break;
                 default:                    
                     break;
@@ -736,21 +642,6 @@ namespace ConsoleApp
         {
             _beforeLastModeMove = _lastModeMove;
             _lastModeMove = _modeMove;
-        }
-
-        private static void DoWorkEvery1Second(TimerCallback callback)
-        {
-            using var timer = new Timer(callback, null, Timeout.Infinite, 0);
-            timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(200));
-            Thread.Sleep(TimeSpan.FromSeconds(50));
-            Console.WriteLine("FINISHED");
-        }
-        private static void DoWorkReadConsoleKeyEvery200mSecond(TimerCallback callback)
-        {
-             var timer = new Timer(callback, null, Timeout.Infinite, 0);
-            timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(1000));
-            Thread.Sleep(TimeSpan.FromSeconds(50));
-            Console.WriteLine("FINISHED");
         }
     }
 }

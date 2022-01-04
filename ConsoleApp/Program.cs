@@ -24,10 +24,10 @@
             SnakeGame snakeGame = new SnakeGame(50, 22);
 
             TimerCallback timeCB = new TimerCallback(snakeGame.SnackField);
-            using Timer time = new Timer(timeCB, null, 2000, 50);
+            using Timer time = new Timer(timeCB, null, 2000, 70);
 
             TimerCallback timeDirectionCB = new TimerCallback(snakeGame.SetNewDirection);
-            using Timer timeDirection = new Timer(timeDirectionCB, null, 2150, 300);
+            using Timer timeDirection = new Timer(timeDirectionCB, null, 2150, 700);
 
             while (true)
             {
