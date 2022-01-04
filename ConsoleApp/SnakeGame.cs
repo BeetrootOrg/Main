@@ -186,7 +186,7 @@ namespace ConsoleApp
             {
                 if (_moveTo(_head, ref _stackCopy) != true)
                 {
-                    ShowDebugData(_stackCopy, _head, "Snake is stacked");
+                    ShowDebugData(_stackCopy, _head, "Snake is stacked!");
                     return;
                 }
 
