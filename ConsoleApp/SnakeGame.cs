@@ -14,20 +14,6 @@ namespace ConsoleApp
         RIGHT = 3,
         INITIAL = 4
     }
-    public class Log
-    {
-        public int Up { get; set; }
-        public int Down { get; set; }
-        public int Left { get; set; }
-        public int Right { get; set; }
-        public Log()
-        {
-            Up = 0;
-            Down = 0;
-            Left = 0;
-            Right = 0;
-        }
-    }
     class SnakeGame
     {
         public class Point
@@ -65,10 +51,7 @@ namespace ConsoleApp
                 value = s.value;
             }
         }
-        private Log _log;
         private ConsoleKeyInfo ck;
-        private Move _beforeLastModeMove;
-        private Move _lastModeMove;
         private Move _setModeMove;
         private Move _modeMove;
         private int _axeX;
@@ -87,21 +70,19 @@ namespace ConsoleApp
             _axeY = ySize;
             _maxX = (_axeX - 2);
             _maxY = (_axeY - 2);
-            _lastModeMove = Move.INITIAL;
             _setModeMove = Move.RIGHT;
             _modeMove = Move.RIGHT;
             _point = new Point(_axeX, _axeY);
             _food = new Snack[_axeY];
             _foodLength = 0;
-            _log = new Log();
             FillField();
             _headPosition.x = 20;
             _headPosition.y = _axeY / 2;
             _stack = new LinkedList<Snack>();
             
-            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 'k'));
+            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 'e'));
             _headPosition.x++;
-            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 'c'));
+            _stack.Push(new Snack(_headPosition.x, _headPosition.y, 'k'));
             _headPosition.x++;
             _stack.Push(new Snack(_headPosition.x, _headPosition.y, 'a'));
             _headPosition.x++;
@@ -122,13 +103,26 @@ namespace ConsoleApp
                     {
                         _point.Position[y, x] = '-';
                     }
-                    else if ((x == 0) || (x == _axeX - 1))
+                    else if ((x == 0) || (x == _axeX - 1) /*|| (x == (_axeX/2) && ((y == 0) || (y == _axeY - 1)))*/)
                     {
                         _point.Position[y, x] = '|';
                     }
                     else
                     {
-                        _point.Position[y, x] = ' ';
+                        _point.Position[y, x] = '.';
+                    }
+                    if (x == (_axeX / 2) && ((y == 0) || (y == _axeY - 1)))
+                    {
+                        _point.Position[y, x] = '|';
+                    }
+                    if (y == (_axeY / 2) && ((x == 0) || (x == _axeX - 1)))
+                    {
+                        _point.Position[y, x] = '-';
+                    }
+                    if ((x == 0) && (y == 0) || (x == 0) && (y == _axeY - 1) ||
+                        (x == _axeX - 1) && (y == 0) || (x == _axeX - 1) && (y == _axeY - 1))
+                    {
+                        _point.Position[y, x] = '.';
                     }
                 }
                 _generateAndSetFood(y);
@@ -162,7 +156,7 @@ namespace ConsoleApp
                 Console.Write("\r\n");
             }
         }
-        public void SnackField(object obj)
+        public void SnackFielProcessd(object obj)
         {
             int i;
             Snack[] _stackCopy;
@@ -192,6 +186,7 @@ namespace ConsoleApp
             {
                 if (_moveTo(_head, ref _stackCopy) != true)
                 {
+                    ShowDebugData(_stackCopy, _head, "Snake is stacked");
                     return;
                 }
 
@@ -208,27 +203,26 @@ namespace ConsoleApp
                     Console.Write(_stackCopy[i].value);
                 }
                 _stack.Push(new Snack(_head._position.x, _head._position.y, _head.value));
-                ShowDebugData(_stackCopy, _head);
+                ShowDebugData(_stackCopy, _head, "                  ");
             }
             catch (Exception ex)
             {
-                ShowDebugData(_stackCopy, _head);
+                ShowDebugData(_stackCopy, _head, "                  ");
                 Console.WriteLine(ex.ToString());
             }
         }
-
-        private void ShowDebugData(Snack[] _stackCopy, Snack _head)
+        private void ShowDebugData(Snack[] _stackCopy, Snack _head, string? error)
         {
-            Console.SetCursorPosition(0, _axeY+1);
-            Console.WriteLine("{0} x {1} : {2} x {3}  Mode: {4}   ", _point.X.Length, _point.Y.Length, _head._position.x, _head._position.y, _modeMove);
+            Console.SetCursorPosition(0, _axeY + 1);
+            Console.WriteLine("{0} x {1} : {2} x {3}  Mode: {4}   {5}   ", _point.X.Length, _point.Y.Length, _head._position.x, _head._position.y, _modeMove, error);
             Console.Write("Snack Data: \"");
             for (int i = _stackCopy.Length - 1; i >= 0; i--)
             {
                 Console.Write(_stackCopy[i].value);
             }
             Console.Write("\", Length: {0}    \r\n\r\n", _stackCopy.Length);
+            // Console.WriteLine("Error: {0}    \r\n", error);
         }
-
         public void SetNewDirection(object obj)
         {
             Random r = new Random();
@@ -349,7 +343,6 @@ namespace ConsoleApp
         {
             bool _enableMove = false;
 
-            _log.Right++;
             if (_head._position.y == 1)
             {
                 if (_head._position.x < _maxX)
@@ -363,7 +356,6 @@ namespace ConsoleApp
                 else
                 {
                     _head._position.y = 2;
-                    _saveLog();
                     _modeMove = Move.DOWN;
                     _enableMove = true;
                 }
@@ -381,7 +373,6 @@ namespace ConsoleApp
                 else
                 {
                     _head._position.y = _maxY - 1;
-                    _saveLog();
                     _modeMove = Move.UP;
                     _enableMove = true;
                 }
@@ -397,7 +388,6 @@ namespace ConsoleApp
             else
             {
                 _head._position.y++;
-                _saveLog();
                 _modeMove = Move.DOWN;
                 _enableMove = true;
             }
@@ -409,7 +399,6 @@ namespace ConsoleApp
         {
             bool _enableMove = false;
 
-            _log.Left++;
             if (_head._position.y == 1)
             {
                 if (_head._position.x > 1)
@@ -423,7 +412,6 @@ namespace ConsoleApp
                 else
                 {
                     _head._position.y = 2;
-                    _saveLog();
                     _modeMove = Move.DOWN;
                     _enableMove = true;
                 }
@@ -441,7 +429,6 @@ namespace ConsoleApp
                 else
                 {
                     _head._position.y = _maxY - 1;
-                    _saveLog();
                     _modeMove = Move.UP;
                     _enableMove = true;
                 }
@@ -457,7 +444,6 @@ namespace ConsoleApp
             else
             {
                 _head._position.y++;
-                _saveLog();
                 _modeMove = Move.DOWN;
                 _enableMove = true;
             }
@@ -467,7 +453,6 @@ namespace ConsoleApp
         {
             bool _enableMove = false;
 
-            _log.Down++;
             if (_head._position.x == 1)
             {
                 if (_head._position.y < _maxY)
@@ -481,7 +466,6 @@ namespace ConsoleApp
                 else
                 {
                     _head._position.x = 2;
-                    _saveLog();
                     _modeMove = Move.RIGHT;
                     _enableMove = true;
                 }
@@ -499,8 +483,6 @@ namespace ConsoleApp
                 else
                 {
                     _head._position.x = _maxX - 1;
-                    _beforeLastModeMove = _lastModeMove;
-                    _lastModeMove = _modeMove;
                     _modeMove = Move.LEFT;
                     _enableMove = true;
                 }
@@ -516,7 +498,6 @@ namespace ConsoleApp
             else
             {
                 _head._position.x++;
-                _saveLog();
                 _modeMove = Move.LEFT;
                 _enableMove = true;
             }
@@ -525,7 +506,6 @@ namespace ConsoleApp
         private bool _handlerMoveUp(ref Snack _head, ref Snack[] stackCopy)
         {
             bool _enableMove = false;
-            _log.Up++;
             if (_head._position.x == 1) // moving on left side
             {
                 if (_head._position.y > 1)
@@ -538,9 +518,7 @@ namespace ConsoleApp
                 }
                 else
                 {
-                    // need to detect...
                     _head._position.x = 2;
-                    _saveLog();
                     _modeMove = Move.RIGHT;
                     _enableMove = true;
                 }
@@ -557,9 +535,7 @@ namespace ConsoleApp
                 }
                 else
                 {
-                    // need to detect...
                     _head._position.x = _maxX - 1;
-                    _saveLog();
                     _modeMove = Move.LEFT;
                     _enableMove = true;
                 }
@@ -575,7 +551,6 @@ namespace ConsoleApp
             else
             {
                 _head._position.x++;
-                _saveLog();
                 _modeMove = Move.RIGHT;
                 _enableMove = true;
             }
@@ -636,12 +611,6 @@ namespace ConsoleApp
                     break;
             }
             return false;
-        }
-
-        private void _saveLog()
-        {
-            _beforeLastModeMove = _lastModeMove;
-            _lastModeMove = _modeMove;
         }
     }
 }
