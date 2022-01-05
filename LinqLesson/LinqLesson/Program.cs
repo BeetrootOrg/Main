@@ -13,6 +13,8 @@ class Program
         var persons = JsonConvert.DeserializeObject<IEnumerable<Person>>(File.ReadAllText("data.json"));
 
         CountByGender1(persons);
+        CountByGender2(persons);
+
         YoungestPerson1(persons);
         YoungestPerson2(persons);
     }
@@ -21,6 +23,21 @@ class Program
     {
         Console.WriteLine($"Males: {persons.Count(person => person.Gender == Gender.Male)}");
         Console.WriteLine($"Females: {persons.Count(person => person.Gender == Gender.Female)}");
+    }
+
+    static void CountByGender2(IEnumerable<Person> persons)
+    {
+        var result = persons.GroupBy(person => person.Gender)
+            .Select(group => new
+            {
+                Key = group.Key,
+                Count = group.Count()
+            });
+
+        foreach (var item in result)
+        {
+            Console.WriteLine($"{item.Key}s: {item.Count}");
+        }
     }
 
     static void YoungestPerson1(IEnumerable<Person> persons)
