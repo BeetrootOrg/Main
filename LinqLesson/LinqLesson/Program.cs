@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace LinqLesson;
 
@@ -29,6 +30,7 @@ class Program
         MinMaxDistanceBetweenPersons(persons);
 
         GroupByEyeColor(persons);
+        CollectAllEmail(persons);
     }
 
     static void CountByGender1(IEnumerable<Person> persons)
@@ -193,5 +195,15 @@ class Program
         {
             Console.WriteLine($"{item.Count} has {item.EyeColor} eye color");
         }
+    }
+
+    static void CollectAllEmail(IEnumerable<Person> persons)
+    {
+        var emails = persons.Select(person => person.Email)
+            .Aggregate(new StringBuilder(),
+                (sb, email) => sb.Append(email).Append(";"),
+                sb => sb.ToString());
+
+        Console.WriteLine($"All emails: {emails}");
     }
 }
