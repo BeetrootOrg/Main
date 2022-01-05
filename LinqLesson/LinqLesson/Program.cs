@@ -18,7 +18,11 @@ class Program
         YoungestPerson1(persons);
         YoungestPerson2(persons);
 
+        OldestPerson(persons);
+
         AverageAgeByGender(persons);
+        NearestToAverageAge(persons);
+        AllNearestToAverageAge(persons);
     }
 
     static void CountByGender1(IEnumerable<Person> persons)
@@ -52,6 +56,10 @@ class Program
         Console.WriteLine($"Youngest: {persons.MinBy(x => x.Age)}");
     }
 
+    static void OldestPerson(IEnumerable<Person> persons)
+    {
+        Console.WriteLine($"Oldest: {persons.MaxBy(x => x.Age)}");
+    }
 
     static void AverageAgeByMale(IEnumerable<Person> persons)
     {
@@ -75,6 +83,48 @@ class Program
         foreach (var item in average)
         {
             Console.WriteLine($"{item.Gender}s average age: {item.AverageAge}");
+        }
+    }
+
+    static void NearestToAverageAge(IEnumerable<Person> persons)
+    {
+        var average = persons.GroupBy(x => x.Gender)
+            .Select(group =>
+            {
+                var averageAge = group.Average(person => person.Age);
+                var nearestToAverage = group.MinBy(person => Math.Abs(person.Age - averageAge));
+
+                return new
+                {
+                    Gender = group.Key,
+                    NearestToAverage = nearestToAverage
+                };
+            });
+
+        foreach (var item in average)
+        {
+            Console.WriteLine($"{item.Gender}s nearest to average age: {item.NearestToAverage}");
+        }
+    }
+
+    static void AllNearestToAverageAge(IEnumerable<Person> persons)
+    {
+        var average = persons.GroupBy(x => x.Gender)
+            .Select(group =>
+            {
+                var averageAge = group.Average(person => person.Age);
+                var nearestAgeToAverage = group.MinBy(person => Math.Abs(person.Age - averageAge)).Age;
+
+                return new
+                {
+                    Gender = group.Key,
+                    NearestToAverage = group.Where(person => person.Age == nearestAgeToAverage)
+                };
+            });
+
+        foreach (var item in average)
+        {
+            Console.WriteLine($"{item.Gender}s nearest to average age (count): {item.NearestToAverage.Count()}");
         }
     }
 }
