@@ -1,243 +1,216 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.IO;
+using System.Text;
 
 namespace ConsoleApp
 {
-    //i.safontev/classwork/18-extensions
-    delegate bool UnicalName(int number);
-
-    #region Changes
-    class ChangesObservable<T>
-    {
-        public delegate void ChangeEventHandler(object sender, ChangeEventArgs args);
-        public record ChangeEventArgs(T PreviousValue, T NewValue);
-
-        public event ChangeEventHandler ChangeEvent;
-
-        private T _value;
-        public string Name { get; init; }
-        public T Value  
-        {
-            get 
-            {
-                return _value;
-            }
-            set 
-            {
-                var oldValue = _value;
-                _value = value;
-                RaiseChangedEvent(oldValue, value);
-            }
-        }
-        protected virtual void RaiseChangedEvent(T old, T @new) => ChangeEvent?.Invoke(this, new ChangeEventArgs(old, @new));
-
-    }
-    #endregion
-
-    #region Where Enumerable
-    public class WhereEnumerable<T> : IEnumerable<T>
-    {
-        private readonly IEnumerable<T> _collection;
-        private readonly Func<T, bool> _predicate;
-
-        public WhereEnumerable(IEnumerable<T> collection, Func<T, bool> predicate)
-        {
-            _collection = collection;
-            _predicate = predicate;
-        }
-
-        public IEnumerator<T> GetEnumerator() => new WhereEnumerator(_collection.GetEnumerator(), _predicate);
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
-
-        private class WhereEnumerator : IEnumerator<T>
-        {
-            private readonly IEnumerator<T> _enumerator;
-            private readonly Func<T, bool> _predicate;
-
-            public WhereEnumerator(IEnumerator<T> enumerator, Func<T, bool> predicate)
-            {
-                _enumerator = enumerator;
-                _predicate = predicate;
-            }
-
-            public T Current { get; private set; }
-
-            object System.Collections.IEnumerator.Current => Current;
-
-            public void Dispose()
-            {
-                _enumerator.Dispose();
-            }
-
-            public bool MoveNext()
-            {
-                while (_enumerator.MoveNext())
-                {
-                    if (_predicate(_enumerator.Current))
-                    {
-                        Current = _enumerator.Current;
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-
-            public void Reset()
-            {
-                _enumerator.Reset();
-            }
-        }
-    }
-
-    #endregion
-
-    static class StringExtensions
-    {
-        // ?? 0 is like:
-        // var result = str?.Split(' ').Length;
-        // return result == null ? 0 : result;
-        //public static int? CountWords(this string str) => str?.Split(' ').Length ?? 0;
-
-        public static int? CountWords(this string str) => string.IsNullOrEmpty(str) ? 0 : str.Split(' ').Length;
-    }
-    static class DateTimeExtensions
-    {
-        public static IEnumerable<DateTime> DatesUntill(this DateTime from, DateTime to, TimeSpan step)
-        {
-            if (from < to && step < TimeSpan.Zero || from > to && step > TimeSpan.Zero)
-            {
-                throw new ArgumentException($"Incorrect input");
-            }
-
-            if (from == to)
-            {
-                yield break;    
-            }
-
-            Func<DateTime, bool> predicate = from < to
-                ? (dateTime) => dateTime <= to
-                : (dateTime) => dateTime >= to;
-
-            for (DateTime current = from; predicate(current); current = current.Add(step))
-            {
-                yield return current;
-            }
-        }
-
-        public static int Age(this DateTime birthday)
-        {
-            var now = DateTime.Now;
-            if (birthday > now)
-            {
-                throw new ArgumentOutOfRangeException(nameof(birthday), "You are an idiot");
-            }
-
-            return (DateTime.MinValue + (now - birthday)).Year - 1;
-        }
-
-        public static DateTime NextWorkingDay(this DateTime dateTime) => dateTime.DayOfWeek switch
-        {
-            DayOfWeek.Friday => dateTime.Date.AddDays(3),
-            DayOfWeek.Saturday => dateTime.Date.AddDays(2),
-            _ => dateTime.Date.AddDays(1)
-        };
-
-    }
+    //i.safontev/classwork/19-linq
 
     class Program
     {
         static void Main()
         {
-            Console.WriteLine($"This is a string".CountWords());
-            Console.WriteLine($"Word".CountWords());
-            Console.WriteLine(((string)null).CountWords());
-            Console.WriteLine($"".CountWords());
+            var persons = JsonConvert.DeserializeObject<IEnumerable<Person>>(File.ReadAllText("data.json"));
 
-            ShowAll(Take(new[] { 1, 2, 3 }, 2));
-            ShowAll(Take(new[] { 1, 2, 3 }, null));
+            CountByGender1(persons);
+            CountByGender2(persons);
 
-            var now = DateTime.Now;
-            Console.WriteLine("FROM MIN TO MAX");
-            ShowAll(now.DatesUntill(now.AddDays(7), TimeSpan.FromHours(5)));
+            YoungestPerson1(persons);
+            YoungestPerson2(persons);
 
-            Console.WriteLine("FROM MAX TO MIN");
-            ShowAll(now.AddDays(7).DatesUntill(now, TimeSpan.FromHours(5).Negate()));
+            OldestPerson(persons);
 
-            Console.WriteLine("EMPTY");
-            ShowAll(now.DatesUntill(now, TimeSpan.FromHours(5)));
-            ShowAll(now.DatesUntill(now, TimeSpan.FromHours(5).Negate()));
+            AverageAgeByGender(persons);
+            NearestToAverageAge(persons);
+            AllNearestToAverageAge(persons);
 
-            Console.WriteLine($"\n");
-            Console.WriteLine(new DateTime(2003, 01, 17).Age());
-            //Console.WriteLine(new DateTime(2023, 01, 17).Age());
+            MostUsedTag(persons);
 
-            Console.WriteLine(new DateTime(2021, 12, 22).NextWorkingDay());
-            Console.WriteLine(new DateTime(2021, 12, 23).NextWorkingDay());
-            Console.WriteLine(new DateTime(2021, 12, 24).NextWorkingDay());
-            Console.WriteLine(new DateTime(2021, 12, 25).NextWorkingDay());
+            MinMaxDistanceBetweenPersons(persons);
+
+            GroupByEyeColor(persons);
+            CollectAllEmail(persons);
 
         }
-
-        public static IEnumerable<T> Take<T>(IEnumerable<T> collection, Nullable<int> count = null) =>//Nullable<int> count == int? count
-            count.HasValue ? Take(collection, count.Value) : collection;
-
-        public static IEnumerable<T> Take<T>(IEnumerable<T> collection, int count )
+        static void CountByGender1(IEnumerable<Person> persons)
         {
-            using var enumerator = collection.GetEnumerator();//using- auto Dispose()
-            var returned = 0;
-
-            while (returned < count && enumerator.MoveNext())
-            {
-                yield return enumerator.Current;
-                ++returned;
-            }
+            Console.WriteLine($"Males: {persons.Count(person => person.Gender == Gender.Male)}");
+            Console.WriteLine($"Females: {persons.Count(person => person.Gender == Gender.Female)}");
         }
 
-        public static IEnumerable<int> FilterValues(IEnumerable<int> collection, UnicalName predicate)
+        static void CountByGender2(IEnumerable<Person> persons)
         {
-            foreach(var item in collection)
-            {
-                if (predicate(item))
+            var result = persons.GroupBy(person => person.Gender)
+                .Select(group => new
                 {
-                    yield return item;
-                }
+                    Gender = group.Key,
+                    Count = group.Count()
+                });
+
+            foreach (var item in result)
+            {
+                Console.WriteLine($"{item.Gender}s: {item.Count}");
             }
+        }
+
+        static void YoungestPerson1(IEnumerable<Person> persons)
+        {
+            Console.WriteLine($"Youngest: {persons.OrderBy(x => x.Age).First()}");
+        }
+
+        static void YoungestPerson2(IEnumerable<Person> persons)
+        {
+            Console.WriteLine($"Youngest: {persons.MinBy(x => x.Age)}");
+        }
+
+        static void OldestPerson(IEnumerable<Person> persons)
+        {
+            Console.WriteLine($"Oldest: {persons.MaxBy(x => x.Age)}");
+        }
+
+        static void AverageAgeByMale(IEnumerable<Person> persons)
+        {
+            var age = persons.GroupBy(x => x.Gender)
+                .Where(group => group.Key == Gender.Male)
+                .SelectMany(group => group)
+                .Average(person => person.Age);
+
+            Console.WriteLine($"Average Male Age: {age}");
+        }
+
+        static void AverageAgeByGender(IEnumerable<Person> persons)
+        {
+            var average = persons.GroupBy(x => x.Gender)
+                .Select(group => new
+                {
+                    Gender = group.Key,
+                    AverageAge = group.Average(person => person.Age)
+                });
+
+            foreach (var item in average)
+            {
+                Console.WriteLine($"{item.Gender}s average age: {item.AverageAge}");
+            }
+        }
+
+        static void NearestToAverageAge(IEnumerable<Person> persons)
+        {
+            var average = persons.GroupBy(x => x.Gender)
+                .Select(group =>
+                {
+                    var averageAge = group.Average(person => person.Age);
+                    var nearestToAverage = group.MinBy(person => Math.Abs(person.Age - averageAge));
+
+                    return new
+                    {
+                        Gender = group.Key,
+                        NearestToAverage = nearestToAverage
+                    };
+                });
+
+            foreach (var item in average)
+            {
+                Console.WriteLine($"{item.Gender}s nearest to average age: {item.NearestToAverage}");
+            }
+        }
+
+        static void AllNearestToAverageAge(IEnumerable<Person> persons)
+        {
+            var average = persons.GroupBy(x => x.Gender)
+                .Select(group =>
+                {
+                    var averageAge = group.Average(person => person.Age);
+                    var nearestAgeToAverage = group.MinBy(person => Math.Abs(person.Age - averageAge)).Age;
+
+                    return new
+                    {
+                        Gender = group.Key,
+                        NearestToAverage = group.Where(person => person.Age == nearestAgeToAverage)
+                    };
+                });
+
+            foreach (var item in average)
+            {
+                Console.WriteLine($"{item.Gender}s nearest to average age (count): {item.NearestToAverage.Count()}");
+            }
+        }
+
+        static void MostUsedTag(IEnumerable<Person> persons)
+        {
+            var mostUsedTag = persons.SelectMany(person => person.Tags)
+                .GroupBy(tag => tag) // key: pariatur, value: [pariatur, pariatur, ..., pariatur] - 25 times
+                .Select(group => new
+                {
+                    Tag = group.Key,
+                    Count = group.Count()
+                })
+                .MaxBy(x => x.Count);
+
+            Console.WriteLine($"Most used tag: {mostUsedTag.Tag} ({mostUsedTag.Count})");
+        }
+
+        static void MinMaxDistanceBetweenPersons(IEnumerable<Person> persons)
+        {
+            var distances = persons.Join(persons,
+                person => true,
+                person => true,
+                (person1, person2) => new
+                {
+                    First = person1,
+                    Second = person2
+                })
+                .Where(twoPersons => twoPersons.First != twoPersons.Second)
+                .Select(twoPersons =>
+                {
+                    var distance = Math.Sqrt(Math.Pow(twoPersons.First.Latitude - twoPersons.Second.Latitude, 2)
+                        + Math.Pow(twoPersons.First.Longitude - twoPersons.Second.Longitude, 2));
+
+                    return new
+                    {
+                        First = twoPersons.First,
+                        Second = twoPersons.Second,
+                        Distance = distance
+                    };
+                })
+                .ToArray();
+
+            var min = distances.MinBy(x => x.Distance);
+            var max = distances.MaxBy(x => x.Distance);
+
+            Console.WriteLine($"Min distance is between {min.First} and {min.Second} is {min.Distance}");
+            Console.WriteLine($"Max distance is between {max.First} and {max.Second} is {max.Distance}");
 
         }
-        public static void ShowAll<T>(IEnumerable<T> collection)
-        {
-            foreach (var item in collection)
-            {
-                Console.WriteLine(item);
-            }
-        }
-        public static bool Any<T>(IEnumerable<T> collection, Func<T, bool> predicate)
-        {
-            foreach (var item in collection)
-            {
-                if (predicate(item))
-                {
-                    return true;
-                }
-            }
 
-            return false;
-        }
-        public static T FirstOrDefault<T>(IEnumerable<T> collection, Func<T,bool> predicate)
+        static void GroupByEyeColor(IEnumerable<Person> persons)
         {
-            foreach(var item in collection)
-            {
-                if (predicate(item))
+            var result = persons.GroupBy(person => person.EyeColor)
+                .Select(group => new
                 {
-                    return item;
-                }
+                    EyeColor = group.Key,
+                    Count = group.Count()
+                });
+
+            foreach (var item in result)
+            {
+                Console.WriteLine($"{item.Count} has {item.EyeColor} eye color");
             }
-            return default; //if T is int we cant return null
         }
+
+        static void CollectAllEmail(IEnumerable<Person> persons)
+        {
+            var emails = persons.Select(person => person.Email)
+                .Aggregate(new StringBuilder(),
+                    (sb, email) => sb.Append(email).Append(";"),
+                    sb => sb.ToString());
+
+            Console.WriteLine($"All emails: {emails}");
+        }
+
     }
 }
