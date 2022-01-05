@@ -67,8 +67,8 @@
             public void OnUpdate(ref Game game)
             {
                 game.matrix = new Matrix();
-                game.DrawSnake(ref game.matrix);
-                game.DrawApple(ref game.matrix);
+                game.DrawSnake(ref game);
+                game.DrawApple(ref game);
                 Console.Clear();
                 for (int i = 0; i < 24; i++)
                 {
@@ -84,12 +84,12 @@
 
         }
 
-        private void DrawApple(ref Matrix matrix)
+        private void DrawApple(ref Game game)
         {
             if (Apples.Count > 0)
                 foreach (Apple apple in Apples)
                 {
-                    matrix.matrix[apple.x, apple.y] = "A";
+                    game.matrix.matrix[apple.x, apple.y] = "A";
                 }
         }
 
@@ -98,7 +98,7 @@
             public int x;
             public int y;
         }
-        public void DrawSnake(ref Matrix matrix)
+        public void DrawSnake(ref Game game)
         {
             var point = snake.tail;
             if (snake.waypoints.Count > 0)
@@ -112,7 +112,7 @@
                             int v = sn.x - point.x;
                             for (int i = 0; i < v; i++)
                             {
-                                matrix.matrix[point.x + i, point.y] = "S";
+                                game.matrix.matrix[point.x + i, point.y] = "S";
                             }
                         }
                         if (point.x > sn.x)
@@ -120,7 +120,7 @@
                             int v = point.x - sn.x;
                             for (int i = v; i > 0; i--)
                             {
-                                matrix.matrix[point.x - i, point.y] = "S";
+                                game.matrix.matrix[point.x - i, point.y] = "S";
                             }
                         }
                     }
@@ -131,7 +131,7 @@
                             int v = sn.y - point.y;
                             for (int i = 0; i < v; i++)
                             {
-                                matrix.matrix[point.x, point.y + i] = "S";
+                                game.matrix.matrix[point.x, point.y + i] = "S";
                             }
                         }
                         if (point.y > sn.y)
@@ -139,7 +139,7 @@
                             int v = point.y - sn.y;
                             for (int i = v; i > 0; i--)
                             {
-                                matrix.matrix[point.x, point.y - i] = "S";
+                                game.matrix.matrix[point.x, point.y - i] = "S";
                             }
                         }
                     }
@@ -154,7 +154,7 @@
                     int v = snt.x - point.x;
                     for (int i = 0; i < v; i++)
                     {
-                        matrix.matrix[point.x + i, point.y] = "S";
+                        game.matrix.matrix[point.x + i, point.y] = "S";
                     }
                 }
                 if (point.x > snt.x)
@@ -162,7 +162,7 @@
                     int v = point.x - snt.x;
                     for (int i = v; i > 0; i--)
                     {
-                        matrix.matrix[point.x - i, point.y] = "S";
+                        game.matrix.matrix[point.x - i, point.y] = "S";
                     }
                 }
             }
@@ -173,7 +173,7 @@
                     int v = snt.y - point.y;
                     for (int i = 0; i < v; i++)
                     {
-                        matrix.matrix[point.x, point.y + i] = "S";
+                        game.matrix.matrix[point.x, point.y + i] = "S";
                     }
                 }
                 if (point.y > snt.y)
@@ -181,9 +181,13 @@
                     int v = point.y - snt.y;
                     for (int i = v; i > 0; i--)
                     {
-                        matrix.matrix[point.x, point.y - i] = "S";
+                        game.matrix.matrix[point.x, point.y - i] = "S";
                     }
                 }
+            }
+            if(point.x == snt.x && point.y == snt.y&& game.snake.waypoints.Count>0)
+            {
+                game.snake.waypoints.RemoveAt(game.snake.waypoints.Count - 1);
             }
 
         }
