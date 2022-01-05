@@ -27,6 +27,8 @@ class Program
         MostUsedTag(persons);
 
         MinMaxDistanceBetweenPersons(persons);
+
+        GroupByEyeColor(persons);
     }
 
     static void CountByGender1(IEnumerable<Person> persons)
@@ -176,5 +178,20 @@ class Program
 
         Console.WriteLine($"Min distance is between {min.First} and {min.Second} is {min.Distance}");
         Console.WriteLine($"Max distance is between {max.First} and {max.Second} is {max.Distance}");
+    }
+
+    static void GroupByEyeColor(IEnumerable<Person> persons)
+    {
+        var result = persons.GroupBy(person => person.EyeColor)
+            .Select(group => new
+            {
+                EyeColor = group.Key,
+                Count = group.Count()
+            });
+
+        foreach (var item in result)
+        {
+            Console.WriteLine($"{item.Count} has {item.EyeColor} eye color");
+        }
     }
 }
