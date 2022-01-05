@@ -3,7 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace ConsoleApp
 {
-    //i.safontev/classwork/14-structs
+    //i.safontev/classwork/14-structs 
+
     struct Complex: IEquatable<Complex>
     {
         public double Real { get; set; }
