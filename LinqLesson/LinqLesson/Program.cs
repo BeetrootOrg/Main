@@ -23,6 +23,10 @@ class Program
         AverageAgeByGender(persons);
         NearestToAverageAge(persons);
         AllNearestToAverageAge(persons);
+
+        MostUsedTag(persons);
+
+        MinMaxDistanceBetweenPersons(persons);
     }
 
     static void CountByGender1(IEnumerable<Person> persons)
@@ -126,5 +130,51 @@ class Program
         {
             Console.WriteLine($"{item.Gender}s nearest to average age (count): {item.NearestToAverage.Count()}");
         }
+    }
+
+    static void MostUsedTag(IEnumerable<Person> persons)
+    {
+        var mostUsedTag = persons.SelectMany(person => person.Tags)
+            .GroupBy(tag => tag) // key: pariatur, value: [pariatur, pariatur, ..., pariatur] - 25 times
+            .Select(group => new
+            {
+                Tag = group.Key,
+                Count = group.Count()
+            })
+            .MaxBy(x => x.Count);
+
+        Console.WriteLine($"Most used tag: {mostUsedTag.Tag} ({mostUsedTag.Count})");
+    }
+
+    static void MinMaxDistanceBetweenPersons(IEnumerable<Person> persons)
+    {
+        var distances = persons.Join(persons,
+            person => true,
+            person => true,
+            (person1, person2) => new
+            {
+                First = person1,
+                Second = person2
+            })
+            .Where(twoPersons => twoPersons.First != twoPersons.Second)
+            .Select(twoPersons =>
+            {
+                var distance = Math.Sqrt(Math.Pow(twoPersons.First.Latitude - twoPersons.Second.Latitude, 2)
+                    + Math.Pow(twoPersons.First.Longitude - twoPersons.Second.Longitude, 2));
+
+                return new
+                {
+                    First = twoPersons.First,
+                    Second = twoPersons.Second,
+                    Distance = distance
+                };
+            })
+            .ToArray();
+
+        var min = distances.MinBy(x => x.Distance);
+        var max = distances.MaxBy(x => x.Distance);
+
+        Console.WriteLine($"Min distance is between {min.First} and {min.Second} is {min.Distance}");
+        Console.WriteLine($"Max distance is between {max.First} and {max.Second} is {max.Distance}");
     }
 }
