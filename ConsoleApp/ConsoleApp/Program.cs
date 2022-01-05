@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace ConsoleApp
 {
-
     //i.safontev/classwork/14-structs
     struct Complex: IEquatable<Complex>
     {
@@ -75,7 +74,6 @@ namespace ConsoleApp
         }
 
     }
-
     class Program
     {
         static void Main()
@@ -110,9 +108,6 @@ namespace ConsoleApp
 
             Console.WriteLine(complex1[0]);
             Console.WriteLine(complex2[1]);
-
-
         }
-
     }
 }
