@@ -76,11 +76,11 @@ CopyTo(arr) - copies stack to array
                     break;
                 case ConsoleKey.D2:
                 case ConsoleKey.NumPad2:
-                    ShowPollResults();
+                    ShowResultAndVote();
                     break;
                 case ConsoleKey.D3:
                 case ConsoleKey.NumPad3:
-                    //TryToVote();
+                    ShowResultAndVote(true);
                     break;
                 case ConsoleKey.D4:
                 case ConsoleKey.NumPad4:
@@ -137,7 +137,7 @@ CopyTo(arr) - copies stack to array
             polls.Add(poll);
             Console.WriteLine("All good");
         }
-        public static void ShowPollResults(bool Vote=false)
+        public static void ShowResultAndVote(bool Vote=false)
         {
 
             Console.Clear();
@@ -182,6 +182,16 @@ CopyTo(arr) - copies stack to array
                     Console.WriteLine($"{i++}. Answer {item.GetAnswer()}");
                 }
                 Console.WriteLine("Please enter number of answer for voting");
+                userRequest = Console.ReadLine();
+                int voteNumber;
+                if (!int.TryParse(userRequest, out voteNumber)|| (voteNumber > polls[voteRequest-1].Answers.Count))
+                    throw new ArgumentException("sorry, not correct input number of answer");
+
+                polls[voteRequest - 1].Answers[voteNumber].Vote();
+
+                Console.WriteLine("Thank's for you Vote!");
+
+
 
 
             }
