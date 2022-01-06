@@ -11,7 +11,7 @@ Count - property return number of elements
 Peek() - returns top element but doesn’t remove it
 CopyTo(arr) - copies stack to array
     */
-
+    
     class Answer
     {
         private string _answer { get; set; }
@@ -28,22 +28,17 @@ CopyTo(arr) - copies stack to array
 
         public int GetVotes() => _count;
 
+        public string GetAnswer()=> _answer;
+
     }
     class Poll
     {
-
-        private int _id;
         private string _question { get; set; }
         public List<Answer> Answers { get; set; }
-        public int ID
-        {
-            get => _id;
-            init => ++_id;
-        }
 
         public Poll(string question)
         {
-            _id = ID;
+
             Answers=new List<Answer>();
             _question = question;
         }
@@ -59,6 +54,7 @@ CopyTo(arr) - copies stack to array
 
     class Program
     {
+        public static List<Poll> polls = new();
 
         static void Menu()
         {
@@ -84,7 +80,7 @@ CopyTo(arr) - copies stack to array
                     break;
                 case ConsoleKey.D3:
                 case ConsoleKey.NumPad3:
-                   // TryToVote();
+                    //TryToVote();
                     break;
                 case ConsoleKey.D4:
                 case ConsoleKey.NumPad4:
@@ -92,19 +88,35 @@ CopyTo(arr) - copies stack to array
                     break;
             }
         }
+
+        private static void Wait()
+        {
+            Console.WriteLine("To back to menu type Enter.");
+            Console.ReadLine();
+        }
         private static void Exit()
         {
             Environment.Exit(0);
         }
 
-        public static List<Poll> polls = new();
+        
         static void Main()
         {
-            
 
+            TestPoll();
             while (true)
             Menu(); 
 
+        }
+        static void TestPoll()
+        {
+            var poll = new Poll("123");
+            string [] answersArr = new string[] { "da", "net" };
+            foreach (var item in answersArr)
+            {
+                poll.AddAnswers(new Answer(item));
+            }
+            polls.Add(poll);
         }
 
         static void CreatePoll()
@@ -125,25 +137,78 @@ CopyTo(arr) - copies stack to array
             polls.Add(poll);
             Console.WriteLine("All good");
         }
-        static void ShowPollResults()
+        public static void ShowPollResults(bool Vote=false)
         {
 
             Console.Clear();
             Console.WriteLine("Here are your polls\n");
             ShowAll(polls);
+            if (!Vote)
+            {
+                Console.WriteLine("PLease press any number to see results of voting\n");
+                string userRequest = Console.ReadLine();
+                int voteRequest;
+                if (!int.TryParse(userRequest, out voteRequest))
+                    throw new ArgumentException("sorry, not a number");
+
+                foreach (var item in polls)
+                {
+
+                    Console.WriteLine($"Question: {item.GetQuestion()}");
+
+                    foreach (var answer in item.Answers)
+                    {
+                        Console.WriteLine($"Answer {answer.GetAnswer()} has: {answer.GetVotes()} votes");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Please enter number of poll for voting");
+                string userRequest = Console.ReadLine();
+                int voteRequest;
+
+                if (!int.TryParse(userRequest, out voteRequest))
+                    throw new ArgumentException("sorry, not a number");
+
+                if (voteRequest > polls.Count)
+                    throw new ArgumentException("sorry, no such poll");
+                
+                Console.WriteLine($"Question: {polls[voteRequest-1]}");
+ 
+                var i = 0;
+                foreach (var item in polls[voteRequest - 1].Answers)
+                {
+                    Console.WriteLine($"{i++}. Answer {item.GetAnswer()}");
+                }
+                Console.WriteLine("Please enter number of answer for voting");
 
 
-        }
+            }
+
+
+
+            Wait();
+
+
+
+
+            }
 
 
 
 
         static void ShowAll(List<Poll> collection)
         {
+            var i= 0;
             foreach (var item in collection)
             {
-                Console.WriteLine(item);
+                ++i;
+                Console.WriteLine($"Poll number {i}: {item.GetQuestion()}");
+               
             }
+           
+
         }
 
 
