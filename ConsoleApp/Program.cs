@@ -11,142 +11,80 @@ Count - property return number of elements
 Peek() - returns top element but doesn’t remove it
 CopyTo(arr) - copies stack to array
     */
-    public class Stack<T>
+
+    class Answer
     {
-        private class StackItem
-        {
-            public T Value { get; set; }
-            public StackItem Next { get; set; }
+        private string _answer { get; set; }
+        private int _count { get; set; }
 
+        public Answer(string answer)
+        { 
+            _answer = answer;
+            _count = 0;
         }
 
-        private StackItem _base;
-        public int Count { get; private set; }
+        public void Vote() => ++_count;
 
-        public void Push(T item)
+        public int GetVotes() => _count;
+
+    }
+    class Vote
+    {
+        private int _id;
+        private string _question { get; set; }
+        public List<Answer> Answers { get; set; }
+        public int ID
         {
-            Insert(item, 0);
+            get => ID;
+            init => ++_id;
         }
-
-        public T this[int index]
-        {
-            get => GetByIndex(index).Value;
-            set
-            {
-                var item = GetByIndex(index);
-                item.Value = value;
-            }
-        }
-
-        public void CopyTo(out T[] arr)
-        {
-            var array = new T[Count];
-            var item = _base;
-
-            for (int i = 0; i < Count; ++i)
-            {
-                array[i] = item.Value;
-                item = item.Next;
-            }
-
-            arr=array;
-        }
-
-
-        public void Clear()
-        {
-            _base = null;
-            Count = 0;
-        }
-
-        public T Pop()
-        {
-            var tItem = _base;
-            if (Count > 0)
-            {
-                _base = _base.Next;
-                --Count;
-            }
-            else
-            throw new ArgumentException("there isn't elements do delete");
-            
-            return tItem.Value;
-            
-        }
-
-       public T  Peek()
-       {
-            return _base.Value;
-        
-       }
-
-        public void Insert(T item, int index)
-        {
-            if (index == 0)
-            {
-                var stackItem = new StackItem
-                {
-                    Value = item,
-                    Next = _base
-                };
-
-                _base = stackItem;
-            }
-            else
-            {
-                var prev = GetByIndex(index-1);
-
-                var stackItem = new StackItem
-                {
-                    Value = item,
-                    Next = prev.Next
-                };
-
-                prev.Next = stackItem;
-            }
-
-            ++Count;
-        }
-
-
-        private StackItem GetByIndex(int index)
-        {
-            if (index < 0 || index >= Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index));
-            }
-
-            var item = _base;
-            for (int i = 0; i < index; i++)
-            {
-                item = item.Next;
-            }
-
-            return item;
-        }
+        public string Question()=> _question;
 
     }
 
 
     class Program
     {
+
+        static void Menu()
+        {
+            Console.Clear();
+            Console.WriteLine("Welcome to Phone Book Application!\n");
+            Console.WriteLine("\tMenu");
+            Console.WriteLine("\t1. Create poll");
+            Console.WriteLine("\t2. Show poll results");
+            Console.WriteLine("\t3. Try to vote");
+            Console.WriteLine("\t4. Exit");
+
+            ConsoleKeyInfo ck = Console.ReadKey();
+
+            switch (ck.Key)
+            {
+                case ConsoleKey.D1:
+                case ConsoleKey.NumPad1:
+                    CreatePoll();
+                    break;
+                case ConsoleKey.D2:
+                case ConsoleKey.NumPad2:
+                    ShowPollResults();
+                    break;
+                case ConsoleKey.D3:
+                case ConsoleKey.NumPad3:
+                    TryToVote();
+                    break;
+                case ConsoleKey.D4:
+                case ConsoleKey.NumPad4:
+                    Exit();
+                    break;
+            }
+        }
+        private static void Exit()
+        {
+            Environment.Exit(0);
+        }
         static void Main()
         {
 
-            var stack = new Stack<string>();
-            stack.Push("el0");
-            stack.Push("el1");
-            stack.Push("el2");
-            stack.Push("el3");
-            Console.WriteLine(stack.Peek());
-            Console.WriteLine(stack.Count);
-            Console.WriteLine(stack.Pop());
-            Console.WriteLine(stack.Count);
-
-            var arr = new string [stack.Count];
-
-            stack.CopyTo(out arr);
-            ShowArray(arr);
         }
 
 
