@@ -23,22 +23,36 @@ CopyTo(arr) - copies stack to array
             _count = 0;
         }
 
+
         public void Vote() => ++_count;
 
         public int GetVotes() => _count;
 
     }
-    class Vote
+    class Poll
     {
+
         private int _id;
         private string _question { get; set; }
         public List<Answer> Answers { get; set; }
         public int ID
         {
-            get => ID;
+            get => _id;
             init => ++_id;
         }
-        public string Question()=> _question;
+
+        public Poll(string question)
+        {
+            _id = ID;
+            Answers=new List<Answer>();
+            _question = question;
+        }
+        public void AddAnswers(Answer answer)
+        {
+            Answers.Add(answer);
+        }
+        public string GetQuestion()=> _question;
+
 
     }
 
@@ -48,8 +62,8 @@ CopyTo(arr) - copies stack to array
 
         static void Menu()
         {
+  
             Console.Clear();
-            Console.WriteLine("Welcome to Phone Book Application!\n");
             Console.WriteLine("\tMenu");
             Console.WriteLine("\t1. Create poll");
             Console.WriteLine("\t2. Show poll results");
@@ -70,7 +84,7 @@ CopyTo(arr) - copies stack to array
                     break;
                 case ConsoleKey.D3:
                 case ConsoleKey.NumPad3:
-                    TryToVote();
+                   // TryToVote();
                     break;
                 case ConsoleKey.D4:
                 case ConsoleKey.NumPad4:
@@ -82,15 +96,51 @@ CopyTo(arr) - copies stack to array
         {
             Environment.Exit(0);
         }
+
+        public static List<Poll> polls = new();
         static void Main()
         {
+            
+
+            while (true)
+            Menu(); 
+
+        }
+
+        static void CreatePoll()
+        {
+
+            Console.Clear();
+            Console.WriteLine("Please enter your question");
+            var newQestion= Console.ReadLine();
+            Console.WriteLine("Please enter your answers separated with comas");
+            var newAnswers=Console.ReadLine();
+              var answersArr = newAnswers.Split(',');
+            var poll = new Poll(newQestion);
+            foreach (var item in answersArr)
+            {
+                poll.AddAnswers(new Answer(item));
+            }
+            
+            polls.Add(poll);
+            Console.WriteLine("All good");
+        }
+        static void ShowPollResults()
+        {
+
+            Console.Clear();
+            Console.WriteLine("Here are your polls\n");
+            ShowAll(polls);
+
 
         }
 
 
-        static void ShowArray<TElement>(TElement[] array)
+
+
+        static void ShowAll(List<Poll> collection)
         {
-            foreach (var item in array)
+            foreach (var item in collection)
             {
                 Console.WriteLine(item);
             }
