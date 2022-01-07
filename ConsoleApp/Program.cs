@@ -127,7 +127,7 @@ CopyTo(arr) - copies stack to array
             var newQestion= Console.ReadLine();
             Console.WriteLine("Please enter your answers separated with comas");
             var newAnswers=Console.ReadLine();
-              var answersArr = newAnswers.Split(',');
+            var answersArr = newAnswers.Split(',');
             var poll = new Poll(newQestion);
             foreach (var item in answersArr)
             {
@@ -135,14 +135,14 @@ CopyTo(arr) - copies stack to array
             }
             
             polls.Add(poll);
-            Console.WriteLine("All good");
+        //   Console.WriteLine("All good");
         }
         public static void ShowResultAndVote(bool Vote=false)
         {
 
             Console.Clear();
             Console.WriteLine("Here are your polls\n");
-            ShowAll(polls);
+            ShowAllQuestion(polls);
             if (!Vote)
             {
                 Console.WriteLine("PLease press any number to see results of voting\n");
@@ -151,16 +151,7 @@ CopyTo(arr) - copies stack to array
                 if (!int.TryParse(userRequest, out voteRequest))
                     throw new ArgumentException("sorry, not a number");
 
-                foreach (var item in polls)
-                {
-
-                    Console.WriteLine($"Question: {item.GetQuestion()}");
-
-                    foreach (var answer in item.Answers)
-                    {
-                        Console.WriteLine($"Answer {answer.GetAnswer()} has: {answer.GetVotes()} votes");
-                    }
-                }
+                ShowAllQuestion(polls, true,true);
             }
             else
             {
@@ -174,52 +165,58 @@ CopyTo(arr) - copies stack to array
                 if (voteRequest > polls.Count)
                     throw new ArgumentException("sorry, no such poll");
                 
-                Console.WriteLine($"Question: {polls[voteRequest-1]}");
- 
-                var i = 0;
-                foreach (var item in polls[voteRequest - 1].Answers)
-                {
-                    Console.WriteLine($"{i++}. Answer {item.GetAnswer()}");
-                }
+                Console.WriteLine($"Question: {polls[voteRequest-1].GetQuestion()}");
+
+                ShowAllAnswers(polls[voteRequest - 1].Answers,false);
+
                 Console.WriteLine("Please enter number of answer for voting");
                 userRequest = Console.ReadLine();
                 int voteNumber;
                 if (!int.TryParse(userRequest, out voteNumber)|| (voteNumber > polls[voteRequest-1].Answers.Count))
                     throw new ArgumentException("sorry, not correct input number of answer");
 
-                polls[voteRequest - 1].Answers[voteNumber].Vote();
+                polls[voteRequest - 1].Answers[voteNumber-1].Vote();
 
                 Console.WriteLine("Thank's for you Vote!");
 
-
-
-
             }
-
-
 
             Wait();
+        }
 
-
-
-
-            }
-
-
-
-
-        static void ShowAll(List<Poll> collection)
+        static void ShowAllQuestion(List<Poll> collection, bool showAnswer = false, bool showVotes=false)
         {
-            var i= 0;
+            var i   = 0;
             foreach (var item in collection)
             {
                 ++i;
                 Console.WriteLine($"Poll number {i}: {item.GetQuestion()}");
-               
+                if (showAnswer)
+                { 
+                    ShowAllAnswers(item.Answers, showVotes); 
+                }
             }
-           
+        }
+        static void ShowAllAnswers(List<Answer> collection, bool showVotes)
+        {
+            var i = 0;
+            foreach (var item in collection)
+            {
+                ++i;
+                if (showVotes)
+                {
+                    Console.WriteLine($"{i} Answer: {item.GetAnswer()} has: {item.GetVotes()} votes");
+                } 
+                else
+                {
+                    Console.WriteLine($"{i} Answer: {item.GetAnswer()}");
+                }
+
+            }
+
 
         }
+
 
 
     }
