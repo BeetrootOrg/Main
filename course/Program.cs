@@ -1,54 +1,131 @@
-﻿using static System.Console;
+﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 
 namespace Course
 {
-
-    static class DateExtention
+    public enum Side
     {
-        public static bool IsWeekend (this DateTime date)
-        {
-            return (date.DayOfWeek == DayOfWeek.Saturday) || (date.DayOfWeek == DayOfWeek.Sunday);
-        }
-
-        public static bool IsWorkday (this DateTime date)
-        {
-            return (date.DayOfWeek != DayOfWeek.Saturday) && (date.DayOfWeek != DayOfWeek.Sunday);
-        }
-    }
-
-    static class CollectionExtention<T>
-    {
-        public static List<List<T>> ChunkBy(List<T> list, int itemsInList)
-        {
-            var newList = new List<List<T>>();
-            for (int i = 0; i < list.Count; i += itemsInList)
-            {
-                newList.Add(list.GetRange(i, Math.Min(itemsInList, list.Count - i)));
-            }
-
-            return newList;
-        }
+        North,
+        South,
+        West,
+        East,
     }
 
     class Program
     {
         static void Main()
         {
-            var list = new List<int>{ 1,2,3,4,5,6,7,8,9,10 };
-            var chunks = CollectionExtention<int>.ChunkBy(list, 3);
-            foreach (var chunk in chunks)
-            {
-                Console.WriteLine("New chunk");
-                ShowAll<int>(chunk);
-            }
+            var persons = JsonConvert.DeserializeObject<IEnumerable<Person>>(File.ReadAllText("data.json"));
+
+            FarthestPerson(persons, Side.West);
+            FarthestPerson(persons);
+            Console.WriteLine("\n");
+            SimilarAboutPeople(persons);
+            Console.WriteLine("\n");
+            SameFriendPeople(persons);
+            Console.WriteLine("\n");
+            CompanyWithMostPeople(persons);
         }
 
-        public static void ShowAll<T>(List<T> list)
+        static void FarthestPerson(IEnumerable<Person> persons, Side side = Side.North)
         {
-            foreach (T item in list)
+            var person = side switch
             {
-                Console.WriteLine(item);
+                Side.South => persons.MinBy(x => x.Latitude),
+                Side.East => persons.MaxBy(x => x.Longitude),
+                Side.West => persons.MinBy(x => x.Longitude),
+                _ => persons.MaxBy(x => x.Latitude),
+            };
+            Console.WriteLine($"The farthest {side} person is {person.Name}");
+        }
+
+        static void SimilarAboutPeople(IEnumerable<Person> persons)
+        {
+            var friends = persons.Join(persons,
+                person => true,
+                person => true,
+                (person1, person2) => new
+                {
+                    First = person1,
+                    Second = person2
+                })
+                .Where(twoPersons => twoPersons.First != twoPersons.Second)
+                .Select(twoPersons =>
+                {
+                    int commonAboutWords = 0;
+                    var firstAboutList = twoPersons.First.About.Split(' ').Distinct().ToList();
+                    var secondAboutList = twoPersons.Second.About.Split(' ').Distinct().ToList();
+                    foreach (var word in firstAboutList)
+                    {
+                        if (secondAboutList.Contains(word))
+                        {
+                            commonAboutWords++;
+                        }
+                    }
+
+                    return new
+                    {
+                        First = twoPersons.First,
+                        Second = twoPersons.Second,
+                        CommonAboutWords = commonAboutWords
+                    };
+                })
+                .ToList();
+            var commonAboutFriends = friends.MaxBy(x => x.CommonAboutWords);
+            Console.WriteLine($"People {commonAboutFriends.First.Name} and {commonAboutFriends.Second.Name} have similarities in Above");
+            Console.WriteLine($"The number of similarities - {commonAboutFriends.CommonAboutWords}");
+        }
+
+        static void SameFriendPeople(IEnumerable<Person> persons)
+        {
+            var friends = persons.Join(persons,
+                person => true,
+                person => true,
+                (person1, person2) => new
+                {
+                    First = person1,
+                    Second = person2
+                })
+                .Where(twoPersons => twoPersons.First != twoPersons.Second)
+                .Select(twoPersons =>
+                {
+                    bool hasCommonFriend = false;
+                    foreach (Friend friend in twoPersons.First.Friends)
+                    {
+                        if (twoPersons.Second.Friends.Any(secondFriend => secondFriend.Name == friend.Name))
+                        {
+                            hasCommonFriend = true;
+                            break;
+                        }
+                    }
+
+                    return new
+                    {
+                        First = twoPersons.First,
+                        Second = twoPersons.Second,
+                        HasCommonFriend = hasCommonFriend
+                    };
+                })
+                .ToList();
+            var commonFriends = friends.FirstOrDefault(x => x.HasCommonFriend);
+            if (commonFriends == null)
+            {
+                throw new Exception("People in your database have no common friends");
             }
+            Console.WriteLine($"People {commonFriends.First.Name} and {commonFriends.Second.Name} have same friend");
+        }
+
+        static void CompanyWithMostPeople(IEnumerable<Person> persons)
+        {
+            var biggestCompany = persons.SelectMany(person => person.Company)
+                .GroupBy(company => company)
+                .Select(company => new
+                {
+                    Company = company.Key,
+                    Count = company.Count()
+                })
+                .MaxBy(x => x.Count);
+            Console.WriteLine($"The biggest company is {biggestCompany.Company} with {biggestCompany.Count} employees");
         }
     }    
 }
