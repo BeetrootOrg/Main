@@ -52,16 +52,9 @@ namespace Course
                 .Where(twoPersons => twoPersons.First != twoPersons.Second)
                 .Select(twoPersons =>
                 {
-                    int commonAboutWords = 0;
                     var firstAboutList = twoPersons.First.About.Split(' ').Distinct().ToList();
                     var secondAboutList = twoPersons.Second.About.Split(' ').Distinct().ToList();
-                    foreach (var word in firstAboutList)
-                    {
-                        if (secondAboutList.Contains(word))
-                        {
-                            commonAboutWords++;
-                        }
-                    }
+                    int commonAboutWords = firstAboutList.Intersect(secondAboutList).Count();
 
                     return new
                     {
