@@ -1,12 +1,29 @@
 ﻿using System;
+using System.Linq;
 
 namespace ConsoleApp
 {
+    [AttributeUsage(AttributeTargets.Property)]
+    public class DefaultValueAttribute : Attribute
+    {
+        public object Value { get; init; }
+
+        public DefaultValueAttribute(object defaultValue)
+        {
+            Value = defaultValue;
+        }
+    }
+
     record TestClass
     {
+        [DefaultValue("Dima")]
         public string Name { get; set; }
+
         public string Description { get; set; }
+        
+        [DefaultValue(42)]
         public int Age { get; set; }
+
         public DateTime CreatedDate { get; set; }
     }
 
@@ -27,6 +44,7 @@ namespace ConsoleApp
             var typeToCreate = Type.GetType($"{assemblyName}.{classname}, {assemblyName}", true);
 
             var obj = Activator.CreateInstance(typeToCreate);
+            SetDefaultValues(obj);
 
             while (true)
             {
@@ -71,6 +89,22 @@ namespace ConsoleApp
             }
 
             Console.WriteLine(obj);
+        }
+
+        private static void SetDefaultValues(object obj)
+        {
+            var type = obj.GetType();
+
+            foreach (var propertyInfo in type.GetProperties())
+            {
+                var attribute = propertyInfo.GetCustomAttributes(typeof(DefaultValueAttribute), true)
+                    .FirstOrDefault();
+
+                if (attribute is DefaultValueAttribute defaultValueAttribute)
+                {
+                    propertyInfo.SetValue(obj, defaultValueAttribute.Value);
+                }
+            }
         }
     }
 }
