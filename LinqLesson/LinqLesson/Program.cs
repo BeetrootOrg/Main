@@ -239,5 +239,8 @@ class Program
         fourtyTwoYearsOld = persons.SingleOrDefault(x => x.Age == age);
         fourtyTwoYearsOld = persons.Last(x => x.Age == age);
         fourtyTwoYearsOld = persons.LastOrDefault(x => x.Age == age);
+
+        var range = Enumerable.Range(5, 10);
+        var repeat = Enumerable.Repeat(fourtyTwoYearsOld, 5);
     }
 }
