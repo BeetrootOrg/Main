@@ -3,64 +3,67 @@ using System.Collections.Generic;
 
 namespace ConsoleApp
 {
-    //Голосовалка
+    //ГОЛОСОВАЛКА ЗА ЧТО УГОДНО
 
     public class Vote
     {
-        public string Question { get; set; }
-        public List<Option> Options = new List<Option>();
+        public string VoteQuestion { get; set; }
+        public List<Option> VoteOptions = new List<Option>();
 
         public Vote(string question)
         {
-            Question = question;
+            VoteQuestion = question;
         }
 
-        public void AddOption(string optionText)
+        public void AddVoteOption(string optionText)
         {
-            Options.Add(new Option(optionText));
+            VoteOptions.Add(new Option(optionText));
         }
 
-        public void ToVote(int choise, string name)
+        public void AddVoter(int choise, string name)
         {
-            Options[choise].voterList.Add(name);
+            VoteOptions[choise].voterList.Add(name);
         }
 
-        public void ShowAll()
+        public void ShowVoteQuestionOption()
         {
-            Console.WriteLine(Question);
+            Console.WriteLine($"{VoteQuestion}");
 
-            foreach (var item in Options)
+            int i = 0;
+            foreach (var item in VoteOptions)
             {
-                Console.WriteLine($"{item.Text}");
-                item.ShowVoters();
-                
+                Console.WriteLine($"{i}) {item.textOption}");
+                ++i;
+            }
+        }
+
+        public void ShowVoteResult()
+        {
+            Console.WriteLine(VoteQuestion);
+
+            foreach (var item in VoteOptions)
+            {
+                item.ShowVotePeople();
+
             }
         }
     }
 
     public class Option
     {
-        public string Text;
+        public string textOption;
         public List<string> voterList = new List<string>();
 
         public Option(string text)
         {
-            Text = text;
+            textOption = text;
         }
 
-        public void ShowVoters()
+        public void ShowVotePeople()
         {
             if (voterList.Count > 0)
             {
-                foreach (var item in voterList)
-                {
-                    Console.Write(item + " ");
-                }
-                Console.WriteLine();
-            }
-            else
-            {
-                Console.WriteLine("Nobody vote for this yet");
+                Console.WriteLine($"{textOption}: {voterList.Count} votes");
             }
         }
     }
@@ -86,9 +89,11 @@ namespace ConsoleApp
             Console.WriteLine(" Welkome to vote Aplication!\n Lets try to create some Vote\n");
 
             Console.WriteLine("\t1. Create Vote");
-            Console.WriteLine("\t2. Show All Vote");
+            Console.WriteLine("\t2. Show All Votes");
+            Console.WriteLine("\t3. Lets Vote");
+            Console.WriteLine("\t4. Show Results");
             Console.WriteLine("\t0. Exit");
-            
+
 
             ConsoleKeyInfo ck = Console.ReadKey();
 
@@ -101,6 +106,14 @@ namespace ConsoleApp
                 case ConsoleKey.D2:
                 case ConsoleKey.NumPad2:
                     ShowAllVotes();
+                    break;
+                case ConsoleKey.D3:
+                case ConsoleKey.NumPad3:
+                    LetsVote();
+                    break;
+                case ConsoleKey.D4:
+                case ConsoleKey.NumPad4:
+                    ShowResults();
                     break;
 
                 case ConsoleKey.D0:
@@ -115,14 +128,46 @@ namespace ConsoleApp
             Console.Clear();
 
             Console.WriteLine("Write a Voting topic:");
-            votes.Add(new Vote(Console.ReadLine()));
+            string question = Console.ReadLine();
 
-            Console.WriteLine("Lets Add some options!");
+            if (!string.IsNullOrEmpty(question))
+            {
+                votes.Add(new Vote(question));
+            }
+            else
+            {
+                Console.WriteLine("Ah Shit, Here We Go Again!");
+                question = Console.ReadLine();
+                votes.Add(new Vote(question));
+            }
+
+            Console.WriteLine("Lets Add some options.");
+
             do
             {
-                votes[votes.Count - 1].AddOption(Console.ReadLine());
-            } while (!String.IsNullOrEmpty(Console.ReadLine()));
+                var option = Console.ReadLine();
 
+                if (!String.IsNullOrEmpty(option) || votes[votes.Count - 1].VoteOptions.Count < 2)
+                {
+                    votes[votes.Count - 1].AddVoteOption(option);
+                }
+                else
+                {
+                    break;
+                }
+
+            } while (true);
+
+        }
+
+        static void ShowQuestions()
+        {
+            int i = 0;
+            foreach (var vote in votes)
+            {
+                Console.WriteLine($"{i}) {vote.VoteQuestion}");
+                ++i;
+            }
         }
 
         static void ShowAllVotes()
@@ -130,13 +175,54 @@ namespace ConsoleApp
             Console.Clear();
             foreach (var vote in votes)
             {
-                vote.ShowAll();
+                vote.ShowVoteQuestionOption();
             }
 
             Wait();
         }
 
-        private static void Wait()
+
+        static void LetsVote()
+        {
+            if (votes.Count > 0)
+            {
+                Console.Clear();
+                ShowQuestions();
+                Console.WriteLine("What vote you whant?");
+                int voteIndex = Convert.ToInt32(Console.ReadLine());
+
+                Console.Clear();
+                votes[voteIndex].ShowVoteQuestionOption();
+
+
+                Console.WriteLine("Write your Name:");
+                string name = Console.ReadLine();
+
+                Console.WriteLine("Write what option you choose (write a number):");
+                int optionIndex = Convert.ToInt32(Console.ReadLine());
+
+                votes[voteIndex].AddVoter(optionIndex, name);
+            }
+            else
+            {
+                Console.WriteLine("Create any Vote!!!");
+            }
+        }
+
+        static void ShowResults()
+        {
+            Console.Clear();
+
+            foreach (var vote in votes)
+            {
+                vote.ShowVoteResult();
+                Console.WriteLine();
+            }
+
+            Wait();
+        }
+
+        static void Wait()
         {
             Console.WriteLine("To back to menu type Enter...");
             Console.ReadLine();
