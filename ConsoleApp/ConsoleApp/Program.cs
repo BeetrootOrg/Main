@@ -26,6 +26,8 @@ namespace ConsoleApp
         public int Age { get; set; }
 
         public DateTime CreatedDate { get; set; }
+
+        public void SayHello() => Console.WriteLine($"Hello, {Name}");
     }
 
     record ExampleClass
@@ -49,22 +51,31 @@ namespace ConsoleApp
 
             while (true)
             {
-                Console.WriteLine("Enter property name:");
-                var propertyName = Console.ReadLine();
+                Console.WriteLine("Enter property/method name:");
+                var propertyMethodName = Console.ReadLine();
 
-                if (!string.IsNullOrWhiteSpace(propertyName))
+                if (!string.IsNullOrWhiteSpace(propertyMethodName))
                 {
-                    Console.WriteLine("Enter property value:");
-                    var propertyValue = Console.ReadLine();
-
-                    var propertyInfo = typeToCreate.GetProperty(propertyName);
+                    var propertyInfo = typeToCreate.GetProperty(propertyMethodName);
                     
                     if (propertyInfo == null)
                     {
-                        Console.WriteLine($"Missing property info {propertyName}");
+                        var methodInfo = typeToCreate.GetMethod(propertyMethodName);
+
+                        if (methodInfo == null)
+                        {
+                            Console.WriteLine($"Missing property/method info {propertyMethodName}");
+                        } 
+                        else
+                        {
+                            methodInfo.Invoke(obj, null);
+                        }
                     }
                     else
                     {
+                        Console.WriteLine("Enter property value:");
+                        var propertyValue = Console.ReadLine();
+
                         if (propertyInfo.PropertyType == typeof(string))
                         {
                             propertyInfo.SetValue(obj, propertyValue);
