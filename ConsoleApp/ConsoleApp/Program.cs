@@ -30,6 +30,8 @@ namespace ConsoleApp
         public void SayHello() => Console.WriteLine($"Hello, {Name}");
         public void SaySome(string something) => Console.WriteLine($"Hello, {something}");
         public void SayInteger(int number) => Console.WriteLine($"Hello, {number}");
+        public void SayALot(string thing, int times, DateTime createdAt) 
+            => Console.WriteLine($"{thing} was created {createdAt} ({times} times)");
     }
 
     record ExampleClass
@@ -83,7 +85,7 @@ namespace ConsoleApp
                                 {
                                     Console.WriteLine($"Enter {i + 1} argument:");
                                     var arg = Console.ReadLine();
-                                    args[i] = arg;
+                                    args[i] = ConvertTo(arg, paramsInfo[i].ParameterType);
                                 }
 
                                 methodInfo.Invoke(obj, args);
@@ -96,22 +98,7 @@ namespace ConsoleApp
                         Console.WriteLine("Enter property value:");
                         var propertyValue = Console.ReadLine();
 
-                        if (propertyInfo.PropertyType == typeof(string))
-                        {
-                            propertyInfo.SetValue(obj, propertyValue);
-                        }
-                        else if (propertyInfo.PropertyType == typeof(int) && int.TryParse(propertyValue, out var intVal))
-                        {
-                            propertyInfo.SetValue(obj, intVal);
-                        }
-                        else if (propertyInfo.PropertyType == typeof(DateTime) && DateTime.TryParse(propertyValue, out var dateTime))
-                        {
-                            propertyInfo.SetValue(obj, dateTime);
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Cannot convert value to type {propertyInfo.PropertyType}");
-                        }
+                        propertyInfo.SetValue(obj, ConvertTo(propertyValue, propertyInfo.PropertyType));
                     }
                 } 
                 else
@@ -137,6 +124,26 @@ namespace ConsoleApp
                     propertyInfo.SetValue(obj, defaultValueAttribute.Value);
                 }
             }
+        }
+
+        private static object ConvertTo(string value, Type type)
+        {
+            if (type == typeof(string))
+            {
+                return value;
+            }
+
+            if (type == typeof(int) && int.TryParse(value, out var intVal))
+            {
+                return intVal;
+            }
+
+            if (type == typeof(DateTime) && DateTime.TryParse(value, out var dateTime))
+            {
+                return dateTime;
+            }
+            
+            throw new ArgumentException($"Cannot convert value to type {type}");
         }
     }
 }
