@@ -1,177 +1,110 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ConsoleApp
 {
-    delegate bool Dima(int number);
-
-    #region Changes
-    public class ChangesObservable<T>
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    public class DefaultValueAttribute : Attribute
     {
-        public delegate void ChangeEventHandler(object sender, ChangeEvetArgs args);
+        public object Value { get; init; }
+        public bool NeedSetup { get; init; }
 
-        public record ChangeEvetArgs(T PreviousValue, T NewValue);
-
-        public event ChangeEventHandler ChangeEvent;
-
-        private T _value;
-
-        public string Name { get; init; }
-
-        public T Value
+        public DefaultValueAttribute(object defaultValue)
         {
-            get
-            {
-                return _value;
-            }
-            set
-            {
-                var oldValue = _value;
-                _value = value;
-                RaiseChangedEvent(oldValue, value);
-            }
-        }
-
-        protected virtual void RaiseChangedEvent(T old, T @new) => ChangeEvent?.Invoke(this, new ChangeEvetArgs(old, @new));
-
-    }
-    #endregion
-
-    #region Where Enumerable
-
-    public class WhereEnumerable<T> : IEnumerable<T>
-    {
-        private readonly IEnumerable<T> _collection;
-        private readonly Func<T, bool> _predicate;
-
-        public WhereEnumerable(IEnumerable<T> collection, Func<T, bool> predicate)
-        {
-            _collection = collection;
-            _predicate = predicate;
-        }
-
-        public IEnumerator<T> GetEnumerator() => new WhereEnumerator(_collection.GetEnumerator(), _predicate);
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
-
-        private class WhereEnumerator : IEnumerator<T>
-        {
-            private readonly IEnumerator<T> _enumerator;
-            private readonly Func<T, bool> _predicate;
-
-            public WhereEnumerator(IEnumerator<T> enumerator, Func<T, bool> predicate)
-            {
-                _enumerator = enumerator;
-                _predicate = predicate;
-            }
-
-            public T Current { get; private set; }
-
-            object System.Collections.IEnumerator.Current => Current;
-
-            public void Dispose()
-            {
-                _enumerator.Dispose();
-            }
-
-            public bool MoveNext()
-            {
-                while (_enumerator.MoveNext())
-                {
-                    if (_predicate(_enumerator.Current))
-                    {
-                        Current = _enumerator.Current;
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-
-            public void Reset()
-            {
-                _enumerator.Reset();
-            }
+            Value = defaultValue;
         }
     }
 
-    #endregion
-
-    static class StringExtensions
+    record TestClass
     {
-        public static int CountWords(this string str) => str.Split(' ').Length;
+        [DefaultValue("Dima", NeedSetup = true)]
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        [DefaultValue(42)]
+        public int Age { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+    }
+
+    record ExampleClass
+    {
+        public string Example { get; set; }
     }
 
     class Program
     {
         static void Main()
         {
-            Console.WriteLine("This is a string".CountWords());
-            Console.WriteLine("Word".CountWords());
-            // Console.WriteLine(((string)null).CountWords());
+            var assemblyName = "ConsoleApp";
 
-            ShowAll(Take(new[] { 1, 2, 3 }, 2));
-            ShowAll(Take(new[] { 1, 2, 3 }, null));
-        }
+            Console.WriteLine("Enter class name you want to create:");
+            var classname = Console.ReadLine();
 
-        public static IEnumerable<T> Take<T>(IEnumerable<T> collection, int? count = null) =>
-            count.HasValue ? Take(collection, count.Value) : collection;
+            var typeToCreate = Type.GetType($"{assemblyName}.{classname}, {assemblyName}", true);
 
-        public static IEnumerable<T> Take<T>(IEnumerable<T> collection, int count)
-        {
-            using var enumerator = collection.GetEnumerator();
-            var returned = 0;
+            var obj = Activator.CreateInstance(typeToCreate);
+            SetDefaultValues(obj);
 
-            while (returned < count && enumerator.MoveNext())
+            while (true)
             {
-                yield return enumerator.Current;
-                ++returned;
-            }
-        }
+                Console.WriteLine("Enter property name:");
+                var propertyName = Console.ReadLine();
 
-        public static IEnumerable<int> FilterValues(IEnumerable<int> collection, Dima predicate)
-        {
-            foreach (var item in collection)
-            {
-                if (predicate(item))
+                if (!string.IsNullOrWhiteSpace(propertyName))
                 {
-                    yield return item;
+                    Console.WriteLine("Enter property value:");
+                    var propertyValue = Console.ReadLine();
+
+                    var propertyInfo = typeToCreate.GetProperty(propertyName);
+
+                    if (propertyInfo == null)
+                    {
+                        Console.WriteLine($"Missing property info {propertyName}");
+                    }
+                    else
+                    {
+                        if (propertyInfo.PropertyType == typeof(string))
+                        {
+                            propertyInfo.SetValue(obj, propertyValue);
+                        }
+                        else if (propertyInfo.PropertyType == typeof(int) && int.TryParse(propertyValue, out var intVal))
+                        {
+                            propertyInfo.SetValue(obj, intVal);
+                        }
+                        else if (propertyInfo.PropertyType == typeof(DateTime) && DateTime.TryParse(propertyValue, out var dateTime))
+                        {
+                            propertyInfo.SetValue(obj, dateTime);
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Cannot convert value to type {propertyInfo.PropertyType}");
+                        }
+                    }
                 }
-            }
-        }
-
-        public static T FirstOrDefault<T>(IEnumerable<T> collection, Func<T, bool> predicate)
-        {
-            foreach (var item in collection)
-            {
-                if (predicate(item))
+                else
                 {
-                    return item;
-                }
-            }
-
-            return default;
-        }
-
-        public static bool Any<T>(IEnumerable<T> collection, Func<T, bool> predicate)
-        {
-            foreach (var item in collection)
-            {
-                if (predicate(item))
-                {
-                    return true;
+                    break;
                 }
             }
 
-            return false;
+            Console.WriteLine(obj);
         }
 
-        public static void ShowAll<T>(IEnumerable<T> collection)
+        private static void SetDefaultValues(object obj)
         {
-            foreach (var item in collection)
+            var type = obj.GetType();
+
+            foreach (var propertyInfo in type.GetProperties())
             {
-                Console.WriteLine(item);
+                var attribute = propertyInfo.GetCustomAttributes(typeof(DefaultValueAttribute), true)
+                    .FirstOrDefault();
+
+                if (attribute is DefaultValueAttribute defaultValueAttribute && defaultValueAttribute.NeedSetup)
+                {
+                    propertyInfo.SetValue(obj, defaultValueAttribute.Value);
+                }
             }
         }
     }
