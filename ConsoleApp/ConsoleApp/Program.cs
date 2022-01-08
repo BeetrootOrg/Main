@@ -3,10 +3,11 @@ using System.Linq;
 
 namespace ConsoleApp
 {
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public class DefaultValueAttribute : Attribute
     {
         public object Value { get; init; }
+        public bool NeedSetup { get; init; }
 
         public DefaultValueAttribute(object defaultValue)
         {
@@ -16,7 +17,7 @@ namespace ConsoleApp
 
     record TestClass
     {
-        [DefaultValue("Dima")]
+        [DefaultValue("Dima", NeedSetup = true)]
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -100,7 +101,7 @@ namespace ConsoleApp
                 var attribute = propertyInfo.GetCustomAttributes(typeof(DefaultValueAttribute), true)
                     .FirstOrDefault();
 
-                if (attribute is DefaultValueAttribute defaultValueAttribute)
+                if (attribute is DefaultValueAttribute defaultValueAttribute && defaultValueAttribute.NeedSetup)
                 {
                     propertyInfo.SetValue(obj, defaultValueAttribute.Value);
                 }
