@@ -2,18 +2,61 @@
 
 namespace ConsoleApp
 {
-    static class StringExtencions
+    public class DefaultValueAttribute : Attribute
     {
-        public static int CountWords(this string str) => string.IsNullOrEmpty(str) ? 0 : str.Split(' ').Length;
+        public object Value { get; init; }
+
+        public DefaultValueAttribute(object defaultValue)
+        {
+            Value = defaultValue;
+        }
+
+    }
+
+    record TestClass
+    {
+        [DefaultValue("Dima")]
+        public string Name { get; set; }
+        public string Description { get; set; }
+
     }
 
     public class Program
     {
         static void Main()
         {
-            Console.WriteLine("This is a string".CountWords());
-            Console.WriteLine("Word".CountWords());
-            Console.WriteLine(((string)null).CountWords());
+            var asseblyName = "ConsoleApp";
+
+            Console.WriteLine("Enter class name you want create:");
+            var className = Console.ReadLine();
+
+            var typeToCreate = Type.GetType($"{asseblyName}.{className}, {asseblyName}", true);
+
+            var obj = Activator.CreateInstance(typeToCreate);
+
+            while(true)
+            {
+                Console.WriteLine("Enter property name:");
+                var propertyName = Console.ReadLine();
+
+                if (!string.IsNullOrEmpty(propertyName))
+                {
+                    Console.WriteLine("Enter property value:");
+                    var propertyValue = Console.ReadLine();
+
+                    var propertyInfo = typeToCreate.GetProperty(propertyName);
+                    
+                    if (propertyInfo == null)
+                    {
+                        Console.WriteLine("Missing");
+                    }
+
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
     }
 }
