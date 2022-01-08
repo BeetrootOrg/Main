@@ -100,7 +100,51 @@ namespace ConsoleApp
 
     static class StringExtensions
     {
-        public static int CountWords(this string str) => str.Split(' ').Length;
+        public static int CountWords(this string str) => string.IsNullOrEmpty(str) ? 0 : str.Split(' ').Length;
+    }
+
+    static class DateTimeExtensions
+    {
+        public static IEnumerable<DateTime> DatesUntil(this DateTime from, DateTime to, TimeSpan step)
+        {
+            if (from < to && step < TimeSpan.Zero ||
+                from > to && step > TimeSpan.Zero)
+            {
+                throw new ArgumentException("Incorrect input");
+            }
+
+            if (from == to)
+            {
+                yield break;
+            }
+
+            Func<DateTime, bool> predicate = from < to
+                ? (dateTime) => dateTime <= to
+                : (dateTime) => dateTime >= to;
+
+            for (DateTime current = from; predicate(current); current = current.Add(step))
+            {
+                yield return current;
+            }
+        }
+
+        public static int Age(this DateTime birthday)
+        {
+            var now = DateTime.Now;
+            if (birthday > now)
+            {
+                throw new ArgumentOutOfRangeException(nameof(birthday), "You are debil");
+            }
+
+            return (DateTime.MinValue + (DateTime.Now - birthday)).Year - 1;
+        }
+
+        public static DateTime NextWorkingDay(this DateTime dateTime) => dateTime.DayOfWeek switch
+        {
+            DayOfWeek.Friday => dateTime.Date.AddDays(3),
+            DayOfWeek.Saturday => dateTime.Date.AddDays(2),
+            _ => dateTime.Date.AddDays(1)
+        };
     }
 
     class Program
@@ -109,10 +153,36 @@ namespace ConsoleApp
         {
             Console.WriteLine("This is a string".CountWords());
             Console.WriteLine("Word".CountWords());
-            // Console.WriteLine(((string)null).CountWords());
+            Console.WriteLine(((string)null).CountWords());
+            Console.WriteLine("".CountWords());
+
+            Console.WriteLine("TAKE FROM ARRAY");
 
             ShowAll(Take(new[] { 1, 2, 3 }, 2));
             ShowAll(Take(new[] { 1, 2, 3 }, null));
+
+            var now = DateTime.Now;
+            Console.WriteLine("FROM MIN TO MAX");
+            ShowAll(now.DatesUntil(now.AddDays(7), TimeSpan.FromHours(5)));
+
+            Console.WriteLine("FROM MAX TO MIN");
+            ShowAll(now.AddDays(7).DatesUntil(now, TimeSpan.FromHours(5).Negate()));
+
+            Console.WriteLine("EMPTY");
+            ShowAll(now.DatesUntil(now, TimeSpan.FromHours(5)));
+            ShowAll(now.DatesUntil(now, TimeSpan.FromHours(5).Negate()));
+
+            Console.WriteLine("BIRTHDAY");
+            Console.WriteLine(new DateTime(1996, 7, 11).Age());
+            Console.WriteLine(new DateTime(2020, 12, 22).Age());
+            Console.WriteLine(new DateTime(1976, 08, 19).Age());
+
+            Console.WriteLine("WORKING DAY");
+            Console.WriteLine(new DateTime(2021, 12, 22).NextWorkingDay());
+            Console.WriteLine(new DateTime(2021, 12, 23).NextWorkingDay());
+            Console.WriteLine(new DateTime(2021, 12, 24).NextWorkingDay());
+            Console.WriteLine(new DateTime(2021, 12, 25).NextWorkingDay());
+            Console.WriteLine(new DateTime(2021, 12, 26).NextWorkingDay());
         }
 
         public static IEnumerable<T> Take<T>(IEnumerable<T> collection, int? count = null) =>
