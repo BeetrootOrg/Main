@@ -28,6 +28,8 @@ namespace ConsoleApp
         public DateTime CreatedDate { get; set; }
 
         public void SayHello() => Console.WriteLine($"Hello, {Name}");
+        public void SaySome(string something) => Console.WriteLine($"Hello, {something}");
+        public void SayInteger(int number) => Console.WriteLine($"Hello, {number}");
     }
 
     record ExampleClass
@@ -68,7 +70,25 @@ namespace ConsoleApp
                         } 
                         else
                         {
-                            methodInfo.Invoke(obj, null);
+                            var paramsInfo = methodInfo.GetParameters();
+
+                            if (paramsInfo.Length == 0)
+                            {
+                                methodInfo.Invoke(obj, null);
+                            }
+                            else
+                            {
+                                var args = new object[paramsInfo.Length];
+                                for (int i = 0; i < paramsInfo.Length; i++)
+                                {
+                                    Console.WriteLine($"Enter {i + 1} argument:");
+                                    var arg = Console.ReadLine();
+                                    args[i] = arg;
+                                }
+
+                                methodInfo.Invoke(obj, args);
+                            }
+
                         }
                     }
                     else
