@@ -54,6 +54,10 @@ namespace ConsoleApp
                         {
                             propertyInfo.SetValue(obj, intVal);
                         }
+                        else if (propertyInfo.PropertyType == typeof(DateTime) && DateTime.TryParse(propertyValue, out var dateTime))
+                        {
+                            propertyInfo.SetValue(obj, dateTime);
+                        }
                         else
                         {
                             Console.WriteLine($"Cannot convert value to type {propertyInfo.PropertyType}");
