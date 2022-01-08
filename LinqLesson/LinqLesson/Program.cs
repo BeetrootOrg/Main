@@ -7,39 +7,15 @@ using System.Text;
 
 namespace LinqLesson;
 
-class Program
+static class PersonsExtension
 {
-    static void Main(string[] args)
-    {
-        var persons = JsonConvert.DeserializeObject<IEnumerable<Person>>(File.ReadAllText("data.json"));
-
-        CountByGender1(persons);
-        CountByGender2(persons);
-
-        YoungestPerson1(persons);
-        YoungestPerson2(persons);
-
-        OldestPerson(persons);
-
-        AverageAgeByGender(persons);
-        NearestToAverageAge(persons);
-        AllNearestToAverageAge(persons);
-
-        MostUsedTag(persons);
-
-        MinMaxDistanceBetweenPersons(persons);
-
-        GroupByEyeColor(persons);
-        CollectAllEmail(persons);
-    }
-
-    static void CountByGender1(IEnumerable<Person> persons)
+    public static void CountByGender1(this IEnumerable<Person> persons)
     {
         Console.WriteLine($"Males: {persons.Count(person => person.Gender == Gender.Male)}");
         Console.WriteLine($"Females: {persons.Count(person => person.Gender == Gender.Female)}");
     }
 
-    static void CountByGender2(IEnumerable<Person> persons)
+    public static void CountByGender2(this IEnumerable<Person> persons)
     {
         var result = persons.GroupBy(person => person.Gender)
             .Select(group => new
@@ -54,22 +30,22 @@ class Program
         }
     }
 
-    static void YoungestPerson1(IEnumerable<Person> persons)
+    public static void YoungestPerson1(this IEnumerable<Person> persons)
     {
         Console.WriteLine($"Youngest: {persons.OrderBy(x => x.Age).First()}");
     }
 
-    static void YoungestPerson2(IEnumerable<Person> persons)
+    public static void YoungestPerson2(this IEnumerable<Person> persons)
     {
         Console.WriteLine($"Youngest: {persons.MinBy(x => x.Age)}");
     }
 
-    static void OldestPerson(IEnumerable<Person> persons)
+    public static void OldestPerson(this IEnumerable<Person> persons)
     {
         Console.WriteLine($"Oldest: {persons.MaxBy(x => x.Age)}");
     }
 
-    static void AverageAgeByMale(IEnumerable<Person> persons)
+    public static void AverageAgeByMale(this IEnumerable<Person> persons)
     {
         var age = persons.GroupBy(x => x.Gender)
             .Where(group => group.Key == Gender.Male)
@@ -79,7 +55,7 @@ class Program
         Console.WriteLine($"Average Male Age: {age}");
     }
 
-    static void AverageAgeByGender(IEnumerable<Person> persons)
+    public static void AverageAgeByGender(this IEnumerable<Person> persons)
     {
         var average = persons.GroupBy(x => x.Gender)
             .Select(group => new
@@ -94,7 +70,7 @@ class Program
         }
     }
 
-    static void NearestToAverageAge(IEnumerable<Person> persons)
+    public static void NearestToAverageAge(this IEnumerable<Person> persons)
     {
         var average = persons.GroupBy(x => x.Gender)
             .Select(group =>
@@ -115,7 +91,7 @@ class Program
         }
     }
 
-    static void AllNearestToAverageAge(IEnumerable<Person> persons)
+    public static void AllNearestToAverageAge(this IEnumerable<Person> persons)
     {
         var average = persons.GroupBy(x => x.Gender)
             .Select(group =>
@@ -136,7 +112,7 @@ class Program
         }
     }
 
-    static void MostUsedTag(IEnumerable<Person> persons)
+    public static void MostUsedTag(this IEnumerable<Person> persons)
     {
         var mostUsedTag = persons.SelectMany(person => person.Tags)
             .GroupBy(tag => tag) // key: pariatur, value: [pariatur, pariatur, ..., pariatur] - 25 times
@@ -150,7 +126,7 @@ class Program
         Console.WriteLine($"Most used tag: {mostUsedTag.Tag} ({mostUsedTag.Count})");
     }
 
-    static void MinMaxDistanceBetweenPersons(IEnumerable<Person> persons)
+    public static void MinMaxDistanceBetweenPersons(this IEnumerable<Person> persons)
     {
         var distances = persons.Join(persons,
             person => true,
@@ -182,7 +158,7 @@ class Program
         Console.WriteLine($"Max distance is between {max.First} and {max.Second} is {max.Distance}");
     }
 
-    static void GroupByEyeColor(IEnumerable<Person> persons)
+    public static void GroupByEyeColor(this IEnumerable<Person> persons)
     {
         var result = persons.GroupBy(person => person.EyeColor)
             .Select(group => new
@@ -197,7 +173,7 @@ class Program
         }
     }
 
-    static void CollectAllEmail(IEnumerable<Person> persons)
+    public static void CollectAllEmail(this IEnumerable<Person> persons)
     {
         var emails = persons.Select(person => person.Email)
             .Aggregate(new StringBuilder(),
@@ -205,5 +181,63 @@ class Program
                 sb => sb.ToString());
 
         Console.WriteLine($"All emails: {emails}");
+    }
+
+    public static void MaxFriends(this IEnumerable<Person> persons, int top)
+    {
+        var topFriends = persons.OrderByDescending(person => person.Friends.Length)
+            .Take(top);
+
+        var i = 0;
+        foreach (var topFriend in topFriends)
+        {
+            Console.WriteLine($"Top friend {++i}: {topFriend.Name} with {topFriend.Friends.Length} friends");
+        }
+    }
+
+    public static void EverybodyHasEmail(this IEnumerable<Person> persons)
+    {
+        var allHasEmails = persons.All(person => !string.IsNullOrEmpty(person.Email));
+        Console.WriteLine($"Everybody has email: {allHasEmails}");
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        var persons = JsonConvert.DeserializeObject<IEnumerable<Person>>(File.ReadAllText("data.json"));
+
+        persons.CountByGender1();
+        persons.CountByGender2();
+
+        persons.YoungestPerson1();
+        persons.YoungestPerson2();
+
+        persons.OldestPerson();
+
+        persons.AverageAgeByGender();
+        persons.NearestToAverageAge();
+        persons.AllNearestToAverageAge();
+
+        persons.MostUsedTag();
+
+        persons.MinMaxDistanceBetweenPersons();
+
+        persons.GroupByEyeColor();
+        persons.CollectAllEmail();
+
+        persons.MaxFriends(3);
+
+        persons.EverybodyHasEmail();
+
+        const int age = 42;
+
+        var fourtyTwoYearsOld = persons.First(x => x.Age == age);
+        fourtyTwoYearsOld = persons.FirstOrDefault(x => x.Age == age);
+        fourtyTwoYearsOld = persons.Single(x => x.Age == age);
+        fourtyTwoYearsOld = persons.SingleOrDefault(x => x.Age == age);
+        fourtyTwoYearsOld = persons.Last(x => x.Age == age);
+        fourtyTwoYearsOld = persons.LastOrDefault(x => x.Age == age);
     }
 }
