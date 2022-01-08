@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 
 namespace ConsoleApp
 {
@@ -43,6 +44,17 @@ namespace ConsoleApp
     {
         static void Main()
         {
+            var assembly = typeof(StringBuilder).Assembly;
+
+            Console.WriteLine($"Types in assembly {assembly.FullName}:");
+            foreach (var type in assembly.GetTypes())
+            {
+                Console.WriteLine($"\t{type.FullName}");
+            }
+        }
+
+        static void DynamicInvocation()
+        {
             var assemblyName = "ConsoleApp";
 
             Console.WriteLine("Enter class name you want to create:");
@@ -61,7 +73,7 @@ namespace ConsoleApp
                 if (!string.IsNullOrWhiteSpace(propertyMethodName))
                 {
                     var propertyInfo = typeToCreate.GetProperty(propertyMethodName);
-                    
+
                     if (propertyInfo == null)
                     {
                         var methodInfo = typeToCreate.GetMethod(propertyMethodName);
@@ -69,7 +81,7 @@ namespace ConsoleApp
                         if (methodInfo == null)
                         {
                             Console.WriteLine($"Missing property/method info {propertyMethodName}");
-                        } 
+                        }
                         else
                         {
                             var paramsInfo = methodInfo.GetParameters();
@@ -100,7 +112,7 @@ namespace ConsoleApp
 
                         propertyInfo.SetValue(obj, ConvertTo(propertyValue, propertyInfo.PropertyType));
                     }
-                } 
+                }
                 else
                 {
                     break;
