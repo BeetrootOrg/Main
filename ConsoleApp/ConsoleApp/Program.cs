@@ -1,109 +1,68 @@
 ﻿using System;
 namespace ConsoleApp
 {
-    enum Sex
+    class AutoService
     {
-        Male,
-        Female,
+        public Tasks Tasks { get; set; }
     }
-    enum Material
+    class Tasks
     {
-        Wood,
-        Metal,
-        Plastic,
+        public Client Client { get; set; }
+        public int ToDoList{ get; set; }
+        public int Terms { get; set; }
     }
-    enum Position
+    class Client
     {
-        HeadTeacher,
-        Director,
+        public string FullName { get; set; }
+        public Vehicle Vehicle { get; set; }
+        public int PhoneNumber { get; set; }
+        public int FinancialSituation { get; init; }
     }
-    enum Subjects
+    class Vehicle
     {
-        Math,
-        Physics,
-        Chemistry,
-        PE,
-        Geography,
+        public string VehicleBrand { get; set; }
+        public Engine Engine { get; set; }
+        public Wheels Wheels{ get; set; }
+        public Frame Frame { get; init; }
     }
-    class School
+    class Engine
     {
-        public Staff Staff { get; set; }
-        public Classrooms Classrooms { get; set; }
-        public Students Students { get; set; }
+        public int Cylinders { get; set; }
+        public string Fuel { get; set; }
+    }
+    class Wheels
+    {
+        public string TireType { get; set; }
+        public float Diameter { get; set; }
+    }
+    class Frame
+    {
+        public int YearOfIssue { get; set; }
+        public float Value{ get; set; }
+    }
+
+    class WorkProcess
+    {
+        public bool Diagnostics { get; init; }
+        public bool PurchaseOfParts { get; init; }
+        public Tasks Task { get; init; }
+        public Staff Staff { get; init; }
     }
     class Staff
     {
-        public Cleaner Cleaner { get; set; }
-        public SecurityGuard SecurityGuard { get; set; }
-        public Administration Administration { get; set; }
-        public Teacher Teacher { get; set; }
-
+        public Mechanic Mechanic { get; init; }
+        public Electrician Electrician{ get; init; }
     }
-    class Cleaner
+    class Mechanic
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public int Payment { get; set; }
-        public int Age { get; init; }
+        public int PhoneNumber{ get; init; }
+        public int Payment{ get; init; }
+        public int WorkExperience{ get; init; }
     }
-    class SecurityGuard
+    class Electrician
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public int Payment { get; set; }
-        public int Age { get; init; }
-    }
-    class Administration
-    {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public int Payment { get; set; }
-        public Position Position { get; set; }
-        public int Age { get; init; }
-    }
-    class Teacher
-    {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public int Payment { get; set; }
-        public Subjects Subjects { get; set; }
-        public int Age { get; init; }
-    }
-    class Students
-    {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public int Grade{ get; set; }
-        public int Age { get; init; }
-        public Sex Sex { get; init; }
-    }
-    class Classrooms
-    {
-        public Table Table { get; init; }
-        public Chair Chair { get; init; }
-        public Blackboard Blackboard { get; init; }
-        public SubjectClassrom SubjectClassrom { get; init; }
-        public int ClassroomsNumber{ get; init; }
-
-    }
-    class Table
-    {
-        public Material Material { get; init; }
-        public int Amount{ get; init; }
-    }
-    class Chair
-    {
-        public Material Material { get; init; }
-        public int Amount{ get; init; }
-    }
-    class Blackboard
-    {
-        public Material Material { get; init; }
-        public int Amount{ get; init; }
-    }
-    class SubjectClassrom
-    {
-        public Subjects Subjects { get; init; }
-        public Teacher Teacher { get; init; }
+        public int PhoneNumber{ get; init; }
+        public int Payment{ get; init; }
+        public int WorkExperience{ get; init; }
     }
 }
