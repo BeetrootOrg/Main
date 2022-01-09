@@ -32,7 +32,7 @@ namespace ConsoleApp
             int i = 0;
             foreach (var item in VoteOptions)
             {
-                Console.WriteLine($"{i}) {item.textOption}");
+                Console.WriteLine($"{i}) {item.TextOption}");
                 ++i;
             }
         }
@@ -51,19 +51,19 @@ namespace ConsoleApp
 
     public class Option
     {
-        public string textOption;
+        public string TextOption;
         public List<string> voterList = new List<string>();
 
         public Option(string text)
         {
-            textOption = text;
+            TextOption = text;
         }
 
         public void ShowVotePeople()
         {
             if (voterList.Count > 0)
             {
-                Console.WriteLine($"{textOption}: {voterList.Count} votes");
+                Console.WriteLine($"{TextOption}: {voterList.Count} votes");
             }
         }
     }
