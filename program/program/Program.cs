@@ -19,7 +19,6 @@ namespace ConsoleApp
 
         }
         
-
         static void MainMenu()
         {
             Console.Clear();
