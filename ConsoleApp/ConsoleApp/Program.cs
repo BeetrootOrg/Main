@@ -193,11 +193,11 @@ namespace ConsoleApp
                 if (votes.Count > 1)
                 {
                     Console.WriteLine("What vote you whant?");
-                    voteIndex = Convert.ToInt32(Console.ReadLine());
-
-                    Console.Clear();
-                    votes[voteIndex].ShowVoteQuestionOption();
+                    voteIndex = Convert.ToInt32(Console.ReadLine());                    
                 }
+
+                Console.Clear();
+                votes[voteIndex].ShowVoteQuestionOption();
 
                 Console.WriteLine("Write your Name:");
                 string name = Console.ReadLine();
