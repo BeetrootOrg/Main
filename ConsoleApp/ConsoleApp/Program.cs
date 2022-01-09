@@ -5,22 +5,14 @@ namespace ConsoleApp
 {
     public static class DateTimeExtentions
     {
-        public static bool IsWeekend(this DateTime checkDate)
-        {
-            if (checkDate.DayOfWeek == DayOfWeek.Saturday || checkDate.DayOfWeek == DayOfWeek.Sunday)
-            {
-                return true;
-            }
-
-            return false;
-        }
+        public static bool IsWeekend(this DateTime checkDate) => checkDate.DayOfWeek == DayOfWeek.Saturday || checkDate.DayOfWeek == DayOfWeek.Sunday;
 
         public static bool IsWorkday(this DateTime checkDate) => !IsWeekend(checkDate); 
     }
 
     public static class IEnumerableExtentions
     {
-        public static List<List<T>> ChunkBy<T>(this List<T> collection, int size)
+        public static IEnumerable<IEnumerable<T>> ChunkBy<T>(this List<T> collection, int size)
         {
             var resultList = new List<List<T>>();
 
