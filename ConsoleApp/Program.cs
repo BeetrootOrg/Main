@@ -244,7 +244,7 @@ namespace ConsoleApp
         static void Main(string[] args)
         {
 
-            Console.WriteLine("\r\n a.tkachenko/homework/19-Linq \r\n");
+            Console.WriteLine("\r\n a.tkachenko/homework/20=Reflections \r\n");
 
             var persons = JsonConvert.DeserializeObject<IEnumerable<Person>>(File.ReadAllText("data.json"));
 
