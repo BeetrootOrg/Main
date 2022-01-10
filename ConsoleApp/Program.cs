@@ -9,282 +9,151 @@ using System.Reflection;
 
 namespace ConsoleApp
 {
-    static class PersonsExtension
+    class MyInnerClass
     {
-        public static void CountByGender1(this IEnumerable<Person> persons)
+        public string Name { get; set; }
+        public int Number { get; set; }
+    }
+    class MyOuterClass
+    {
+        public MyInnerClass[] inner = new MyInnerClass[2];
+        public string[] Answer = new string[2];
+
+        public MyInnerClass this[int index]
         {
-            Console.WriteLine($"Males: {persons.Count(person => person.Gender == Gender.Male)}");
-            Console.WriteLine($"Females: {persons.Count(person => person.Gender == Gender.Female)}");
+            get { return inner[index]; }
+            set { inner[index] = value; }
         }
+    }
+    class MyClass
+    {
+        public String[] m_StringArray = { "Apples", "Oranges", "Pears" };
+        public MyInnerClass[] inner { get; set; }
 
-        public static void CountByGender2(this IEnumerable<Person> persons)
+        public String[] StringArray
         {
-            var result = persons.GroupBy(person => person.Gender)
-                .Select(group => new
-                {
-                    Gender = group.Key,
-                    Count = group.Count()
-                });
-
-            foreach (var item in result)
-            {
-                Console.WriteLine($"{item.Gender}s: {item.Count}");
-            }
+            get { return m_StringArray; }
+            set { m_StringArray = value; }
         }
-
-        public static void YoungestPerson1(this IEnumerable<Person> persons)
+        public MyClass()
         {
-            Console.WriteLine($"Youngest: {persons.OrderBy(x => x.Age).First()}");
-        }
-
-        public static void YoungestPerson2(this IEnumerable<Person> persons)
-        {
-            Console.WriteLine($"Youngest: {persons.MinBy(x => x.Age)}");
-        }
-
-        public static void OldestPerson(this IEnumerable<Person> persons)
-        {
-            Console.WriteLine($"Oldest: {persons.MaxBy(x => x.Age)}");
-        }
-
-        public static void AverageAgeByMale(this IEnumerable<Person> persons)
-        {
-            var age = persons.GroupBy(x => x.Gender)
-                .Where(group => group.Key == Gender.Male)
-                .SelectMany(group => group)
-                .Average(person => person.Age);
-
-            Console.WriteLine($"Average Male Age: {age}");
-        }
-
-        public static void AverageAgeByGender(this IEnumerable<Person> persons)
-        {
-            var average = persons.GroupBy(x => x.Gender)
-                .Select(group => new
-                {
-                    Gender = group.Key,
-                    AverageAge = group.Average(person => person.Age)
-                });
-
-            foreach (var item in average)
-            {
-                Console.WriteLine($"{item.Gender}s average age: {item.AverageAge}");
-            }
-        }
-
-        public static void NearestToAverageAge(this IEnumerable<Person> persons)
-        {
-            var average = persons.GroupBy(x => x.Gender)
-                .Select(group =>
-                {
-                    var averageAge = group.Average(person => person.Age);
-                    var nearestToAverage = group.MinBy(person => Math.Abs(person.Age - averageAge));
-
-                    return new
-                    {
-                        Gender = group.Key,
-                        NearestToAverage = nearestToAverage
-                    };
-                });
-
-            foreach (var item in average)
-            {
-                Console.WriteLine($"{item.Gender}s nearest to average age: {item.NearestToAverage}");
-            }
-        }
-
-        public static void AllNearestToAverageAge(this IEnumerable<Person> persons)
-        {
-            var average = persons.GroupBy(x => x.Gender)
-                .Select(group =>
-                {
-                    var averageAge = group.Average(person => person.Age);
-                    var nearestAgeToAverage = group.MinBy(person => Math.Abs(person.Age - averageAge)).Age;
-
-                    return new
-                    {
-                        Gender = group.Key,
-                        NearestToAverage = group.Where(person => person.Age == nearestAgeToAverage)
-                    };
-                });
-
-            foreach (var item in average)
-            {
-                Console.WriteLine($"{item.Gender}s nearest to average age (count): {item.NearestToAverage.Count()}");
-            }
-        }
-
-        public static void MostUsedTag(this IEnumerable<Person> persons)
-        {
-            var mostUsedTag = persons.SelectMany(person => person.Tags)
-                .GroupBy(tag => tag) // key: pariatur, value: [pariatur, pariatur, ..., pariatur] - 25 times
-                .Select(group => new
-                {
-                    Tag = group.Key,
-                    Count = group.Count()
-                })
-                .MaxBy(x => x.Count);
-
-            Console.WriteLine($"Most used tag: {mostUsedTag.Tag} ({mostUsedTag.Count})");
-        }
-
-        public static void MinMaxDistanceBetweenPersons(this IEnumerable<Person> persons)
-        {
-            var distances = persons.Join(persons,
-                person => true,
-                person => true,
-                (person1, person2) => new
-                {
-                    First = person1,
-                    Second = person2
-                })
-                .Where(twoPersons => twoPersons.First != twoPersons.Second)
-                .Select(twoPersons =>
-                {
-                    var distance = Math.Sqrt(Math.Pow(twoPersons.First.Latitude - twoPersons.Second.Latitude, 2)
-                        + Math.Pow(twoPersons.First.Longitude - twoPersons.Second.Longitude, 2));
-
-                    return new
-                    {
-                        First = twoPersons.First,
-                        Second = twoPersons.Second,
-                        Distance = distance
-                    };
-                })
-                .ToArray();
-
-            var min = distances.MinBy(x => x.Distance);
-            var max = distances.MaxBy(x => x.Distance);
-
-            Console.WriteLine($"Min distance is between {min.First} and {min.Second} is {min.Distance}");
-            Console.WriteLine($"Max distance is between {max.First} and {max.Second} is {max.Distance}");
-        }
-
-        public static void GroupByEyeColor(this IEnumerable<Person> persons)
-        {
-            var result = persons.GroupBy(person => person.EyeColor)
-                .Select(group => new
-                {
-                    EyeColor = group.Key,
-                    Count = group.Count()
-                });
-
-            foreach (var item in result)
-            {
-                Console.WriteLine($"{item.Count} has {item.EyeColor} eye color");
-            }
-        }
-
-        public static void CollectAllEmail(this IEnumerable<Person> persons)
-        {
-            var emails = persons.Select(person => person.Email)
-                .Aggregate(new StringBuilder(),
-                    (sb, email) => sb.Append(email).Append(";"),
-                    sb => sb.ToString());
-
-            Console.WriteLine($"All emails: {emails}");
-        }
-
-        public static void MaxFriends(this IEnumerable<Person> persons, int top)
-        {
-            var topFriends = persons.OrderByDescending(person => person.Friends.Length)
-                .Take(top);
-
-            var i = 0;
-            foreach (var topFriend in topFriends)
-            {
-                Console.WriteLine($"Top friend {++i}: {topFriend.Name} with {topFriend.Friends.Length} friends");
-            }
-        }
-
-        public static void EverybodyHasEmail(this IEnumerable<Person> persons)
-        {
-            var allHasEmails = persons.All(person => !string.IsNullOrEmpty(person.Email));
-            Console.WriteLine($"Everybody has email: {allHasEmails}");
-        }
-        public static void ShowCompanyNameWithMaxPeople(this IEnumerable<Person> persons)
-        {
-            int cnt = 0;
-
-            var result = persons.GroupBy(person => person.Company)
-                .Select(group => new
-                {
-                    Company = group.Key,
-                    Count = group.Count()
-                });
-
-            foreach (var item in result)
-            {
-                Console.WriteLine($"{cnt++}: {item.Count} working in \"{item.Company}\" company");
-            }
-
-            Console.WriteLine($"Most working in: {result.MaxBy(item => item.Count)}");
-        }
-        public static void GroupBySameWordsInAbout(this IEnumerable<Person> persons)
-        {
-            // to do...
+            inner = new MyInnerClass[2];
         }
     }
     class ConsoleApp
     {
-        // finish all tasks from lesson using LinqExample.zip and do next:
-        //
-        // find out who is located farthest north/south/west/east using latitude/longitude data
-        // find max and min distance between 2 persons
-        // find 2 persons whos ‘about’ have the most same words
-        // find persons with same friends(compare by friend’s name)
-
-        // створити наступні методи:
-        // метод, що виводить людей що знаходяться найпівнічніше/південіше/західніше/східніше
-        // метод, що виводить двох людей, у яких в About найбільше однакових слів
-        // метод, що виводить двох людей, у котрих є спільний друг
-        // метод, що виводить назву компанії в якій працює найбільша кількість людей та кількість людей, що там працює
-        // ShowCompanyNameWithMaxPeople
-
         static void Main(string[] args)
         {
 
-            Console.WriteLine("\r\n a.tkachenko/homework/20=Reflections \r\n");
+            Console.WriteLine("\r\n a.tkachenko/homework/20-Reflections \r\n");
 
-            var persons = JsonConvert.DeserializeObject<IEnumerable<Person>>(File.ReadAllText("data.json"));
+            var assemblyName = "ConsoleApp";
+            Console.WriteLine("Enter class name you want to create:");
+            var classname = "Vote"; //  Console.ReadLine();
+            Console.WriteLine(classname);
+            var typeToCreate = Type.GetType($"{assemblyName}.{classname}, {assemblyName}", true);
+            var obj = Activator.CreateInstance(typeToCreate);
 
-            persons.CountByGender1();
-            persons.CountByGender2();
+            // var propertyName = "Question";
+            // var propertyValue = "How are you?";
 
-            persons.YoungestPerson1();
-            persons.YoungestPerson2();
 
-            persons.OldestPerson();
 
-            persons.AverageAgeByGender();
-            persons.NearestToAverageAge();
-            persons.AllNearestToAverageAge();
 
-            persons.MostUsedTag();
 
-            persons.MinMaxDistanceBetweenPersons();
 
-            persons.GroupByEyeColor();
-            persons.CollectAllEmail();
 
-            persons.MaxFriends(5);
+            
+            var propertyInfo = typeToCreate.GetProperty("Question");
+            SetProperty(obj, "Question", "How are you?", propertyInfo);
 
-            persons.EverybodyHasEmail();
+            propertyInfo = typeToCreate.GetProperty("Answer");
+            SetProperty(obj, "Answer", "Fine", propertyInfo, 0);
 
-            const int age = 42;
 
-            var fourtyTwoYearsOld = persons.First(x => x.Age == age);
-            fourtyTwoYearsOld = persons.FirstOrDefault(x => x.Age == age);
-            fourtyTwoYearsOld = persons.Single(x => x.Age == age);
-            fourtyTwoYearsOld = persons.SingleOrDefault(x => x.Age == age);
-            fourtyTwoYearsOld = persons.Last(x => x.Age == age);
-            fourtyTwoYearsOld = persons.LastOrDefault(x => x.Age == age);
 
-            var range = Enumerable.Range(5, 10);
-            var repeat = Enumerable.Repeat(fourtyTwoYearsOld, 5);
 
-            // made just this
-            persons.ShowCompanyNameWithMaxPeople();
+
+
+
+
+
+
+
+
+
+            MyInnerClass mic0 = new MyInnerClass { Name = "Test0", Number = 9 };
+            MyOuterClass moc = new MyOuterClass();
+            PropertyInfo piInner = moc.GetType().GetProperty("Item");
+            piInner.SetValue(moc, mic0, new object[] { (int)0 });
+            if (moc[0] == mic0)
+                Console.WriteLine("MyInnerClass wurde zugewiesen.");
+            PropertyInfo piAnsw = typeof(MyOuterClass).GetProperty("Answer");
+            // piAnsw.SetValue(moc, propertyValue, new object[] { (int)0 });
+            MyClass mc = new MyClass();
+            PropertyInfo pinfo = typeof(MyClass).GetProperty("StringArray");
+            SetProperty(mc, "StringArray", "Fine", pinfo, 0);
+
+        }
+        public static void ApplyValue(object obj, string property, object value,  int? index)
+        {
+            object target = obj; //  Data;
+            var pi = target.GetType().GetProperty(property);
+            if (index.HasValue && pi.GetIndexParameters().Length != 1)
+            {
+                target = pi.GetValue(target, null);
+                var pp = pi.GetIndexParameters().Length;
+                // var p = pi.GetIndexParameters()[0].ParameterType;
+
+                // pi = target.GetType().GetProperties().First(p => p.GetIndexParameters().Length == 1 && p.GetIndexParameters()[0].ParameterType == typeof(int));
+            }
+            pi.SetValue(obj, value, index.HasValue ? new object[] { index.Value } : null);
+        }
+        private static void SetProperty(object obj, string propertyName, string propertyValue, PropertyInfo propertyInfo, int index)
+        {
+            if (propertyInfo == null)
+            {
+                Console.WriteLine($"Missing property info {propertyName}");
+            }
+            else
+            {
+                if (propertyInfo.PropertyType == typeof(String[]))
+                {
+                    object[] value = (object[])propertyInfo.GetValue(obj, null);
+                    value[index] = propertyValue;
+                    // propertyInfo.SetValue(obj, propertyValue, index.HasValue ? new object[] { index.Value } : null);
+                }
+                else
+                {
+                    Console.WriteLine($"Cannot convert value to type {propertyInfo.PropertyType}");
+                }
+            }
+        }
+        private static void SetProperty(object obj, string propertyName, string propertyValue, System.Reflection.PropertyInfo propertyInfo)
+        {
+            if (propertyInfo == null)
+            {
+                Console.WriteLine($"Missing property info {propertyName}");
+            }
+            else
+            {
+                if (propertyInfo.PropertyType == typeof(string))
+                {
+                    propertyInfo.SetValue(obj, propertyValue);
+                }
+                else if (propertyInfo.PropertyType == typeof(String[]))
+                {
+                    propertyInfo.SetValue(obj, propertyValue, new object[] { 0 });
+                }
+                else if (propertyInfo.PropertyType == typeof(int) && int.TryParse(propertyValue, out var intVal))
+                {
+                    propertyInfo.SetValue(obj, intVal);
+                }
+                else
+                {
+                    Console.WriteLine($"Cannot convert value to type {propertyInfo.PropertyType}");
+                }
+            }
         }
     }
 }
