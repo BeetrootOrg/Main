@@ -1,5 +1,6 @@
 ﻿namespace CalendarApp.Console
 {
+    using CalendarApp.Console.Context;
     using CalendarApp.Console.Controllers;
     using CalendarApp.Console.Controllers.Interfaces;
 
@@ -7,7 +8,8 @@
     {
         private static void Main()
         {
-            IController controller = new MainMenuController();
+            var context = new CalendarContext();
+            IController controller = new MainMenuController(context);
 
             while (controller != null)
             {
