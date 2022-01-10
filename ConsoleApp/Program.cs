@@ -25,18 +25,18 @@ namespace ConsoleApp
     {
         public static List<List<T>> ChunkBy<T>(List<T> list, int itemsInList)
         {
-            var newList = new List<List<T>>();
+            var _newList = new List<List<T>>();
 
             PrintInputData(list);
 
             for (int i = 0; i < list.Count; i += itemsInList)
             {
-                newList.Add(list.GetRange(i, Math.Min(itemsInList, list.Count - i)));
+                _newList.Add(list.GetRange(i, Math.Min(itemsInList, list.Count - i)));
             }
 
-            PrintOutData(newList);
+            PrintOutData(_newList);
 
-            return newList;
+            return _newList;
         }
         public static void PrintInputData<T>(List<T> list)
         {
