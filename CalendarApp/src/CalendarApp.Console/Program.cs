@@ -1,11 +1,20 @@
-﻿namespace CalendarApp.Console;
-
-using System;
-
-class Program
+﻿namespace CalendarApp.Console
 {
-    private static void Main()
+    using CalendarApp.Console.Controllers;
+    using CalendarApp.Console.Controllers.Interfaces;
+
+    public class Program
     {
-        Console.WriteLine("Hello");
+        private static void Main()
+        {
+            IController controller = new MainMenuController();
+
+            while (controller != null)
+            {
+                controller.Render();
+                controller = controller.Action();
+            }
+        }
     }
+
 }
