@@ -8,209 +8,160 @@ using System.IO;
 using System.Text;
 
 namespace ConsoleApp
+    //i.safontev/classwork/20-reflection
 {
-    //i.safontev/classwork/19-linq
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    public class DefaultValueAttribute : Attribute
+    {
+        public object Value { get; init; }
+        public bool NeedSetup { get; init; }
+
+        public DefaultValueAttribute(object defaultValue)
+        {
+            Value = defaultValue;
+        }
+    }
+
+    record TestClass
+    {
+        [DefaultValue("Dima", NeedSetup = true)]
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        [DefaultValue(42)]
+        public int Age { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public void SayHello() => Console.WriteLine($"Hello, {Name}");
+        public void SaySome(string something) => Console.WriteLine($"Hello, {something}");
+        public void SayInteger(int number) => Console.WriteLine($"Hello, {number}");
+        public void SayALot(string thing, int times, DateTime createdAt)
+            => Console.WriteLine($"{thing} was created {createdAt} ({times} times)");
+    }
+
+    record ExampleClass
+    {
+        public string Example { get; set; }
+    }
 
     class Program
     {
         static void Main()
         {
-            var persons = JsonConvert.DeserializeObject<IEnumerable<Person>>(File.ReadAllText("data.json"));
+            var assembly = typeof(StringBuilder).Assembly;
 
-            CountByGender1(persons);
-            CountByGender2(persons);
-
-            YoungestPerson1(persons);
-            YoungestPerson2(persons);
-
-            OldestPerson(persons);
-
-            AverageAgeByGender(persons);
-            NearestToAverageAge(persons);
-            AllNearestToAverageAge(persons);
-
-            MostUsedTag(persons);
-
-            MinMaxDistanceBetweenPersons(persons);
-
-            GroupByEyeColor(persons);
-            CollectAllEmail(persons);
-
-        }
-        static void CountByGender1(IEnumerable<Person> persons)
-        {
-            Console.WriteLine($"Males: {persons.Count(person => person.Gender == Gender.Male)}");
-            Console.WriteLine($"Females: {persons.Count(person => person.Gender == Gender.Female)}");
-        }
-
-        static void CountByGender2(IEnumerable<Person> persons)
-        {
-            var result = persons.GroupBy(person => person.Gender)
-                .Select(group => new
-                {
-                    Gender = group.Key,
-                    Count = group.Count()
-                });
-
-            foreach (var item in result)
+            Console.WriteLine($"Types in assembly {assembly.FullName}:");
+            foreach (var type in assembly.GetTypes())
             {
-                Console.WriteLine($"{item.Gender}s: {item.Count}");
+                Console.WriteLine($"\t{type.FullName}");
             }
         }
 
-        static void YoungestPerson1(IEnumerable<Person> persons)
+        static void DynamicInvocation()
         {
-            Console.WriteLine($"Youngest: {persons.OrderBy(x => x.Age).First()}");
-        }
+            var assemblyName = "ConsoleApp";
 
-        static void YoungestPerson2(IEnumerable<Person> persons)
-        {
-            Console.WriteLine($"Youngest: {persons.MinBy(x => x.Age)}");
-        }
+            Console.WriteLine("Enter class name you want to create:");
+            var classname = Console.ReadLine();
 
-        static void OldestPerson(IEnumerable<Person> persons)
-        {
-            Console.WriteLine($"Oldest: {persons.MaxBy(x => x.Age)}");
-        }
+            var typeToCreate = Type.GetType($"{assemblyName}.{classname}, {assemblyName}", true);
 
-        static void AverageAgeByMale(IEnumerable<Person> persons)
-        {
-            var age = persons.GroupBy(x => x.Gender)
-                .Where(group => group.Key == Gender.Male)
-                .SelectMany(group => group)
-                .Average(person => person.Age);
+            var obj = Activator.CreateInstance(typeToCreate);
+            SetDefaultValues(obj);
 
-            Console.WriteLine($"Average Male Age: {age}");
-        }
-
-        static void AverageAgeByGender(IEnumerable<Person> persons)
-        {
-            var average = persons.GroupBy(x => x.Gender)
-                .Select(group => new
-                {
-                    Gender = group.Key,
-                    AverageAge = group.Average(person => person.Age)
-                });
-
-            foreach (var item in average)
+            while (true)
             {
-                Console.WriteLine($"{item.Gender}s average age: {item.AverageAge}");
-            }
-        }
+                Console.WriteLine("Enter property/method name:");
+                var propertyMethodName = Console.ReadLine();
 
-        static void NearestToAverageAge(IEnumerable<Person> persons)
-        {
-            var average = persons.GroupBy(x => x.Gender)
-                .Select(group =>
+                if (!string.IsNullOrWhiteSpace(propertyMethodName))
                 {
-                    var averageAge = group.Average(person => person.Age);
-                    var nearestToAverage = group.MinBy(person => Math.Abs(person.Age - averageAge));
+                    var propertyInfo = typeToCreate.GetProperty(propertyMethodName);
 
-                    return new
+                    if (propertyInfo == null)
                     {
-                        Gender = group.Key,
-                        NearestToAverage = nearestToAverage
-                    };
-                });
+                        var methodInfo = typeToCreate.GetMethod(propertyMethodName);
 
-            foreach (var item in average)
-            {
-                Console.WriteLine($"{item.Gender}s nearest to average age: {item.NearestToAverage}");
-            }
-        }
+                        if (methodInfo == null)
+                        {
+                            Console.WriteLine($"Missing property/method info {propertyMethodName}");
+                        }
+                        else
+                        {
+                            var paramsInfo = methodInfo.GetParameters();
 
-        static void AllNearestToAverageAge(IEnumerable<Person> persons)
-        {
-            var average = persons.GroupBy(x => x.Gender)
-                .Select(group =>
-                {
-                    var averageAge = group.Average(person => person.Age);
-                    var nearestAgeToAverage = group.MinBy(person => Math.Abs(person.Age - averageAge)).Age;
+                            if (paramsInfo.Length == 0)
+                            {
+                                methodInfo.Invoke(obj, null);
+                            }
+                            else
+                            {
+                                var args = new object[paramsInfo.Length];
+                                for (int i = 0; i < paramsInfo.Length; i++)
+                                {
+                                    Console.WriteLine($"Enter {i + 1} argument:");
+                                    var arg = Console.ReadLine();
+                                    args[i] = ConvertTo(arg, paramsInfo[i].ParameterType);
+                                }
 
-                    return new
+                                methodInfo.Invoke(obj, args);
+                            }
+
+                        }
+                    }
+                    else
                     {
-                        Gender = group.Key,
-                        NearestToAverage = group.Where(person => person.Age == nearestAgeToAverage)
-                    };
-                });
+                        Console.WriteLine("Enter property value:");
+                        var propertyValue = Console.ReadLine();
 
-            foreach (var item in average)
+                        propertyInfo.SetValue(obj, ConvertTo(propertyValue, propertyInfo.PropertyType));
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            Console.WriteLine(obj);
+        }
+
+        private static void SetDefaultValues(object obj)
+        {
+            var type = obj.GetType();
+
+            foreach (var propertyInfo in type.GetProperties())
             {
-                Console.WriteLine($"{item.Gender}s nearest to average age (count): {item.NearestToAverage.Count()}");
+                var attribute = propertyInfo.GetCustomAttributes(typeof(DefaultValueAttribute), true)
+                    .FirstOrDefault();
+
+                if (attribute is DefaultValueAttribute defaultValueAttribute && defaultValueAttribute.NeedSetup)
+                {
+                    propertyInfo.SetValue(obj, defaultValueAttribute.Value);
+                }
             }
         }
 
-        static void MostUsedTag(IEnumerable<Person> persons)
+        private static object ConvertTo(string value, Type type)
         {
-            var mostUsedTag = persons.SelectMany(person => person.Tags)
-                .GroupBy(tag => tag) // key: pariatur, value: [pariatur, pariatur, ..., pariatur] - 25 times
-                .Select(group => new
-                {
-                    Tag = group.Key,
-                    Count = group.Count()
-                })
-                .MaxBy(x => x.Count);
-
-            Console.WriteLine($"Most used tag: {mostUsedTag.Tag} ({mostUsedTag.Count})");
-        }
-
-        static void MinMaxDistanceBetweenPersons(IEnumerable<Person> persons)
-        {
-            var distances = persons.Join(persons,
-                person => true,
-                person => true,
-                (person1, person2) => new
-                {
-                    First = person1,
-                    Second = person2
-                })
-                .Where(twoPersons => twoPersons.First != twoPersons.Second)
-                .Select(twoPersons =>
-                {
-                    var distance = Math.Sqrt(Math.Pow(twoPersons.First.Latitude - twoPersons.Second.Latitude, 2)
-                        + Math.Pow(twoPersons.First.Longitude - twoPersons.Second.Longitude, 2));
-
-                    return new
-                    {
-                        First = twoPersons.First,
-                        Second = twoPersons.Second,
-                        Distance = distance
-                    };
-                })
-                .ToArray();
-
-            var min = distances.MinBy(x => x.Distance);
-            var max = distances.MaxBy(x => x.Distance);
-
-            Console.WriteLine($"Min distance is between {min.First} and {min.Second} is {min.Distance}");
-            Console.WriteLine($"Max distance is between {max.First} and {max.Second} is {max.Distance}");
-
-        }
-
-        static void GroupByEyeColor(IEnumerable<Person> persons)
-        {
-            var result = persons.GroupBy(person => person.EyeColor)
-                .Select(group => new
-                {
-                    EyeColor = group.Key,
-                    Count = group.Count()
-                });
-
-            foreach (var item in result)
+            if (type == typeof(string))
             {
-                Console.WriteLine($"{item.Count} has {item.EyeColor} eye color");
+                return value;
             }
+
+            if (type == typeof(int) && int.TryParse(value, out var intVal))
+            {
+                return intVal;
+            }
+
+            if (type == typeof(DateTime) && DateTime.TryParse(value, out var dateTime))
+            {
+                return dateTime;
+            }
+
+            throw new ArgumentException($"Cannot convert value to type {type}");
         }
-
-        static void CollectAllEmail(IEnumerable<Person> persons)
-        {
-            var emails = persons.Select(person => person.Email)
-                .Aggregate(new StringBuilder(),
-                    (sb, email) => sb.Append(email).Append(";"),
-                    sb => sb.ToString());
-
-            Console.WriteLine($"All emails: {emails}");
-        }
-
     }
 }
