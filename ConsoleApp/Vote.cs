@@ -8,7 +8,7 @@ namespace ConsoleApp
 {
     class Vote
     {
-        public class Person
+        private class Person
         {
             public string? Name { get; set; }
             public string? Answer { get; set; }
@@ -36,7 +36,7 @@ namespace ConsoleApp
                 return;
             }
 
-            Console.WriteLine("Question: {0}", Question);
+            Console.WriteLine("Question: \"{0}\"", Question);
         }
         public void AddNewVotedPerson(string name, string answer)
         {
@@ -74,11 +74,11 @@ namespace ConsoleApp
 
             ShowArray(_person);
         }
-        public void ShowArray(Person[] array)
+        private void ShowArray(Person[] array)
         {
             if (array.Length == 0)
             {
-                Console.Write("Stack is empty!\r\n");
+                // Console.Write("Stack is empty!\r\n");
                 return;
             }
             Console.Write("Poll result in Stack:\r\n");

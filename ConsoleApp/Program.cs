@@ -1,45 +1,9 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-using System;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Reflection;
 
 
 namespace ConsoleApp
 {
-    class MyInnerClass
-    {
-        public string Name { get; set; }
-        public int Number { get; set; }
-    }
-    class MyOuterClass
-    {
-        public MyInnerClass[] inner = new MyInnerClass[2];
-        public string[] Answer = new string[2];
-
-        public MyInnerClass this[int index]
-        {
-            get { return inner[index]; }
-            set { inner[index] = value; }
-        }
-    }
-    class MyClass
-    {
-        public String[] m_StringArray = { "Apples", "Oranges", "Pears" };
-        public MyInnerClass[] inner { get; set; }
-
-        public String[] StringArray
-        {
-            get { return m_StringArray; }
-            set { m_StringArray = value; }
-        }
-        public MyClass()
-        {
-            inner = new MyInnerClass[2];
-        }
-    }
     class ConsoleApp
     {
         static void Main(string[] args)
@@ -48,67 +12,113 @@ namespace ConsoleApp
             Console.WriteLine("\r\n a.tkachenko/homework/20-Reflections \r\n");
 
             var assemblyName = "ConsoleApp";
+            var classname = "Vote";
+
             Console.WriteLine("Enter class name you want to create:");
-            var classname = "Vote"; //  Console.ReadLine();
             Console.WriteLine(classname);
+
             var typeToCreate = Type.GetType($"{assemblyName}.{classname}, {assemblyName}", true);
             var obj = Activator.CreateInstance(typeToCreate);
 
-            // var propertyName = "Question";
-            // var propertyValue = "How are you?";
 
-
-
-
-
-
-
-            
             var propertyInfo = typeToCreate.GetProperty("Question");
-            SetProperty(obj, "Question", "How are you?", propertyInfo);
+            SetProperty(obj, "Question", "test question", propertyInfo);
 
             propertyInfo = typeToCreate.GetProperty("Answer");
             SetProperty(obj, "Answer", "Fine", propertyInfo, 0);
+            SetProperty(obj, "Answer", "Not Fine", propertyInfo, 1);
 
+            GetListMethods(typeToCreate);
 
+            TestShowQuestionMethod(typeToCreate, obj, "ShowQuestion");
+            TestSetQuestionMethod(typeToCreate, obj, "SetQuestion", new string[] { "How are you?" });
+            TestShowQuestionMethod(typeToCreate, obj, "ShowQuestion");
 
+            TestShowVoteResultMethod(typeToCreate, obj, "ShowVoteResult");
 
+            TestAddNewVotedPersonMethod(typeToCreate, obj, "AddNewVotedPerson", new string[] { "Petya", "Fine" });
+            TestAddNewVotedPersonMethod(typeToCreate, obj, "AddNewVotedPerson", new string[] { "Victor", "Fine" });
+            TestAddNewVotedPersonMethod(typeToCreate, obj, "AddNewVotedPerson", new string[] { "Misha", "Not Fine" });
 
-
-
-
-
-
-
-
-
-            MyInnerClass mic0 = new MyInnerClass { Name = "Test0", Number = 9 };
-            MyOuterClass moc = new MyOuterClass();
-            PropertyInfo piInner = moc.GetType().GetProperty("Item");
-            piInner.SetValue(moc, mic0, new object[] { (int)0 });
-            if (moc[0] == mic0)
-                Console.WriteLine("MyInnerClass wurde zugewiesen.");
-            PropertyInfo piAnsw = typeof(MyOuterClass).GetProperty("Answer");
-            // piAnsw.SetValue(moc, propertyValue, new object[] { (int)0 });
-            MyClass mc = new MyClass();
-            PropertyInfo pinfo = typeof(MyClass).GetProperty("StringArray");
-            SetProperty(mc, "StringArray", "Fine", pinfo, 0);
-
+            TestShowVoteResultMethod(typeToCreate, obj, "ShowVoteResult");
         }
-        public static void ApplyValue(object obj, string property, object value,  int? index)
+
+        private static void TestSetQuestionMethod(Type typeToCreate, object obj, string method, string[] setArgs)
         {
-            object target = obj; //  Data;
-            var pi = target.GetType().GetProperty(property);
-            if (index.HasValue && pi.GetIndexParameters().Length != 1)
-            {
-                target = pi.GetValue(target, null);
-                var pp = pi.GetIndexParameters().Length;
-                // var p = pi.GetIndexParameters()[0].ParameterType;
-
-                // pi = target.GetType().GetProperties().First(p => p.GetIndexParameters().Length == 1 && p.GetIndexParameters()[0].ParameterType == typeof(int));
-            }
-            pi.SetValue(obj, value, index.HasValue ? new object[] { index.Value } : null);
+            InvokeMethod(typeToCreate, obj, method, setArgs);
         }
+        private static void TestShowQuestionMethod(Type typeToCreate, object obj, string method)
+        {
+            InvokeMethod(typeToCreate, obj, method);
+        }
+        private static void TestShowVoteResultMethod(Type typeToCreate, object obj, string method)
+        {
+            InvokeMethod(typeToCreate, obj, method);
+        }
+        private static void TestAddNewVotedPersonMethod(Type typeToCreate, object obj, string method, string[] setArgs)
+        {
+            InvokeMethod(typeToCreate, obj, method, setArgs);
+        }
+        private static void InvokeMethod(Type typeToCreate, object obj, string method)
+        {
+            Console.WriteLine("\r\nInvoke \"{0}\" method: ", method);
+            var methodInfo = typeToCreate.GetMethod(method);
+            var paramsMethodInfo = methodInfo.GetParameters();
+            if (paramsMethodInfo.Length == 0)
+            {
+                methodInfo.Invoke(obj, null);
+            }
+        }
+        private static void InvokeMethod(Type typeToCreate, object obj, string method, string [] setArgs)
+        {
+            Console.WriteLine("\r\nInvoke \"{0}\" method: ", method);
+            var methodInfo = typeToCreate.GetMethod(method);
+            var paramsMethodInfo = methodInfo.GetParameters();
+            if (paramsMethodInfo.Length > 0)
+            {
+                var args = new object[paramsMethodInfo.Length];
+                for (int i = 0; i < paramsMethodInfo.Length; i++)
+                {
+                    Console.WriteLine($"argument {i + 1}: {setArgs[i]}");
+                    var arg = setArgs[i];                              //  var arg = Console.ReadLine();
+                    args[i] = ConvertTo(arg, paramsMethodInfo[i].ParameterType);
+                }
+                methodInfo.Invoke(obj, args);
+            }
+        }
+
+        static void GetListMethods(Type t)
+        {
+            Console.WriteLine("\r\nAll Methods in \"{0}\" type:", t.Name);
+            
+            MethodInfo[] methodInfos = t.GetMethods();
+
+            int i = 0;
+            foreach (MethodInfo mi in methodInfos)
+            {
+                Console.WriteLine("{0}: {1}", i++, mi.Name);
+            }
+        }
+        private static object ConvertTo(string value, Type type)
+        {
+            if (type == typeof(string))
+            {
+                return value;
+            }
+
+            if (type == typeof(int) && int.TryParse(value, out var intVal))
+            {
+                return intVal;
+            }
+
+            if (type == typeof(DateTime) && DateTime.TryParse(value, out var dateTime))
+            {
+                return dateTime;
+            }
+
+            throw new ArgumentException($"Cannot convert value to type {type}");
+        }
+        
         private static void SetProperty(object obj, string propertyName, string propertyValue, PropertyInfo propertyInfo, int index)
         {
             if (propertyInfo == null)
@@ -121,7 +131,6 @@ namespace ConsoleApp
                 {
                     object[] value = (object[])propertyInfo.GetValue(obj, null);
                     value[index] = propertyValue;
-                    // propertyInfo.SetValue(obj, propertyValue, index.HasValue ? new object[] { index.Value } : null);
                 }
                 else
                 {
