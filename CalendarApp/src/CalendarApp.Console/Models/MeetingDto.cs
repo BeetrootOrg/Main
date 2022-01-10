@@ -1,5 +1,4 @@
-﻿using CalendarApp.Contracts.Models;
-using MessagePack;
+﻿using MessagePack;
 using System;
 
 namespace CalendarApp.Console.Models

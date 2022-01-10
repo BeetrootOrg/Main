@@ -1,6 +1,6 @@
 ﻿using CalendarApp.Console.Context;
 using CalendarApp.Console.Controllers.Interfaces;
-using CalendarApp.Domain.Services;
+using CalendarApp.Domain.Factories;
 using System;
 using static System.Console;
 
@@ -26,7 +26,7 @@ namespace CalendarApp.Console.Controllers
 
             if (int.TryParse(input, out var minutes))
             {
-                return new CreateMeetingController(new MeetingService(),
+                return new CreateMeetingController(Factory.CreateMeetingService(),
                     _calendarContext,
                     _meetingName, 
                     _startAt, 

@@ -1,9 +1,10 @@
 ﻿using CalendarApp.Contracts.Models;
+using CalendarApp.Domain.Services.Interfaces;
 using System;
 
 namespace CalendarApp.Domain.Services
 {
-    public class MeetingService
+    internal class MeetingService : IMeetingService
     {
         public Meeting Create(string name, DateTime start, TimeSpan duration, string roomName)
         {

@@ -1,20 +1,20 @@
 ﻿using CalendarApp.Console.Context;
 using CalendarApp.Console.Controllers.Interfaces;
-using CalendarApp.Domain.Services;
+using CalendarApp.Domain.Services.Interfaces;
 using System;
 
 namespace CalendarApp.Console.Controllers
 {
     internal class CreateMeetingController : IController
     {
-        private readonly MeetingService _meetingService;
+        private readonly IMeetingService _meetingService;
         private readonly CalendarContext _calendarContext;
 
         private readonly string _meetingName;
         private readonly DateTime _startAt;
         private readonly TimeSpan _duration;
 
-        public CreateMeetingController(MeetingService meetingService, CalendarContext calendarContext, 
+        public CreateMeetingController(IMeetingService meetingService, CalendarContext calendarContext, 
             string meetingName, DateTime startAt, TimeSpan duration)
         {
             _meetingService = meetingService;
