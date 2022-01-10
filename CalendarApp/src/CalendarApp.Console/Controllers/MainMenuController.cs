@@ -1,18 +1,17 @@
 ﻿using CalendarApp.Console.Controllers.Interfaces;
+using static System.Console;
 
 namespace CalendarApp.Console.Controllers
 {
-    using System;
-
     internal class MainMenuController : IController
     {
         public IController Action()
         {
-            var input = Console.ReadLine();
+            var input = ReadLine();
 
             return input switch
             {
-                "1" => new CreateMeetingController(),
+                "1" => new CreateMeetingNameController(),
                 "0" => null,
                 _ => this,
             };
@@ -20,9 +19,9 @@ namespace CalendarApp.Console.Controllers
 
         public void Render()
         {
-            Console.Clear();
-            Console.WriteLine("1. Add meeting");
-            Console.WriteLine("0. Exit");
+            Clear();
+            WriteLine("1. Add meeting");
+            WriteLine("0. Exit");
         }
     }
 }

@@ -3,7 +3,7 @@ using System;
 
 namespace CalendarApp.Domain.Services
 {
-    internal class MeetingService
+    public class MeetingService
     {
         public Meeting Create(string name, DateTime start, TimeSpan duration, string roomName)
         {
