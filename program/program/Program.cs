@@ -7,8 +7,27 @@ using System.Linq;
 
 namespace ConsoleApp
 {
+    public class VoteList
+    {
+
+        Dictionary<string, int> _voteList = new Dictionary<string, int>();
+
+        public Dictionary<string, int> Parameter
+        {
+            get
+            {
+                return _voteList;
+            }
+            set
+            {
+                _voteList = value;
+            }
+        }
+    }
+
     class Program
     {
+        static VoteList voteList = new VoteList();
 
         static void Main()
         {
@@ -21,11 +40,15 @@ namespace ConsoleApp
         
         static void MainMenu()
         {
+            
+
             Console.Clear();
             Console.WriteLine("1.Create pool");
             Console.WriteLine("2.Show pool results");
             Console.WriteLine("3.Vote for something");
             Console.WriteLine("4.Exit");
+
+            
 
             ConsoleKeyInfo ck = Console.ReadKey();
 
@@ -37,26 +60,29 @@ namespace ConsoleApp
                     break;
                 case ConsoleKey.D2:
                 case ConsoleKey.NumPad2:
-
+                    ShowPoolResults();
                     break;
                 case ConsoleKey.D3:
                 case ConsoleKey.NumPad3:
-
+                    VoteForSomething();
                     break;
                 case ConsoleKey.D4:
                 case ConsoleKey.NumPad4:
-
+                    Exit();
                     break;
             }
 
         }
 
-        static public void CreatePool()
-        {
-            var voteList = new Dictionary<string, int>
-            {
 
-            };
+        
+        
+
+        static void CreatePool()
+        {
+            Console.Clear();
+            
+           
 
             Console.WriteLine("Enter your survey text:");
             string surveyText = Console.ReadLine();
@@ -65,28 +91,36 @@ namespace ConsoleApp
             string newCandidate = Console.ReadLine();
             int i = 0;
 
+                        
+
             while (newCandidate != "Enter")
             {
-                voteList.TryAdd(newCandidate, i);
+                voteList.Parameter.TryAdd(newCandidate, i);
                 newCandidate = Console.ReadLine();
+                
             }
+            
         }
 
         static void VoteForSomething()
         {
+            Console.Clear();
+            
+
+            ShowAll(voteList.Parameter);
+
             Console.WriteLine("Pls choose candidate: (For end write <Finish>)");
-            ShowAll(voteList);
 
             string enterVote = Console.ReadLine();
 
-            bool findCandidate = voteList.ContainsKey(enterVote);
+            bool findCandidate = voteList.Parameter.ContainsKey(enterVote);
 
 
             while (enterVote != "Finish")
             {
-                if (findCandidate == true && voteList.ContainsKey(enterVote))
+                if (findCandidate == true && voteList.Parameter.ContainsKey(enterVote))
                 {
-                    voteList[enterVote]++;
+                    voteList.Parameter[enterVote]++;
                 }
                 else
                 {
@@ -99,10 +133,16 @@ namespace ConsoleApp
 
         static void ShowPoolResults()
         {
+            Console.Clear();
+            
+
+            ShowAll(voteList.Parameter);
+
             Console.Write("Winer is: ");
-            var result = voteList.Max(s => s.Key);
-            //var result = voteList.Where(s => s.Value.Equals(max)).Select(s => s.Key).ToList();
+            var result = voteList.Parameter.Max(s => s.Key);
+            
             Console.WriteLine(result);
+            Console.ReadLine();
         }
 
         private static void Exit()
@@ -117,8 +157,8 @@ namespace ConsoleApp
                 Console.WriteLine(item);
             }
         }
-        
 
+        
 
     }
 
