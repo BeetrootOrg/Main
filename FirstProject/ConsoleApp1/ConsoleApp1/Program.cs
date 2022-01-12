@@ -1,5 +1,6 @@
 ﻿using System;
-
+using System.Linq;
+using System.Collections.Generic;
 namespace ConsoleApp1
 {
 
@@ -23,7 +24,7 @@ namespace ConsoleApp1
     }
     interface IProduct
     {
-        public void AddProduct(int Id, string name, string description, double price, int quainity);
+        public void AddProduct(Product product);
         public void EditProduct(ref Product product, int id, string name, string description, double price, int quainity);
         public void DeleteProduct(ref Product product, int ID);
     }
@@ -40,7 +41,9 @@ namespace ConsoleApp1
     }
     class Admin : IProduct, IShowProducts
     {
-        public Product[] _product;
+
+        public List<Product> product { get; set; }
+
         int ID { get; set; }
         string Name { get; set; }
         public Admin(int Id, string name)
@@ -50,9 +53,11 @@ namespace ConsoleApp1
 
         }
 
-        public void AddProduct(int id, string name, string description, double price, int quainity)
+        public void AddProduct(Product product)
         {
-            _product[id] = new Product(id, name, description, price, quainity);
+            List<Product> newProd = new List<Product>();
+            newProd.Add(product);
+           
 
         }
         public void EditProduct(ref Product product, int id, string name, string description, double price, int quainity)
@@ -70,23 +75,19 @@ namespace ConsoleApp1
         }
         public void ShowProduct()
         {
-            if (_product != null)
-            {
-                for (int i = 0; i < _product.Length; i++)
+            
+               foreach (Product pr in product)
                 {
 
-                    Console.Write("Id: {0}, ", _product[i].Id);
-                    Console.WriteLine("Name: {0}", _product[i].Name);
-                    Console.WriteLine("Description: {0}", _product[i].Description);
-                    Console.WriteLine("Price: {0}", _product[i].Price);
-                    Console.WriteLine("Quanity: {0}", _product[i].Quainity);
+                    Console.Write("Id: {0}, ", pr.Id);
+                    Console.Write("Name: {0}, ", pr.Name);        
+                    Console.Write("Description: {0}, ", pr.Description);
+                    Console.Write("Price: {0}, ", pr.Price);
+                    Console.Write("Quantity: {0}\r\n", pr.Quainity);
                 }
 
-            }
-            else
-            {
-                Console.WriteLine("Not found any product");
-            }
+            
+            
         }
 
     }
@@ -100,8 +101,8 @@ namespace ConsoleApp1
         {
             var potate = new Product(1, "potato", "tasty", 22.5, 1);
             var adm = new Admin(1, "ss");
-            adm.AddProduct(1, "potato", "tasty", 22.5, 1);
-            adm.ShowProduct();
+          
+         
         }
     }
 
