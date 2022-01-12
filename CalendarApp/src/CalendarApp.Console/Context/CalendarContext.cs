@@ -1,9 +1,9 @@
 ﻿using CalendarApp.Console.Models;
 using CalendarApp.Contracts.Models;
-using MessagePack;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace CalendarApp.Console.Context
 {
@@ -13,8 +13,8 @@ namespace CalendarApp.Console.Context
 
         public void ReadFromFile(string filename)
         {
-            var bytes = File.ReadAllBytes(filename);
-            var meetings = MessagePackSerializer.Deserialize<IEnumerable<MeetingDto>>(bytes);
+            var text = File.ReadAllText(filename);
+            var meetings = JsonConvert.DeserializeObject<IEnumerable<MeetingDto>>(text);
 
             Meetings = meetings.Select(meeting => new Meeting
             {
@@ -30,7 +30,7 @@ namespace CalendarApp.Console.Context
 
         public void WriteToFile(string filename)
         {
-            var bytes = MessagePackSerializer.Serialize(Meetings.Select(meeting => new MeetingDto
+            var text = JsonConvert.SerializeObject(Meetings.Select(meeting => new MeetingDto
             {
                 StartAt = meeting.StartAt,
                 RoomName = meeting.Room.Name,
@@ -38,7 +38,7 @@ namespace CalendarApp.Console.Context
                 Duration = meeting.Duration
             }));
 
-            File.WriteAllBytes(filename, bytes);
+            File.WriteAllText(filename, text);
         }
     }
 }

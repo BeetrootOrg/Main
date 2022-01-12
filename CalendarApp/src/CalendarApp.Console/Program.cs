@@ -7,7 +7,7 @@
 
     public class Program
     {
-        private const string Filename = "dump.bin";
+        private const string Filename = "dump.json";
 
         private static void Main()
         {
