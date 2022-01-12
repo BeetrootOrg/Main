@@ -16,16 +16,10 @@ namespace CalendarApp.Console.Context
             var text = File.ReadAllText(filename);
             var meetings = JsonConvert.DeserializeObject<IEnumerable<MeetingDto>>(text);
 
-            Meetings = meetings.Select(meeting => new Meeting
-            {
-                Duration = meeting.Duration,
-                Name = meeting.Name,
-                Room = new Room
-                {
-                    Name = meeting.RoomName
-                },
-                StartAt = meeting.StartAt
-            }).ToList();
+            Meetings = meetings
+                .Select(meeting => 
+                    new Meeting(meeting.Name, meeting.StartAt, meeting.Duration, new Room(meeting.RoomName)))
+                .ToList();
         }
 
         public void WriteToFile(string filename)

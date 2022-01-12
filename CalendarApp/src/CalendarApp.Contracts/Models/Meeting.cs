@@ -2,12 +2,9 @@
 
 namespace CalendarApp.Contracts.Models
 {
-    public record Meeting
+    public record Meeting(string Name, DateTime StartAt, TimeSpan Duration, Room Room)
     {
-        public string Name { get; init; }
-        public DateTime StartAt { get; init; }
-        public TimeSpan Duration { get; init; }
         public DateTime EndAt => StartAt.Add(Duration);
-        public Room Room { get; init; }
+        public DateTimeSpan DateTimeSpan => new(StartAt, EndAt);
     }
 }

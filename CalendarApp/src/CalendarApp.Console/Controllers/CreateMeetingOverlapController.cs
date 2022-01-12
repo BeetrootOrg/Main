@@ -4,25 +4,25 @@ using static System.Console;
 
 namespace CalendarApp.Console.Controllers
 {
-    internal class CreateMeetingNameController : IController
+    internal class CreateMeetingOverlapController : IController
     {
         private readonly CalendarContext _calendarContext;
 
-        public CreateMeetingNameController(CalendarContext calendarContext)
+        public CreateMeetingOverlapController(CalendarContext calendarContext)
         {
             _calendarContext = calendarContext;
         }
 
         public IController Action()
         {
-            var input = ReadLine();
-            return new CreateMeetingStartAtController(_calendarContext, input);
+            ReadLine();
+            return new MainMenuController(_calendarContext);
         }
 
         public void Render()
         {
-            Clear();
-            WriteLine("Enter meeting name:");
+            WriteLine("Meeting overlaps with another one");
+            WriteLine("To continue press Enter...");
         }
     }
 }

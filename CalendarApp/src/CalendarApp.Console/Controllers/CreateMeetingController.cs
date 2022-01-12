@@ -29,6 +29,12 @@ namespace CalendarApp.Console.Controllers
         public IController Action()
         {
             var meeting = _meetingService.Create(_meetingName, _startAt, _duration, _roomName);
+
+            if (_meetingService.OverlapWithAny(_calendarContext.Meetings, meeting))
+            {
+                return new CreateMeetingOverlapController(_calendarContext);
+            }
+
             _calendarContext.Meetings.Add(meeting);
             return new MainMenuController(_calendarContext);
         }
