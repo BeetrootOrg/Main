@@ -8,8 +8,4 @@
     <ProjectReference Include="..\CalendarApp.Contracts\CalendarApp.Contracts.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>
