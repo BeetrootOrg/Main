@@ -3,6 +3,24 @@ using System.Linq;
 using System.Collections.Generic;
 namespace ConsoleApp1
 {
+ 
+    interface IProduct
+    {
+        public void AddProduct(ref Product product);
+        public void EditProduct(ref Product product, int id, string name, string description, double price, int quainity);
+        public void DeleteProduct(ref Product product, int id);
+    }
+    interface IShowProducts
+    {
+        void ShowProduct();
+    }
+    interface IBuyer
+    {
+        void AddProductInBakset(ref Product product);
+        void DeleteFromBasket(ref Product product);
+        void GetRecipe();
+
+    }
 
     class Product
     {
@@ -20,26 +38,6 @@ namespace ConsoleApp1
             this.Price = Price;
             this.Quainity = Quainity;
         }
-   
-        }
-
-    
-    interface IProduct
-    {
-        public void AddProduct(ref Product product);
-        public void EditProduct(ref Product product, int id, string name, string description, double price, int quainity);
-        public void DeleteProduct(ref Product product, int ID);
-    }
-    interface IShowProducts
-    {
-        void ShowProduct();
-    }
-    class Basket
-    {
-        public int BasketId { get; set; }
-        public Product product { get; set; }
-        public double TotalPrice { get; set; }
-
     }
     class Admin : IProduct, IShowProducts
     {
@@ -88,8 +86,62 @@ namespace ConsoleApp1
         }
 
     }
+    class Buyer:IBuyer,IShowProducts
+        
+    {
+        public List<Product> buyersProducts = new List<Product>();
+        //
+     
+        public Buyer(string name,int id)
+        {
+            this.Name=name;
+            this.Id=id;
+        }
 
+        public string Name { get; set; }   
+        public int Id   { get; set; }
 
+        public void AddProductInBakset(ref Product product)
+        {
+            buyersProducts.Add(product);
+        }
+
+        public void DeleteFromBasket(ref Product product)
+        {
+           buyersProducts.Remove(product);
+        }
+
+        public void GetRecipe()
+        {
+
+            double result = 0;
+            foreach (Product p in buyersProducts)
+
+            {
+                Console.WriteLine($"Name product: {p.Name}\t Price: {p.Price}"); 
+                result += p.Price;
+
+            }
+            Console.WriteLine($"Total price in recipe: { result}");
+            Console.WriteLine($"Time of purchase: { DateTime.Now }");
+           
+        }
+       
+        public void ShowProduct()
+        {
+
+            foreach (Product pr in buyersProducts)
+            {
+
+                
+                Console.Write("Name: {0}, ", pr.Name);
+                Console.Write("Description: {0}, ", pr.Description);
+                Console.Write("Price: {0}, ", pr.Price);
+                Console.Write("Quantity: {0}\r\n", pr.Quainity);
+            }
+        }
+
+    }
 
 
     class Program
@@ -97,12 +149,17 @@ namespace ConsoleApp1
         static void Main()
         {
 
-            var potate = new Product(1, "potato", "tasty", 22.5, 1);
-            var abrikos = new Product(1, "abrikos", "nyam", 11, 2);
+            var potate = new Product(1, "potato", "tasty", 10, 1);
+            var abrikos = new Product(1, "abrikos", "nyam", 20, 2);
+            //
             var adm = new Admin(1, "ss");
-            adm.AddProduct(ref potate);  
-            adm.AddProduct(ref abrikos);
-            adm.ShowProduct();
+            //
+            var buyer1 = new Buyer("Vasil", 2);
+
+            buyer1.AddProductInBakset(ref potate);
+            buyer1.AddProductInBakset(ref abrikos);
+            buyer1.GetRecipe();
+       
         }
     }
 
