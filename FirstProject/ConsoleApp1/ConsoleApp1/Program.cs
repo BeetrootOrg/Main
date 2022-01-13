@@ -20,11 +20,13 @@ namespace ConsoleApp1
             this.Price = Price;
             this.Quainity = Quainity;
         }
+   
+        }
 
-    }
+    
     interface IProduct
     {
-        public void AddProduct(Product product);
+        public void AddProduct(ref Product product);
         public void EditProduct(ref Product product, int id, string name, string description, double price, int quainity);
         public void DeleteProduct(ref Product product, int ID);
     }
@@ -42,7 +44,7 @@ namespace ConsoleApp1
     class Admin : IProduct, IShowProducts
     {
 
-        public List<Product> product { get; set; }
+        public List<Product> product=new List<Product>();
 
         int ID { get; set; }
         string Name { get; set; }
@@ -53,12 +55,10 @@ namespace ConsoleApp1
 
         }
 
-        public void AddProduct(Product product)
+        public void AddProduct(ref Product products)
         {
-            List<Product> newProd = new List<Product>();
-            newProd.Add(product);
-           
-
+            product.Add(products);
+                  
         }
         public void EditProduct(ref Product product, int id, string name, string description, double price, int quainity)
         {
@@ -74,19 +74,16 @@ namespace ConsoleApp1
             product = null;
         }
         public void ShowProduct()
-        {
-            
-               foreach (Product pr in product)
-                {
-
-                    Console.Write("Id: {0}, ", pr.Id);
-                    Console.Write("Name: {0}, ", pr.Name);        
-                    Console.Write("Description: {0}, ", pr.Description);
-                    Console.Write("Price: {0}, ", pr.Price);
-                    Console.Write("Quantity: {0}\r\n", pr.Quainity);
-                }
-
-            
+        {       
+            foreach(Product pr in product)
+            {
+              
+                Console.Write("Id: {0}, ", pr.Id);
+                Console.Write("Name: {0}, ", pr.Name);
+                Console.Write("Description: {0}, ", pr.Description);
+                Console.Write("Price: {0}, ", pr.Price);
+                Console.Write("Quantity: {0}\r\n", pr.Quainity);
+            }
             
         }
 
@@ -99,10 +96,13 @@ namespace ConsoleApp1
     {
         static void Main()
         {
+
             var potate = new Product(1, "potato", "tasty", 22.5, 1);
+            var abrikos = new Product(1, "abrikos", "nyam", 11, 2);
             var adm = new Admin(1, "ss");
-          
-         
+            adm.AddProduct(ref potate);  
+            adm.AddProduct(ref abrikos);
+            adm.ShowProduct();
         }
     }
 
