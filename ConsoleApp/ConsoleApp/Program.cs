@@ -2,147 +2,89 @@
 
 namespace ConsoleApp
 {
+    public class Stack<T>
+    {
+        private class StackItem
+        {
+            public T Value { get; init; }
+            public StackItem Next { get; set; }
+        }
+
+        private StackItem _head;
+        public int Count { get; private set; }
+
+        public void Push(T item)
+        {
+            var head = new StackItem
+            {
+                Value = item,
+                Next = _head
+            };
+
+            _head = head;
+            ++Count;
+        }
+
+        public T Pop()
+        {
+            ValidateHasElements();
+
+            var item = _head;
+            _head = _head.Next;
+            --Count;
+
+            return item.Value;
+        }
+
+        public void Clear()
+        {
+            _head = null;
+            Count = 0;
+        }
+
+        public T Peek()
+        {
+            ValidateHasElements();
+            return _head.Value;
+        }
+
+        public void CopyTo(T[] arr)
+        {
+            var length = Math.Min(Count, arr.Length);
+
+            var current = _head;
+            for (int i = 0; i < length; i++)
+            {
+                arr[i] = current.Value;
+                current = current.Next;
+            }
+        }
+
+        private void ValidateHasElements()
+        {
+            if (Count == 0)
+            {
+                throw new ArgumentException("Stack is empty");
+            }
+        }
+    }
+
     class Program
     {
         static void Main()
         {
-            double result = FuncWithABigName(5.5);
-            Console.WriteLine(result);
-            Concat("Hello", "Dima");
+            var stack = new Stack<int>();
 
-            int ai = 0;
-            Increment(ai);
-            Console.WriteLine($"In Main: {ai}");
+            stack.Push(1);
+            stack.Push(2);
 
-            IncrementRef(ref ai);
-            Console.WriteLine($"In Main: {ai}");
+            var item = stack.Pop();
+            item = stack.Peek();
+            item = stack.Peek();
 
-            string str = "Hello";
-            Add(str, ", Dima");
-            Console.WriteLine($"In Main: {str}");
-
-            AddRef(ref str, ", Dima");
-            Console.WriteLine($"In Main: {str}");
-
-            Console.WriteLine(AddIfOdd(2, 4));
-            Console.WriteLine(AddIfOdd(1, 4));
-            Console.WriteLine(AddIfOdd(2, 1));
-
-            Console.WriteLine(AddIfOdd(-2, 2));
-            Console.WriteLine(AddIfOdd(-1, 1));
-            Console.WriteLine(AddIfOdd(0, 0));
-
-            const int i1 = 3;
-            const int i2 = 4;
-
-            int sum;
-            if (TryAddIfOdd(i1, i2, out sum))
-            {
-                Console.WriteLine($"Sum equal to {sum}");
-            }
-            else
-            {
-                Console.WriteLine("Cannot count sum because inputs are not odd");
-            }
-
-            // int.TryParse("1", out int res);
-            Console.WriteLine(SomeMath(5));
-            Console.WriteLine(SomeMath(5, 4));
-            Console.WriteLine(SomeMath(5, 4, 6));
-            Console.WriteLine(SomeMath(5, 4, 6, 1));
-
-            Console.WriteLine(AddThree());
-            Console.WriteLine(AddThree(8));
-            Console.WriteLine(AddThree(b: 1));
-            Console.WriteLine(AddThree(c: 1));
-            Console.WriteLine(AddThree(c: 1, a: 4));
-            Console.WriteLine(AddThree(b: 1, a: 4));
-            Console.WriteLine(AddThree(c: 3, b: 1, a: 4));
-            Console.WriteLine(AddThree(3, 2, 1));
-
-            Console.WriteLine("SUM");
-
-            // 1. call Sum(1, 3)
-            // 2. return 1 + Sum(2, 3)
-            // 3. call Sum(2, 3)
-            // 4. return 2 + Sum(3, 3)
-            // 5. call Sum(3, 3)
-            // 6. return 3
-            // 7. return to step 4
-            // 8. return 2 + 3
-            // 9. return to step 2
-            // 10. return 1 + 2 + 3
-            Console.WriteLine(Sum(1, 3));
-
-            // the same as before, but first call Sum(1, 3)
-            Console.WriteLine(Sum(3, 1));
-            Console.WriteLine(Sum(1, 1));
-
-            Console.WriteLine(Fibonacci(6));
+            stack.CopyTo(new int[0]);
+            stack.CopyTo(new int[1]);
+            stack.CopyTo(new int[2]);
         }
-
-        static int Sum(int min, int max)
-        {
-            if (min > max) return Sum(max, min);
-            if (min == max) return min;
-            return min + Sum(min + 1, max);
-        }
-
-        static int Fibonacci(int n)
-        {
-            if (n == 0) return 0;
-            if (n == 1) return 1;
-            return Fibonacci(n - 1) + Fibonacci(n - 2);
-        }
-
-        static double FuncWithABigName(double x) => x * x * x + 5 * x * x + 6;
-        static void Concat(string str1, string str2) => Console.WriteLine($"{str1}, {str2}");
-
-        static void Increment(int i)
-        {
-            ++i;
-            Console.WriteLine($"In Increment: {i}");
-        }
-
-        static void IncrementRef(ref int i)
-        {
-            ++i;
-            Console.WriteLine($"In IncrementRef: {i}");
-        }
-
-        static void Add(string str1, string str2)
-        {
-            str1 += str2;
-            Console.WriteLine($"In Add: {str1}");
-        }
-
-        static void AddRef(ref string str1, string str2)
-        {
-            str1 += str2;
-            Console.WriteLine($"In AddRef: {str1}");
-        }
-
-        static int AddIfOdd(int i1, int i2) => i1 % 2 == 0 && i2 % 2 == 0
-            ? i1 + i2
-            : 0;
-
-        static bool TryAddIfOdd(int i1, int i2, out int sum)
-        {
-            if (i1 % 2 == 0 && i2 % 2 == 0)
-            {
-                sum = i1 + i2;
-                return true;
-            }
-
-            sum = 0;
-            return false;
-        }
-
-        static int SomeMath(int a, int b = 3) => a + b;
-        static int SomeMath(int a, int b, int c = 4) => a * 2 + b * 3 + c * 5;
-        static double SomeMath(double a, int b, int c = 4) => a * 2 + b * 3 + c * 5;
-        static double SomeMath(int a, int b, int c = 4, int d = 5) => Math.Sqrt(a + b + c + d);
-
-        static int AddThree(int a = 1, int b = 2, int c = 3) => a + b + c;
     }
 }
