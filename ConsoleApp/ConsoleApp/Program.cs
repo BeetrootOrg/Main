@@ -20,10 +20,12 @@ namespace ConsoleApp
         {
             _items = items;
             _size = size;
+
         }
 
         private class ChunkByEnumerator : IEnumerator<IEnumerable<T>>
         {
+
             private readonly IEnumerator<T> _enumerator;
             private readonly int _size;
 
@@ -31,6 +33,7 @@ namespace ConsoleApp
             {
                 _enumerator = enumerator;
                 _size = size;
+
             }
 
             public IEnumerable<T> Current { get; private set; }
@@ -61,6 +64,7 @@ namespace ConsoleApp
 
                 Current = arr;
                 return true;
+
             }
 
             public void Reset() => _enumerator.Reset();
@@ -68,10 +72,12 @@ namespace ConsoleApp
 
         public IEnumerator<IEnumerable<T>> GetEnumerator() => new ChunkByEnumerator(_items.GetEnumerator(), _size);
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
     }
 
     public static class DateTimeExtensions
     {
+
         public static bool IsWeekend(this DateTime date) =>
             date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday;
 
@@ -79,6 +85,7 @@ namespace ConsoleApp
 
         public static IEnumerable<IEnumerable<T>> ChunkBy<T>(this IEnumerable<T> collection, int size)
             => new ChunkByEnumerable<T>(collection, size);
+
     }
 
     class Program
