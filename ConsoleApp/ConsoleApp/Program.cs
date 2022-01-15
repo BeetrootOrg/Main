@@ -25,10 +25,20 @@ namespace ConsoleApp
 
             var foodClient = new FoodClient(httpClient);
 
+            Console.WriteLine("Please wait until random image will be generated...");
             var imageResult = await foodClient.GetRandomImage(cancellationToken);
             var image = await foodClient.GetImage(imageResult, cancellationToken);
 
-            await File.WriteAllBytesAsync("image.jpg", image, cancellationToken);
+            Console.WriteLine("Enter filename (skip if want to use random name):");
+            var filename = Console.ReadLine();
+
+            if (string.IsNullOrEmpty(filename))
+            {
+                filename = $"{Guid.NewGuid()}.jpg";
+            }
+
+            await File.WriteAllBytesAsync(filename, image, cancellationToken);
+            Console.WriteLine($"Image saved to {filename}");
         }
     }
 }
