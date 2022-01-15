@@ -18,6 +18,8 @@ namespace ConsoleApp
             var toastTask = MakeAToast();
             var glassOfWater = PourAGlassOfWater();
 
+            Scream();
+
             await feedACat;
 
             await toastTask;
@@ -107,6 +109,12 @@ namespace ConsoleApp
         {
             Console.WriteLine("Cat already got food");
             return Task.CompletedTask;
+        }
+
+        private static void Scream()
+        {
+            Task.Delay(500).Wait();
+            Console.WriteLine("AAAAAAAAA");
         }
     }
 }
