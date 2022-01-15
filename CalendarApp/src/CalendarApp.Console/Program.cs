@@ -1,10 +1,10 @@
-﻿namespace CalendarApp.Console
-{
-    using CalendarApp.Console.Context;
-    using CalendarApp.Console.Controllers;
-    using CalendarApp.Console.Controllers.Interfaces;
-    using System.IO;
+﻿using CalendarApp.Console.Context;
+using CalendarApp.Console.Controllers;
+using CalendarApp.Console.Controllers.Interfaces;
+using System.IO;
 
+namespace CalendarApp.Console
+{
     public class Program
     {
         private const string Filename = "dump.json";
