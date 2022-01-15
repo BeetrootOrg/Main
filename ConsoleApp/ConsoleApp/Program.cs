@@ -38,6 +38,10 @@ namespace ConsoleApp
 
         private static async Task BoilWater()
         {
+            await Task.Yield();
+
+            // long await sync task
+            Task.Delay(5000).Wait();
             await Task.Delay(5000);
             Console.WriteLine("Water boiled");
         }
