@@ -17,8 +17,7 @@ namespace ConsoleApp
             var heatUpAPenTask = HeatUpAPen();
             var toastTask = MakeAToast();
             var glassOfWater = PourAGlassOfWater();
-
-            Scream();
+            var screamTask = Scream();
 
             await feedACat;
 
@@ -33,7 +32,7 @@ namespace ConsoleApp
             await boilTask;
             await PourACupOfCoffee();
 
-            await Task.WhenAll(eggsTask, baconTask, glassOfWater);
+            await Task.WhenAll(eggsTask, baconTask, glassOfWater, screamTask);
 
             await Eat();
             sw.Stop();
@@ -111,10 +110,13 @@ namespace ConsoleApp
             return Task.CompletedTask;
         }
 
-        private static void Scream()
+        private static Task Scream()
         {
-            Task.Delay(500).Wait();
-            Console.WriteLine("AAAAAAAAA");
+            return Task.Run(() =>
+            {
+                Task.Delay(500).Wait();
+                Console.WriteLine("AAAAAAAAA");
+            });
         }
     }
 }
