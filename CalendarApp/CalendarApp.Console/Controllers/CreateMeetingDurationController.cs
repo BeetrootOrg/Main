@@ -1,5 +1,6 @@
 ﻿using CalendarApp.Console.Context;
 using CalendarApp.Console.Controllers.Interfaces;
+using CalendarApp.Domain.Builders;
 using System;
 using static System.Console;
 
@@ -8,30 +9,27 @@ namespace CalendarApp.Console.Controllers
     internal class CreateMeetingDurationController : IController
     {
         private readonly CalendarContext _calendarContext;
+        private readonly MeetingBuilder _meetingBuilder;
 
-        private readonly string _meetingName;
-        private readonly DateTime _startAt;
-
-        public CreateMeetingDurationController(CalendarContext calendarContext, string meetingName, DateTime startAt)
+        public CreateMeetingDurationController(CalendarContext calendarContext, MeetingBuilder meetingBuilder)
         {
             _calendarContext = calendarContext;
-            _meetingName = meetingName;
-            _startAt = startAt;
+            _meetingBuilder = meetingBuilder;
         }
 
         public IController Action()
         {
             var input = ReadLine();
 
-            if (int.TryParse(input, out var minutes))
+            try
             {
-                return new CreateMeetingRoomController(_calendarContext,
-                    _meetingName,
-                    _startAt,
-                    TimeSpan.FromMinutes(minutes));
+                _meetingBuilder.SetMeetingDuration(input);
+                return new CreateMeetingRoomController(_calendarContext, _meetingBuilder);
             }
-
-            return this;
+            catch (ArgumentException)
+            {
+                return this;
+            }
         }
 
         public void Render()

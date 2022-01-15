@@ -1,5 +1,6 @@
 ﻿using CalendarApp.Console.Context;
 using CalendarApp.Console.Controllers.Interfaces;
+using CalendarApp.Domain.Builders;
 using static System.Console;
 
 namespace CalendarApp.Console.Controllers
@@ -19,7 +20,7 @@ namespace CalendarApp.Console.Controllers
 
             return input switch
             {
-                "1" => new CreateMeetingNameController(_calendarContext),
+                "1" => new CreateMeetingNameController(_calendarContext, new MeetingBuilder()),
                 "2" => new ShowAllMeetingsController(_calendarContext),
                 "0" => null,
                 _ => this,
