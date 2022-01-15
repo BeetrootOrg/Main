@@ -6,83 +6,93 @@ namespace ConsoleApp
 {
     class Program
     {
-        static void Main()
+        static async Task Main()
         {
             var sw = new Stopwatch();
 
             sw.Start();
-            BoilWater();
-            PourACupOfCoffee();
-            HeatUpAPen();
-            FryTwoEggs();
-            FryABacon();
-            MakeAToast();
-            AddButterToAToast();
-            AddJamToAToast();
-            PourAGlassOfWater();
-            Eat();
+
+            var boilTask = BoilWater();
+            var heatUpAPenTask = HeatUpAPen();
+            var toastTask = MakeAToast();
+            var glassOfWater = PourAGlassOfWater();
+
+            await toastTask;
+            await AddButterToAToast();
+            await AddJamToAToast();
+
+            await heatUpAPenTask;
+            var eggsTask = FryTwoEggs();
+            var baconTask = FryABacon();
+
+            await boilTask;
+            await PourACupOfCoffee();
+
+            await Task.WhenAll(eggsTask, baconTask, glassOfWater);
+
+            await Eat();
             sw.Stop();
 
             Console.WriteLine($"Breakfast finished in {sw.Elapsed}");
         }
 
-        private static void BoilWater()
+        private static async Task BoilWater()
         {
-            Task.Delay(5000).Wait();
+            await Task.Delay(5000);
             Console.WriteLine("Water boiled");
         }
 
-        private static void PourACupOfCoffee()
+        private static async Task PourACupOfCoffee()
         {
-            Task.Delay(1000).Wait();
+            await Task.Delay(1000);
             Console.WriteLine("Coffee ready");
         }
 
-        private static void HeatUpAPen()
+        private static async Task HeatUpAPen()
         {
-            Task.Delay(2000).Wait();
+            await Task.Delay(2000);
             Console.WriteLine("Pen ready");
         }
 
-        private static void FryTwoEggs()
+        private static async Task FryTwoEggs()
         {
-            Task.Delay(6000).Wait();
+            await Task.Delay(6000);
             Console.WriteLine("Eggs ready");
         }
 
-        private static void FryABacon()
+        private static async Task FryABacon()
         {
-            Task.Delay(4000).Wait();
+            await Task.Delay(4000);
             Console.WriteLine("Bacon ready");
         }
 
-        private static void MakeAToast()
+        private static async Task MakeAToast()
         {
-            Task.Delay(1000).Wait();
+            await Task.Delay(1000);
             Console.WriteLine("Toast made");
         }
 
-        private static void AddButterToAToast()
+        private static async Task AddButterToAToast()
         {
-            Task.Delay(500).Wait();
-            Console.WriteLine("Buttern on a toast");
+            await Task.Delay(500);
+            Console.WriteLine("Butter on a toast");
         }
 
-        private static void AddJamToAToast()
+        private static async Task AddJamToAToast()
         {
-            Task.Delay(500).Wait();
+            await Task.Delay(500);
             Console.WriteLine("Jam on a toast");
         }
 
-        private static void PourAGlassOfWater()
+        private static async Task PourAGlassOfWater()
         {
-            Task.Delay(500).Wait();
+            await Task.Delay(500);
             Console.WriteLine("Glass of water ready");
         }
 
-        private static void Eat()
+        private static async Task Eat()
         {
-            Task.Delay(10000).Wait();
+            await Task.Delay(10000);
             Console.WriteLine("Ate");
         }
     }
