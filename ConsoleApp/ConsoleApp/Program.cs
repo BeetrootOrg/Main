@@ -13,9 +13,12 @@ namespace ConsoleApp
             sw.Start();
 
             var boilTask = BoilWater();
+            var feedACat = FeedACat();
             var heatUpAPenTask = HeatUpAPen();
             var toastTask = MakeAToast();
             var glassOfWater = PourAGlassOfWater();
+
+            await feedACat;
 
             await toastTask;
             await AddButterToAToast();
@@ -98,6 +101,12 @@ namespace ConsoleApp
         {
             await Task.Delay(10000);
             Console.WriteLine("Ate");
+        }
+
+        private static Task FeedACat()
+        {
+            Console.WriteLine("Cat already got food");
+            return Task.CompletedTask;
         }
     }
 }
