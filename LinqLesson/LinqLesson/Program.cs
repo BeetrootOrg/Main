@@ -200,6 +200,115 @@ static class PersonsExtension
         var allHasEmails = persons.All(person => !string.IsNullOrEmpty(person.Email));
         Console.WriteLine($"Everybody has email: {allHasEmails}");
     }
+
+    #region Homework
+    public static void TheMostFarthestPerson(this IEnumerable<Person> persons)
+    {
+        var northernPerson = persons.OrderByDescending(x => x.Latitude).First();
+        var southernPerson = persons.OrderBy(x => x.Latitude).First();
+        var easternPerson = persons.OrderByDescending(x => x.Longitude).First();
+        var westernPerson = persons.OrderBy(x => x.Longitude).First();
+
+        Console.WriteLine($"The most northest person is: {northernPerson.Name}, Latitude is  {northernPerson.Latitude}");
+        Console.WriteLine($"The most southest person is: {southernPerson.Name}, Latitude is  {southernPerson.Latitude}");
+        Console.WriteLine($"The most eastest person is: {easternPerson.Name}, Longitude is {easternPerson.Longitude}");
+        Console.WriteLine($"The most westest person is: {westernPerson.Name}, Longitude is {westernPerson.Longitude}\n");
+    }
+
+
+    public static void FindMaxEqualsInAbout(this IEnumerable<Person> persons)
+    {
+        var intersect = persons.Join(persons,
+            person => true,
+            person => true,
+            (person1, person2) => new
+            {
+                First = person1,
+                Second = person2
+            })
+            .Where(twoPersons => twoPersons.First != twoPersons.Second)
+            .Select(twoPersons =>
+            {
+                var intersect = twoPersons.First.About.Split(' ')
+                .Intersect(twoPersons.Second.About.Split(' '))
+                .ToArray().Length;
+
+
+                return new
+                {
+                    First = twoPersons.First,
+                    Second = twoPersons.Second,
+                    Intersect = intersect
+                };
+            });
+
+        var max = intersect.MaxBy(x => x.Intersect);
+
+        Console.WriteLine($"Max equals in about is between {max.First.Name} and {max.Second.Name} is {max.Intersect} words\n");
+
+    }
+
+    public static void FindPersonsWithMutualFriends(this IEnumerable<Person> persons)
+    {
+        var mutual = persons.Join(persons,
+            person => true,
+            person => true,
+            (person1, person2) => new
+            {
+                First = person1,
+                Second = person2
+            })
+            .Where(twoPersons => twoPersons.First != twoPersons.Second)
+            .Select(twoPersons =>
+            {
+                var mutual = 0;
+                foreach (var friend1 in twoPersons.First.Friends)
+                {
+                    foreach (var friend2 in twoPersons.Second.Friends)
+                    {
+                        if (friend1 == friend2) ++mutual;
+                    }
+                }
+ 
+
+                return new
+                {
+                    First = twoPersons.First,
+                    Second = twoPersons.Second,
+                    Mutual = mutual
+                };
+            });
+
+        var hasMutualFriends = mutual.MaxBy(x => x.Mutual);
+
+
+
+        if (hasMutualFriends.Mutual != 0)
+        {
+            Console.WriteLine($"{hasMutualFriends.First.Name} and {hasMutualFriends.Second.Name} has {hasMutualFriends.Mutual} mutual friends");
+        }
+        else
+        {
+            Console.WriteLine("seems like no one has mutual friends\n");
+        }
+
+    }
+
+    public static void FindTheBiggerCompany(this IEnumerable<Person> persons)
+    {
+        var biggerCompany = persons.GroupBy(person => person.Company)
+            .Select(company => new
+           {
+               Company = company.Key,
+               Count = company.Count()
+           })
+            .OrderByDescending(x => x.Count)
+            .First();
+        Console.WriteLine($"{biggerCompany.Company} {biggerCompany.Count}");
+
+    }
+
+    #endregion
 }
 
 class Program
@@ -208,39 +317,19 @@ class Program
     {
         var persons = JsonConvert.DeserializeObject<IEnumerable<Person>>(File.ReadAllText("data.json"));
 
-        persons.CountByGender1();
-        persons.CountByGender2();
+        
+        persons.TheMostFarthestPerson();
+        persons.FindMaxEqualsInAbout();
+        persons.FindPersonsWithMutualFriends();
+        persons.FindTheBiggerCompany();
 
-        persons.YoungestPerson1();
-        persons.YoungestPerson2();
 
-        persons.OldestPerson();
 
-        persons.AverageAgeByGender();
-        persons.NearestToAverageAge();
-        persons.AllNearestToAverageAge();
 
-        persons.MostUsedTag();
 
-        persons.MinMaxDistanceBetweenPersons();
 
-        persons.GroupByEyeColor();
-        persons.CollectAllEmail();
 
-        persons.MaxFriends(3);
 
-        persons.EverybodyHasEmail();
 
-        const int age = 42;
-
-        var fourtyTwoYearsOld = persons.First(x => x.Age == age);
-        fourtyTwoYearsOld = persons.FirstOrDefault(x => x.Age == age);
-        fourtyTwoYearsOld = persons.Single(x => x.Age == age);
-        fourtyTwoYearsOld = persons.SingleOrDefault(x => x.Age == age);
-        fourtyTwoYearsOld = persons.Last(x => x.Age == age);
-        fourtyTwoYearsOld = persons.LastOrDefault(x => x.Age == age);
-
-        var range = Enumerable.Range(5, 10);
-        var repeat = Enumerable.Repeat(fourtyTwoYearsOld, 5);
     }
 }
