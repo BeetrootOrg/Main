@@ -17,7 +17,7 @@ namespace ConsoleApp
             var heatUpAPenTask = HeatUpAPen();
             var toastTask = MakeAToast();
             var glassOfWater = PourAGlassOfWater();
-            var screamTask = Scream();
+            var screamTask = ScreamAsync();
 
             await feedACat;
 
@@ -110,7 +110,12 @@ namespace ConsoleApp
             return Task.CompletedTask;
         }
 
-        private static Task Scream()
+        private static void Scream()
+        {
+            ScreamAsync().Wait();
+        }
+
+        private static Task ScreamAsync()
         {
             return Task.Run(() =>
             {
