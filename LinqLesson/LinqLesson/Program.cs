@@ -261,14 +261,15 @@ static class PersonsExtension
             .Where(twoPersons => twoPersons.First != twoPersons.Second)
             .Select(twoPersons =>
             {
-                var mutual = 0;
-                foreach (var friend1 in twoPersons.First.Friends)
+                var i = 0;
+                foreach (Friend friend1 in twoPersons.First.Friends)
                 {
-                    foreach (var friend2 in twoPersons.Second.Friends)
+                    foreach (Friend friend2 in twoPersons.Second.Friends)
                     {
-                        if (friend1 == friend2) ++mutual;
+                        if (friend1.Name == friend2.Name) ++i;
                     }
                 }
+                var mutual=i;
  
 
                 return new
