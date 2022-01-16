@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace ConsoleApp
@@ -47,10 +48,35 @@ namespace ConsoleApp
             var assembly = typeof(StringBuilder).Assembly;
 
             Console.WriteLine($"Types in assembly {assembly.FullName}:");
-            foreach (var type in assembly.GetTypes())
+            foreach (Type type in assembly.GetTypes())
             {
                 Console.WriteLine($"\t{type.FullName}");
+
+                
+                var members = type.GetMembers();
+                foreach (MemberInfo memberInfo in members)
+                {
+                    Console.WriteLine(memberInfo.Name);
+                }
+
+                var properties = type.GetProperties();
+                foreach (PropertyInfo property in properties)
+                {
+                    Console.WriteLine(property.Name);
+                }
+
+                var methods = type.GetMethods();
+                foreach (var method in methods)
+                {
+                    Console.WriteLine(method.Name);
+                    var args = method.GetParameters();
+                    foreach (var arg in args)
+                    {
+                        Console.WriteLine(arg.Name);
+                    }
+                }
             }
+
         }
 
         static void DynamicInvocation()
