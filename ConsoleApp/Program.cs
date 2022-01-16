@@ -150,10 +150,6 @@ namespace ConsoleApp
                 {
                     propertyInfo.SetValue(obj, propertyValue);
                 }
-                else if (propertyInfo.PropertyType == typeof(String[]))
-                {
-                    propertyInfo.SetValue(obj, propertyValue, new object[] { 0 });
-                }
                 else if (propertyInfo.PropertyType == typeof(int) && int.TryParse(propertyValue, out var intVal))
                 {
                     propertyInfo.SetValue(obj, intVal);
