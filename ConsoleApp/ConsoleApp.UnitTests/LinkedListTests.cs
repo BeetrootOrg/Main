@@ -57,6 +57,18 @@ namespace ConsoleApp.UnitTests
             }
         }
 
+        [Theory]
+        [InlineData(1, true, "Str")]
+        public void Blablabla(int num, bool any, string str)
+        {
+            // Arrange
+            // Act
+            // Assert
+            Assert.Equal(1, num);
+            Assert.True(any);
+            Assert.Equal("Str", str);
+        }
+
         [Fact]
         public void RemoveShouldRemoveElementWithCorrectIndex()
         {
