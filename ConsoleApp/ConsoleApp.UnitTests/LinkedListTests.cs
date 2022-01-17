@@ -44,18 +44,41 @@ namespace ConsoleApp.UnitTests
         [InlineData(1)]
         public void AddSeveralElementsShouldUpdateList(params int[] data)
         {
-            // Act
-            foreach (var item in data)
-            {
-                _list.Add(item);
-            }
-
             // Arrange
+            // Act
+            AddItemsToList(data);
+
+            // Assert
             Assert.Equal(data.Length, _list.Count);
 
             for (var i = 0; i < data.Length; ++i)
             {
                 Assert.Equal(data[i], _list[i]);
+            }
+        }
+
+        [Fact]
+        public void RemoveShouldRemoveElementWithCorrectIndex()
+        {
+            // Arrange
+            var data = new[] { 1, 2, 3 };
+            var index = 1;
+            AddItemsToList(data);
+
+            // Act
+            _list.Remove(index);
+
+            // Assert
+            Assert.Equal(data.Length - 1, _list.Count);
+            Assert.Equal(data[0], _list[0]);
+            Assert.Equal(data[2], _list[1]);
+        }
+
+        private void AddItemsToList(int[] data)
+        {
+            foreach (var item in data)
+            {
+                _list.Add(item);
             }
         }
     }
