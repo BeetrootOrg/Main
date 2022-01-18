@@ -6,6 +6,11 @@ namespace CalendarApp.Domain.Services
 {
     internal class MeetingService : IMeetingService
     {
+        public MeetingService()
+        {
+
+        }
+
         public Meeting Create(string name, DateTime start, TimeSpan duration, string roomName)
         {
             return new Meeting
@@ -19,5 +24,13 @@ namespace CalendarApp.Domain.Services
                 StartAt = start
             };
         }
+        public Meeting Update(Meeting meeting, DateTime start, TimeSpan duration, string roomName)
+        {
+            meeting.Duration = duration;
+            meeting.StartAt = start;
+            meeting.Room.Name = roomName;
+            return meeting;
+        }
+
     }
 }

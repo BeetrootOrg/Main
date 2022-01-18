@@ -1,12 +1,16 @@
 ﻿using CalendarApp.Console.Context;
 using CalendarApp.Console.Controllers.Interfaces;
+using CalendarApp.Contracts.Models;
 using CalendarApp.Domain.Services.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace CalendarApp.Console.Controllers
 {
-    internal class CreateMeetingController : IController
+    internal class UpdateMeetingNameController : IController
     {
         private readonly IMeetingService _meetingService;
         private readonly CalendarContext _calendarContext;
@@ -16,7 +20,7 @@ namespace CalendarApp.Console.Controllers
         private readonly TimeSpan _duration;
         private readonly string _roomName;
 
-        public CreateMeetingController(IMeetingService meetingService, CalendarContext calendarContext, 
+        public UpdateMeetingNameController(IMeetingService meetingService, CalendarContext calendarContext,
             string meetingName, DateTime startAt, TimeSpan duration, string roomName)
         {
             _meetingService = meetingService;
@@ -29,28 +33,18 @@ namespace CalendarApp.Console.Controllers
 
         public IController Action()
         {
-            if (IsValid(_meetingName))
+            var fiend = FiendByName(_meetingName);
+            if (fiend != null)
             {
-                var meeting = _meetingService.Create(_meetingName, _startAt, _duration, _roomName);
-                _calendarContext.Meetings.Add(meeting);
+                _meetingService.Update(fiend, _startAt, _duration, _roomName);
             }
-                return new MainMenuController(_calendarContext);
+            return new MainMenuController(_calendarContext);
         }
-
-        public bool IsValid(string name)
+        public Meeting FiendByName(string name)
         {
             var valid = _calendarContext.Meetings.FirstOrDefault(x => x.Name == name);
-
-            if (valid == null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+                return valid;
         }
-
         public void Render()
         {
         }

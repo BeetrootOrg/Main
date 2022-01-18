@@ -1,13 +1,18 @@
 ﻿using CalendarApp.Console.Context;
 using CalendarApp.Console.Controllers.Interfaces;
+using CalendarApp.Contracts.Models;
 using CalendarApp.Domain.Services.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace CalendarApp.Console.Controllers
 {
-    internal class CreateMeetingController : IController
+    internal class RemoveByNameMeetingController : IController
     {
+         
         private readonly IMeetingService _meetingService;
         private readonly CalendarContext _calendarContext;
 
@@ -16,7 +21,7 @@ namespace CalendarApp.Console.Controllers
         private readonly TimeSpan _duration;
         private readonly string _roomName;
 
-        public CreateMeetingController(IMeetingService meetingService, CalendarContext calendarContext, 
+        public RemoveByNameMeetingController(IMeetingService meetingService, CalendarContext calendarContext,
             string meetingName, DateTime startAt, TimeSpan duration, string roomName)
         {
             _meetingService = meetingService;
@@ -29,30 +34,21 @@ namespace CalendarApp.Console.Controllers
 
         public IController Action()
         {
-            if (IsValid(_meetingName))
-            {
-                var meeting = _meetingService.Create(_meetingName, _startAt, _duration, _roomName);
-                _calendarContext.Meetings.Add(meeting);
-            }
-                return new MainMenuController(_calendarContext);
+            RemoveByName(_meetingName);
+            
+            return new MainMenuController(_calendarContext);
         }
-
-        public bool IsValid(string name)
+        public void RemoveByName(string name)
         {
             var valid = _calendarContext.Meetings.FirstOrDefault(x => x.Name == name);
-
-            if (valid == null)
+            if (valid != null)
             {
-                return true;
-            }
-            else
-            {
-                return false;
+                _calendarContext.Meetings.Remove(valid);
             }
         }
-
         public void Render()
         {
         }
     }
 }
+
