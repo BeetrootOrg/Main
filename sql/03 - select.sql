@@ -1,1 +1,1 @@
-SELECT * FROM [PersonsDB].[dbo].[Persons];
+SELECT * FROM PersonsDB.dbo.Persons;
