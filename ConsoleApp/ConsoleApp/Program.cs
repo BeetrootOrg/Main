@@ -2,7 +2,7 @@
 
 namespace ConsoleApp
 {
-    //i.safontev/classwork/15-generics
+    //i.safontev/classwork/24-testing
     #region Interfaces
 
     public interface IList
