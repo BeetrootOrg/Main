@@ -44,7 +44,7 @@ namespace CalendarApp.Console.Controllers
 
         public void Render()
         {
-            if (_mode.nameMode != Mode.DeleteName) { WriteLine("Enter start datetime:"); }
+            if (_mode.nameMode != Mode.DeleteName) { WriteLine("Enter start datetime: // format: 16-jan-22 15:30:00"); }
         }
     }
 }
