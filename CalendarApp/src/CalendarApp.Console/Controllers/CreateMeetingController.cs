@@ -24,14 +24,26 @@ namespace CalendarApp.Console.Controllers
         {
             try
             {
+                _meetingBuilder.SetMeetingIndex(_calendarContext.Meetings.Count);
                 var meeting = _meetingBuilder.Build();
+                var meetingId = _meetingService.FindMeeting(_calendarContext.Meetings, meeting.Name);
 
+                if (!_meetingService.UniqueName(_calendarContext.Meetings, meeting) && meeting.Id != meetingId)
+                {
+                    return new CreateMeetingUniqueNameController(_calendarContext);
+                }
                 if (_meetingService.OverlapWithAny(_calendarContext.Meetings, meeting))
                 {
                     return new CreateMeetingOverlapController(_calendarContext);
                 }
 
-                _calendarContext.Meetings.Add(meeting);
+                if (meetingId != -1)
+                {
+                    _calendarContext.Meetings[meetingId] = meeting;
+                } else
+                {
+                    _calendarContext.Meetings.Add(meeting);
+                }
                 return new MainMenuController(_calendarContext);
             }
             catch (ArgumentNullException)

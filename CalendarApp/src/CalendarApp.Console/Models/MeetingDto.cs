@@ -8,5 +8,6 @@ namespace CalendarApp.Console.Models
         public DateTime StartAt { get; set; }
         public TimeSpan Duration { get; set; }
         public string RoomName { get; set; }
+        public int Id { get; init; }
     }
 }

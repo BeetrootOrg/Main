@@ -1,6 +1,7 @@
 ﻿using CalendarApp.Console.Context;
 using CalendarApp.Console.Controllers.Interfaces;
 using CalendarApp.Domain.Builders;
+using CalendarApp.Domain.Factories;
 using static System.Console;
 
 namespace CalendarApp.Console.Controllers
@@ -22,6 +23,8 @@ namespace CalendarApp.Console.Controllers
             {
                 "1" => new CreateMeetingNameController(_calendarContext, new MeetingBuilder()),
                 "2" => new ShowAllMeetingsController(_calendarContext),
+                "3" => new EditMeetingController(Factory.CreateMeetingService(), _calendarContext, new MeetingBuilder()),
+                "4" => new DeleteMeetingController(Factory.CreateMeetingService(), _calendarContext),
                 "0" => null,
                 _ => this,
             };
@@ -32,6 +35,8 @@ namespace CalendarApp.Console.Controllers
             Clear();
             WriteLine("1. Add meeting");
             WriteLine("2. Show all meetings");
+            WriteLine("3. Edit meeting");
+            WriteLine("4. Delete meeting");
             WriteLine("0. Exit");
         }
     }

@@ -7,8 +7,18 @@ namespace CalendarApp.Domain.Builders
     {
         private string _meetingName;
         private string _roomName;
+        private int? _meetingId;
         private DateTime? _startAt;
         private TimeSpan? _duration;
+
+        public MeetingBuilder SetMeetingIndex(int meetingId)
+        {
+            if (_meetingId == null)
+            {
+                _meetingId = meetingId;
+            }
+            return this;
+        }
 
         public MeetingBuilder SetMeetingName(string meetingName)
         {
@@ -86,7 +96,7 @@ namespace CalendarApp.Domain.Builders
                 throw new ArgumentNullException(nameof(_duration));
             }
 
-            return new Meeting(_meetingName, _startAt.Value, _duration.Value, new Room(_roomName));
+            return new Meeting(_meetingName, _startAt.Value, _duration.Value, new Room(_roomName), (int)_meetingId);
         }
     }
 }

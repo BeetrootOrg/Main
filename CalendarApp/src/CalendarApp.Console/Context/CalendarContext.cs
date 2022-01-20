@@ -18,7 +18,7 @@ namespace CalendarApp.Console.Context
 
             Meetings = meetings
                 .Select(meeting => 
-                    new Meeting(meeting.Name, meeting.StartAt, meeting.Duration, new Room(meeting.RoomName)))
+                    new Meeting(meeting.Name, meeting.StartAt, meeting.Duration, new Room(meeting.RoomName), meeting.Id))
                 .ToList();
         }
 
@@ -29,10 +29,16 @@ namespace CalendarApp.Console.Context
                 StartAt = meeting.StartAt,
                 RoomName = meeting.Room.Name,
                 Name = meeting.Name,
-                Duration = meeting.Duration
+                Duration = meeting.Duration,
+                Id = meeting.Id
             }));
 
             File.WriteAllText(filename, text);
+        }
+
+        public void SetNewMeetingsList(IList<Meeting> meetings)
+        {
+            Meetings = meetings;
         }
     }
 }
