@@ -23,22 +23,15 @@ namespace ConsoleApp
                 cancellationTokenSource.Cancel();
             };
 
-            var foodClient = new FoodClient(httpClient);
+            var activityClient = new ActivityClient(httpClient);
 
-            Console.WriteLine("Please wait until random image will be generated...");
-            var imageResult = await foodClient.GetRandomImage(cancellationToken);
-            var image = await foodClient.GetImage(imageResult, cancellationToken);
+            Console.WriteLine("Please wait until random activity will be generated...");
+            var activityResult = await activityClient.GetRandomActivity(cancellationToken);
 
-            Console.WriteLine("Enter filename (skip if want to use random name):");
-            var filename = Console.ReadLine();
+            Console.WriteLine($"Activity - {activityResult.Activity}");
+            Console.WriteLine($"Activity type - {activityResult.Type}");
+            Console.WriteLine($"You need {(activityResult.Participants == 1 ? "only yourself" : $"{activityResult.Participants} people")}");
 
-            if (string.IsNullOrEmpty(filename))
-            {
-                filename = $"{Guid.NewGuid()}.jpg";
-            }
-
-            await File.WriteAllBytesAsync(filename, image, cancellationToken);
-            Console.WriteLine($"Image saved to {filename}");
         }
     }
 }
