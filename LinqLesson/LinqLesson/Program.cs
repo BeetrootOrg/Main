@@ -1,130 +1,15 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System;
-using System.IO;
 using System.Linq;
-using System.Text;
+using System.IO;
+
 
 namespace LinqLesson;
 
 static class PersonsExtension
 {
-    public static void CountByGender1(this IEnumerable<Person> persons)
-    {
-        Console.WriteLine($"Males: {persons.Count(person => person.Gender == Gender.Male)}");
-        Console.WriteLine($"Females: {persons.Count(person => person.Gender == Gender.Female)}");
-    }
-
-    public static void CountByGender2(this IEnumerable<Person> persons)
-    {
-        var result = persons.GroupBy(person => person.Gender)
-            .Select(group => new
-            {
-                Gender = group.Key,
-                Count = group.Count()
-            });
-
-        foreach (var item in result)
-        {
-            Console.WriteLine($"{item.Gender}s: {item.Count}");
-        }
-    }
-
-    public static void YoungestPerson1(this IEnumerable<Person> persons)
-    {
-        Console.WriteLine($"Youngest: {persons.OrderBy(x => x.Age).First()}");
-    }
-
-    public static void YoungestPerson2(this IEnumerable<Person> persons)
-    {
-        Console.WriteLine($"Youngest: {persons.MinBy(x => x.Age)}");
-    }
-
-    public static void OldestPerson(this IEnumerable<Person> persons)
-    {
-        Console.WriteLine($"Oldest: {persons.MaxBy(x => x.Age)}");
-    }
-
-    public static void AverageAgeByMale(this IEnumerable<Person> persons)
-    {
-        var age = persons.GroupBy(x => x.Gender)
-            .Where(group => group.Key == Gender.Male)
-            .SelectMany(group => group)
-            .Average(person => person.Age);
-
-        Console.WriteLine($"Average Male Age: {age}");
-    }
-
-    public static void AverageAgeByGender(this IEnumerable<Person> persons)
-    {
-        var average = persons.GroupBy(x => x.Gender)
-            .Select(group => new
-            {
-                Gender = group.Key,
-                AverageAge = group.Average(person => person.Age)
-            });
-
-        foreach (var item in average)
-        {
-            Console.WriteLine($"{item.Gender}s average age: {item.AverageAge}");
-        }
-    }
-
-    public static void NearestToAverageAge(this IEnumerable<Person> persons)
-    {
-        var average = persons.GroupBy(x => x.Gender)
-            .Select(group =>
-            {
-                var averageAge = group.Average(person => person.Age);
-                var nearestToAverage = group.MinBy(person => Math.Abs(person.Age - averageAge));
-
-                return new
-                {
-                    Gender = group.Key,
-                    NearestToAverage = nearestToAverage
-                };
-            });
-
-        foreach (var item in average)
-        {
-            Console.WriteLine($"{item.Gender}s nearest to average age: {item.NearestToAverage}");
-        }
-    }
-
-    public static void AllNearestToAverageAge(this IEnumerable<Person> persons)
-    {
-        var average = persons.GroupBy(x => x.Gender)
-            .Select(group =>
-            {
-                var averageAge = group.Average(person => person.Age);
-                var nearestAgeToAverage = group.MinBy(person => Math.Abs(person.Age - averageAge)).Age;
-
-                return new
-                {
-                    Gender = group.Key,
-                    NearestToAverage = group.Where(person => person.Age == nearestAgeToAverage)
-                };
-            });
-
-        foreach (var item in average)
-        {
-            Console.WriteLine($"{item.Gender}s nearest to average age (count): {item.NearestToAverage.Count()}");
-        }
-    }
-
-    public static void MostUsedTag(this IEnumerable<Person> persons)
-    {
-        var mostUsedTag = persons.SelectMany(person => person.Tags)
-            .GroupBy(tag => tag) // key: pariatur, value: [pariatur, pariatur, ..., pariatur] - 25 times
-            .Select(group => new
-            {
-                Tag = group.Key,
-                Count = group.Count()
-            })
-            .MaxBy(x => x.Count);
-
-        Console.WriteLine($"Most used tag: {mostUsedTag.Tag} ({mostUsedTag.Count})");
-    }
+    const double RadiusEarth = 6372.795;
 
     public static void MinMaxDistanceBetweenPersons(this IEnumerable<Person> persons)
     {
@@ -139,8 +24,7 @@ static class PersonsExtension
             .Where(twoPersons => twoPersons.First != twoPersons.Second)
             .Select(twoPersons =>
             {
-                var distance = Math.Sqrt(Math.Pow(twoPersons.First.Latitude - twoPersons.Second.Latitude, 2)
-                    + Math.Pow(twoPersons.First.Longitude - twoPersons.Second.Longitude, 2));
+                var distance = DistanceOnEarth(twoPersons.First.Latitude, twoPersons.Second.Longitude, twoPersons.Second.Latitude, twoPersons.Second.Longitude);
 
                 return new
                 {
@@ -154,93 +38,139 @@ static class PersonsExtension
         var min = distances.MinBy(x => x.Distance);
         var max = distances.MaxBy(x => x.Distance);
 
-        Console.WriteLine($"Min distance is between {min.First} and {min.Second} is {min.Distance}");
-        Console.WriteLine($"Max distance is between {max.First} and {max.Second} is {max.Distance}");
+        Console.WriteLine($"Min distance is between {min.First} and {min.Second} is {min.Distance} km");
+        Console.WriteLine($"Max distance is between {max.First} and {max.Second} is {max.Distance} km");
     }
 
-    public static void GroupByEyeColor(this IEnumerable<Person> persons)
+    public static void MaxDistanseFromCardinalDirection(this IEnumerable<Person> persons)
     {
-        var result = persons.GroupBy(person => person.EyeColor)
-            .Select(group => new
+        var distances = persons.Select(person =>
+        {
+            var distanceToNorth = DistanceOnEarth(person.Latitude, person.Longitude, 90, person.Longitude);
+            var distanceToSouth = DistanceOnEarth(person.Latitude, person.Longitude, -90, person.Longitude);
+            var distanceToEast = DistanceOnEarth(person.Latitude, person.Longitude, person.Latitude, 0);
+            var distanceToWest = DistanceOnEarth(person.Latitude, person.Longitude, person.Latitude, -180);
+
+            return new
             {
-                EyeColor = group.Key,
-                Count = group.Count()
-            });
+                Name = person.Name,
+                DistanceToNorth = distanceToNorth,
+                DistanceToSouth = distanceToSouth,
+                DistanceToEast = distanceToEast,
+                DistanceToWest = distanceToWest
+            };
+        }).ToArray();
 
-        foreach (var item in result)
+        var maxFromNorth = distances.MaxBy(x => x.DistanceToNorth);
+        var maxFromSouth = distances.MaxBy(x => x.DistanceToSouth);
+        var maxFromEast = distances.MaxBy(x => x.DistanceToEast);
+        var maxFromWest = distances.MaxBy(x => x.DistanceToWest);
+
+        Console.WriteLine($"Max distance to North by {maxFromNorth.Name}, {maxFromNorth.DistanceToNorth} km");
+        Console.WriteLine($"Max distance to North by {maxFromSouth.Name}, {maxFromSouth.DistanceToSouth} km");
+        Console.WriteLine($"Max distance to North by {maxFromEast.Name}, {maxFromEast.DistanceToEast} km");
+        Console.WriteLine($"Max distance to North by {maxFromWest.Name}, {maxFromWest.DistanceToWest} km");
+    }
+
+
+    public static void SameWordsInAbout(this IEnumerable<Person> persons)
+    {
+        var group = persons.Join(persons,
+            person => true,
+            person => true,
+            (person1, person2) => new
+            {
+                First = person1,
+                Second = person2
+            })
+            .Where(twoPerson => twoPerson.First != twoPerson.Second)
+            .Select(twoPersons =>
+            {
+                var listFirst = twoPersons.First.About.Split('.', '?', '!', ' ', ';', ':', ',');
+                var listSecond = twoPersons.Second.About.Split('.', '?', '!', ' ', ';', ':', ',');
+
+                return new
+                {
+                    FirstPerson = twoPersons.First,
+                    SecondPerson = twoPersons.Second,
+                    SimilarWordsInAbout = listFirst.Intersect(listSecond).Count()
+                };
+            }).ToList();
+
+        var resultPersons = group.MaxBy(x => x.SimilarWordsInAbout);
+
+        Console.WriteLine($"Most similar ABOUT is: {resultPersons.SimilarWordsInAbout} same word in {resultPersons.FirstPerson.Name} and {resultPersons.SecondPerson.Name} descroption.");
+    }
+
+    public static void SameFriends(this IEnumerable<Person> persons)
+    {
+        var group = persons.Join(persons,
+            person => true,
+            person => true,
+            (person1, person2) => new
+            {
+                First = person1,
+                Second = person2
+            })
+            .Where(twoPerson => twoPerson.First != twoPerson.Second)
+            .Select(twoPersons =>
+            {
+                var listFriendsFirst = twoPersons.First.Friends.Select(x => x.Name);
+                var listFriendsSecond = twoPersons.Second.Friends.Select(x => x.Name);
+
+                return new
+                {
+                    FirstPerson = twoPersons.First,
+                    SecondPerson = twoPersons.Second,
+
+                    SameFriends = listFriendsFirst.Intersect(listFriendsSecond)
+                };
+            })
+            .Where(twoPersons => twoPersons.SameFriends.Count() > 0)
+            .ToList();
+
+        if (group.Count > 0)
         {
-            Console.WriteLine($"{item.Count} has {item.EyeColor} eye color");
+            foreach (var twoPerson in group)
+            {
+                Console.WriteLine($"People with same friends: {twoPerson.FirstPerson.Name} and {twoPerson.SecondPerson.Name}");
+            }
         }
-    }
-
-    public static void CollectAllEmail(this IEnumerable<Person> persons)
-    {
-        var emails = persons.Select(person => person.Email)
-            .Aggregate(new StringBuilder(),
-                (sb, email) => sb.Append(email).Append(";"),
-                sb => sb.ToString());
-
-        Console.WriteLine($"All emails: {emails}");
-    }
-
-    public static void MaxFriends(this IEnumerable<Person> persons, int top)
-    {
-        var topFriends = persons.OrderByDescending(person => person.Friends.Length)
-            .Take(top);
-
-        var i = 0;
-        foreach (var topFriend in topFriends)
+        else
         {
-            Console.WriteLine($"Top friend {++i}: {topFriend.Name} with {topFriend.Friends.Length} friends");
+            Console.WriteLine("No one have same friends.");
         }
+        
     }
 
-    public static void EverybodyHasEmail(this IEnumerable<Person> persons)
+    public static double DistanceOnEarth(double firstLatitude, double firstLongitude, double secondLatitude, double secondLongitude)
     {
-        var allHasEmails = persons.All(person => !string.IsNullOrEmpty(person.Email));
-        Console.WriteLine($"Everybody has email: {allHasEmails}");
+        //Convert To Radian
+        var x1 = AngleToRadian(firstLatitude);
+        var y1 = AngleToRadian(firstLongitude);
+
+        var x2 = AngleToRadian(secondLatitude);
+        var y2 = AngleToRadian(secondLongitude);
+
+
+        return Math.Round(RadiusEarth * Math.Acos(Math.Sin(x1) * Math.Sin(x2) + Math.Cos(x1) * Math.Cos(x2) * Math.Cos(y2 - y1)));
     }
+    static double AngleToRadian(double x) => x * Math.PI / 180;
 }
 
 class Program
 {
     static void Main(string[] args)
     {
+
         var persons = JsonConvert.DeserializeObject<IEnumerable<Person>>(File.ReadAllText("data.json"));
 
-        persons.CountByGender1();
-        persons.CountByGender2();
+        persons.MaxDistanseFromCardinalDirection();
 
-        persons.YoungestPerson1();
-        persons.YoungestPerson2();
+        persons.SameWordsInAbout();
 
-        persons.OldestPerson();
+        persons.SameFriends();
 
-        persons.AverageAgeByGender();
-        persons.NearestToAverageAge();
-        persons.AllNearestToAverageAge();
-
-        persons.MostUsedTag();
-
-        persons.MinMaxDistanceBetweenPersons();
-
-        persons.GroupByEyeColor();
-        persons.CollectAllEmail();
-
-        persons.MaxFriends(3);
-
-        persons.EverybodyHasEmail();
-
-        const int age = 42;
-
-        var fourtyTwoYearsOld = persons.First(x => x.Age == age);
-        fourtyTwoYearsOld = persons.FirstOrDefault(x => x.Age == age);
-        fourtyTwoYearsOld = persons.Single(x => x.Age == age);
-        fourtyTwoYearsOld = persons.SingleOrDefault(x => x.Age == age);
-        fourtyTwoYearsOld = persons.Last(x => x.Age == age);
-        fourtyTwoYearsOld = persons.LastOrDefault(x => x.Age == age);
-
-        var range = Enumerable.Range(5, 10);
-        var repeat = Enumerable.Repeat(fourtyTwoYearsOld, 5);
     }
+
 }
