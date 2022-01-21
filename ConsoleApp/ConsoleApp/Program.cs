@@ -1,230 +1,89 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApp
 {
-
-    public class Vote
+    public class ChunkByEnumerable<T> : IEnumerable<IEnumerable<T>>
     {
-        public string question { get; set; }
-        public List<Option> options = new List<Option>();
+        private readonly IEnumerable<T> _items;
+        private readonly int _size;
 
-        public Vote(string question)
+        public ChunkByEnumerable(IEnumerable<T> items, int size)
         {
-            this.question = question;
+            _items = items;
+            _size = size;
         }
 
-        public void AddVoteOption(string optionText)
+        private class ChunkByEnumerator : IEnumerator<IEnumerable<T>>
         {
-            options.Add(new Option(optionText));
-        }
+            private readonly IEnumerator<T> _enumerator;
+            private readonly int _size;
 
-        public void AddVoter(int choise, string name)
-        {
-            options[choise].voterList.Add(name);
-        }
-
-        public void ShowVoteQuestionOption()
-        {
-            Console.WriteLine($"{question}");
-
-            int i = 0;
-            foreach (var item in options)
+            public ChunkByEnumerator(IEnumerator<T> enumerator, int size)
             {
-                Console.WriteLine($"{i}) {item.TextOption}");
-                ++i;
+                _enumerator = enumerator;
+                _size = size;
             }
-        }
 
-        public void ShowVoteResult()
-        {
-            Console.WriteLine(question);
+            public IEnumerable<T> Current { get; private set; }
 
-            foreach (var item in options)
+            object IEnumerator.Current => Current;
+
+            public void Dispose() => _enumerator.Dispose();
+
+            public bool MoveNext()
             {
-                item.ShowVotePeople();
+                var arr = new T[_size];
+                var currentIndex = 0;
 
+                while (currentIndex < _size && _enumerator.MoveNext())
+                {
+                    arr[currentIndex++] = _enumerator.Current;
+                }
+
+                if (currentIndex == 0)
+                {
+                    return false;
+                }
+
+                if (currentIndex < _size)
+                {
+                    Array.Resize(ref arr, currentIndex);
+                }
+
+                Current = arr;
+                return true;
             }
+
+            public void Reset() => _enumerator.Reset();
         }
+
+        public IEnumerator<IEnumerable<T>> GetEnumerator() => new ChunkByEnumerator(_items.GetEnumerator(), _size);
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
-    public class Option
+    public static class DateTimeExtensions
     {
-        public string TextOption;
-        public List<string> voterList = new List<string>();
+        public static bool IsWeekend(this DateTime date) =>
+            date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday;
 
-        public Option(string text)
-        {
-            TextOption = text;
-        }
+        public static bool IsWorkday(this DateTime date) => !date.IsWeekend();
 
-        public void ShowVotePeople()
-        {
-            if (voterList.Count > 0)
-            {
-                Console.WriteLine($"{TextOption}: {voterList.Count} votes");
-            }
-        }
+        public static IEnumerable<IEnumerable<T>> ChunkBy<T>(this IEnumerable<T> collection, int size)
+            => new ChunkByEnumerable<T>(collection, size);
     }
 
-    public class Program
+    class Program
     {
-        static List<Vote> votes = new List<Vote>();
-
-
         static void Main()
         {
-            while (true)
-            {
-                Menu();
-            }
-        }
-
-        static void Menu()
-        {
-            Console.Clear();
-            Console.WriteLine(" Welcome!For start choose action!");
-
-            Console.WriteLine("\t1. Create Vote");
-            Console.WriteLine("\t2. Show All Votes");
-            Console.WriteLine("\t3. Lets Vote");
-            Console.WriteLine("\t4. Show Results");
-            Console.WriteLine("\t0. Exit");
-
-
-            ConsoleKeyInfo ck = Console.ReadKey();
-
-            switch (ck.Key)
-            {
-                case ConsoleKey.D1:
-                case ConsoleKey.NumPad1:
-                    CreateVote();
-                    break;
-                case ConsoleKey.D2:
-                case ConsoleKey.NumPad2:
-                    ShowAllVotes();
-                    break;
-                case ConsoleKey.D3:
-                case ConsoleKey.NumPad3:
-                    DoVote();
-                    break;
-                case ConsoleKey.D4:
-                case ConsoleKey.NumPad4:
-                    ShowResults();
-                    break;
-
-                case ConsoleKey.D0:
-                case ConsoleKey.NumPad0:
-                    Environment.Exit(0);
-                    break;
-            }
-        }
-
-
-        static void ShowQuestions()
-        {
-            int i = 0;
-            foreach (var vote in votes)
-            {
-                Console.WriteLine($"{i}) {vote.question}");
-                ++i;
-            }
-        }
-        static void CreateVote()
-        {
-            Console.Clear();
-
-            Console.WriteLine("Write a voting name:");
-            string question = Console.ReadLine();
-
-            if (!string.IsNullOrEmpty(question))
-            {
-                votes.Add(new Vote(question));
-            }
-            else
-            {
-                Console.WriteLine("Again pls!");
-                question = Console.ReadLine();
-                votes.Add(new Vote(question));
-            }
-
-            Console.WriteLine("Lets Add some options.");
-
-            do
-            {
-                var option = Console.ReadLine();
-
-                if (!String.IsNullOrEmpty(option) || votes[votes.Count - 1].options.Count < 2)
-                {
-                    votes[votes.Count - 1].AddVoteOption(option);
-                }
-                else
-                {
-                    break;
-                }
-
-            } while (true);
-
-        }
-        static void ShowAllVotes()
-        {
-            Console.Clear();
-            foreach (var vote in votes)
-            {
-                vote.ShowVoteQuestionOption();
-            }
-
-            Wait();
-        }
-
-        static void DoVote()
-        {
-            if (votes.Count > 0)
-            {
-                Console.Clear();
-                ShowQuestions();
-                int index = 0;
-
-                if (votes.Count > 1)
-                {
-                    Console.WriteLine("What vote you whant?");
-                    index = Convert.ToInt32(Console.ReadLine());
-                }
-
-                Console.Clear();
-                votes[index].ShowVoteQuestionOption();
-
-                Console.WriteLine("Write your Name: ");
-                string name = Console.ReadLine();
-
-                Console.WriteLine("Write what option you choose : ");
-                int optionIndex = Convert.ToInt32(Console.ReadLine());
-
-                votes[index].AddVoter(optionIndex, name);
-            }
-            else
-            {
-                Console.WriteLine("Create one more vote pls");
-            }
-        }
-
-        static void ShowResults()
-        {
-            Console.Clear();
-
-            foreach (var vote in votes)
-            {
-                vote.ShowVoteResult();
-                Console.WriteLine();
-            }
-
-            Wait();
-        }
-
-        static void Wait()
-        {
-            Console.WriteLine("Type Enter if u want back...");
-            Console.ReadLine();
+            int[] arr = { 1, 2, 3, 4, 5 };
+            var chunked = arr.ChunkBy(2).ToArray();
+            chunked = arr.ChunkBy(3).ToArray();
+            chunked = arr.ChunkBy(5).ToArray();
+            chunked = arr.ChunkBy(7).ToArray();
         }
     }
 }
