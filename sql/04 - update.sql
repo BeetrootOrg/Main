@@ -8,3 +8,7 @@ ADD Gender VARCHAR(1) NOT NULL
 
 ALTER TABLE PersonsDB.dbo.Persons
 ADD Address VARCHAR(255)
+
+--3--
+UPDATE PersonsDB.dbo.Persons
+    SET Age = Age + 1;

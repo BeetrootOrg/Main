@@ -48,3 +48,12 @@ SELECT *
 		HAVING COUNT(1) > 1);
 
 SELECT * FROM PersonsDB.dbo.Persons;
+
+--1--
+SELECT *
+	FROM PersonsDB.dbo.Persons
+	WHERE Gender = 'M';
+--2--
+SELECT *
+	FROM PersonsDB.dbo.Persons
+	WHERE Age = 18;

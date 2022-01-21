@@ -10,3 +10,10 @@ DROP COLUMN Address;
 
 UPDATE PersonsDB.dbo.Persons 
 SET Address = NULL;
+
+--4--
+UPDATE PersonsDB.dbo.Persons
+	SET FirstName = ' ',
+	LastName = ' ',
+		Age = ' ',
+		Gender = ' ';
