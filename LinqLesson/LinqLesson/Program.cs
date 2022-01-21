@@ -200,6 +200,88 @@ static class PersonsExtension
         var allHasEmails = persons.All(person => !string.IsNullOrEmpty(person.Email));
         Console.WriteLine($"Everybody has email: {allHasEmails}");
     }
+    //HOMEWORK //
+    public static void MaxMinPositions(this IEnumerable<Person> persons)
+    {
+        var northest = persons.MaxBy(person => person.Latitude);
+        var southest = persons.MinBy(person => person.Latitude);
+        var western = persons.MaxBy(person => person.Longitude);
+        var southern = persons.MinBy(person => person.Longitude);
+    }
+
+    public static void CommonAbout(this IEnumerable<Person> persons)
+    {
+        var result = persons.Join(persons,
+            person => true,
+            person => true,
+            (p1, p2) => new
+            {
+                First = p1,
+                Second = p2
+            })
+            .Where(pair => pair.First != pair.Second)
+            .Select(pair =>
+            {
+                var firstAbout = pair.First.About;
+                var secondAbout = pair.First.About;
+
+                var intersection = firstAbout.Split(' ').Intersect(secondAbout.Split(' '));
+
+                return new
+                {
+                    pair.First,
+                    pair.Second,
+                    CommonWords = intersection.Count()
+                };
+            })
+            .MaxBy(pair => pair.CommonWords);
+
+        Console.WriteLine($"The most common words is {result.CommonWords}");
+    }
+
+    public static void CommonFriend(this IEnumerable<Person> persons)
+    {
+        var result = persons.Join(persons,
+            person => true,
+            person => true,
+            (p1, p2) => new
+            {
+                First = p1,
+                Second = p2
+            })
+            .Where(pair => pair.First != pair.Second)
+            .Select(pair =>
+            {
+                var firstFriends = pair.First.Friends;
+                var secondFriends = pair.First.Friends;
+
+                var intersection = firstFriends.Intersect(secondFriends);
+
+                return new
+                {
+                    pair.First,
+                    pair.Second,
+                    CommonFriends = intersection
+                };
+            });
+
+        Console.WriteLine($"Common friends have {result.Count() / 2} persons");
+    }
+
+    public static void TheBiggestCompany(this IEnumerable<Person> persons)
+    {
+        var result = persons.GroupBy(person => person.Company)
+            .Select(group => new
+            {
+                CompanyName = group.Key,
+                NumberOfPersonal = group.Count()
+            })
+            .MaxBy(x => x.NumberOfPersonal);
+
+        Console.WriteLine($"The biggest company is {result.CompanyName} with {result.NumberOfPersonal} employees");
+    }
+
+
 }
 
 class Program
