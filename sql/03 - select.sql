@@ -46,3 +46,5 @@ SELECT *
 		FROM PersonsDB.dbo.Persons
 		GROUP BY FirstName
 		HAVING COUNT(1) > 1);
+
+SELECT * FROM PersonsDB.dbo.Persons;
