@@ -1,13 +1,35 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace ConsoleApp
 {
+
+ 
+
+
     class Program
     {
+
+        static string todayHoliday(Rootobject holidays)
+        {
+            holidays.Select(holiday => holiday.
+            //var xxx = new IEnumerable < Rootobject > holidays; 
+            var result = holidays
+            
+                .Select(x => x.)
+                .First();
+
+            return result.ToString();   
+            Console.WriteLine($" {result} is the most populated company");
+
+        }
+
+
         static async Task Main()
         {
             using var httpClient = new HttpClient
@@ -26,21 +48,13 @@ namespace ConsoleApp
             var foodClient = new FoodClient(httpClient);
 
             Console.WriteLine("Please wait until random image will be generated...");
-            var imageResult = await foodClient.GetRandomImage(cancellationToken);
-            //var image = await foodClient.GetImage(var, cancellationToken);
+            var holidayList = await foodClient.GetHolidays(cancellationToken);
+
+            var resultX = todayHoliday((IEnumerable<Rootobject>)holidayList);
 
 
-            Console.WriteLine(imageResult);
-            //Console.WriteLine("Enter filename (skip if want to use random name):");
-            //var filename = Console.ReadLine();
 
-            //if (string.IsNullOrEmpty(filename))
-            //{
-            //    filename = $"{Guid.NewGuid()}.jpg";
-            //}
-
-            //await File.WriteAllBytesAsync(filename, image, cancellationToken);
-            //Console.WriteLine($"Image saved to {filename}");
+            Console.WriteLine($"Image saved to {todayHoliday}");
         }
     }
 }
