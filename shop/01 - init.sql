@@ -1,0 +1,8 @@
+CREATE TABLE dbo.Orders
+(
+	Id INT NOT NULL PRIMARY KEY,
+	PurchaseAmount MONEY NOT NULL,
+	OrderDatetime DATETIME NOT NULL,
+	CustomerId INT NOT NULL,
+	SalesmanId INT NOT NULL
+);
