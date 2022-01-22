@@ -78,6 +78,7 @@ namespace ConsoleApp
             WriteLine($"Temperature CoolSide: 1C {_jwst.tempC.tempCoolSide1C}°C, 2C {_jwst.tempC.tempCoolSide2C}°C");
             WriteLine($"timestamp: {_jwst.timestamp}\r\n");
             /*
+             -- 1 --
             Response example data:
             LaunchElapsedTime: 24:08:47:13
             Distance from Earth: 1347301.5 Km
@@ -88,6 +89,17 @@ namespace ConsoleApp
             Temperature WarmSide: 1C 56°C, 2C 10°C
             Temperature CoolSide: 1C -207°C, 2C -201°C
             timestamp: 18-Jan-22 21:07:13
+             -- 2 --
+            Response example data:
+            Launch Elapsed Time: 27:19:48:22
+            Distance from Earth: 1416316.9 Km
+            Distance to L2 Orbit: 50009.1 Km
+            Distance Complete: 96.5892 %
+            Cruising Speed: 215.8 m/S
+            Current Deployment Step: Mirror Segment Deployments COMPLETED - undefined
+            Temperature WarmSide: 1C 57°C, 2C 11°C
+            Temperature CoolSide: 1C -207°C, 2C -201°C
+            timestamp: 22-Jan-22 08:08:22
             */
         }
 
