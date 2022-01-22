@@ -1,0 +1,1 @@
+ALTER TABLE PersonsDB.dbo.Persons ADD PhoneNumber VARCHAR(50)
