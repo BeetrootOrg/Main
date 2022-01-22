@@ -42,7 +42,12 @@ namespace ConsoleApp
             //< Dictionary<string, Course> >
             //var jsonobj = JsonConvert.DeserializeObject< Dictionary<string, HolidayDescription> >(strResult);
             //var jsonobj = JsonConvert.DeserializeObject<List<List<HolidayDescription>>>(strResult);
-            var jsonobj = JsonConvert.DeserializeObject<HolidayResponse>(strResult);
+            //var jsonobj = JsonConvert.DeserializeObject<HolidayResponse>(strResult);
+            //var strResult2 = JsonConvert.DeserializeObject(strResult);
+            //var jsonobj2 = JsonConvert.DeserializeObject(strResult);
+            //var jsonobj = JsonConvert.DeserializeObject<HolidayResponse>(jsonobj2.ToString());
+            //var jsonobj = JsonConvert.DeserializeObject<HolidayResponse>(strResult);
+            var jsonobj = JsonConvert.DeserializeObject<Rootobject>(strResult);
             //<ImageResult>(strResult);
             return jsonobj;
         }
