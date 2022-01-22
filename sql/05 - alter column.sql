@@ -1,0 +1,1 @@
+ALTER TABLE PersonsDB.dbo.Persons ALTER COLUMN PhoneNumber VARCHAR(75)

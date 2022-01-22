@@ -1,0 +1,1 @@
+ALTER TABLE PersonsDB.dbo.Persons DROP COLUMN PhoneNumber;

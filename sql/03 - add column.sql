@@ -1,1 +1,1 @@
-ALTER TABLE PersonsDB.dbo.Persons ADD PhoneNumber VARCHAR(50)
+ALTER TABLE PersonsDB.dbo.Persons ADD PhoneNumber VARCHAR(50) NOT NULL DEFAULT 'N/A'
