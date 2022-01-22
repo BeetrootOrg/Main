@@ -42,7 +42,7 @@ namespace ConsoleApp
             //< Dictionary<string, Course> >
             //var jsonobj = JsonConvert.DeserializeObject< Dictionary<string, HolidayDescription> >(strResult);
             //var jsonobj = JsonConvert.DeserializeObject<List<List<HolidayDescription>>>(strResult);
-            var jsonobj = JsonConvert.DeserializeObject<List<HolidayDescription>>(strResult);
+            var jsonobj = JsonConvert.DeserializeObject<HolidayResponse>(strResult);
             //<ImageResult>(strResult);
             return jsonobj;
         }

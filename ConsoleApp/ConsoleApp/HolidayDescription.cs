@@ -1,14 +1,19 @@
 ﻿namespace ConsoleApp
 {
+    internal class HolidayResponse
+    {
+        public HolidayDescription Holiday { get; set; }
+    }
+
     internal class HolidayDescription
     {
-        public string id { get; set; }
-        public string date { get; set; }
-        public string nameEn { get; set; }
-        public string nameFr { get; set; }
-        public string federal { get; set; }
-        public string observedDate { get; set; }
-        public object provinces { get; set; }
+        public string Id { get; set; }
+        public string Date { get; set; }
+        public string NameEn { get; set; }
+        public string NameFr { get; set; }
+        public string Federal { get; set; }
+        public string ObservedDate { get; set; }
+        public object Provinces { get; set; }
 
     }
    
