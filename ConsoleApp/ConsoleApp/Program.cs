@@ -44,118 +44,47 @@ namespace ConsoleApp
     {
         static void Main()
         {
-            var assembly = typeof(StringBuilder).Assembly;
+            var assembly = typeof(Program).Assembly;
+            Console.WriteLine($"Info about assembly {assembly}");
 
-            Console.WriteLine($"Types in assembly {assembly.FullName}:");
-            foreach (var type in assembly.GetTypes())
+
+            //About TestClass
+            var aboutTestClass= typeof(TestClass);
+
+            foreach (var item in aboutTestClass.GetProperties())
             {
-                Console.WriteLine($"\t{type.FullName}");
+                Console.WriteLine($"About TestClass Properties: {item}");
             }
-        }
 
-        static void DynamicInvocation()
-        {
-            var assemblyName = "ConsoleApp";
-
-            Console.WriteLine("Enter class name you want to create:");
-            var classname = Console.ReadLine();
-
-            var typeToCreate = Type.GetType($"{assemblyName}.{classname}, {assemblyName}", true);
-
-            var obj = Activator.CreateInstance(typeToCreate);
-            SetDefaultValues(obj);
-
-            while (true)
+            foreach (var item in aboutTestClass.GetMethods())
             {
-                Console.WriteLine("Enter property/method name:");
-                var propertyMethodName = Console.ReadLine();
+                Console.WriteLine($"About TestClass Methods: {item}, return type {item.ReturnType}");
 
-                if (!string.IsNullOrWhiteSpace(propertyMethodName))
+                foreach (var parameters in item.GetParameters())
                 {
-                    var propertyInfo = typeToCreate.GetProperty(propertyMethodName);
-
-                    if (propertyInfo == null)
-                    {
-                        var methodInfo = typeToCreate.GetMethod(propertyMethodName);
-
-                        if (methodInfo == null)
-                        {
-                            Console.WriteLine($"Missing property/method info {propertyMethodName}");
-                        }
-                        else
-                        {
-                            var paramsInfo = methodInfo.GetParameters();
-
-                            if (paramsInfo.Length == 0)
-                            {
-                                methodInfo.Invoke(obj, null);
-                            }
-                            else
-                            {
-                                var args = new object[paramsInfo.Length];
-                                for (int i = 0; i < paramsInfo.Length; i++)
-                                {
-                                    Console.WriteLine($"Enter {i + 1} argument:");
-                                    var arg = Console.ReadLine();
-                                    args[i] = ConvertTo(arg, paramsInfo[i].ParameterType);
-                                }
-
-                                methodInfo.Invoke(obj, args);
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Enter property value:");
-                        var propertyValue = Console.ReadLine();
-
-                        propertyInfo.SetValue(obj, ConvertTo(propertyValue, propertyInfo.PropertyType));
-                    }
-                }
-                else
-                {
-                    break;
+                    Console.WriteLine($"Method parameters: {parameters}");
                 }
             }
 
-            Console.WriteLine(obj);
-        }
 
-        private static void SetDefaultValues(object obj)
-        {
-            var type = obj.GetType();
+            //About DefaultValueAttribute Class
+            var aboutClass = typeof(DefaultValueAttribute);
 
-            foreach (var propertyInfo in type.GetProperties())
+            foreach (var item in aboutClass.GetProperties())
             {
-                var attribute = propertyInfo.GetCustomAttributes(typeof(DefaultValueAttribute), true)
-                    .FirstOrDefault();
+                Console.WriteLine($"About DefaultValueAttribute Properties: {item}");
+            }
 
-                if (attribute is DefaultValueAttribute defaultValueAttribute && defaultValueAttribute.NeedSetup)
+            foreach (var item in aboutClass.GetMethods())
+            {
+                Console.WriteLine($"About DefaultValueAttribute Methods: {item}, return type {item.ReturnType}");
+
+                foreach (var parameters in item.GetParameters())
                 {
-                    propertyInfo.SetValue(obj, defaultValueAttribute.Value);
+                    Console.WriteLine($"Method parameters: {parameters}");
                 }
             }
-        }
 
-        private static object ConvertTo(string value, Type type)
-        {
-            if (type == typeof(string))
-            {
-                return value;
-            }
-
-            if (type == typeof(int) && int.TryParse(value, out var intVal))
-            {
-                return intVal;
-            }
-
-            if (type == typeof(DateTime) && DateTime.TryParse(value, out var dateTime))
-            {
-                return dateTime;
-            }
-            
-            throw new ArgumentException($"Cannot convert value to type {type}");
         }
     }
 }
