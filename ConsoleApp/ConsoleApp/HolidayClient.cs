@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp
 {
-    internal class FoodClient
+    internal class HolidayClient
     {
         private readonly HttpClient _httpClient;
 
-        public FoodClient(HttpClient httpClient)
+        public HolidayClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }

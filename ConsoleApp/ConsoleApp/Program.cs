@@ -52,14 +52,17 @@ namespace ConsoleApp
                 .FirstOrDefault() ?? new { nameEn = "today is not a holiday" };
 
 
-            sb.Append("Past Holiday: ");
+            sb.Append("Nearest Past Holiday: ");
             sb.Append(resultPrevious.nameEn);
+            sb.Append(" ");
             sb.Append(resultPrevious.date);
             sb.Append(",\n\n Current Holiday: ");
             sb.Append(resultCurrent);
+            sb.Append(" ");
             sb.Append(currentDate.ToString("yyyy-MM-dd"));
-            sb.Append(",\n\n Forthcoming Holiday: ");
+            sb.Append(",\n\n Nearest Forthcoming Holiday: ");
             sb.Append(resultNext.nameEn);
+            sb.Append(" ");
             sb.Append(resultNext.date);
 
             Console.WriteLine(sb.ToString()); 
@@ -83,9 +86,9 @@ namespace ConsoleApp
                 cancellationTokenSource.Cancel();
             };
 
-            var foodClient = new FoodClient(httpClient);
+            var foodClient = new HolidayClient(httpClient);
 
-            Console.WriteLine("What holiday is today in Canada? ");
+            Console.WriteLine("WHAT HOLIDAY IS TODAY IN CANADA? \n");
             object holidayList = await foodClient.GetHolidays(cancellationToken);
 
 
