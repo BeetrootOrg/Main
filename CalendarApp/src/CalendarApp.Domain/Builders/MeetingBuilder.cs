@@ -5,11 +5,24 @@ namespace CalendarApp.Domain.Builders
 {
     public class MeetingBuilder
     {
+
+        private bool _needUpdate;
         private string _meetingName;
         private string _roomName;
         private DateTime? _startAt;
         private TimeSpan? _duration;
 
+        public MeetingBuilder SetUpdateMeeting(bool needUpdate=false)
+        { 
+            _needUpdate = needUpdate;
+            return this;
+        }
+
+        public bool NeedUpdate()
+        {
+            return _needUpdate;
+        }
+        
         public MeetingBuilder SetMeetingName(string meetingName)
         {
             if (string.IsNullOrEmpty(meetingName))

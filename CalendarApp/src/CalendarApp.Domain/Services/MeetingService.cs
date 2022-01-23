@@ -18,5 +18,11 @@ namespace CalendarApp.Domain.Services
                     return first.Inside(m.StartAt, true, false) ||
                         second.Inside(meeting.StartAt, true, false);
                 });
+        public bool IsUniqueName(IEnumerable<Meeting> meetings, Meeting meeting) =>
+            !meetings.Any(m => m.Name == meeting.Name);
+
+        public int FindMeeting(IEnumerable<Meeting> meetings, string meetingName) => 
+            meetings.ToList().FindIndex(m => m.Name == meetingName);
+
     }
 }

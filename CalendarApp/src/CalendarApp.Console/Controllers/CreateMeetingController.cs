@@ -30,8 +30,18 @@ namespace CalendarApp.Console.Controllers
                 {
                     return new CreateMeetingOverlapController(_calendarContext);
                 }
+                
+                if (!_meetingService.IsUniqueName(_calendarContext.Meetings, meeting) && !_meetingBuilder.NeedUpdate())
+                {
+                  return new CreateMeetingUniqNameController(_calendarContext);
+                }
+                if (_meetingBuilder.NeedUpdate())
+                {
+                    var oldMeetingVersion = _meetingService.FindMeeting(_calendarContext.Meetings,meeting.Name);
+                    _calendarContext.Meetings.RemoveAt(oldMeetingVersion);
+                }
 
-                _calendarContext.Meetings.Add(meeting);
+                    _calendarContext.Meetings.Add(meeting);
                 return new MainMenuController(_calendarContext);
             }
             catch (ArgumentNullException)
