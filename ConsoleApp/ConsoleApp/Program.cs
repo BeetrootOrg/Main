@@ -23,22 +23,14 @@ namespace ConsoleApp
                 cancellationTokenSource.Cancel();
             };
 
-            var foodClient = new FoodClient(httpClient);
+            var factClient = new FactClient(httpClient);
 
-            Console.WriteLine("Please wait until random image will be generated...");
-            var imageResult = await foodClient.GetRandomImage(cancellationToken);
-            var image = await foodClient.GetImage(imageResult, cancellationToken);
+            Console.WriteLine("Please wait while we getting a random fact...\n");
+            var textResult = await factClient.GetRandomFact(cancellationToken);
+            var fact = factClient.GetFact(textResult);
 
-            Console.WriteLine("Enter filename (skip if want to use random name):");
-            var filename = Console.ReadLine();
-
-            if (string.IsNullOrEmpty(filename))
-            {
-                filename = $"{Guid.NewGuid()}.jpg";
-            }
-
-            await File.WriteAllBytesAsync(filename, image, cancellationToken);
-            Console.WriteLine($"Image saved to {filename}");
+            Console.WriteLine($"Here is your random fact: {fact}");
+            
         }
     }
 }
