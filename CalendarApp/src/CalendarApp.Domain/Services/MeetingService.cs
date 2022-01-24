@@ -8,6 +8,12 @@ namespace CalendarApp.Domain.Services
 {
     internal class MeetingService : IMeetingService
     {
+        public Meeting FindByName(IEnumerable<Meeting> meetings, string meetingName) =>
+            meetings.SingleOrDefault(meeting => meeting.Name == meetingName);
+
+        public bool IsNameUnique(IEnumerable<Meeting> meetings, string meetingName) =>
+            meetings.All(meeting => meeting.Name != meetingName);
+
         public bool OverlapWithAny(IEnumerable<Meeting> meetings, Meeting meeting) => 
             meetings.Where(m => m.Room.Equals(meeting.Room))
                 .Any(m =>

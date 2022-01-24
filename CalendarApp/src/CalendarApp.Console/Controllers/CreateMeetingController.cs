@@ -31,6 +31,12 @@ namespace CalendarApp.Console.Controllers
                     return new CreateMeetingOverlapController(_calendarContext);
                 }
 
+                var existingMeeting = _meetingService.FindByName(_calendarContext.Meetings, meeting.Name);
+                if (meeting != null)
+                {
+                    _calendarContext.Meetings.Remove(existingMeeting);
+                }
+
                 _calendarContext.Meetings.Add(meeting);
                 return new MainMenuController(_calendarContext);
             }
