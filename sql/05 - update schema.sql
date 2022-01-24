@@ -1,0 +1,1 @@
+ALTER TABLE dbo.Orders ALTER COLUMN SalesmanId INT;

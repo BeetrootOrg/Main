@@ -7,4 +7,4 @@ SELECT o.Id AS OrderId,
 	s.LastName AS SalesLastName
 	FROM dbo.Orders AS o
 		JOIN dbo.Customers AS c ON o.CustomerId = c.Id
-		JOIN dbo.Salesmen AS s ON o.SalesmanId = s.Id;
+		LEFT JOIN dbo.Salesmen AS s ON o.SalesmanId = s.Id;
