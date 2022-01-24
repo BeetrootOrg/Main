@@ -100,6 +100,16 @@ namespace ConsoleApp
             Temperature WarmSide: 1C 57°C, 2C 11°C
             Temperature CoolSide: 1C -207°C, 2C -201°C
             timestamp: 22-Jan-22 08:08:22
+            -- 3 --
+            Launch Elapsed Time: 30:05:51:31
+            Distance from Earth: 1459792.4 Km
+            Distance to L2 Orbit: 736.8 Km
+            Distance Complete: 99.9493 %
+            Cruising Speed: 202.0 m/S
+            Current Deployment Step: L2 Insertion Burn - Mid Course Correction Burn (MCC2) - L2 Orbit Insertion
+            Temperature WarmSide: 1C 55°C, 2C 12°C
+            Temperature CoolSide: 1C -210°C, 2C -202°C
+            timestamp: 24-Jan-22 18:11:31
             */
         }
 
