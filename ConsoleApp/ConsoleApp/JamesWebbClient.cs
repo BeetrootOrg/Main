@@ -9,23 +9,23 @@ namespace ConsoleApp
 {
     public class JWSTTrackingData
     {
-        public float distanceEarthKm { get; set; }
-        public string launchElapsedTime { get; set; }
-        public float distanceL2Km { get; set; }
-        public float percentageCompleted { get; set; }
+        public float? distanceEarthKm { get; set; }
+        public string? launchElapsedTime { get; set; }
+        public float? distanceL2Km { get; set; }
+        public float? percentageCompleted { get; set; }
         public float speedKmS { get; set; }
         public string deploymentImgURL { get; set; }
-        public string currentDeploymentStep { get; set; }
-        public Tempc tempC { get; set; }
-        public DateTime timestamp { get; set; }
+        public string? currentDeploymentStep { get; set; }
+        public Tempc? tempC { get; set; }
+        public DateTime? timestamp { get; set; }
     }
 
     public class Tempc
     {
-        public float tempWarmSide1C { get; set; }
-        public float tempWarmSide2C { get; set; }
-        public float tempCoolSide1C { get; set; }
-        public float tempCoolSide2C { get; set; }
+        public float? tempWarmSide1C { get; set; }
+        public float? tempWarmSide2C { get; set; }
+        public float? tempCoolSide1C { get; set; }
+        public float? tempCoolSide2C { get; set; }
     }
     public class JamesWebbClient
     {
