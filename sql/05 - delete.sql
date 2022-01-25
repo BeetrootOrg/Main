@@ -1,19 +1,10 @@
-DELETE FROM PersonsDB.dbo.Persons WHERE FirstName = 'D';
-
-DELETE FROM PersonsDB.dbo.Persons;
-
-ALTER TABLE PersonsDB.dbo.Persons
-DROP COLUMN Gender;
-
-ALTER TABLE PersonsDB.dbo.Persons
-DROP COLUMN Address;
-
-UPDATE PersonsDB.dbo.Persons 
-SET Address = NULL;
-
---4--
+-- 5: clear all rows without address --
 UPDATE PersonsDB.dbo.Persons
-	SET FirstName = ' ',
-	LastName = ' ',
-		Age = ' ',
-		Gender = ' ';
+	SET FirstName = Null,
+	LastName = Null,
+		Age = Null,
+		Gender = Null;
+
+-- 5: delete all rows without address --
+ALTER TABLE PersonsDB.dbo.Persons
+DROP COLUMN FirstName, LastName, Age, Gender;

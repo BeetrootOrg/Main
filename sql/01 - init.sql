@@ -16,10 +16,10 @@ BEGIN
     CREATE TABLE PersonsDB.dbo.Persons
     (
       Id INT IDENTITY(1, 1) NOT NULL PRIMARY KEY,
-      FirstName VARCHAR(100) NOT NULL,
-      LastName VARCHAR(100) NOT NULL,
-      Age TINYINT NOT NULL,
-      Gender VARCHAR(1) NOT NULL,
+      FirstName VARCHAR(100) NULL,
+      LastName VARCHAR(100) NULL,
+      Age TINYINT NULL,
+      Gender VARCHAR(1) NULL,
       Address VARCHAR(255)
     )
 END
