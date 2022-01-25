@@ -12,13 +12,9 @@ namespace ConsoleApp
         {
         }
 
-        public ShopDbContext(DbContextOptions<ShopDbContext> options) : base(options)
-        {
-        }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost;Database=ClassworkDB;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=localhost;Database=OrdersDB;Trusted_Connection=True;");
             optionsBuilder.LogTo(Console.WriteLine);
         }
     }
