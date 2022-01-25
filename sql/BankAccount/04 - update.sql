@@ -8,4 +8,4 @@ UPDATE BankAccountsDB.dbo.BankAccounts
 
 UPDATE BankAccountsDB.dbo.BankAccounts
 	SET Balance = Balance + 1000
-	WHERE AccountName = 'Sidorov' AND AccountNumber = '1234';
+	WHERE AccountName = 'Sidorov' AND AccountNumber = '9012';
