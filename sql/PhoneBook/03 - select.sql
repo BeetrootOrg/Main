@@ -1,0 +1,1 @@
+SELECT * FROM PhoneBookDB.dbo.PhoneBook;
