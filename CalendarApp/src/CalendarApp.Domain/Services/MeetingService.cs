@@ -18,5 +18,7 @@ namespace CalendarApp.Domain.Services
                     return first.Inside(m.StartAt, true, false) ||
                         second.Inside(meeting.StartAt, true, false);
                 });
+
+        public bool IsNameUniq(IEnumerable<Meeting> meetings, string meetingName) => !meetings.Any(m => m.Name.Equals(meetingName));
     }
 }

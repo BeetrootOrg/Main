@@ -22,6 +22,8 @@ namespace CalendarApp.Console.Controllers
             {
                 "1" => new CreateMeetingNameController(_calendarContext, new MeetingBuilder()),
                 "2" => new ShowAllMeetingsController(_calendarContext),
+                "3" => new DeleteMeetingByName(_calendarContext),
+                "4" => new EditElementByName(_calendarContext),
                 "0" => null,
                 _ => this,
             };
@@ -32,6 +34,8 @@ namespace CalendarApp.Console.Controllers
             Clear();
             WriteLine("1. Add meeting");
             WriteLine("2. Show all meetings");
+            WriteLine("3. Delete by name");
+            WriteLine("4. Edit by name");
             WriteLine("0. Exit");
         }
     }

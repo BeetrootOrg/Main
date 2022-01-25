@@ -3,6 +3,7 @@ using CalendarApp.Console.Controllers.Interfaces;
 using CalendarApp.Domain.Builders;
 using CalendarApp.Domain.Services.Interfaces;
 using System;
+using System.Linq;
 
 namespace CalendarApp.Console.Controllers
 {
@@ -29,6 +30,13 @@ namespace CalendarApp.Console.Controllers
                 if (_meetingService.OverlapWithAny(_calendarContext.Meetings, meeting))
                 {
                     return new CreateMeetingOverlapController(_calendarContext);
+                }
+
+                var existingMeet = _calendarContext.Meetings.FirstOrDefault(m => m.Name == meeting.Name);
+
+                if (meeting != null)
+                {
+                    _calendarContext.Meetings.Remove(existingMeet);
                 }
 
                 _calendarContext.Meetings.Add(meeting);
