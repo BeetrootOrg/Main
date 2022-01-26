@@ -1,5 +1,6 @@
 ﻿using ConsoleApp.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace ConsoleApp.Database
 {
@@ -16,6 +17,7 @@ namespace ConsoleApp.Database
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=localhost;Database=NewOrdersDB;Trusted_Connection=True;");
+            optionsBuilder.LogTo(Console.WriteLine);
         }
     }
 }

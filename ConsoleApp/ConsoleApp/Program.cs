@@ -1,6 +1,7 @@
 ﻿using ConsoleApp.Database;
 using ConsoleApp.Models;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ConsoleApp
@@ -33,6 +34,21 @@ namespace ConsoleApp
             await foreach (var order in dbContext.Orders)
             {
                 Console.WriteLine(order);
+            }
+
+            var result = dbContext.Orders.Join(dbContext.Customers,
+                order => order.CustomerId,
+                customer => customer.Id,
+                (order, customer) => new
+                {
+                    order.PurchaseAmount,
+                    customer.FirstName,
+                    customer.LastName
+                });
+
+            foreach (var item in result)
+            {
+                Console.WriteLine(item);
             }
         }
     }
