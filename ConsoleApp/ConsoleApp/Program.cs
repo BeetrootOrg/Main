@@ -12,6 +12,8 @@ namespace ConsoleApp
         {
             await using var dbContext = new OrderDBContext();
             var orders = await dbContext.Orders
+                .Include(x => x.Customer)
+                .Include(x => x.Salesman)
                 .Where(order => order.Customer.LastName == "Guy")
                 .ToArrayAsync();
 
