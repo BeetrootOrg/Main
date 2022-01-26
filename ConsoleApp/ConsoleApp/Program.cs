@@ -1,5 +1,6 @@
 ﻿using ConsoleApp.Database;
 using ConsoleApp.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -50,6 +51,14 @@ namespace ConsoleApp
             {
                 Console.WriteLine(item);
             }
+
+            // update
+            var maxPurchaseAmount = await dbContext.Orders.MaxAsync(x => x.PurchaseAmount);
+            var maxOrder = await dbContext.Orders.FirstAsync(x => x.PurchaseAmount == maxPurchaseAmount);
+            maxOrder.PurchaseAmount -= 1;
+
+            dbContext.Orders.Update(maxOrder);
+            await dbContext.SaveChangesAsync();
         }
     }
 }
