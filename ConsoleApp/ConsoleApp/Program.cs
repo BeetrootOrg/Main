@@ -58,6 +58,12 @@ namespace ConsoleApp
             maxOrder.PurchaseAmount -= 1;
 
             dbContext.Orders.Update(maxOrder);
+
+            // delete
+            var minPurchaseAmount = await dbContext.Orders.MinAsync(x => x.PurchaseAmount);
+            var minOrder = await dbContext.Orders.FirstAsync(x => x.PurchaseAmount == minPurchaseAmount);
+
+            dbContext.Orders.Remove(minOrder);
             await dbContext.SaveChangesAsync();
         }
     }
