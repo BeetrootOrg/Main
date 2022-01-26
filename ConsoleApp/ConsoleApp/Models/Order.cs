@@ -13,7 +13,7 @@ namespace ConsoleApp.Models
         public decimal PurchaseAmount { get; set; }
         public DateTime PurchasedAt { get; set; }
         public int CustomerId { get; set; }
-        public int SalesmanId { get; set; }
+        public int? SalesmanId { get; set; }
 
         [ForeignKey("CustomerId")]
         public Customer Customer { get; set; }
