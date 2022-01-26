@@ -1,44 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace ConsoleApp
+﻿namespace ConsoleApp
 {
-    class Program
+    internal class Program
     {
-        static async Task Main()
+        private static void Main()
         {
-            using var httpClient = new HttpClient
-            {
-                Timeout = TimeSpan.FromSeconds(5),
-            };
-
-            var cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = cancellationTokenSource.Token;
-
-            Console.CancelKeyPress += (sender, eventArgs) =>
-            {
-                cancellationTokenSource.Cancel();
-            };
-
-            var foodClient = new FoodClient(httpClient);
-
-            Console.WriteLine("Please wait until random image will be generated...");
-            var imageResult = await foodClient.GetRandomImage(cancellationToken);
-            var image = await foodClient.GetImage(imageResult, cancellationToken);
-
-            Console.WriteLine("Enter filename (skip if want to use random name):");
-            var filename = Console.ReadLine();
-
-            if (string.IsNullOrEmpty(filename))
-            {
-                filename = $"{Guid.NewGuid()}.jpg";
-            }
-
-            await File.WriteAllBytesAsync(filename, image, cancellationToken);
-            Console.WriteLine($"Image saved to {filename}");
         }
     }
 }
