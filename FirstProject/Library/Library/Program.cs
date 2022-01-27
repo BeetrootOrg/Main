@@ -10,26 +10,29 @@ namespace Library
     {
         private static async Task Main()
         {
-
-            await using var dbContext = new LibraryDBContext();
-            var list = dbContext.Histories.Include(c=>c.Customer).ToList()
-                .Where(c => c.Id ==3);
-            var listBook =dbContext.Histories.Include(b=>b.Book).ToList().Where(b=>b.Id==3);
-            var book = dbContext.Books.Include(a => a.Author).ToList().Where(c=>c.AuthorId==1);
-            foreach(var item in list)
+            async Task FoundHistoryById(int id)
             {
-                foreach (var itemBook in listBook)
+                await using var dbContext = new LibraryDBContext();
+
+                var history = await dbContext.Histories
+                    .Include(x => x.Customer)
+                    .Include(x => x.Book)
+                    .ThenInclude(x => x.Author)
+                    .Where(x => x.Id == id)
+                    .ToArrayAsync();
+
+                foreach (var item in history)
                 {
-                    foreach (var items in book) {
-                        Console.WriteLine($"Данные читателя :{item.Customer.FirstName} {item.Customer.LastName}" +
+                    Console.WriteLine($"Данные читателя :{item.Customer.FirstName} {item.Customer.LastName}" +
                             $" | Дата выдачи: { item.DateWhenTaken}| Название Книги: {item.Book.NameBook} Имя Автора:" +
-                            $" {items.Author.FirstName} {items.Author.LastName} ");
-                    }
+                            $" {item.Book.Author.FirstName} {item.Book.Author.LastName} ");
                 }
             }
-        }
-  
-      
 
+            await FoundHistoryById(4);
+        }
     }
+
+
+
 }
