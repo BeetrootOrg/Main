@@ -1,4 +1,4 @@
-INSERT INTO PhoneBookDB.dbo.PhoneBook(FirstName, LastName, PhoneNumber, Email)
-	VALUES ('Ivan', 'Petrov', 1234, 'Email:'),
-		('Petr', 'Ivanov', 1234, 'Email:'),
-		('Petia', 'Sidorov', 1234, 'Email:');
+INSERT INTO AuthorsDB.dbo.Authors(Name, Title, Published)
+	VALUES ('Leo Tolstoy', 'War and Peace', '1899-01-01 00:00:00'),
+		('Alexander Pushkin', 'Eugene Onegin', '1833-01-01 00:00:00'),
+		('Fyodor Dostoevsky', 'The Gambler', '1866-01-01 00:00:00');

@@ -1,1 +1,1 @@
-SELECT * FROM PhoneBookDB.dbo.PhoneBook;
+SELECT * FROM AuthorsDB.dbo.Authors;
