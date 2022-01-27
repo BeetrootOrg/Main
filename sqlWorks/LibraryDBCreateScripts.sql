@@ -1,0 +1,36 @@
+--CREATE TABLE dbo.Book
+--(
+--Id INT IDENTITY(1,1)NOT NULL PRIMARY KEY,
+--NameBook VARCHAR(100) NOT NULL,
+--AuthorId INT NOT NULL,
+--CountsOfBook INT NOT NULL
+--);
+
+--);
+--CREATE TABLE dbo.Author
+--(
+--Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+--FirstName VARCHAR(100) NOT NULL,
+--LastName VARCHAR(100) NOT NULL
+--)
+
+--CREATE TABLE dbo.Customers
+--(
+--Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+--FirstName VARCHAR(100) NOT NULL,
+--LastName VARCHAR(100) NOT NULL
+--)
+
+--CREATE TABLE dbo.History
+--(
+--Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+--DateWhenTaken DATETIME NOT NULL,
+--CustomerId INT NOT NULL,
+--BookId INT NOT NULL
+--)
+
+--ALTER TABLE dbo.Book ADD FOREIGN KEY (AuthorId) REFERENCES dbo.Author(Id);
+--ALTER TABLE dbo.History ADD FOREIGN KEY (BookId) REFERENCES dbo.Book(Id);
+--ALTER TABLE dbo.History ADD FOREIGN KEY(CustomerId) REFERENCES dbo.Customers(Id);
+ 
+
