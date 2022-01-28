@@ -1,1 +1,0 @@
-DELETE FROM BankAccountsDB.dbo.BankAccounts;
