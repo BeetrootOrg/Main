@@ -10,9 +10,15 @@ p {
 	color: cadetblue;
 }
 
+a {
+	text-decoration: none;
+	color: black;
+}
+
 .about-me {
 	font-size: 24px;
 	font-weight: 500;
+	color: blue;
 }
 
 .about-me:hover {
