@@ -28,3 +28,24 @@ a {
 table td,th {
 	border: 1px solid black;
 }
+
+.container {
+	margin: 5px 200px;
+}
+
+.header {
+	font-size: 150%;
+	color: rgb(6, 8, 116);
+}
+
+.content {
+	color: black;
+	font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.footer {
+	position: sticky;
+	bottom: 0px;
+	padding: 20px;
+	background-color: white;
+}
