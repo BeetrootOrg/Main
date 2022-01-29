@@ -1,0 +1,1 @@
+DELETE FROM UsersLoginHistoryDB.dbo.UsersLoginHistory;
