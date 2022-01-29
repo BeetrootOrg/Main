@@ -9,3 +9,12 @@ h1 {
 p {
 	color: cadetblue;
 }
+
+.about-me {
+	font-size: 24px;
+	font-weight: 500;
+}
+
+.about-me:hover {
+	color: red;
+}
