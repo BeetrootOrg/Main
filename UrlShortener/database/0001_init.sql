@@ -1,0 +1,8 @@
+CREATE TABLE dbo.Urls
+(
+	Id BIGINT IDENTITY(1, 1) NOT NULL PRIMARY KEY,
+	OriginalUrl VARCHAR(255) NOT NULL,
+	ShortUrl VARCHAR(255) NOT NULL
+);
+
+CREATE UNIQUE INDEX U_IDX_Url ON dbo.Urls(OriginalUrl, ShortUrl);
