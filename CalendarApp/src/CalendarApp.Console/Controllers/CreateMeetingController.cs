@@ -3,6 +3,7 @@ using CalendarApp.Console.Controllers.Interfaces;
 using CalendarApp.Domain.Builders;
 using CalendarApp.Domain.Services.Interfaces;
 using System;
+using System.Linq;
 
 namespace CalendarApp.Console.Controllers
 {
@@ -22,6 +23,7 @@ namespace CalendarApp.Console.Controllers
 
         public IController Action()
         {
+
             try
             {
                 var meeting = _meetingBuilder.Build();
