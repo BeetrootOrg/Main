@@ -6,20 +6,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace UrlShortener.Database.Models
 {
     [Table("Urls", Schema = "dbo")]
-    [Index(nameof(Original), nameof(Short), IsUnique = true)]
+    [Index(nameof(Url), IsUnique = true)]
+    [Index(nameof(Hash), IsUnique = true)]
     public class ShortUrl
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        [Column("OriginalUrl")]
+        [Column("Url")]
         [Required]
-        public string Original { get; set; }
+        [MaxLength(255)]
+        public string Url { get; set; }
 
-        [Column("ShortUrl")]
+        [Column("Hash")]
         [Required]
-        public string Short { get; set; }
+        [MaxLength(50)]
+        public string Hash { get; set; }
 
         public DateTime CreatedAt { get; set; }
     }

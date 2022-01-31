@@ -1,15 +1,16 @@
+using System;
+using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using UrlShortener.Database.Context;
+using UrlShortener.Domain;
 
 namespace UrlShortener.Api
 {
@@ -25,12 +26,29 @@ namespace UrlShortener.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
-            services.AddSwaggerGen(c =>
+            services.AddApiVersioning(config =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "UrlShortener.Api", Version = "v1" });
+                config.DefaultApiVersion = new ApiVersion(1, 0);
+                config.AssumeDefaultVersionWhenUnspecified = true;
             });
+            
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "UrlShortener.Api", Version = "v1" });
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+            });
+
+            services.AddOptions<ApiConfiguration>()
+                .Bind(Configuration);
+
+            services.AddDbContext<UrlDbContext>(builder =>
+            {
+                builder.UseSqlServer(Configuration.GetConnectionString("UrlsDB"));
+            });
+
+            services.AddDomainServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,8 +62,6 @@ namespace UrlShortener.Api
             }
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
