@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -20,16 +21,20 @@ namespace UrlShortener.Api.Controllers
         }
 
         /// <summary>
-        /// Redirect to resource by it hash
+        /// Redirect to resource by it's hash
         /// </summary>
-        /// <param name="hash">URL's hash</param>
+        /// <param name="hash">Resource's hash</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <response code="302">Redirects to location by it's hash</response>
+        /// <response code="404">Cannot find resource by hash</response>
+        /// <response code="500">Server error</response>
         [HttpGet("{hash}")]
         [ProducesResponseType(302)]
         [ProducesResponseType(typeof(ErrorResponse), 404)]
         [ProducesResponseType(typeof(ErrorResponse), 500)]
-        public async Task<ActionResult> GetRouteByHash(string hash, CancellationToken cancellationToken = default)
+        public async Task<ActionResult> GetRouteByHash(
+            [StringLength(50, ErrorMessage = "Hash can't be more than 50 symbols", MinimumLength = 1)] string hash, 
+            CancellationToken cancellationToken = default)
         {
             var query = new GetUrlQuery
             {
@@ -37,12 +42,6 @@ namespace UrlShortener.Api.Controllers
             };
 
             var result = await _mediator.Send(query, cancellationToken);
-
-            if (result.Result == SearchUrlResult.Success)
-            {
-                return Redirect(result.Url);
-            }
-
             return result.Result switch
             {
                 SearchUrlResult.Success => Redirect(result.Url),
