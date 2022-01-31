@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using UrlShortener.Database.Context;
 using UrlShortener.Domain;
 
@@ -48,7 +49,7 @@ namespace UrlShortener.Api
                 builder.UseSqlServer(Configuration.GetConnectionString("UrlsDB"));
             });
 
-            services.AddDomainServices();
+            services.AddDomainServices(sp => sp.GetRequiredService<IOptionsMonitor<ApiConfiguration>>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
