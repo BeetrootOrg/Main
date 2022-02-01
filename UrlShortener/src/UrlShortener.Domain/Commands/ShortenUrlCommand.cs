@@ -30,7 +30,7 @@ namespace UrlShortener.Domain.Commands
 
     internal class ShortenUrlCommandHandlerConfig
     {
-        public string Domain { get; init; }
+        public string BaseAddress { get; init; }
     }
     
     internal class ShortenUrlCommandHandler : BaseHandler<ShortenUrlCommand, ShortenUrlCommandResponse>
@@ -41,7 +41,7 @@ namespace UrlShortener.Domain.Commands
         private readonly UrlDbContext _dbContext;
         private readonly IHashGenerator _hashGenerator;
         private readonly IDateTimeProvider _dateTimeProvider;
-        private readonly string _domain;
+        private readonly string _baseAddress;
         
         public ShortenUrlCommandHandler(ILogger<ShortenUrlCommandHandler> logger, 
             UrlDbContext dbContext, 
@@ -53,7 +53,7 @@ namespace UrlShortener.Domain.Commands
             _dbContext = dbContext;
             _hashGenerator = hashGenerator;
             _dateTimeProvider = dateTimeProvider;
-            _domain = config.Domain.TrimEnd('/');
+            _baseAddress = config.BaseAddress.TrimEnd('/');
         }
 
         protected override Task<ShortenUrlCommandResponse> HandleInternal(ShortenUrlCommand request, CancellationToken cancellationToken) =>
@@ -104,7 +104,7 @@ namespace UrlShortener.Domain.Commands
                 Result = ShortenUrlResult.Created
             };
 
-            string ToUrl(string hash) => $"{_domain}/{hash}";
+            string ToUrl(string hash) => $"{_baseAddress}/{hash}";
         }
     }
 }

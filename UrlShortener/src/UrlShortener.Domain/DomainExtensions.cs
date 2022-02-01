@@ -20,7 +20,7 @@ namespace UrlShortener.Domain
                 var configuration = domainConfigurationFunc(sp);
                 return new ShortenUrlCommandHandlerConfig
                 {
-                    Domain = configuration.CurrentValue.Domain
+                    BaseAddress = configuration.CurrentValue.BaseAddress
                 };
             });
             

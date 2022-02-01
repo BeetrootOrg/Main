@@ -20,14 +20,14 @@ namespace UrlShortener.UnitTests.Tests
         private readonly Mock<IDateTimeProvider> _dateTimeProvider;
 
         private readonly ShortenUrlCommandHandler _command;
-        private readonly string _domain;
+        private readonly string _baseAddress;
 
         public ShortenUrlCommandTests()
         {
             _hashGenerator = new Mock<IHashGenerator>();
             _dateTimeProvider = new Mock<IDateTimeProvider>();
 
-            _domain = Faker.Internet.Url();
+            _baseAddress = Faker.Internet.Url();
 
             _command = new ShortenUrlCommandHandler(new Mock<ILogger<ShortenUrlCommandHandler>>().Object,
                 UrlDbContext,
@@ -35,7 +35,7 @@ namespace UrlShortener.UnitTests.Tests
                 _dateTimeProvider.Object,
                 new ShortenUrlCommandHandlerConfig
                 {
-                    Domain = _domain
+                    BaseAddress = _baseAddress
                 });
         }
 
@@ -61,7 +61,7 @@ namespace UrlShortener.UnitTests.Tests
             
             // Assert
             result.ShouldNotBeNull();
-            result.Url.ShouldBe($"{_domain}/{expected.Hash}");
+            result.Url.ShouldBe($"{_baseAddress}/{expected.Hash}");
             result.Result.ShouldBe(ShortenUrlResult.Created);
 
             var any = await UrlDbContext.Urls.AnyAsync(VerifyPredicate(expected));
@@ -92,7 +92,7 @@ namespace UrlShortener.UnitTests.Tests
             
             // Assert
             result.ShouldNotBeNull();
-            result.Url.ShouldBe($"{_domain}/{expected.Hash}");
+            result.Url.ShouldBe($"{_baseAddress}/{expected.Hash}");
             result.Result.ShouldBe(ShortenUrlResult.AlreadyExists);
         }
 
