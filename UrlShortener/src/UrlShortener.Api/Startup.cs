@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using UrlShortener.Database.Context;
 using UrlShortener.Domain;
+using Microsoft.Extensions.Logging;
 
 namespace UrlShortener.Api
 {
@@ -44,9 +45,10 @@ namespace UrlShortener.Api
             services.AddOptions<ApiConfiguration>()
                 .Bind(Configuration);
 
-            services.AddDbContext<UrlDbContext>(builder =>
+            services.AddDbContext<UrlDbContext>((sp, builder) =>
             {
-                builder.UseSqlServer(Configuration.GetConnectionString("UrlsDB"));
+                builder.UseSqlServer(Configuration.GetConnectionString("UrlsDB"))
+                    .UseLoggerFactory(sp.GetRequiredService<ILoggerFactory>());
             });
 
             services.AddDomainServices(sp => sp.GetRequiredService<IOptionsMonitor<ApiConfiguration>>());

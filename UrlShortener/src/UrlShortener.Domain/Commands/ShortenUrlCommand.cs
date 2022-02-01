@@ -61,6 +61,7 @@ namespace UrlShortener.Domain.Commands
                 .Handle<DbUpdateException>()
                 .RetryAsync(RetryTimes, (exception, times) =>
                 {
+                    _dbContext.ChangeTracker.Clear();
                     _logger.LogWarning(exception, "Retry on specific exception. Times: {@Times}", times);
                 })
                 .ExecuteAsync(() => ExecuteInternal(request, cancellationToken));
