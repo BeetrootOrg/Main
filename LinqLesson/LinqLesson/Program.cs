@@ -7,7 +7,7 @@ using System.Text;
 
 namespace LinqLesson;
 
-static class PersonsExtension
+public static class PersonsExtension
 {
     public static void CountByGender1(this IEnumerable<Person> persons)
     {
@@ -30,9 +30,12 @@ static class PersonsExtension
         }
     }
 
-    public static void YoungestPerson1(this IEnumerable<Person> persons)
+    public static Person YoungestPerson1(this IEnumerable<Person> persons)
     {
-        Console.WriteLine($"Youngest: {persons.OrderBy(x => x.Age).First()}");
+        var personWeNeed = persons.OrderBy(x => x.Age).First();
+        Console.WriteLine($"Youngest: {personWeNeed}");
+        return personWeNeed;
+
     }
 
     public static void YoungestPerson2(this IEnumerable<Person> persons)
@@ -112,7 +115,7 @@ static class PersonsExtension
         }
     }
 
-    public static void MostUsedTag(this IEnumerable<Person> persons)
+    public static string MostUsedTag(this IEnumerable<Person> persons)
     {
         var mostUsedTag = persons.SelectMany(person => person.Tags)
             .GroupBy(tag => tag) // key: pariatur, value: [pariatur, pariatur, ..., pariatur] - 25 times
@@ -123,7 +126,10 @@ static class PersonsExtension
             })
             .MaxBy(x => x.Count);
 
+
         Console.WriteLine($"Most used tag: {mostUsedTag.Tag} ({mostUsedTag.Count})");
+
+        return mostUsedTag.Tag.ToString();
     }
 
     public static void MinMaxDistanceBetweenPersons(this IEnumerable<Person> persons)
@@ -312,7 +318,7 @@ static class PersonsExtension
     #endregion
 }
 
-class Program
+public class Program
 {
     static void Main(string[] args)
     {
