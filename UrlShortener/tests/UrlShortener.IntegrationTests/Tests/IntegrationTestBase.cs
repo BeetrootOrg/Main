@@ -3,6 +3,7 @@ using System.Net.Http;
 using Bogus;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using UrlShortener.Api;
 using UrlShortener.Database.Context;
 using UrlShortener.Database.Models;
@@ -16,6 +17,7 @@ namespace UrlShortener.IntegrationTests.Tests
 
         protected readonly HttpClient Client;
         protected readonly UrlDbContext UrlDbContext;
+        protected IOptionsMonitor<ApiConfiguration> Config;
 
         protected readonly Faker Faker;
         protected readonly Faker<ShortUrl> ShortUrlFaker;
@@ -31,6 +33,7 @@ namespace UrlShortener.IntegrationTests.Tests
 
             _scope = factory.Services.CreateAsyncScope();
             UrlDbContext = _scope.ServiceProvider.GetRequiredService<UrlDbContext>();
+            Config = _scope.ServiceProvider.GetRequiredService<IOptionsMonitor<ApiConfiguration>>();
 
             Faker = new Faker();
             ShortUrlFaker = new Faker<ShortUrl>()
@@ -39,7 +42,8 @@ namespace UrlShortener.IntegrationTests.Tests
                 .RuleFor(x => x.Url, f => f.Internet.Url())
                 .RuleFor(x => x.CreatedAt, f => f.Date.Past());
         }
-        
+
+
         public void Dispose()
         {
             Client?.Dispose();
