@@ -24,11 +24,28 @@ namespace UrlShortener.IntegrationTests.Tests
             await UrlDbContext.SaveChangesAsync();
 
             // Act
-            var response = await Client.GetAsync($"api/v1/Url/{shortUrl.Hash}");
+            var response = await Client.GetAsync(GetUrlToGetFullPath(shortUrl.Hash));
 
             // Assert
             response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
             response.Headers.Location.ShouldBe(new Uri(shortUrl.Url));
         }
+        
+        [Fact]
+        public async Task GetRouteByHashShouldReturnBadRequestIfHashIsLong()
+        {
+            // Arrange
+            var shortUrl = ShortUrlFaker.Generate();
+            await UrlDbContext.AddAsync(shortUrl);
+            await UrlDbContext.SaveChangesAsync();
+
+            // Act
+            var response = await Client.GetAsync(GetUrlToGetFullPath(Faker.Random.String2(60)));
+
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+        }
+
+        private static string GetUrlToGetFullPath(string hash) => $"api/v1/Url/{hash}";
     }
 }

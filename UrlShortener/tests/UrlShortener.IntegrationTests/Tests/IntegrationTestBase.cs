@@ -17,6 +17,7 @@ namespace UrlShortener.IntegrationTests.Tests
         protected readonly HttpClient Client;
         protected readonly UrlDbContext UrlDbContext;
 
+        protected readonly Faker Faker;
         protected readonly Faker<ShortUrl> ShortUrlFaker;
 
         private readonly AsyncServiceScope _scope;
@@ -31,6 +32,7 @@ namespace UrlShortener.IntegrationTests.Tests
             _scope = factory.Services.CreateAsyncScope();
             UrlDbContext = _scope.ServiceProvider.GetRequiredService<UrlDbContext>();
 
+            Faker = new Faker();
             ShortUrlFaker = new Faker<ShortUrl>()
                 .RuleFor(x => x.Id, f => 0)
                 .RuleFor(x => x.Hash, f => f.Random.String2(HashLength))
