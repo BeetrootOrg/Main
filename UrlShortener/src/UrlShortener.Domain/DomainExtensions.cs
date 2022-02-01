@@ -20,6 +20,9 @@ namespace UrlShortener.Domain
                     var configuration = domainConfigurationFunc(sp);
                     return new RandomHashGenerator(configuration.CurrentValue.HashLength);
                 });
+
+            serviceCollection.AddSingleton<IDateTimeProvider, UtcDateTimeProvider>();
+            
             return serviceCollection;
         }
     }
