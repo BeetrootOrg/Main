@@ -2,7 +2,9 @@ using Shouldly;
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UrlShortener.Api;
+using UrlShortener.Api.Models;
 using UrlShortener.IntegrationTests.Helpers;
 using Xunit;
 
@@ -29,6 +31,24 @@ namespace UrlShortener.IntegrationTests.Tests
             // Assert
             response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
             response.Headers.Location.ShouldBe(new Uri(shortUrl.Url));
+        }
+        
+        [Fact]
+        public async Task GetRouteByHashShouldReturnNotFoundIfThereNoData()
+        {
+            // Arrange
+            var hash = Faker.Random.String2(8);
+
+            // Act
+            var response = await Client.GetAsync(GetUrlToGetFullPath(hash));
+
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+
+            var strContent = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<ErrorResponse>(strContent);
+            
+            result.Message.ShouldBe($"Url with hash '{hash}' not found");
         }
         
         [Fact]
