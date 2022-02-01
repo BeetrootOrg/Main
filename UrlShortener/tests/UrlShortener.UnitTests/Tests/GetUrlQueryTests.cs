@@ -28,7 +28,7 @@ namespace UrlShortener.UnitTests.Tests
             UrlDbContext.Urls.Add(shortUrl);
             await UrlDbContext.SaveChangesAsync();
 
-            var query = new GetUrlQuery
+            var query = new GetLongUrlQuery
             {
                 Hash = shortUrl.Hash
             };
@@ -46,7 +46,7 @@ namespace UrlShortener.UnitTests.Tests
         public async Task HandleShouldReturnNotFoundResult()
         {
             // Arrange
-            var query = new GetUrlQuery
+            var query = new GetLongUrlQuery
             {
                 Hash = Faker.Random.String2(HashLength)
             };

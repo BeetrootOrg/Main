@@ -1,5 +1,4 @@
-﻿using System.Data.SqlClient;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +7,7 @@ using System.Transactions;
 using dotenv.net;
 using Microsoft.Extensions.Configuration;
 using UrlShortener.Database.Context;
+using SqlConnection = System.Data.SqlClient.SqlConnection;
 
 namespace UrlShortener.IntegrationTests.Helpers
 {

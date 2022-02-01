@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -12,50 +11,63 @@ using UrlShortener.Domain.Services.Interfaces;
 
 namespace UrlShortener.Domain.Commands
 {
-    public class CreateHashCommand : IRequest<CreateHashCommandResponse>
+    public class ShortenUrlCommand : IRequest<ShortenUrlCommandResponse>
     {
         public string Url { get; init; }
     }
 
-    public class CreateHashCommandResponse
+    public enum ShortenUrlResult
     {
-        public string Hash { get; init; }
+        Created,
+        AlreadyExists
+    }
+
+    public class ShortenUrlCommandResponse
+    {
+        public string Url { get; init; }
+        public ShortenUrlResult Result { get; set; }
+    }
+
+    internal class ShortenUrlCommandHandlerConfig
+    {
+        public string Domain { get; init; }
     }
     
-    internal class CreateHashCommandHandler : BaseHandler<CreateHashCommand, CreateHashCommandResponse>
+    internal class ShortenUrlCommandHandler : BaseHandler<ShortenUrlCommand, ShortenUrlCommandResponse>
     {
         private const int RetryTimes = 5;
 
-        private readonly ILogger<CreateHashCommandHandler> _logger;
+        private readonly ILogger<ShortenUrlCommandHandler> _logger;
         private readonly UrlDbContext _dbContext;
         private readonly IHashGenerator _hashGenerator;
         private readonly IDateTimeProvider _dateTimeProvider;
+        private readonly string _domain;
         
-        public CreateHashCommandHandler(ILogger<CreateHashCommandHandler> logger, 
+        public ShortenUrlCommandHandler(ILogger<ShortenUrlCommandHandler> logger, 
             UrlDbContext dbContext, 
             IHashGenerator hashGenerator, 
-            IDateTimeProvider dateTimeProvider) : base(logger)
+            IDateTimeProvider dateTimeProvider,
+            ShortenUrlCommandHandlerConfig config) : base(logger)
         {
             _logger = logger;
             _dbContext = dbContext;
             _hashGenerator = hashGenerator;
             _dateTimeProvider = dateTimeProvider;
+            _domain = config.Domain.TrimEnd('/');
         }
 
-        protected override Task<CreateHashCommandResponse> HandleInternal(CreateHashCommand request, CancellationToken cancellationToken) =>
+        protected override Task<ShortenUrlCommandResponse> HandleInternal(ShortenUrlCommand request, CancellationToken cancellationToken) =>
             Policy
-                .Handle<Exception>()
+                .Handle<DbUpdateException>()
                 .RetryAsync(RetryTimes, (exception, times) =>
                 {
                     _logger.LogWarning(exception, "Retry on specific exception. Times: {@Times}", times);
                 })
                 .ExecuteAsync(() => ExecuteInternal(request, cancellationToken));
 
-        private async Task<CreateHashCommandResponse> ExecuteInternal(CreateHashCommand request,
+        private async Task<ShortenUrlCommandResponse> ExecuteInternal(ShortenUrlCommand request,
             CancellationToken cancellationToken)
         {
-            await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
-
             var lowerUrl = request.Url.ToLower();
             var realUrlHash = await _dbContext.Urls.SingleOrDefaultAsync(url => url.Url.ToLower() == lowerUrl, 
                 cancellationToken);
@@ -66,9 +78,10 @@ namespace UrlShortener.Domain.Commands
                     request.Url,
                     realUrlHash.Hash);
 
-                return new CreateHashCommandResponse
+                return new ShortenUrlCommandResponse
                 {
-                    Hash = realUrlHash.Hash
+                    Url = ToUrl(realUrlHash.Hash),
+                    Result = ShortenUrlResult.AlreadyExists
                 };
             }
             
@@ -84,12 +97,14 @@ namespace UrlShortener.Domain.Commands
 
             await _dbContext.Urls.AddAsync(shortUrl, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
 
-            return new CreateHashCommandResponse
+            return new ShortenUrlCommandResponse
             {
-                Hash = shortUrl.Hash
+                Url = ToUrl(shortUrl.Hash),
+                Result = ShortenUrlResult.Created
             };
+
+            string ToUrl(string hash) => $"{_domain}/{hash}";
         }
     }
 }

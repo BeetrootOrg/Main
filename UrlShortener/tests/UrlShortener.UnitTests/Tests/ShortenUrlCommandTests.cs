@@ -14,22 +14,29 @@ using Xunit;
 namespace UrlShortener.UnitTests.Tests
 {
     [Collection(CollectionNames.DbQueries)]
-    public class CreateHashCommandTests : ShortUrlTestBase
+    public class ShortenUrlCommandTests : ShortUrlTestBase
     {
         private readonly Mock<IHashGenerator> _hashGenerator;
         private readonly Mock<IDateTimeProvider> _dateTimeProvider;
 
-        private readonly CreateHashCommandHandler _command;
+        private readonly ShortenUrlCommandHandler _command;
+        private readonly string _domain;
 
-        public CreateHashCommandTests()
+        public ShortenUrlCommandTests()
         {
             _hashGenerator = new Mock<IHashGenerator>();
             _dateTimeProvider = new Mock<IDateTimeProvider>();
 
-            _command = new CreateHashCommandHandler(new Mock<ILogger<CreateHashCommandHandler>>().Object,
+            _domain = Faker.Internet.Url();
+
+            _command = new ShortenUrlCommandHandler(new Mock<ILogger<ShortenUrlCommandHandler>>().Object,
                 UrlDbContext,
                 _hashGenerator.Object,
-                _dateTimeProvider.Object);
+                _dateTimeProvider.Object,
+                new ShortenUrlCommandHandlerConfig
+                {
+                    Domain = _domain
+                });
         }
 
         [Fact]
@@ -44,7 +51,7 @@ namespace UrlShortener.UnitTests.Tests
             _dateTimeProvider.Setup(x => x.Now)
                 .Returns(expected.CreatedAt);
 
-            var command = new CreateHashCommand
+            var command = new ShortenUrlCommand
             {
                 Url = expected.Url
             };
@@ -54,10 +61,39 @@ namespace UrlShortener.UnitTests.Tests
             
             // Assert
             result.ShouldNotBeNull();
-            result.Hash.ShouldBe(expected.Hash);
+            result.Url.ShouldBe($"{_domain}/{expected.Hash}");
+            result.Result.ShouldBe(ShortenUrlResult.Created);
 
             var any = await UrlDbContext.Urls.AnyAsync(VerifyPredicate(expected));
             any.ShouldBeTrue();
+        }
+        
+        [Fact]
+        public async Task HandleShouldReturnLinkIfItExists()
+        {
+            // Arrange
+            var expected = ShortUrlFaker.Generate();
+            await UrlDbContext.AddAsync(expected);
+            await UrlDbContext.SaveChangesAsync();
+            
+            _hashGenerator.Setup(x => x.ToHash(It.Is<string>(str => str.Equals(expected.Url))))
+                .Throws<Exception>();
+
+            _dateTimeProvider.Setup(x => x.Now)
+                .Throws<Exception>();
+
+            var command = new ShortenUrlCommand
+            {
+                Url = expected.Url
+            };
+            
+            // Act
+            var result = await _command.Handle(command, CancellationToken.None);
+            
+            // Assert
+            result.ShouldNotBeNull();
+            result.Url.ShouldBe($"{_domain}/{expected.Hash}");
+            result.Result.ShouldBe(ShortenUrlResult.AlreadyExists);
         }
 
         private static Expression<Func<ShortUrl, bool>> VerifyPredicate(ShortUrl expected) => url =>

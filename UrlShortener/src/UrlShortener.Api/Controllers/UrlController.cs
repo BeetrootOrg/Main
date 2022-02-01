@@ -36,7 +36,7 @@ namespace UrlShortener.Api.Controllers
             [StringLength(50, ErrorMessage = "Hash can't be more than 50 symbols", MinimumLength = 1)] string hash, 
             CancellationToken cancellationToken = default)
         {
-            var query = new GetUrlQuery
+            var query = new GetLongUrlQuery
             {
                 Hash = hash
             };

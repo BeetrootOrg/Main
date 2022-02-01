@@ -8,7 +8,7 @@ using UrlShortener.Domain.Common;
 
 namespace UrlShortener.Domain.Queries
 {
-    public class GetUrlQuery : IRequest<GetUrlQueryResponse>
+    public class GetLongUrlQuery : IRequest<GetLongUrlQueryResponse>
     {
         public string Hash { get; init; }
     }
@@ -19,14 +19,14 @@ namespace UrlShortener.Domain.Queries
         NotFound
     }
 
-    public class GetUrlQueryResponse
+    public class GetLongUrlQueryResponse
     {
         public string Url { get; init; }
         public SearchUrlResult Result { get; init; }
         public string Message { get; init; }
     }
     
-    internal class GetLongUrlQueryHandler : BaseHandler<GetUrlQuery, GetUrlQueryResponse>
+    internal class GetLongUrlQueryHandler : BaseHandler<GetLongUrlQuery, GetLongUrlQueryResponse>
     {
         private readonly ILogger<GetLongUrlQueryHandler> _logger;
         private readonly UrlDbContext _dbContext;
@@ -38,7 +38,7 @@ namespace UrlShortener.Domain.Queries
             _logger = logger;
         }
 
-        protected override async Task<GetUrlQueryResponse> HandleInternal(GetUrlQuery request, CancellationToken cancellationToken)
+        protected override async Task<GetLongUrlQueryResponse> HandleInternal(GetLongUrlQuery request, CancellationToken cancellationToken)
         {
             var lowerHash = request.Hash.ToLower();
             var url = await _dbContext.Urls.SingleOrDefaultAsync(url => url.Hash.ToLower() == lowerHash, 
@@ -48,7 +48,7 @@ namespace UrlShortener.Domain.Queries
             {
                 _logger.LogDebug("Url not found in DB. Request: {@Request}", request);
                 
-                return new GetUrlQueryResponse
+                return new GetLongUrlQueryResponse
                 {
                     Message = $"Url with hash '{request.Hash}' not found",
                     Result = SearchUrlResult.NotFound
@@ -59,7 +59,7 @@ namespace UrlShortener.Domain.Queries
                 request, 
                 url.Url);
             
-            return new GetUrlQueryResponse
+            return new GetLongUrlQueryResponse
             {
                 Result = SearchUrlResult.Success,
                 Url = url.Url

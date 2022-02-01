@@ -1,10 +1,6 @@
 using System;
-using System.Transactions;
 using Bogus;
-using dotenv.net;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using UrlShortener.Database.Context;
 using UrlShortener.Database.Models;
 
@@ -19,28 +15,10 @@ namespace UrlShortener.UnitTests.Tests
         protected readonly Faker Faker;
         protected readonly Faker<ShortUrl> ShortUrlFaker;
 
-        private readonly SqlConnection _connection;
-        private readonly CommittableTransaction _transaction;
-
         protected ShortUrlTestBase()
         {
-            DotEnv.Load();
-
-            var config = new ConfigurationBuilder()
-                .AddEnvironmentVariables()
-                .Build();
-            
-            _transaction = new CommittableTransaction(new TransactionOptions
-            {
-                IsolationLevel = IsolationLevel.ReadUncommitted
-            });
-
-            _connection = new SqlConnection(config.GetConnectionString("UrlsDb"));
-            _connection.Open();
-            _connection.EnlistTransaction(_transaction);
-            
             var options = new DbContextOptionsBuilder<UrlDbContext>()
-                .UseSqlServer(_connection)
+                .UseInMemoryDatabase("UrlsDbContext")
                 .Options;
 
             UrlDbContext = new UrlDbContext(options);
@@ -56,8 +34,6 @@ namespace UrlShortener.UnitTests.Tests
         public void Dispose()
         {
             UrlDbContext.Dispose();
-            _connection.Dispose();
-            _transaction.Dispose();
         }
     }
 }

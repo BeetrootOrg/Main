@@ -1,7 +1,8 @@
 namespace UrlShortener.Domain
 {
-    public class IDomainConfiguration
+    public interface IDomainConfiguration
     {
-        public int HashLength { get; init; }
+        int HashLength { get; }
+        string Domain { get; }
     }
 }
