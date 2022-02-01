@@ -84,6 +84,7 @@ namespace UrlShortener.Domain.Commands
 
             await _dbContext.Urls.AddAsync(shortUrl, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
 
             return new CreateHashCommandResponse
             {

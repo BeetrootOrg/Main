@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using System.Transactions;
 using Bogus;
 using dotenv.net;
@@ -11,7 +10,7 @@ using UrlShortener.Database.Models;
 
 namespace UrlShortener.UnitTests.Tests
 {
-    public class ShortUrlTestBase : IAsyncDisposable
+    public class ShortUrlTestBase : IDisposable
     {
         protected const int HashLength = 15;
 
@@ -54,11 +53,11 @@ namespace UrlShortener.UnitTests.Tests
                 .RuleFor(x => x.CreatedAt, f => f.Date.Past());
         }
 
-        public async ValueTask DisposeAsync()
+        public void Dispose()
         {
+            UrlDbContext.Dispose();
+            _connection.Dispose();
             _transaction.Dispose();
-            await _connection.DisposeAsync();
-            await UrlDbContext.DisposeAsync();
         }
     }
 }

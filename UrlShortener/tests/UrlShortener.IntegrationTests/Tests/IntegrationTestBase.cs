@@ -1,6 +1,5 @@
 using System;
 using System.Net.Http;
-using System.Threading.Tasks;
 using Bogus;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +10,7 @@ using UrlShortener.IntegrationTests.Helpers;
 
 namespace UrlShortener.IntegrationTests.Tests
 {
-    public class IntegrationTestBase : IAsyncDisposable
+    public class IntegrationTestBase : IDisposable
     {
         protected const int HashLength = 15;
 
@@ -39,9 +38,11 @@ namespace UrlShortener.IntegrationTests.Tests
                 .RuleFor(x => x.CreatedAt, f => f.Date.Past());
         }
         
-        public async ValueTask DisposeAsync()
+        public void Dispose()
         {
-            await _scope.DisposeAsync();
+            Client?.Dispose();
+            UrlDbContext?.Dispose();
+            _scope.Dispose();
         }
     }
 }

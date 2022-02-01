@@ -8,6 +8,7 @@ using Xunit;
 
 namespace UrlShortener.UnitTests.Tests
 {
+    [Collection(CollectionNames.DbQueries)]
     public class GetUrlQueryTests : ShortUrlTestBase
     {
         private readonly GetLongUrlQueryHandler _handler;
