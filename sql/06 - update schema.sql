@@ -1,0 +1,2 @@
+ALTER TABLE dbo.BookCount ALTER COLUMN AuthorId INT;
+ALTER TABLE dbo.BookCount ALTER COLUMN BookId INT;
