@@ -12,18 +12,18 @@ namespace UrlShortener.Database.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long Id { get; set; }
+        public long Id { get; init; }
 
         [Column("Url")]
         [Required]
         [MaxLength(255)]
-        public string Url { get; set; }
+        public string Url { get; init; }
 
         [Column("Hash")]
         [Required]
         [MaxLength(50)]
-        public string Hash { get; set; }
+        public string Hash { get; init; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; init; }
     }
 }

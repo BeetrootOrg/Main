@@ -25,7 +25,7 @@ namespace UrlShortener.Domain.Commands
     public class ShortenUrlCommandResponse
     {
         public string Url { get; init; }
-        public ShortenUrlResult Result { get; set; }
+        public ShortenUrlResult Result { get; init; }
     }
 
     internal class ShortenUrlCommandHandlerConfig
