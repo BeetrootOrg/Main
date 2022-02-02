@@ -40,32 +40,33 @@ namespace ConsoleApp
             {
                 Console.WriteLine(bc);
             }
-
-            var result = dbContext.BookCounts.Join(dbContext.Books,
+            var booksResult = dbContext.BookCounts.Join(dbContext.Books,
                 bookCount => bookCount.BookId,
                 book => book.Id,
                 (bookCount, book) => new
                 {
-                    bookCount.Quantity,
-                    book.Title
+                    book.Title,
+                    bookCount.Quantity
+                });
+            var authorsResult = dbContext.BookCounts.Join(dbContext.Authors,
+                authorCount => authorCount.AuthorId,
+                author => author.Id,
+                (authorCount, author) => new
+                {
+                    author.Name,
+                    authorCount.Quantity
                 });
 
-            foreach (var item in result)
+            foreach (var item in booksResult)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine();
+            foreach (var item in authorsResult)
             {
                 Console.WriteLine(item);
             }
 
-            // update
-            var maxBookCounts = await dbContext.BookCounts.MaxAsync(x => x.Quantity);
-            var maxBooks = await dbContext.BookCounts.FirstAsync(x => x.Quantity == maxBookCounts);
-            maxBooks.Quantity += 1;
-            dbContext.BookCounts.Update(maxBooks);
-
-            // delete
-            var minBookCounts = await dbContext.BookCounts.MinAsync(x => x.Quantity);
-            var minBooks = await dbContext.BookCounts.FirstAsync(x => x.Quantity == minBookCounts);
-
-            dbContext.BookCounts.Remove(minBooks);
             await dbContext.SaveChangesAsync();
         }
     }

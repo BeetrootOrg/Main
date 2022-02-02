@@ -75,34 +75,6 @@ PS D:\GitHub\B_R\Main\CodeFirst\ConsoleApp> dotnet ef dbcontext scaffold "Server
 Build started...
 Build succeeded.
 To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-The following file(s) already exist in directory 'D:\GitHub\B_R\Main\CodeFirst\ConsoleApp\Models': ..\Database\BookLibraryDBContext.cs. Use the Force flag to overwrite these files.
-PS D:\GitHub\B_R\Main\CodeFirst\ConsoleApp> dotnet ef dbcontext scaffold "Server=localhost;Database=BookLibraryDB;Trusted_Connection=True;" "Microsoft.EntityFrameworkCore.SqlServer" --context BookLibraryDBContext --context-dir Database --output-dir Models
-Build started...
-Build succeeded.
-To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-The following file(s) already exist in directory 'D:\GitHub\B_R\Main\CodeFirst\ConsoleApp\Models': ..\Database\BookLibraryDBContext.cs. Use the Force flag to overwrite these files.
-PS D:\GitHub\B_R\Main\CodeFirst\ConsoleApp> dotnet ef dbcontext scaffold "Server=localhost;Database=BookLibraryDB;Trusted_Connection=True;" "Microsoft.EntityFrameworkCore.SqlServer" --context BookLibraryDBContext --context-dir Database --output-dir Models
-Build started...
-Build succeeded.
-To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-The following file(s) already exist in directory 'D:\GitHub\B_R\Main\CodeFirst\ConsoleApp\Models': ..\Database\BookLibraryDBContext.cs. Use the Force flag to overwrite these files.
-PS D:\GitHub\B_R\Main\CodeFirst\ConsoleApp> dotnet ef dbcontext scaffold "Server=localhost;Database=BookLibraryDB;Trusted_Connection=True;" "Microsoft.EntityFrameworkCore.SqlServer" --context BookLibraryDBContext --context-dir Database --output-dir Models
-Build started...
-Build failed. Use dotnet build to see the errors.
-PS D:\GitHub\B_R\Main\CodeFirst\ConsoleApp> dotnet ef dbcontext scaffold "Server=localhost;Database=BookLibraryDB;Trusted_Connection=True;" "Microsoft.EntityFrameworkCore.SqlServer" --context BookLibraryDBContext --context-dir Database --output-dir Models
-Build started...
-Build succeeded.
-To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-The following file(s) already exist in directory 'D:\GitHub\B_R\Main\CodeFirst\ConsoleApp\Models': ..\Database\BookLibraryDBContext.cs. Use the Force flag to overwrite these files.
-PS D:\GitHub\B_R\Main\CodeFirst\ConsoleApp> dotnet ef dbcontext scaffold "Server=localhost;Database=BookLibraryDB;Trusted_Connection=True;" "Microsoft.EntityFrameworkCore.SqlServer" --context BookLibraryDBContext --context-dir Database --output-dir Models
-Build started...
-Build succeeded.
-To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-PS D:\GitHub\B_R\Main\CodeFirst\ConsoleApp> dotnet ef dbcontext scaffold "Server=localhost;Database=BookLibraryDB;Trusted_Connection=True;" "Microsoft.EntityFrameworkCore.SqlServer" --context BookLibraryDBContext --context-dir Database --output-dir Models
-Build started...
-Build succeeded.
-To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-The following file(s) already exist in directory 'D:\GitHub\B_R\Main\CodeFirst\ConsoleApp\Models': ..\Database\BookLibraryDBContext.cs. Use the Force flag to overwrite these files.
 PS D:\GitHub\B_R\Main\CodeFirst\ConsoleApp> dotnet ef migrations add Initial
 Build started...
 Build succeeded.

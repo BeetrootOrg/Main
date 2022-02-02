@@ -21,7 +21,7 @@ namespace ConsoleApp.Models
         public int? Quantity { get; set; }
         public BookCount()
         {
-            Quantity = 0;
+            Quantity = 1;
         }
     }
 }
