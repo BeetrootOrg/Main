@@ -7,7 +7,7 @@ using System.Text;
 
 namespace LinqLesson;
 
-static class PersonsExtension
+public static class PersonsExtension
 {
     public static void CountByGender1(this IEnumerable<Person> persons)
     {
@@ -173,15 +173,11 @@ static class PersonsExtension
         }
     }
 
-    public static void CollectAllEmail(this IEnumerable<Person> persons)
-    {
-        var emails = persons.Select(person => person.Email)
+    public static string CollectAllEmails(this IEnumerable<Person> persons) =>
+        persons.Select(person => person.Email)
             .Aggregate(new StringBuilder(),
                 (sb, email) => sb.Append(email).Append(";"),
                 sb => sb.ToString());
-
-        Console.WriteLine($"All emails: {emails}");
-    }
 
     public static void MaxFriends(this IEnumerable<Person> persons, int top)
     {
@@ -225,7 +221,7 @@ class Program
         persons.MinMaxDistanceBetweenPersons();
 
         persons.GroupByEyeColor();
-        persons.CollectAllEmail();
+        persons.CollectAllEmails();
 
         persons.MaxFriends(3);
 
