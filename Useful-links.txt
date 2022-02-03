@@ -10,4 +10,8 @@
 4. https://www.wolframalpha.com/
 5. http://www.quizful.net/interview/csharp?page=0
 6. Book Sql: https://www.amazon.com/dp/1492057614
+7. JS: https://www.w3schools.com/js/js_dates.asp
+8. Project ideas: https://gist.github.com/MWins/41c6fec2122dd47fdfaca31924647499
 
+Bogus
+Shouldly
