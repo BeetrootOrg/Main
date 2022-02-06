@@ -59,13 +59,26 @@ a:active {
 .bg-blue {
     background: #d0e8f3;
   }
-
-.card {
-  padding: 15px 20px;
-  margin-bottom: 20px;
-  border-radius: 20px;
-}
+  
+  .card {
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    transition: all .3s ease-in-out;
+  }
+  .card:hover { transform: scale(1.1); }
 
 .card h2 {
   margin-bottom: 10px;
+}
+
+.rating {
+  width: 180px;
+  margin-left: 15%;
+  margin-top: 10%;
+}
+
+.rating__star {
+  cursor: pointer;
+  color: #dabd18b2;
 }
