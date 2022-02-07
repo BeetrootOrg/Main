@@ -6,7 +6,7 @@ namespace WebApplication.Controllers
 {
     public class PersonController : Controller
     {
-        private static readonly IEnumerable<Person> _persons = new List<Person>
+        private static readonly IList<Person> _persons = new List<Person>
         {
             new Person
             {
@@ -38,10 +38,11 @@ namespace WebApplication.Controllers
         // POST: PersonController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create([FromForm] Person person)
         {
             try
             {
+                _persons.Add(person);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -53,16 +54,20 @@ namespace WebApplication.Controllers
         // GET: PersonController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var person = _persons.First(person => person.Id == id);
+            return View(person);
         }
 
         // POST: PersonController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit([FromRoute]int id, [FromForm] Person person)
         {
             try
             {
+                var oldPerson = _persons.First(person => person.Id == id);
+                _persons.Remove(oldPerson);
+                _persons.Add(person);
                 return RedirectToAction(nameof(Index));
             }
             catch
