@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebApplication.Models;
 
 namespace WebApplication.Controllers
@@ -16,26 +15,22 @@ namespace WebApplication.Controllers
             }
         };
 
-        // GET: PersonController
         public ActionResult Index()
         {
             return View(_persons);
         }
 
-        // GET: PersonController/Details/5
         public ActionResult Details(int id)
         {
             var person = _persons.First(person => person.Id == id);
             return View(person);
         }
 
-        // GET: PersonController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: PersonController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([FromForm] Person person)
@@ -51,14 +46,12 @@ namespace WebApplication.Controllers
             }
         }
 
-        // GET: PersonController/Edit/5
         public ActionResult Edit(int id)
         {
             var person = _persons.First(person => person.Id == id);
             return View(person);
         }
 
-        // POST: PersonController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([FromRoute]int id, [FromForm] Person person)
@@ -76,19 +69,20 @@ namespace WebApplication.Controllers
             }
         }
 
-        // GET: PersonController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var person = _persons.First(person => person.Id == id);
+            return View(person);
         }
 
-        // POST: PersonController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, IFormCollection form)
         {
             try
             {
+                var oldPerson = _persons.First(person => person.Id == id);
+                _persons.Remove(oldPerson);
                 return RedirectToAction(nameof(Index));
             }
             catch
