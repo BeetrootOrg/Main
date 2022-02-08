@@ -12,7 +12,7 @@ namespace ConsoleApp
         }
         class InternetShop
         {
-            Product[] Products;
+            private Product[] Products;
             private Seller[] Sellers;
             private Buyer[] Buyers;
             private Order[] Orders;
@@ -59,7 +59,7 @@ namespace ConsoleApp
 
         public class Product
         {
-            public Product(int id, string name, InternetShop.Seller seller, decimal price, int qty)
+            Product(int id, string name, InternetShop.Seller seller, decimal price, int qty)
             {
                 ID = id;
                 Name = name;
@@ -68,10 +68,12 @@ namespace ConsoleApp
                 Qty = qty;
             }
 
-            public string Name { get; set; }
-            public InternetShop.Seller Seller { get; set; }
-            public decimal Price { get; set; }
-            public int Qty { get; set; }
+            private int ID { get; set; }
+
+            private string Name { get; set; }
+            private InternetShop.Seller Seller { get; set; }
+            private decimal Price { get; set; }
+            private int Qty { get; set; }
         }
 
         class Personal
@@ -89,10 +91,6 @@ namespace ConsoleApp
             public string PhoneNumber { get; set; }
 
         }
-
-
-
-
 
         static void Main()
         {
