@@ -1,0 +1,75 @@
+{
+	"info": {
+		"_postman_id": "1b47ef8e-7bb6-4415-988a-eae1b555b41f",
+		"name": "Kraken API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Server Time",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.kraken.com/0/public/Time",
+					"protocol": "https",
+					"host": [
+						"api",
+						"kraken",
+						"com"
+					],
+					"path": [
+						"0",
+						"public",
+						"Time"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get System Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.kraken.com/0/public/SystemStatus",
+					"protocol": "https",
+					"host": [
+						"api",
+						"kraken",
+						"com"
+					],
+					"path": [
+						"0",
+						"public",
+						"SystemStatus"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Asset Info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.kraken.com/0/public/Assets",
+					"protocol": "https",
+					"host": [
+						"api",
+						"kraken",
+						"com"
+					],
+					"path": [
+						"0",
+						"public",
+						"Assets"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
