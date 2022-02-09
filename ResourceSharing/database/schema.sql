@@ -1,0 +1,6 @@
+CREATE TABLE dbo.Schemas
+(
+	Id INT IDENTITY(1, 1) NOT NULL PRIMARY KEY,
+	SchemaName VARCHAR(30) NOT NULL UNIQUE,
+	SchemaDefinition TEXT NOT NULL
+);
