@@ -7,6 +7,8 @@ using ResourceSharing.Domain.Commands;
 using ResourceSharing.Domain.Repositories;
 using System.Data;
 using System.Data.SqlClient;
+using ResourceSharing.Api;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +19,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDomainDependencies();
-builder.Services.AddTransient<IDbConnection>(sp => 
-    new SqlConnection("Server=localhost;Database=ResourcesDB;Trusted_Connection=True;"));
+builder.Services.Configure<ApiConfiguration>(builder.Configuration);
+builder.Services.AddTransient<IDbConnection>(sp =>
+{
+    var configuration = sp.GetRequiredService<IOptionsMonitor<ApiConfiguration>>();
+    return new SqlConnection(configuration.CurrentValue.DbConnectionString);
+});
 
 var app = builder.Build();
 
