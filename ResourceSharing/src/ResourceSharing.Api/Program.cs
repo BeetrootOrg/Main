@@ -1,10 +1,6 @@
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using ResourceSharing.Domain;
-using ResourceSharing.Domain.Commands;
-using ResourceSharing.Domain.Repositories;
 using System.Data;
 using System.Data.SqlClient;
 using ResourceSharing.Api;
@@ -29,11 +25,8 @@ builder.Services.AddTransient<IDbConnection>(sp =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseAuthorization();
 
