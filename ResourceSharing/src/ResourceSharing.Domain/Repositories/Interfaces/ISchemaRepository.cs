@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ResourceSharing.Domain.Repositories.Interfaces
 {
-    internal interface ISchemaRepository
+    public interface ISchemaRepository
     {
         Task AddSchema(SchemaDto schemaDto, CancellationToken cancellationToken = default);
         Task<SchemaDto> GetSchemaByName(string name, CancellationToken cancellationToken = default);
