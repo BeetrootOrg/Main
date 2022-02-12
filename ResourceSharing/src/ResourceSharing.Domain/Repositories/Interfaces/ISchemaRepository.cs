@@ -8,5 +8,6 @@ namespace ResourceSharing.Domain.Repositories.Interfaces
     {
         Task AddSchema(SchemaDto schemaDto, CancellationToken cancellationToken = default);
         Task<SchemaDto> GetSchemaByName(string name, CancellationToken cancellationToken = default);
+        Task CreateTableUsingSchema(SchemaDto schemaDto, CancellationToken cancellationToken = default);
     }
 }

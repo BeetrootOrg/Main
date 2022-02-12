@@ -62,10 +62,11 @@ namespace ResourceSharing.Domain.Commands
             var newSchemaDb = new SchemaDto
             {
                 SchemaName = request.SchemaName,
-                SchemaDefinition = JsonConvert.SerializeObject(request.Fields)
+                Fields = request.Fields
             };
 
             await _schemaRepository.AddSchema(newSchemaDb, cancellationToken);
+            await _schemaRepository.CreateTableUsingSchema(newSchemaDb, cancellationToken);
 
             return new CreateSchemaCommandResult
             {

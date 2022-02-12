@@ -13,7 +13,7 @@ namespace ResourceSharing.Api.Models
     {
         public string Name { get; init; }
         public DataType Type { get; init; }
-        public bool Required { get; init; }
+        public bool Required { get; init; } = false;
         public string Default { get; init; }
     }
 
