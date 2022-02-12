@@ -28,7 +28,7 @@ namespace ResourceSharing.Domain.Commands
         public CreateSchemaResult Result { get; init; }
     }
 
-    public class CreateSchemaCommandHandler : IRequestHandler<CreateSchemaCommand, CreateSchemaCommandResult>
+    internal class CreateSchemaCommandHandler : IRequestHandler<CreateSchemaCommand, CreateSchemaCommandResult>
     {
         private readonly ISchemaRepository _schemaRepository;
 

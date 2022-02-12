@@ -2,9 +2,9 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ResourceSharing.Domain;
 using ResourceSharing.Domain.Commands;
 using ResourceSharing.Domain.Repositories;
-using ResourceSharing.Domain.Repositories.Interfaces;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -16,8 +16,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddMediatR(typeof(CreateSchemaCommandHandler).Assembly);
-builder.Services.AddTransient<ISchemaRepository, SchemaRepository>();
+builder.Services.AddDomainDependencies();
 builder.Services.AddTransient<IDbConnection>(sp => 
     new SqlConnection("Server=localhost;Database=ResourcesDB;Trusted_Connection=True;"));
 

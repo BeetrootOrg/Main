@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ResourceSharing.Domain.Repositories
 {
-    public class SchemaRepository : ISchemaRepository
+    internal class SchemaRepository : ISchemaRepository
     {
         private const string AddSchemaQuery = @"INSERT INTO dbo.Schemas(SchemaName, SchemaDefinition) 
                                                     VALUES (@SchemaName, @SchemaDefinition)";

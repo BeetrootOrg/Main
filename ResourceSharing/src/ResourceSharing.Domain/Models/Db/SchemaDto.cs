@@ -1,6 +1,6 @@
 ﻿namespace ResourceSharing.Domain.Models.Db
 {
-    public class SchemaDto
+    internal class SchemaDto
     {
         public int Id { get; init; }
         public string SchemaName { get; init; }
