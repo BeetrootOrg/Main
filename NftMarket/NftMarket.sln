@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NftMarket", "NftMarket\NftMarket.csproj", "{F2B0A16D-4359-4DC5-9383-B24DDF508DD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DLL", "DLL\DLL.csproj", "{AECD623F-B392-49AE-A890-204708904DC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{F86557F8-E717-4600-8AEB-B3049A1F2927}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{187EF305-18B4-4A45-920F-D90EB37AA01A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F2B0A16D-4359-4DC5-9383-B24DDF508DD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2B0A16D-4359-4DC5-9383-B24DDF508DD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2B0A16D-4359-4DC5-9383-B24DDF508DD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2B0A16D-4359-4DC5-9383-B24DDF508DD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AECD623F-B392-49AE-A890-204708904DC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AECD623F-B392-49AE-A890-204708904DC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AECD623F-B392-49AE-A890-204708904DC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AECD623F-B392-49AE-A890-204708904DC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F86557F8-E717-4600-8AEB-B3049A1F2927}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F86557F8-E717-4600-8AEB-B3049A1F2927}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F86557F8-E717-4600-8AEB-B3049A1F2927}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F86557F8-E717-4600-8AEB-B3049A1F2927}.Release|Any CPU.Build.0 = Release|Any CPU
+		{187EF305-18B4-4A45-920F-D90EB37AA01A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{187EF305-18B4-4A45-920F-D90EB37AA01A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{187EF305-18B4-4A45-920F-D90EB37AA01A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{187EF305-18B4-4A45-920F-D90EB37AA01A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D7B26256-AB1F-415F-8D18-80A64FF8A2A2}
+	EndGlobalSection
+EndGlobal
