@@ -116,7 +116,7 @@ static class PersonsExtension
     public static void MostUsedTag(this IEnumerable<Person> persons)
     {
         var mostUsedTag = persons.SelectMany(person => person.Tags)
-            .GroupBy(tag => tag) // key: pariatur, value: [pariatur, pariatur, ..., pariatur] - 25 times
+            .GroupBy(tag => tag)
             .Select(group => new
             {
                 Tag = group.Key,
