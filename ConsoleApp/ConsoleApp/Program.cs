@@ -290,8 +290,6 @@ static class PersonsExtension
         Console.WriteLine($"The biggest company is {result.CompanyName} with {result.NumberOfPersonal} employees");
     }
 }
-}
-
 
 /*
     дз з linq:
@@ -344,6 +342,6 @@ class Program
         var range = Enumerable.Range(5, 10);
         var repeat = Enumerable.Repeat(fourtyTwoYearsOld, 5);
 
-        persons.MostSide();
+        persons.MaxMinPositions();
     }
 }
