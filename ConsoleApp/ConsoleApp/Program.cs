@@ -203,60 +203,93 @@ static class PersonsExtension
     }
 
 
-    public static void MostSide(this IEnumerable<Person> personss)
+    public static void MaxMinPositions(this IEnumerable<Person> persons)
     {
-        List<Person> persons = (List<Person>)personss;
+        var northest = persons.MaxBy(person => person.Latitude);
+        var southest = persons.MinBy(person => person.Latitude);
+        var western = persons.MaxBy(person => person.Longitude);
+        var estern = persons.MinBy(person => person.Longitude);
 
-        double minLatitude = persons[0].Latitude;
-        double maxLatitude = persons[0].Latitude;
+        // Show in console
 
-        double minLongitude = persons[0].Longitude;
-        double maxLongitude = persons[0].Longitude;
-
-        Person Northerner = persons[0];
-        Person Southerner = persons[0];
-        Person Westerner = persons[0];
-        Person Easterner = persons[0];
-
-        foreach (var person in persons)
-        {
-            if (person.Latitude <= minLatitude)
-            {
-                minLatitude = person.Latitude;
-                Westerner = person;
-            }
-
-            if (person.Latitude >= maxLatitude)
-            {
-                maxLatitude = person.Latitude;
-                Easterner = person;
-            }
-
-            if (person.Longitude <= minLongitude)
-            {
-                minLongitude = person.Longitude;
-                Southerner = person;
-            }
-
-            if (person.Longitude >= maxLongitude)
-            {
-                maxLongitude = person.Longitude;
-                Northerner = person;
-            }
-
-        }
-
-        Console.WriteLine($"{Northerner.Name} lives at the northernmost point");
-        Console.WriteLine($"{Southerner.Name} lives at the southernmost point");
-        Console.WriteLine($"{Westerner.Name} lives at the westernmost point");
-        Console.WriteLine($"{Easterner.Name} lives at the easternmost point");
-
+        Console.WriteLine($"{northest.Name} lives at the northernmost point");
+        Console.WriteLine($"{southest.Name} lives at the southernmost point");
+        Console.WriteLine($"{western.Name} lives at the westernmost point");
+        Console.WriteLine($"{estern.Name} lives at the easternmost point");
     }
 
-    public static void MostPopularCompany(this IEnumerable<Person> personss)
+    public static void CommonAbout(this IEnumerable<Person> persons)
     {
+        var result = persons.Join(persons,
+            person => true,
+            person => true,
+            (p1, p2) => new
+            {
+                First = p1,
+                Second = p2
+            })
+            .Where(pair => pair.First != pair.Second)
+            .Select(pair =>
+            {
+                var firstAbout = pair.First.About;
+                var secondAbout = pair.First.About;
 
+                var intersection = firstAbout.Split(' ').Intersect(secondAbout.Split(' '));
+
+                return new
+                {
+                    pair.First,
+                    pair.Second,
+                    CommonWords = intersection.Count()
+                };
+            })
+            .MaxBy(pair => pair.CommonWords);
+
+        Console.WriteLine($"The most common words is {result.CommonWords}");
     }
+
+    public static void CommonFriend(this IEnumerable<Person> persons)
+    {
+        var result = persons.Join(persons,
+            person => true,
+            person => true,
+            (p1, p2) => new
+            {
+                First = p1,
+                Second = p2
+            })
+            .Where(pair => pair.First != pair.Second)
+            .Select(pair =>
+            {
+                var firstFriends = pair.First.Friends;
+                var secondFriends = pair.First.Friends;
+
+                var intersection = firstFriends.Intersect(secondFriends);
+
+                return new
+                {
+                    pair.First,
+                    pair.Second,
+                    CommonFriends = intersection
+                };
+            });
+
+        Console.WriteLine($"Common friends have {result.Count() / 2} persons");
+    }
+
+    public static void TheBiggestCompany(this IEnumerable<Person> persons)
+    {
+        var result = persons.GroupBy(person => person.Company)
+            .Select(group => new
+            {
+                CompanyName = group.Key,
+                NumberOfPersonal = group.Count()
+            })
+            .MaxBy(x => x.NumberOfPersonal);
+
+        Console.WriteLine($"The biggest company is {result.CompanyName} with {result.NumberOfPersonal} employees");
+    }
+}
 }
 
 
