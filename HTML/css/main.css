@@ -1,0 +1,53 @@
+body {
+	background-color: rgb(202, 177, 86);
+}
+
+h1 {
+	font-weight: 900;
+}
+
+p {
+	color: rgb(103, 31, 105);
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
+.about-me {
+	font-size: 21px;
+	font-weight: 500;
+	color: blue;
+}
+
+.container {
+	margin: 5px 200px;
+}
+
+.header {
+	font-size: 150%;
+	color: rgb(6, 8, 116);
+}
+
+.content {
+	color: black;
+	font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.footer {
+	position: sticky;
+	bottom: 0px;
+	padding: 20px;
+	background-color: white;
+}
+
+.align-center {
+	text-align: center;
+}
+
+.with-borders {
+	margin: 10px;
+	padding: 20px;
+	border: 3px solid black;
+}
