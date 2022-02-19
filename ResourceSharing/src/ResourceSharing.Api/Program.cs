@@ -21,14 +21,19 @@ builder.Services.AddTransient<IDbConnection>(sp =>
     var configuration = sp.GetRequiredService<IOptionsMonitor<ApiConfiguration>>();
     return new SqlConnection(configuration.CurrentValue.DbConnectionString);
 });
+builder.Services.AddHealthChecks()
+    .AddSqlServer(sp =>
+    {
+        var configuration = sp.GetRequiredService<IOptionsMonitor<ApiConfiguration>>();
+        return configuration.CurrentValue.DbConnectionString;
+    }, timeout: System.TimeSpan.FromSeconds(5));
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
-
-app.UseAuthorization();
+app.MapHealthChecks("/health");
 
 app.MapControllers();
 
