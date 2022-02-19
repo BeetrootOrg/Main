@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using ResourceSharing.Domain.Commands;
@@ -36,7 +37,8 @@ namespace ResourceSharing.UnitTests
                 .RuleFor(x => x.SchemaName, x => x.Random.String())
                 .RuleFor(x => x.SchemaDefinition, x => JsonConvert.SerializeObject(_fieldFaker.GenerateBetween(1, 10)));
 
-            _handler = new CreateSchemaCommandHandler(_repositoryMock.Object);
+            _handler = new CreateSchemaCommandHandler(_repositoryMock.Object, 
+                new Mock<ILogger<CreateSchemaCommandHandler>>().Object);
         }
 
         [Fact]

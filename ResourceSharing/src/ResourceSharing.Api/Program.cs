@@ -5,15 +5,24 @@ using System.Data;
 using System.Data.SqlClient;
 using ResourceSharing.Api;
 using Microsoft.Extensions.Options;
+using FluentValidation;
+using ResourceSharing.Api.Models;
+using ResourceSharing.Api.Validator;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddFluentValidation(fv =>
+{
+    fv.ImplicitlyValidateChildProperties = true;
+    fv.ImplicitlyValidateRootCollectionElements = true;
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddDomainDependencies();
 builder.Services.Configure<ApiConfiguration>(builder.Configuration);
 builder.Services.AddTransient<IDbConnection>(sp =>
@@ -21,12 +30,16 @@ builder.Services.AddTransient<IDbConnection>(sp =>
     var configuration = sp.GetRequiredService<IOptionsMonitor<ApiConfiguration>>();
     return new SqlConnection(configuration.CurrentValue.DbConnectionString);
 });
+
 builder.Services.AddHealthChecks()
     .AddSqlServer(sp =>
     {
         var configuration = sp.GetRequiredService<IOptionsMonitor<ApiConfiguration>>();
         return configuration.CurrentValue.DbConnectionString;
     }, timeout: System.TimeSpan.FromSeconds(5));
+
+builder.Services.AddTransient<IValidator<Field>, FieldValidator>();
+builder.Services.AddTransient<IValidator<CreateSchemaRequest>, CreateSchemaRequestValidator>();
 
 var app = builder.Build();
 
