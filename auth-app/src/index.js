@@ -1,12 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import Layout from './Layout';
+import { withEmotionCache } from '@emotion/react';
 import reportWebVitals from './reportWebVitals';
 
+const Document = withEmotionCache(() => {
+  return <React.StrictMode>
+    <Layout>
+      <App />
+    </Layout>
+  </React.StrictMode>
+})
+
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Document></Document>,
   document.getElementById('root')
 );
 
