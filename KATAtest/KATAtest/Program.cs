@@ -8,7 +8,6 @@ namespace KATAtest
     {
         static void Main(string[] args)
         {
-            DuplicateCount("AbaBZZzr");
         }
         //public static int MakeNegative(int number)
         //{
@@ -79,6 +78,11 @@ namespace KATAtest
         //       .Reverse()
         //       .Select(t => Convert.ToInt64(t.ToString()))
         //       .ToArray();
+        //}
+        //public static bool Check(object[] a, object x)
+        //{
+        //    bool res = a.Contains(x);
+        //    return res;
         //}
         //public static int PositiveSum(int[] arr)
         //{
@@ -192,5 +196,31 @@ namespace KATAtest
         //    return count;
 
         //}
+        //public static String Accum(string s)
+        //{
+        //    string result = String.Empty;
+        //    for (int i = 0; i < s.Length; i++)
+        //    {
+        //        char c = s[i];
+        //        result += char.ToUpper(c);
+        //        result += new String(char.ToLower(c), i);
+        //        if (i < s.Length - 1)
+        //        {
+        //            result += "-";
+        //        }
+        //    }
+        //    return result;
+        //}
+        //public static string Solution(string str)
+        //{
+        //    string rev = "";
+
+        //    for (int i = str.Length - 1; i >= 0; i--)
+
+        //    {
+        //        rev += str[i];
+        //    }
+        //    return rev;
+        //}
     }
-}   
+}
