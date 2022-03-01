@@ -1,0 +1,114 @@
+﻿@model IEnumerable<DLL.Entites.MeleeWeapon>
+
+@{
+    ViewData["Title"] = "Melee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Melee</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MeleeWeaponType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WeaponType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Damage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DamageType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HandWeaponType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Strength)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Agility)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Endurance)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Intelligence)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CriticalDamage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Speed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rarity)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MeleeWeaponType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WeaponType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Damage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DamageType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HandWeaponType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Strength)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Agility)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Endurance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Intelligence)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CriticalDamage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Speed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rarity)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
