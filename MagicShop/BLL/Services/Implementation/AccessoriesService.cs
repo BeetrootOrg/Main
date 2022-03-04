@@ -26,5 +26,9 @@ namespace BLL.Services.Implementation
         {
             return _accessoriesRepository.GetById(id);
         }
+        public void Create(Accessories model)
+        {
+            _accessoriesRepository.Create(model);
+        }
     }
 }

@@ -21,5 +21,14 @@ namespace BLL.Services.Implementation
         {
             return _armorRepository.GetAll();
         }
+        public Armor GetById(int id)
+        {
+            return _armorRepository.GetById(id);
+        }
+
+        public void Create(Armor model)
+        {
+            _armorRepository.Create(model);
+        }
     }
 }

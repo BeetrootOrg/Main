@@ -1,4 +1,5 @@
 ﻿using BLL.Services.Interfaces;
+using DLL.Entites;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,25 +38,90 @@ namespace MagicShop.Controllers
             var result = _weaponService.GetMagicWeapons();
             return View(result);
         }
-        // GET: WeaponConroller/Details/5
-        public ActionResult Details(int id)
+        [HttpGet("getRangeWeapon/{id}")]
+        public ActionResult DetailsRange(int id)
+        {
+            var model = _weaponService.GetRangeById(id);
+            if (model == null)
+            {
+                return View("NotFound");
+            }
+            return View(model);
+        }
+        [HttpGet("getMeleeWeapon/{id}")]
+        public ActionResult DetailsMelee(int id)
+        {
+            var model = _weaponService.GetMeleeById(id);
+            if (model == null)
+            {
+                return View("NotFound");
+            }
+            return View(model);
+        }
+        [HttpGet("getMagicWeapon/{id}")]
+        public ActionResult DetailsMagic(int id)
+        {
+            var model = _weaponService.GetMagicById(id);
+            if (model == null)
+            {
+                return View("NotFound");
+            }
+            return View(model);
+        }
+
+        [HttpGet("createRange")]
+        public ActionResult CreateRange()
         {
             return View();
         }
 
-        // GET: WeaponConroller/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: WeaponConroller/Create
-        [HttpPost]
+        [HttpPost("createRange")]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult CreateRange(RangeWeapon model)
         {
             try
             {
+                _weaponService.CreateRange(model);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        [HttpGet("createMelee")]
+        public ActionResult CreateMelee()
+        {
+            return View();
+        }
+
+        [HttpPost("createMelee")]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateMelee(MeleeWeapon model)
+        {
+            try
+            {
+                _weaponService.CreateMelee(model);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        [HttpGet("createMagic")]
+        public ActionResult CreateMagic()
+        {
+            return View();
+        }
+
+        [HttpPost("createMagic")]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateMagic(MagicWeapon model)
+        {
+            try
+            {
+                _weaponService.CreateMagic(model);
                 return RedirectToAction(nameof(Index));
             }
             catch

@@ -1,10 +1,5 @@
 ﻿using DLL.Entites;
 using DLL.Entites.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Repository.Interfaces
 {
@@ -14,5 +9,11 @@ namespace BLL.Repository.Interfaces
         List<RangeWeapon> GetRangeWeapons();
         List<MeleeWeapon> GetMeleeWeapons();
         List<MagicWeapon> GetMagicWeapons();
+        RangeWeapon GetRangeById(int id);
+        MeleeWeapon GetMeleeById(int id);
+        MagicWeapon GetMagicById(int id);
+        void CreateRange(RangeWeapon model);
+        void CreateMelee(MeleeWeapon model);
+        void CreateMagic(MagicWeapon model);
     }
 }

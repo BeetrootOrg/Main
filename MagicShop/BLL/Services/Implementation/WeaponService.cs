@@ -34,5 +34,29 @@ namespace BLL.Services.Implementation
         {
             return _weaponRepository.GetMagicWeapons();
         }
+        public RangeWeapon GetRangeById(int id)
+        {
+            return _weaponRepository.GetRangeById(id);
+        }
+        public MeleeWeapon GetMeleeById(int id)
+        {
+            return _weaponRepository.GetMeleeById(id);
+        }
+        public MagicWeapon GetMagicById(int id)
+        {
+            return _weaponRepository.GetMagicById(id);
+        }
+        public void CreateRange(RangeWeapon model)
+        {
+            _weaponRepository.CreateRange(model);
+        }
+        public void CreateMelee(MeleeWeapon model)
+        {
+            _weaponRepository.CreateMelee(model);
+        }
+        public void CreateMagic(MagicWeapon model)
+        {
+            _weaponRepository.CreateMagic(model);
+        }
     }
 }

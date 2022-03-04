@@ -46,5 +46,32 @@ namespace BLL.Repository.Implementation
             return result;
         }
 
+        public RangeWeapon GetRangeById(int id)
+        {
+            return _armoryDbContext.RangeWeapon.FirstOrDefault(x => x.Id == id);
+        }
+        public MeleeWeapon GetMeleeById(int id)
+        {
+            return _armoryDbContext.MeleeWeapon.FirstOrDefault(x => x.Id == id);
+        }
+        public MagicWeapon GetMagicById(int id)
+        {
+            return _armoryDbContext.MagicWeapon.FirstOrDefault(x => x.Id == id);
+        }
+        public void CreateRange(RangeWeapon model)
+        {
+            _armoryDbContext.RangeWeapon.Add(model);
+            _armoryDbContext.SaveChanges();
+        }
+        public void CreateMelee(MeleeWeapon model)
+        {
+            _armoryDbContext.MeleeWeapon.Add(model);
+            _armoryDbContext.SaveChanges();
+        }
+        public void CreateMagic(MagicWeapon model)
+        {
+            _armoryDbContext.MagicWeapon.Add(model);
+            _armoryDbContext.SaveChanges();
+        }
     }
 }

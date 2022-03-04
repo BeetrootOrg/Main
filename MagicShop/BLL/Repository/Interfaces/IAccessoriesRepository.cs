@@ -11,6 +11,7 @@ namespace BLL.Repository.Interfaces
     {
         List<Accessories> GetAll();
         Accessories GetById(int id);
+        void Create(Accessories model);
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BLL.Services.Implementation;
 using BLL.Services.Interfaces;
+using DLL.Entites;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,19 +33,19 @@ namespace MagicShop.Controllers
             return View(model);
         }
 
-        // GET: AccessoriesController/Create
+        [HttpGet("create")]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: AccessoriesController/Create
-        [HttpPost]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Accessories model)
         {
             try
             {
+                _accessoriesService.Create(model);
                 return RedirectToAction(nameof(Index));
             }
             catch

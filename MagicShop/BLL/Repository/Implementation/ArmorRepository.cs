@@ -1,11 +1,6 @@
 ﻿using BLL.Repository.Interfaces;
 using DLL.Context;
 using DLL.Entites.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Repository.Implementation
 {
@@ -21,6 +16,16 @@ namespace BLL.Repository.Implementation
         {
             return _armoryDbContext.Armor.ToList();
             
+        }
+        public Armor GetById(int id)
+        {
+            return _armoryDbContext.Armor.FirstOrDefault(x => x.Id == id);
+        }
+
+        public void Create(Armor model)
+        {
+            _armoryDbContext.Armor.Add(model);
+            _armoryDbContext.SaveChanges();
         }
     }
 }

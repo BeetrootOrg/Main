@@ -15,5 +15,11 @@ namespace BLL.Services.Interfaces
         List<RangeWeapon> GetRangeWeapons();
         List<MeleeWeapon> GetMeleeWeapons();
         List<MagicWeapon> GetMagicWeapons();
+        RangeWeapon GetRangeById(int id);
+        MeleeWeapon GetMeleeById(int id);
+        MagicWeapon GetMagicById(int id);
+        void CreateRange(RangeWeapon model);
+        void CreateMelee(MeleeWeapon model);
+        void CreateMagic(MagicWeapon model);
     }
 }

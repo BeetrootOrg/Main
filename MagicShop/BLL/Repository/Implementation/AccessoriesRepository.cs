@@ -25,5 +25,10 @@ namespace BLL.Repository.Implementation
         {
             return _armoryDbContext.Accessories.FirstOrDefault(x => x.Id == id);
         }
+        public void Create(Accessories model)
+        {
+            _armoryDbContext.Accessories.Add(model);
+            _armoryDbContext.SaveChanges();
+        }
     }
 }

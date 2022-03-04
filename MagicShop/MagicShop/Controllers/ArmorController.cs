@@ -1,4 +1,5 @@
 ﻿using BLL.Services.Interfaces;
+using DLL.Entites.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,25 +22,30 @@ namespace MagicShop.Controllers
             return View(res);
         }
 
-        // GET: ArmorController/Details/5
+        [HttpGet("getAccess/{id}")]
         public ActionResult Details(int id)
         {
-            return View();
+            var model = _armorService.GetById(id);
+            if (model == null)
+            {
+                return View("NotFound");
+            }
+            return View(model);
         }
 
-        // GET: ArmorController/Create
+        [HttpGet("create")]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: ArmorController/Create
-        [HttpPost]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Armor model)
         {
             try
             {
+                _armorService.Create(model);
                 return RedirectToAction(nameof(Index));
             }
             catch
