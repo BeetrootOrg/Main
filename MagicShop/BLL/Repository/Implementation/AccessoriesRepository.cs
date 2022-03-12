@@ -30,5 +30,19 @@ namespace BLL.Repository.Implementation
             _armoryDbContext.Accessories.Add(model);
             _armoryDbContext.SaveChanges();
         }
+        public void Edit(Accessories updated)
+        {
+            _armoryDbContext.Accessories.Update(updated);
+            _armoryDbContext.SaveChanges();
+        }
+        public void Delete(int id)
+        {
+            Accessories a = _armoryDbContext.Accessories.FirstOrDefault(x => x.Id == id);
+            if (a != null)
+            {
+                _armoryDbContext.Accessories.Remove(a);
+                _armoryDbContext.SaveChanges();
+            }
+        }
     }
 }

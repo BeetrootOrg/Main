@@ -30,5 +30,14 @@ namespace BLL.Services.Implementation
         {
             _armorRepository.Create(model);
         }
+        public void Edit(Armor updated)
+        {
+            _armorRepository.Edit(updated);
+
+        }
+        public void Delete(int id)
+        {
+            _armorRepository.Delete(id);
+        }
     }
 }

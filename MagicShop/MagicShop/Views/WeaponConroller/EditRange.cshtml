@@ -1,26 +1,41 @@
-﻿@model DLL.Entites.Accessories
+﻿@model DLL.Entites.RangeWeapon
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "EditRange";
 }
 
-<h1>Create</h1>
+<h1>EditRange</h1>
 
-<h4>Accessories</h4>
+<h4>RangeWeapon</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" method="post">
+        <form asp-action="EditRange">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ActiveEffect" class="control-label"></label>
-                <input asp-for="ActiveEffect" class="form-control" />
-                <span asp-validation-for="ActiveEffect" class="text-danger"></span>
+                <label asp-for="RangeWeaponType" class="control-label"></label>
+                <input asp-for="RangeWeaponType" class="form-control" />
+                <span asp-validation-for="RangeWeaponType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AccessoriesType" class="control-label"></label>
-                <input asp-for="AccessoriesType" class="form-control" />
-                <span asp-validation-for="AccessoriesType" class="text-danger"></span>
+                <label asp-for="WeaponType" class="control-label"></label>
+                <input asp-for="WeaponType" class="form-control" />
+                <span asp-validation-for="WeaponType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Damage" class="control-label"></label>
+                <input asp-for="Damage" class="form-control" />
+                <span asp-validation-for="Damage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DamageType" class="control-label"></label>
+                <input asp-for="DamageType" class="form-control" />
+                <span asp-validation-for="DamageType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HandWeaponType" class="control-label"></label>
+                <input asp-for="HandWeaponType" class="form-control" />
+                <span asp-validation-for="HandWeaponType" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Id" class="control-label"></label>
@@ -68,7 +83,7 @@
                 <span asp-validation-for="Rarity" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>

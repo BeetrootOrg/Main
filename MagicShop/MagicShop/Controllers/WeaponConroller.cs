@@ -130,19 +130,20 @@ namespace MagicShop.Controllers
             }
         }
 
-        // GET: WeaponConroller/Edit/5
-        public ActionResult Edit(int id)
+        [HttpGet("editRange")]
+        public ActionResult EditRange(int id)
         {
-            return View();
+            var model = _weaponService.GetRangeById(id);
+            return View(model);
         }
 
-        // POST: WeaponConroller/Edit/5
-        [HttpPost]
+        [HttpPost("editRange")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult EditRange(RangeWeapon updated)
         {
             try
             {
+                _weaponService.EditRange(updated);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -151,19 +152,106 @@ namespace MagicShop.Controllers
             }
         }
 
-        // GET: WeaponConroller/Delete/5
-        public ActionResult Delete(int id)
+        [HttpGet("deleteRange")]
+        public ActionResult DeleteRange(int id)
         {
-            return View();
+            var model = _weaponService.GetRangeById(id);
+            return View(model);
         }
 
-        // POST: WeaponConroller/Delete/5
-        [HttpPost]
+        [HttpPost("deleteRange")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeleteRange(int id, IFormCollection collection)
         {
             try
             {
+                _weaponService.DeleteRange(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        [HttpGet("editMelee")]
+        public ActionResult EditMelee(int id)
+        {
+            var model = _weaponService.GetMeleeById(id);
+            return View(model);
+        }
+
+        [HttpPost("editMelee")]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditMelee(MeleeWeapon updated)
+        {
+            try
+            {
+                _weaponService.EditMelee(updated);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        [HttpGet("deleteMelee")]
+        public ActionResult DeleteMelee(int id)
+        {
+            var model = _weaponService.GetMeleeById(id);
+            return View(model);
+        }
+
+        [HttpPost("deleteMelee")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteMelee(int id, IFormCollection collection)
+        {
+            try
+            {
+                _weaponService.DeleteMelee(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        [HttpGet("editMagic")]
+        public ActionResult EditMagic(int id)
+        {
+            var model = _weaponService.GetMagicById(id);
+            return View(model);
+        }
+
+        [HttpPost("editeditMagic")]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditMagic(MagicWeapon updated)
+        {
+            try
+            {
+                _weaponService.EditMagic(updated);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        [HttpGet("deleteMagic")]
+        public ActionResult DeleteMagic(int id)
+        {
+            var model = _weaponService.GetMagicById(id);
+            return View(model);
+        }
+
+        [HttpPost("deleteMagic")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteMagic(int id, IFormCollection collection)
+        {
+            try
+            {
+                _weaponService.DeleteMagic(id);
                 return RedirectToAction(nameof(Index));
             }
             catch

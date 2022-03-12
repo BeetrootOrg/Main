@@ -122,9 +122,9 @@
                 @Html.DisplayFor(modelItem => item.Rarity)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Edit", "Edit", "armor" ,new {  id=item.Id  }) |
+                @Html.ActionLink("Details", "Details" , "armor", new {  id=item.Id  }) |
+                @Html.ActionLink("Delete", "delete", "armor", new {  id=item.Id  })
             </td>
         </tr>
 }

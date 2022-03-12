@@ -1,8 +1,41 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<link rel="stylesheet" href="~/css/Homepage.css" />
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <div class="container">
+  <div class="row">
+    <div class="col-sm">
+    <a href="/armor/getArmor" style="text-decoration: none; color: #000000;" >
+        <div class="card homecard" style="width: auto; height: auto;">    
+        <img src="~/images/armor.jpg" class="card-img-top avatar" alt="...">
+        <div class="card-body" style="background-color: #666; width: auto; height: auto;">
+           <a href="/armor/getArmor" class="btn btn-primary" style="margin-top: -10px;margin-bottom: -10px;">Watch Armor</a>
+        </div>
+    </div>
+    </a>
+    </div>
+
+    <div class="col-sm">
+    <a href="/armor/getArmor" style="text-decoration: none; color: #000000;" >
+        <div class="card homecard" style="width: auto; height: auto;">    
+        <img src="~/images/AllWeapon.jpg" class="card-img-top avatar" alt="...">
+        <div class="card-body" style="background-color: #666;">
+           <a href="/armor/getArmor" class="btn btn-primary" style="margin-top: -10px;margin-bottom: -10px;">Watch Weapon</a>
+        </div>
+    </div>
+    </a>
+     </div>
+
+    <div class="col-sm">
+     <a href="/armor/getArmor" style="text-decoration: none; color: #000000;" >
+        <div class="card homecard" style="width: auto; height: auto;">    
+        <img src="~/images/accessories.jpg" class="card-img-top avatar" alt="...">
+        <div class="card-body" style="background-color: #666; width: auto; height: auto;">
+           <a href="/armor/getArmor" class="btn btn-primary" style="margin-top: -10px;margin-bottom: -10px">Watch Accessories</a>
+        </div>
+    </div>
+    </a>
+    </div>
+   </div>
+  </div>

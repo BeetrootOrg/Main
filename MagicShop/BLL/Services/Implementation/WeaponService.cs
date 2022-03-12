@@ -58,5 +58,32 @@ namespace BLL.Services.Implementation
         {
             _weaponRepository.CreateMagic(model);
         }
+        public void EditRange(RangeWeapon updated)
+        {
+            _weaponRepository.EditRange(updated);
+
+        }
+        public void DeleteRange(int id)
+        {
+            _weaponRepository.DeleteRange(id);
+        }
+        public void EditMelee(MeleeWeapon updated)
+        {
+            _weaponRepository.EditMelee(updated);
+
+        }
+        public void DeleteMelee(int id)
+        {
+            _weaponRepository.DeleteMelee(id);
+        }
+        public void EditMagic(MagicWeapon updated)
+        {
+            _weaponRepository.EditMagic(updated);
+
+        }
+        public void DeleteMagic(int id)
+        {
+            _weaponRepository.DeleteMagic(id);
+        }
     }
 }

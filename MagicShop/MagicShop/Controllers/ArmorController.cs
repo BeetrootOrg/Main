@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace MagicShop.Controllers
 {
     [Route("armor")]
-
     public class ArmorController : Controller
     {
         private IArmorService _armorService;
@@ -54,19 +53,20 @@ namespace MagicShop.Controllers
             }
         }
 
-        // GET: ArmorController/Edit/5
+        [HttpGet("edit")]
         public ActionResult Edit(int id)
         {
-            return View();
+            var model = _armorService.GetById(id);
+            return View(model);
         }
 
-        // POST: ArmorController/Edit/5
-        [HttpPost]
+        [HttpPost("edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Armor updated)
         {
             try
             {
+                _armorService.Edit(updated);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -75,19 +75,20 @@ namespace MagicShop.Controllers
             }
         }
 
-        // GET: ArmorController/Delete/5
+        [HttpGet("delete")]
         public ActionResult Delete(int id)
         {
-            return View();
+            var model = _armorService.GetById(id);
+            return View(model);
         }
 
-        // POST: ArmorController/Delete/5
-        [HttpPost]
+        [HttpPost("delete")]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
+                _armorService.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
             catch

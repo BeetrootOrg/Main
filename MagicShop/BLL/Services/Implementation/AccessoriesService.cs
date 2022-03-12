@@ -30,5 +30,14 @@ namespace BLL.Services.Implementation
         {
             _accessoriesRepository.Create(model);
         }
+        public void Edit(Accessories updated)
+        {
+            _accessoriesRepository.Edit(updated);
+
+        }
+        public void Delete(int id)
+        {
+            _accessoriesRepository.Delete(id);
+        }
     }
 }

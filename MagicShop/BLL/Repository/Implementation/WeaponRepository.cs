@@ -73,5 +73,47 @@ namespace BLL.Repository.Implementation
             _armoryDbContext.MagicWeapon.Add(model);
             _armoryDbContext.SaveChanges();
         }
+        public void EditRange(RangeWeapon updated)
+        {
+            _armoryDbContext.RangeWeapon.Update(updated);
+            _armoryDbContext.SaveChanges();
+        }
+        public void DeleteRange(int id)
+        {
+            RangeWeapon a = _armoryDbContext.RangeWeapon.FirstOrDefault(x => x.Id == id);
+            if (a != null)
+            {
+                _armoryDbContext.RangeWeapon.Remove(a);
+                _armoryDbContext.SaveChanges();
+            }
+        }
+        public void EditMelee(MeleeWeapon updated)
+        {
+            _armoryDbContext.MeleeWeapon.Update(updated);
+            _armoryDbContext.SaveChanges();
+        }
+        public void DeleteMelee(int id)
+        {
+            MeleeWeapon a = _armoryDbContext.MeleeWeapon.FirstOrDefault(x => x.Id == id);
+            if (a != null)
+            {
+                _armoryDbContext.MeleeWeapon.Remove(a);
+                _armoryDbContext.SaveChanges();
+            }
+        }
+        public void EditMagic(MagicWeapon updated)
+        {
+            _armoryDbContext.MagicWeapon.Update(updated);
+            _armoryDbContext.SaveChanges();
+        }
+        public void DeleteMagic(int id)
+        {
+            MagicWeapon a = _armoryDbContext.MagicWeapon.FirstOrDefault(x => x.Id == id);
+            if (a != null)
+            {
+                _armoryDbContext.MagicWeapon.Remove(a);
+                _armoryDbContext.SaveChanges();
+            }
+        }
     }
 }

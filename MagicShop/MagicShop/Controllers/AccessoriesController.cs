@@ -54,19 +54,20 @@ namespace MagicShop.Controllers
             }
         }
 
-        // GET: AccessoriesController/Edit/5
+        [HttpGet("edit")]
         public ActionResult Edit(int id)
         {
-            return View();
+            var model = _accessoriesService.GetById(id);
+            return View(model);
         }
 
-        // POST: AccessoriesController/Edit/5
-        [HttpPost]
+        [HttpPost("edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Accessories updated)
         {
             try
             {
+                _accessoriesService.Edit(updated);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -75,19 +76,20 @@ namespace MagicShop.Controllers
             }
         }
 
-        // GET: AccessoriesController/Delete/5
+        [HttpGet("delete")]
         public ActionResult Delete(int id)
         {
-            return View();
+            var model = _accessoriesService.GetById(id);
+            return View(model);
         }
 
-        // POST: AccessoriesController/Delete/5
-        [HttpPost]
+        [HttpPost("delete")]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
+                _accessoriesService.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
             catch
