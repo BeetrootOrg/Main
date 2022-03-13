@@ -1,0 +1,102 @@
+{
+	"info": {
+		"_postman_id": "9f3ebeeb-352c-4160-bcb8-ffd7836199a0",
+		"name": "Some Animal facts",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Some facts about dogs",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://dog-facts-api.herokuapp.com/api/v1/resources/dogs/all",
+					"protocol": "https",
+					"host": [
+						"dog-facts-api",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"resources",
+						"dogs",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Random cat picture",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Get Categories",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://api.thecatapi.com/v1/categories",
+					"protocol": "https",
+					"host": [
+						"api",
+						"thecatapi",
+						"com"
+					],
+					"path": [
+						"v1",
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Voting",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"image_id\": \"ypWqngd1\",\r\n    \"sub_id\": \"test-user\",\r\n    \"value\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.thecatapi.com/v1/votes",
+					"protocol": "https",
+					"host": [
+						"api",
+						"thecatapi",
+						"com"
+					],
+					"path": [
+						"v1",
+						"votes"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
