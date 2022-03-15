@@ -2,6 +2,7 @@ var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddRouting(x => x.LowercaseUrls = true);
 
 var app = builder.Build();
 
