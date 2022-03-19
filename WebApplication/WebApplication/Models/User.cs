@@ -10,6 +10,15 @@ namespace WebApplication.Models
         [DisplayName("Last Name")]
         public string LastName { get; set; }
 
+        public string FullName
+        {
+            get
+            {
+                return LastName + " " + FistName + " " + Patrimonic; ;
+            }
+            
+        }
+
         [DisplayName("First Name")]
         public string FistName { get; set; }
         public string Patrimonic { get; set; }

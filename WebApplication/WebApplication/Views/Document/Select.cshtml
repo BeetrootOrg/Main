@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<hr />
+    <form asp-action="Create">
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label  class="control-label"> Select User</label>
+                <select name="products" class="form-control" asp-items="@ViewBag.users"></select>
+            </div>
+        </div>
+    </div>
+        <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label  class="control-label"> Select Court</label>
+                <select name="products" class="form-control" asp-items="@ViewBag.courts"></select>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+    </form>
+    

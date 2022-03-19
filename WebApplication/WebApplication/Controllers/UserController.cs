@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication.Models;
 
-namespace WebApplication.Models
+namespace WebApplication.Controllers
 {
     public class UserController : Controller
     {
-        public User GetUserByID(IList<User> users, int id)
-        {
-            var user = users.First(x => x.Id == id);
-            return user;
-        }
+
 
         private static readonly IList<User> _users = new List<User>
         {
@@ -23,6 +20,17 @@ namespace WebApplication.Models
                 DateOfBirth=DateTime.Now,
                 Address="65012, Одеса, вул. Архітекторська, 18, кв. 12",
                 Email="test@text.gmail.com"
+            },
+            new User
+            {
+                Id = 2,
+                FistName="Іван",
+                Patrimonic="Іванович",
+                LastName="Ковальский",
+                TaxNumber=1231237890,
+                DateOfBirth=DateTime.Now,
+                Address="65027",
+                Email="test2@gmail.com"
             }
         };
         // GET: UserController
@@ -35,7 +43,7 @@ namespace WebApplication.Models
         public ActionResult Details(int id)
         {
 
-            return View(GetUserByID(_users, id));
+            return View(Utility.GetUserById(_users, id));
         }
 
         // GET: UserController/Create
@@ -66,7 +74,7 @@ namespace WebApplication.Models
         public ActionResult Edit(int id)
         {
             //var user = _users.First(user => user.Id == id);
-            return View(GetUserByID(_users, id));
+            return View(Utility.GetUserById(_users, id));
 
         }
 
@@ -92,7 +100,7 @@ namespace WebApplication.Models
         public ActionResult Delete(int id)
         {
             // var user = _users.First(user => user.Id == id);
-            return View(GetUserByID(_users, id));
+            return View(Utility.GetUserById(_users, id));
             //return View();
         }
 
