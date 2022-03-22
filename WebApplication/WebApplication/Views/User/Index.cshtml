@@ -8,21 +8,14 @@
 <h1>View</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Додати інформацію про позивача або відповідача</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FistName)
+                @Html.DisplayNameFor(model => model.FullName)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Patrimonic)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-
             <th>
                 @Html.DisplayNameFor(model => model.TaxNumber)
             </th>
@@ -42,13 +35,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.FistName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Patrimonic)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
+                @Html.DisplayFor(modelItem => item.FullName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TaxNumber)
@@ -63,9 +50,9 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { item.Id }) |
-                @Html.ActionLink("Details", "Details", new { item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { item.Id })
+                @Html.ActionLink("Змінити", "Edit", new { item.Id }) |
+                @Html.ActionLink("Деталі", "Details", new { item.Id }) |
+                @Html.ActionLink("Видалити", "Delete", new { item.Id })
             </td>
         </tr>
 }

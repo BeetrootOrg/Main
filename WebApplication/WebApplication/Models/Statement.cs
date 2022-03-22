@@ -2,14 +2,10 @@
 
 namespace WebApplication.Models
 {
-    public class Document
+    public class Statement
     {
-        private static int _id;
 
-        public int Id {
-            get=> _id;
-            set=> ++_id;
-        }
+        public int Id { get; init; }
 
         public string Title { get; set; }
 

@@ -1,39 +1,23 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Reflection;
 using WebApplication.Models;
+using Spire.Doc;
+using IOFile= System.IO.File;
+
+
 
 namespace WebApplication.Controllers
 {
-    public class DocumentController : Controller
+    public class StatementController : Controller
     {
 
-        private static readonly IList<Document> _documents  = new List<Document>(); 
-        private static readonly IList<User> _users = new List<User>
-        {
-            new User
-            {
-                Id = 1,
-                FistName="Петро",
-                Patrimonic="Петрович",
-                LastName="3Ковальский",
-                TaxNumber=1234567890,
-                DateOfBirth=DateTime.Now,
-                Address="65012, Одеса, вул. Архітекторська, 18, кв. 12",
-                Email="test@text.gmail.com"
-            },
-            new User
-            {
-                Id = 2,
-                FistName="Іван",
-                Patrimonic="Іванович",
-                LastName="2Ломаченко",
-                TaxNumber=1231237890,
-                DateOfBirth=DateTime.Now,
-                Address="65027",
-                Email="test2@gmail.com"
-            }
-        };
+
+
+        
+        private static readonly IList<Statement> _statements  = new List<Statement>(); 
+
         private static readonly IList<Court> _courts = new List<Court>
         {
             new Court
@@ -64,12 +48,12 @@ namespace WebApplication.Controllers
         };
 
 
-        // GET: DocumentController
+        // GET: StatementController
         public ActionResult Index()
         {
             IList<SelectListItem> users = new List<SelectListItem>();
 
-            foreach (var item in _users)
+            foreach (var item in Utility._usersContext)
             {
                 users.Add(new SelectListItem { Value = item.Id.ToString(), Text = item.FullName });
  
@@ -89,21 +73,21 @@ namespace WebApplication.Controllers
             
             ViewBag.courts = courts;
 
-            return View(_documents);
+            return View(_statements);
         }
 
-        // GET: DocumentController/Details/5
+        // GET: StatementController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: DocumentController/Create
+        // GET: StatementController/Create
         public ActionResult Create()
         {
             IList<SelectListItem> users = new List<SelectListItem>();
 
-            foreach (var item in _users)
+            foreach (var item in Utility._usersContext)
             {
                 users.Add(new SelectListItem { Value = item.Id.ToString(), Text = item.FullName });
             }
@@ -124,43 +108,90 @@ namespace WebApplication.Controllers
             return View();
         }
 
-        // POST: DocumentController/Create
+        // POST: StatementController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(int plaintiff, int defendant, int court )
         {
             try
             {
-                //_documents.Add(x=> x.User1.Id = firstUser)
-                Document newDocument=CreateDocumentTemplate(_users,plaintiff,defendant,_courts,court);
-                _documents.Add(newDocument);
-                ChangeTemplateForDownloading(newDocument);
                 
-                return RedirectToAction(nameof(Index));
-                //return View(_documents);
+                Statement newStatement = CreateObjectWithDataForTemplate(Utility._usersContext, plaintiff, defendant, _courts, court) ;
+                _statements.Add(newStatement);
+                string filename = CreateStatementForDownloading(newStatement);
+
+                //GetFile(filename);
+
+                              
+                return LocalRedirect($"/api/files/{filename}");
+                //return View(newStatement);
             }
             catch
             {
-                return View();
+                return View(Utility._usersContext);
             }
         }
 
-        private static Document ChangeTemplateForDownloading(Document newDocument)
-        { 
 
-        }
 
-        private static Document CreateDocumentTemplate(IList<User> users, int plaintiff, int defendant, IList<Court> courts, int court)
+
+        private static string CreateStatementForDownloading(Statement newDocument)
         {
-            Document document = new()
+              
+            User Plantiff = newDocument.Plaintiff;
+            User Defendant = newDocument.Defendant;
+
+            object o = newDocument.Plaintiff;
+            Type type = o.GetType();
+            
+            Document doc = new Document();
+            doc.LoadFromFile("Files/Divorce.docx");
+            string? replaceText;
+            foreach (PropertyInfo prop in type.GetProperties())
             {
+                replaceText = (prop.PropertyType.Name != "DateTime") 
+                    ? prop.GetValue(o)?.ToString() 
+                    : Plantiff.DateOfBirth.ToString("d");
+
+                doc.Replace($"[Plantiff.{prop.Name}]", replaceText, false, true);
+                Console.WriteLine($"Plantiff.{prop.Name} {prop.PropertyType.Name} has value {prop.GetValue(o)}");
+            }
+            o = newDocument.Defendant;
+            type = o.GetType();
+           
+            foreach (PropertyInfo prop in type.GetProperties())
+            {
+                replaceText = (prop.PropertyType.Name != "DateTime")
+                    ? prop.GetValue(o)?.ToString()
+                    : Defendant.DateOfBirth.ToString("d");
+
+                doc.Replace($"[Defendant.{prop.Name}]", replaceText, false, true);
+                Console.WriteLine($"Defendant.{prop.Name} {prop.PropertyType.Name} has value {prop.GetValue(o)}");
+            }
+
+            Guid guid = Guid.NewGuid();
+
+            string fileName =$"{guid}.docx";
+
+            doc.SaveToFile($"Files/{fileName}", FileFormat.Docx2013);
+
+            return fileName;
+            
+        }
+        
+        private static Statement CreateObjectWithDataForTemplate(IList<User> users, int plaintiff, int defendant, IList<Court> courts, int court)
+        {
+
+        Statement statement = new()
+            {
+                Id = _statements.Count+1,
                 Title = "First",
                 Plaintiff = Utility.GetUserById(users,plaintiff),
                 Defendant=Utility.GetUserById(users,defendant),
                 Court=Utility.GetCourtById(courts,court),
                 DateOfCreation=DateTime.Today,
             };
-            return document;
+            return statement;
 
 
         }

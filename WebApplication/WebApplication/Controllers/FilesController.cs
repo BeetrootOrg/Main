@@ -1,15 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using IOFile = System.IO.File;
 
 namespace WebApplication.Controllers
 {
     [Route("api/files")]
-    public class FilesController : ControllerBase
+    public class FilesController : Controller
     {
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+
         private static readonly string Directory = (Path.GetFullPath("files"));
 
+
+
         [HttpGet("{filename}")]
-        public async Task<IActionResult>  GetFile([FromRoute] string filename)
+        public async Task<IActionResult>  GetFile(string filename)
         {
             string fullPath = Path.Combine(Directory, filename);
             

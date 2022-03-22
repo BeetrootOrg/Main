@@ -8,42 +8,18 @@ namespace WebApplication.Controllers
     {
 
 
-        private static readonly IList<User> _users = new List<User>
-        {
-            new User
-            {
-                Id = 1,
-                FistName="Петро",
-                Patrimonic="Петрович",
-                LastName="Ковальский",
-                TaxNumber=1234567890,
-                DateOfBirth=DateTime.Now,
-                Address="65012, Одеса, вул. Архітекторська, 18, кв. 12",
-                Email="test@text.gmail.com"
-            },
-            new User
-            {
-                Id = 2,
-                FistName="Іван",
-                Patrimonic="Іванович",
-                LastName="Ковальский",
-                TaxNumber=1231237890,
-                DateOfBirth=DateTime.Now,
-                Address="65027",
-                Email="test2@gmail.com"
-            }
-        };
+
         // GET: UserController
         public ActionResult Index()
         {
-            return View(_users);
+            return View(Utility._usersContext);
         }
 
         // GET: UserController/Details/5
         public ActionResult Details(int id)
         {
 
-            return View(Utility.GetUserById(_users, id));
+            return View(Utility.GetUserById(Utility._usersContext, id));
         }
 
         // GET: UserController/Create
@@ -59,8 +35,8 @@ namespace WebApplication.Controllers
         {
             try
             {
-                user.Id=_users.Count+1;
-                _users.Add(user);
+                user.Id= Utility._usersContext.Count+1;
+                Utility._usersContext.Add(user);
   
                 return RedirectToAction(nameof(Index));
             }
@@ -74,7 +50,7 @@ namespace WebApplication.Controllers
         public ActionResult Edit(int id)
         {
             //var user = _users.First(user => user.Id == id);
-            return View(Utility.GetUserById(_users, id));
+            return View(Utility.GetUserById(Utility._usersContext, id));
 
         }
 
@@ -85,9 +61,9 @@ namespace WebApplication.Controllers
         {
             try
             {
-                _users.RemoveAt(id-1);
+                Utility._usersContext.RemoveAt(id-1);
                 user.Id = id;
-                _users.Add(user);
+                Utility._usersContext.Add(user);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -100,7 +76,7 @@ namespace WebApplication.Controllers
         public ActionResult Delete(int id)
         {
             // var user = _users.First(user => user.Id == id);
-            return View(Utility.GetUserById(_users, id));
+            return View(Utility.GetUserById(Utility._usersContext, id));
             //return View();
         }
 
@@ -111,7 +87,7 @@ namespace WebApplication.Controllers
         {
             try
             {
-                _users.RemoveAt(id - 1);
+                Utility._usersContext.RemoveAt(id - 1);
                 return RedirectToAction(nameof(Index));
             }
             catch

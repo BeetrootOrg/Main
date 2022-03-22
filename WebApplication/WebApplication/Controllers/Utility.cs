@@ -14,5 +14,31 @@ namespace WebApplication.Controllers
             var court = courts.First(x => x.Id == id);
             return court;
         }
+
+        public static readonly IList<User> _usersContext = new List<User>
+        {
+            new User
+            {
+                Id = 1,
+                FistName="Петро",
+                Patrimonic="Петрович",
+                LastName="Ковальский",
+                TaxNumber=1234567890,
+                DateOfBirth=DateTime.Now,
+                Address="65012, Одеса, вул. Архітекторська, 18, кв. 12",
+                Email="test@text.gmail.com"
+            },
+            new User
+            {
+                Id = 2,
+                FistName="Іван",
+                Patrimonic="Іванович",
+                LastName="Іванов",
+                TaxNumber=1231237890,
+                DateOfBirth=DateTime.Now,
+                Address="65027",
+                Email="test2@gmail.com"
+            }
+        };
     }
 }
