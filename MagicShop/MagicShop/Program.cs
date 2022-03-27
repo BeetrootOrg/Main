@@ -23,6 +23,11 @@ builder.Services.AddTransient<IArmorService, ArmorService>();
 builder.Services.AddTransient<IAccessoriesRepository, AccessoriesRepository>();
 builder.Services.AddTransient<IAccessoriesService, AccessoriesService>();
 
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository <>));
+builder.Services.AddScoped(typeof(ICrudService<,>), typeof(CrudService <,>));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
 builder.Services.AddDefaultIdentity<IdentityUser>(options => { 
     options.SignIn.RequireConfirmedAccount = false;
     options.Password.RequireDigit = false;

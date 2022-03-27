@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using BLL.Repository.Interfaces;
 using BLL.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Services.Implementation
 {
@@ -18,16 +13,32 @@ namespace BLL.Services.Implementation
             _repository = repository;
             _maper = maper;
         }
-        public async Task<List<TModel>> GetAll()
+        public virtual async Task<List<TModel>> GetAll()
         {
             var entities = await _repository.GetAll();
             return _maper.Map<List<TModel>>(entities);
         }
 
-        public async Task<TModel> GetById(int id)
+        public virtual async Task<TModel> GetById(int id)
         {
             var entity = await _repository.Get(id);
             return _maper.Map<TModel>(entity);
+        }
+        public virtual async Task<TModel> Create(TEntity entity)
+        {
+            await _repository.Create(entity);
+            return _maper.Map<TModel>(entity);
+        }
+
+        public virtual async Task<TModel> Edit(TEntity entity)
+        {
+            await _repository.Edit(entity);
+            return _maper.Map<TModel>(entity);
+        }
+
+        public virtual async Task Delete(int id)
+        {
+            await _repository.Delete(id);
         }
     }
 }

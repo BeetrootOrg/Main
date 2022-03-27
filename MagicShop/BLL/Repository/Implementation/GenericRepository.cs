@@ -2,34 +2,51 @@
 using DLL.Context;
 using DLL.Entites.Base;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Repository.Implementation
 {
-    public class GenericRepository<T> : IGenericRepository<T>
-        where T : BaseEntity
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity>
+        where TEntity : BaseEntity
     {
         private readonly ArmoryDbContext _dbContext;
-        private readonly DbSet<T> _set;
+        private readonly DbSet<TEntity> _set;
         public GenericRepository(ArmoryDbContext dbContext)
         {
             _dbContext = dbContext;
-            _set = _dbContext.Set<T>();
+            _set = _dbContext.Set<TEntity>();
         }
 
-        public async  Task<List<T>> GetAll()
+        public async  Task<List<TEntity>> GetAll()
         {
-            return await _set.ToListAsync<T>();
+            return await _set.ToListAsync<TEntity>();
 
         }
-        public async Task<T> Get(int id)
+        public async Task<TEntity> Get(int id)
         {
             return await _set.FirstAsync(x => x.Id == id);
         }
-
+        public async Task Create(TEntity entities)
+        {
+           await _set.AddAsync(entities);
+           await _dbContext.SaveChangesAsync();
+        }
+        public async Task Edit(TEntity entity)
+        {
+            TEntity existing = await Get(entity.Id);
+            if (existing != null)
+            {   
+                _dbContext.Entry(existing).CurrentValues.SetValues(entity);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+        public async Task Delete(int id)
+        {
+             TEntity entityDel = await _set.FirstAsync(x => x.Id == id);
+            if (entityDel != null)
+            {
+                _dbContext.Remove(entityDel);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
     }
 }

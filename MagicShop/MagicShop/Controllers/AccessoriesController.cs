@@ -3,99 +3,15 @@ using BLL.Services.Interfaces;
 using DLL.Entites;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Models;
 
 namespace MagicShop.Controllers
 {
     [Route("Accessories")]
-    public class AccessoriesController : Controller
+    public class AccessoriesController : GenericController<Accessories, AccessoriesModel>
     {
-        private IAccessoriesService _accessoriesService;
-        public AccessoriesController(IAccessoriesService accessoriesServic)
+        public AccessoriesController(ICrudService<Accessories, AccessoriesModel> crudService) : base(crudService)
         {
-            _accessoriesService = accessoriesServic;
-        }
-
-        [HttpGet("getAccess")]
-        public ActionResult Index()
-        {
-            var rest = _accessoriesService.GetAll();
-            return View(rest);
-        }
-
-        [HttpGet("getAccess/{id}")]
-        public ActionResult Details(int id)
-        {
-            var model = _accessoriesService.GetById(id);
-            if (model == null)
-            {
-                return View("NotFound");
-            }
-            return View(model);
-        }
-
-        [HttpGet("create")]
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost("create")]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(Accessories model)
-        {
-            try
-            {
-                _accessoriesService.Create(model);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        [HttpGet("edit")]
-        public ActionResult Edit(int id)
-        {
-            var model = _accessoriesService.GetById(id);
-            return View(model);
-        }
-
-        [HttpPost("edit")]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(Accessories updated)
-        {
-            try
-            {
-                _accessoriesService.Edit(updated);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        [HttpGet("delete")]
-        public ActionResult Delete(int id)
-        {
-            var model = _accessoriesService.GetById(id);
-            return View(model);
-        }
-
-        [HttpPost("delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                _accessoriesService.Delete(id);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
 }

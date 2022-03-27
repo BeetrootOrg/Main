@@ -10,5 +10,8 @@ namespace BLL.Services.Interfaces
     {
         Task<List<TModel>> GetAll();
         Task<TModel> GetById(int id);
+        Task<TModel> Create(TEntity entity);
+        Task<TModel> Edit(TEntity entity);
+        Task Delete(int id);
     }
 }

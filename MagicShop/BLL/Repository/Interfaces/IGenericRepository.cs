@@ -1,8 +1,11 @@
 ﻿namespace BLL.Repository.Interfaces
 {
-    public interface IGenericRepository<T> 
+    public interface IGenericRepository<TEntity> 
     {
-        Task<List<T>> GetAll();
-        Task<T> Get(int id);
+        Task<List<TEntity>> GetAll();
+        Task<TEntity> Get(int id);
+        Task Create(TEntity entities);
+        Task Edit(TEntity entities);
+        Task Delete(int id);
     }
 }
