@@ -1,0 +1,165 @@
+{
+	"info": {
+		"_postman_id": "25ea97f0-8807-42e2-931d-1f147e959d5e",
+		"name": "City API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Query by Location for a County boundary",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-rapidapi-host",
+						"value": "vanitysoft-boundaries-io-v1.p.rapidapi.com",
+						"type": "default"
+					},
+					{
+						"key": "x-rapidapi-key",
+						"value": "8d2a4d6891msh57ad0acf155cf0ep15ba7ejsnef80f0898ab4",
+						"type": "default"
+					},
+					{
+						"key": "useQueryString",
+						"value": "true",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://vanitysoft-boundaries-io-v1.p.rapidapi.com/reaperfire/rest/v1/public/boundary/county/within?latitude=45.50737&longitude=-122.809678",
+					"protocol": "https",
+					"host": [
+						"vanitysoft-boundaries-io-v1",
+						"p",
+						"rapidapi",
+						"com"
+					],
+					"path": [
+						"reaperfire",
+						"rest",
+						"v1",
+						"public",
+						"boundary",
+						"county",
+						"within"
+					],
+					"query": [
+						{
+							"key": "latitude",
+							"value": "45.50737"
+						},
+						{
+							"key": "longitude",
+							"value": "-122.809678"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query by for County boundaries",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-rapidapi-host",
+						"value": "vanitysoft-boundaries-io-v1.p.rapidapi.com",
+						"type": "default"
+					},
+					{
+						"key": "x-rapidapi-key",
+						"value": "8d2a4d6891msh57ad0acf155cf0ep15ba7ejsnef80f0898ab4",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "https://vanitysoft-boundaries-io-v1.p.rapidapi.com/reaperfire/rest/v1/public/boundary/county/levy/state/fl",
+					"protocol": "https",
+					"host": [
+						"vanitysoft-boundaries-io-v1",
+						"p",
+						"rapidapi",
+						"com"
+					],
+					"path": [
+						"reaperfire",
+						"rest",
+						"v1",
+						"public",
+						"boundary",
+						"county",
+						"levy",
+						"state",
+						"fl"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query for up to 1000 zipcodes",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-rapidapi-host",
+						"value": "vanitysoft-boundaries-io-v1.p.rapidapi.com",
+						"type": "default"
+					},
+					{
+						"key": "x-rapidapi-key",
+						"value": "8d2a4d6891msh57ad0acf155cf0ep15ba7ejsnef80f0898ab4",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    \"00501\",\r\n    \"00544\",\r\n    \"07002\",\r\n    \"07003\",\r\n    \"07004\",\r\n    \"07006\"\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://vanitysoft-boundaries-io-v1.p.rapidapi.com/rest/v1/public/boundary/zipcode?combine=true",
+					"protocol": "https",
+					"host": [
+						"vanitysoft-boundaries-io-v1",
+						"p",
+						"rapidapi",
+						"com"
+					],
+					"path": [
+						"rest",
+						"v1",
+						"public",
+						"boundary",
+						"zipcode"
+					],
+					"query": [
+						{
+							"key": "combine",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
