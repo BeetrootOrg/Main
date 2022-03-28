@@ -5,7 +5,7 @@ using Shared.Models;
 
 namespace MagicShop.Controllers
 {
-    [Route("weapon")]
+    [Route("magic-weapon")]
     public class MagicWeaponController : GenericController<MagicWeapon, MagicWeaponModel>
     {
         public MagicWeaponController(ICrudService<MagicWeapon, MagicWeaponModel> crudService) : base(crudService)

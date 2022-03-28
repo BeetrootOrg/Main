@@ -2,7 +2,7 @@
 using NftMarket.Models;
 using System.Diagnostics;
 
-namespace NftMarket.Controllers
+namespace MagicShop.Controllers
 {
     public class HomeController : Controller
     {

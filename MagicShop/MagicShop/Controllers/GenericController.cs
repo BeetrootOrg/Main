@@ -12,7 +12,7 @@ namespace MagicShop.Controllers
         }
 
         [HttpGet("getAll")]
-        public async Task<ActionResult> Index()
+        public virtual async Task<ActionResult> Index()
         {
             var res = await _crudService.GetAll();
             return View(res);

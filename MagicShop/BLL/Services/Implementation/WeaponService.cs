@@ -1,89 +1,24 @@
-﻿using BLL.Repository.Interfaces;
+﻿using AutoMapper;
+using BLL.Repository.Interfaces;
 using BLL.Services.Interfaces;
-using DLL.Entites;
-using DLL.Entites.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Shared.Models.Base;
 
 namespace BLL.Services.Implementation
 {
     public class WeaponService : IWeaponService
     {
         private IWeaponRepository _weaponRepository;
+        private readonly IMapper _mapper;
 
-        public WeaponService(IWeaponRepository weaponRepository)
+        public WeaponService(IWeaponRepository weaponRepository, IMapper mapper)
         {
             _weaponRepository = weaponRepository;
+            _mapper = mapper;
         }
-        public List<BaseWeapon> GetAllWeapons()
+        public async Task<List<BaseWeaponModel>> GetAllWeapons()
         {
-            return _weaponRepository.GetAllWeapons();
-        }
-        public List<RangeWeapon> GetRangeWeapons()
-        {
-            return _weaponRepository.GetRangeWeapons();
-        }
-        public List<MeleeWeapon> GetMeleeWeapons()
-        {
-            return _weaponRepository.GetMeleeWeapons();
-        }
-        public List<MagicWeapon> GetMagicWeapons()
-        {
-            return _weaponRepository.GetMagicWeapons();
-        }
-        public RangeWeapon GetRangeById(int id)
-        {
-            return _weaponRepository.GetRangeById(id);
-        }
-        public MeleeWeapon GetMeleeById(int id)
-        {
-            return _weaponRepository.GetMeleeById(id);
-        }
-        public MagicWeapon GetMagicById(int id)
-        {
-            return _weaponRepository.GetMagicById(id);
-        }
-        public void CreateRange(RangeWeapon model)
-        {
-            _weaponRepository.CreateRange(model);
-        }
-        public void CreateMelee(MeleeWeapon model)
-        {
-            _weaponRepository.CreateMelee(model);
-        }
-        public void CreateMagic(MagicWeapon model)
-        {
-            _weaponRepository.CreateMagic(model);
-        }
-        public void EditRange(RangeWeapon updated)
-        {
-            _weaponRepository.EditRange(updated);
+            return _mapper.Map<List<BaseWeaponModel>>(await _weaponRepository.GetAllWeapons());
 
-        }
-        public void DeleteRange(int id)
-        {
-            _weaponRepository.DeleteRange(id);
-        }
-        public void EditMelee(MeleeWeapon updated)
-        {
-            _weaponRepository.EditMelee(updated);
-
-        }
-        public void DeleteMelee(int id)
-        {
-            _weaponRepository.DeleteMelee(id);
-        }
-        public void EditMagic(MagicWeapon updated)
-        {
-            _weaponRepository.EditMagic(updated);
-
-        }
-        public void DeleteMagic(int id)
-        {
-            _weaponRepository.DeleteMagic(id);
         }
     }
 }
