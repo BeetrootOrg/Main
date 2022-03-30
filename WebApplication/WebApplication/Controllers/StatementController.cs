@@ -168,12 +168,12 @@ namespace WebApplication.Controllers
                 doc.Replace($"[Defendant.{prop.Name}]", replaceText, false, true);
                 Console.WriteLine($"Defendant.{prop.Name} {prop.PropertyType.Name} has value {prop.GetValue(o)}");
             }
-
+            
             Guid guid = Guid.NewGuid();
 
             string fileName =$"{guid}.docx";
-
-            doc.SaveToFile($"Files/{fileName}", FileFormat.Docx2013);
+            string directory = Path.GetTempPath();
+            doc.SaveToFile($"{directory}{fileName}", FileFormat.Docx2013);
 
             return fileName;
             

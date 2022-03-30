@@ -10,34 +10,34 @@
 <h4> для створення позовної заяви</h4>
 <hr />
 <div class="row">
-        <div class="col-md-8">
+    <div class="col-md-8">
         <form asp-action="Create">
-        <div class="row">
-        <div class="col-md-8">
-            <div class="form-group">
-                <label  class="control-label">Оберіть позивача з переліку </label>
-                <select name="plaintiff" class="form-control" asp-items="@ViewBag.users"></select>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label class="control-label">Оберіть позивача з переліку </label>
+                        <select name="plaintiff" class="form-control" asp-items="@ViewBag.users"></select>
+                    </div>
+                </div>
             </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="col-md-8">
-            <div class="form-group">
-                <label  class="control-label">Оберіть відповідача з переліку </label>
-                <select name="defendant" class="form-control" asp-items="@ViewBag.users"></select>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label class="control-label">Оберіть відповідача з переліку </label>
+                        <select name="defendant" class="form-control" asp-items="@ViewBag.users"></select>
+                    </div>
+                </div>
             </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="col-md-8">
-            <div class="form-group">
-                <label  class="control-label">Оберіть суд для подання заяви</label>
-                <select name="court" class="form-control" asp-items="@ViewBag.courts"></select>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label class="control-label">Оберіть суд для подання заяви</label>
+                        <select name="court" class="form-control" asp-items="@ViewBag.courts"></select>
+                    </div>
+                </div>
             </div>
-        </div>
-        </div>
             <div class="form-group">
-            <input type="submit" value="Зегенерувати заяву та завантажити" class="btn btn-primary" />
+                <input type="submit" value="Зегенерувати заяву та завантажити" class="btn btn-primary" />
             </div>
         </form>
     </div>

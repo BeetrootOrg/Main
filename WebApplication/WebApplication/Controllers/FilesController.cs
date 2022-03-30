@@ -12,16 +12,13 @@ namespace WebApplication.Controllers
             return View();
         }
 
-
-        private static readonly string Directory = (Path.GetFullPath("files"));
-
-
+        private static readonly string Directory = Path.GetTempPath();
 
         [HttpGet("{filename}")]
-        public async Task<IActionResult>  GetFile(string filename)
+        public async Task<IActionResult> GetFile(string filename)
         {
             string fullPath = Path.Combine(Directory, filename);
-            
+
             if (!IOFile.Exists(fullPath))
             {
                 return NotFound(new
