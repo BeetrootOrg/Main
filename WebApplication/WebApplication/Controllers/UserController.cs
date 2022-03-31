@@ -1,25 +1,30 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebApplication.Models;
+using static WebApplication.Services.WorkingWithUserRepository;
 
 namespace WebApplication.Controllers
 {
     public class UserController : Controller
     {
-
-
+        IUserRepository userRepo;
+       public UserController(IUserRepository r)
+       {
+           userRepo = r;
+       }
 
         // GET: UserController
         public ActionResult Index()
         {
-            return View(Utility._usersContext);
+            //return View(Utility._usersContext);
+            return View(userRepo.GetUsers());
         }
 
         // GET: UserController/Details/5
         public ActionResult Details(int id)
         {
 
-            return View(Utility.GetUserById(Utility._usersContext, id));
+            //return View(Utility.GetUserById(Utility._usersContext, id));
+            return View(userRepo.Get(id));
         }
 
         // GET: UserController/Create
@@ -35,9 +40,10 @@ namespace WebApplication.Controllers
         {
             try
             {
-                user.Id= Utility._usersContext.Count+1;
-                Utility._usersContext.Add(user);
-  
+                //user.Id = Utility._usersContext.Count + 1;
+                //Utility._usersContext.Add(user);
+                //Create();
+                userRepo.Create(user);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -50,7 +56,7 @@ namespace WebApplication.Controllers
         public ActionResult Edit(int id)
         {
             //var user = _users.First(user => user.Id == id);
-            return View(Utility.GetUserById(Utility._usersContext, id));
+            return View(userRepo.Get(id));
 
         }
 
@@ -61,9 +67,10 @@ namespace WebApplication.Controllers
         {
             try
             {
-                Utility._usersContext.RemoveAt(id-1);
+                //Utility._usersContext.RemoveAt(id - 1);
                 user.Id = id;
-                Utility._usersContext.Add(user);
+                //Utility._usersContext.Add(user);
+                userRepo.Update(user);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -75,9 +82,10 @@ namespace WebApplication.Controllers
         // GET: UserController/Delete/5
         public ActionResult Delete(int id)
         {
+            
             // var user = _users.First(user => user.Id == id);
-            return View(Utility.GetUserById(Utility._usersContext, id));
-            //return View();
+            //return View(Utility.GetUserById(Utility._usersContext, id));
+            return View(userRepo.GetUsers());
         }
 
         // POST: UserController/Delete/5
@@ -87,7 +95,8 @@ namespace WebApplication.Controllers
         {
             try
             {
-                Utility._usersContext.RemoveAt(id - 1);
+                //Utility._usersContext.RemoveAt(id - 1);
+                userRepo.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
             catch

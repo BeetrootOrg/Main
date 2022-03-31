@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using System.IO;
+using System.Threading.Tasks;
 using IOFile = System.IO.File;
 
 namespace WebApplication.Controllers
@@ -7,10 +8,7 @@ namespace WebApplication.Controllers
     [Route("api/files")]
     public class FilesController : Controller
     {
-        public ActionResult Index()
-        {
-            return View();
-        }
+        public ActionResult Index() => View();
 
         private static readonly string Directory = Path.GetTempPath();
 

@@ -1,4 +1,7 @@
-﻿using WebApplication.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using WebApplication.Models;
 
 namespace WebApplication.Controllers
 {
@@ -21,7 +24,7 @@ namespace WebApplication.Controllers
             {
                 Id = 1,
                 FistName="Петро",
-                Patrimonic="Петрович",
+                Patronymic="Петрович",
                 LastName="Ковальский",
                 TaxNumber=1234567890,
                 DateOfBirth=DateTime.Now,
@@ -32,7 +35,7 @@ namespace WebApplication.Controllers
             {
                 Id = 2,
                 FistName="Іван",
-                Patrimonic="Іванович",
+                Patronymic="Іванович",
                 LastName="Іванов",
                 TaxNumber=1231237890,
                 DateOfBirth=DateTime.Now,

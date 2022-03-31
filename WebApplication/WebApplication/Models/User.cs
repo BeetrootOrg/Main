@@ -1,58 +1,41 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication.Models
 {
     public class User
     {
-        public int Id { get; set; }
-
         private DateTime _dateOfBirth;
-
-        [DisplayName("Дата народження")]
-        [DataType(DataType.Date)]
-
-        public DateTime DateOfBirth
-        {
-
-            set=> _dateOfBirth = value;
-            get => _dateOfBirth.Date;
-
-        }
-
-
-        [DisplayName("Прізвище")]
-
-        public string LastName { get; set; }
+        public int Id { get; set; }
 
         [DisplayName("Ім'я")]
         public string FistName { get; set; }
 
-        [DisplayName("Патронім")]
-        public string Patrimonic { get; set; }
+        [DisplayName("По батькові")]
+        public string Patronymic { get; set; }
 
-        public string FullName => $"{LastName} {FistName} {Patrimonic}";
+        [DisplayName("Прізвище")]
+        public string LastName { get; set; }
+
+        public string FullName => $"{LastName} {FistName} {Patronymic}";
+
+        [DisplayName("Дата народження")]
+        [DataType(DataType.Date)]
+        public DateTime DateOfBirth
+        {
+            set => _dateOfBirth = value;
+            get => _dateOfBirth.Date;
+        }
 
         [DisplayName("Податковий номер")]
         [Required]
         public ulong TaxNumber { get; init; }
 
- 
-
-
-
-
-
-
-
-
-
-
         [DisplayName("Адреса")]
         public string Address { get; set; }
 
         [DisplayName("Електронна пошта")]
-
         public string Email { get; set; }
 
     }

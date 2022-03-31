@@ -1,11 +1,30 @@
 using MediatR;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using System.Data;
+using WebApplication.Controllers;
+using WebApplication.Services;
+using static WebApplication.Services.WorkingWithUserRepository;
 
 var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRouting(x => x.LowercaseUrls = true);
-builder.Services.AddMediatR(typeof(Index).Assembly);
+builder.Services.AddMediatR(typeof(UserController).Assembly);
+
+builder.Services.Configure<ConnectConfiguration>(builder.Configuration);
+//builder.Services.AddTransient<IDbConnection>(sp =>
+//{
+//    var configuration = sp.GetRequiredService<IOptionsMonitor<ConnectConfiguration>>();
+//    return new SqlConnection(configuration.CurrentValue.DbConnectionString);
+//});
+
+string connectionString = "Server=localhost;Database=DocumentsDB;Trusted_Connection=True;TrustServerCertificate=True";
+builder.Services.AddTransient<IUserRepository, UserRepository>(provider => new UserRepository(connectionString));
 
 
 var app = builder.Build();

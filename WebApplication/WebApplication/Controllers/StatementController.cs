@@ -5,8 +5,9 @@ using System.Reflection;
 using WebApplication.Models;
 using Spire.Doc;
 using IOFile= System.IO.File;
-
-
+using System.Collections.Generic;
+using System;
+using System.IO;
 
 namespace WebApplication.Controllers
 {
@@ -146,7 +147,7 @@ namespace WebApplication.Controllers
             
             Document doc = new Document();
             doc.LoadFromFile("Files/Divorce.docx");
-            string? replaceText;
+            string replaceText;
             foreach (PropertyInfo prop in type.GetProperties())
             {
                 replaceText = (prop.PropertyType.Name != "DateTime") 
@@ -155,7 +156,7 @@ namespace WebApplication.Controllers
 
                 doc.Replace($"[Plantiff.{prop.Name}]", replaceText, false, true);
                 Console.WriteLine($"Plantiff.{prop.Name} {prop.PropertyType.Name} has value {prop.GetValue(o)}");
-            }
+            };
             o = newDocument.Defendant;
             type = o.GetType();
            
