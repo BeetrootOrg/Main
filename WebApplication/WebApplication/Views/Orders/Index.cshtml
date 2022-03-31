@@ -1,0 +1,113 @@
+﻿@model IEnumerable<WebApplication.Models2.Order>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Flash)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ord)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Steel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Surface)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Thickness)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Qty)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bending)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dimension1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dimension2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Note)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Manager)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Operator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Modified)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Flash)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Customer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ord)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Steel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Surface)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Thickness)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Qty)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bending)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dimension1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dimension2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Note)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Manager)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Operator)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Modified)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

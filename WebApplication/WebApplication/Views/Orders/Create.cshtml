@@ -1,0 +1,101 @@
+﻿@model WebApplication.Models2.Order
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Order</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Flash" class="control-label"></label>
+                <input asp-for="Flash" class="form-control" />
+                <span asp-validation-for="Flash" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Customer" class="control-label"></label>
+                <input asp-for="Customer" class="form-control" />
+                <span asp-validation-for="Customer" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ord" class="control-label"></label>
+                <input asp-for="Ord" class="form-control" />
+                <span asp-validation-for="Ord" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Steel" class="control-label"></label>
+                <input asp-for="Steel" class="form-control" />
+                <span asp-validation-for="Steel" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Surface" class="control-label"></label>
+                <input asp-for="Surface" class="form-control" />
+                <span asp-validation-for="Surface" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Thickness" class="control-label"></label>
+                <input asp-for="Thickness" class="form-control" />
+                <span asp-validation-for="Thickness" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Qty" class="control-label"></label>
+                <input asp-for="Qty" class="form-control" />
+                <span asp-validation-for="Qty" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Bending" class="control-label"></label>
+                <input asp-for="Bending" class="form-control" />
+                <span asp-validation-for="Bending" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Dimension1" class="control-label"></label>
+                <input asp-for="Dimension1" class="form-control" />
+                <span asp-validation-for="Dimension1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Dimension2" class="control-label"></label>
+                <input asp-for="Dimension2" class="form-control" />
+                <span asp-validation-for="Dimension2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Note" class="control-label"></label>
+                <input asp-for="Note" class="form-control" />
+                <span asp-validation-for="Note" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Manager" class="control-label"></label>
+                <input asp-for="Manager" class="form-control" />
+                <span asp-validation-for="Manager" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Operator" class="control-label"></label>
+                <input asp-for="Operator" class="form-control" />
+                <span asp-validation-for="Operator" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Modified" class="control-label"></label>
+                 @Html.TextBoxFor(model => model.Modified, "{0:yyyy-MM-ddTHH:mm:ss}", new { @class = "form-control", 
+@alt = "date", @placeholder = DateTime.Now, 
+@maxlength = "10", @data_val="false", @value = DateTime.Now})
+                @*<p><span>Date embauche </span><input type="datetime-local" id="date" name="date" value="<%:DateTime.Now.ToString("o")%>"/></p>*@
+                @*<p><span>Date embauche </span><input type="text" id="date" name="date" value="@DateTime.Now"/></p>*@
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
