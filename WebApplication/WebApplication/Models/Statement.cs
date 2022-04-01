@@ -3,6 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication.Models
 {
+    public enum TypeOfStatement
+    { 
+        divorce,
+        lawOrder
+    }
     public class Statement
     {
 
@@ -18,6 +23,8 @@ namespace WebApplication.Models
         public User Defendant { get; set; }
 
         public Court Court { get; set; }
+
+        public TypeOfStatement typeOfStatement { get; set; }
 
     }
 }

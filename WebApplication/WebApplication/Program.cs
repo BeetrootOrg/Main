@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using System.Data;
 using WebApplication.Controllers;
 using WebApplication.Services;
+using static WebApplication.Services.WorkingWithCourtRepository;
 using static WebApplication.Services.WorkingWithUserRepository;
 
 var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
@@ -25,6 +26,7 @@ builder.Services.Configure<ConnectConfiguration>(builder.Configuration);
 
 string connectionString = "Server=localhost;Database=DocumentsDB;Trusted_Connection=True;TrustServerCertificate=True";
 builder.Services.AddTransient<IUserRepository, UserRepository>(provider => new UserRepository(connectionString));
+builder.Services.AddSingleton<ICourtRepository, CourtRepository>(provider => new CourtRepository(connectionString));
 
 
 var app = builder.Build();

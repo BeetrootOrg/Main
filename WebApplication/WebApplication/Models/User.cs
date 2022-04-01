@@ -6,31 +6,35 @@ namespace WebApplication.Models
 {
     public class User
     {
-        private DateTime _dateOfBirth;
+        //private DateTime _dateOfBirth;
         public int Id { get; set; }
-
-        [DisplayName("Ім'я")]
-        public string FistName { get; set; }
-
-        [DisplayName("По батькові")]
-        public string Patronymic { get; set; }
 
         [DisplayName("Прізвище")]
         public string LastName { get; set; }
 
-        public string FullName => $"{LastName} {FistName} {Patronymic}";
+        [DisplayName("Ім'я")]
+        public string FirstName { get; set; }
+
+        [DisplayName("По батькові")]
+        public string Patronymic { get; set; }
+
+
+        [DisplayName("Прізвище ім'я по батькові")]
+        public string FullName => $"{LastName} {FirstName} {Patronymic}";
 
         [DisplayName("Дата народження")]
         [DataType(DataType.Date)]
         public DateTime DateOfBirth
         {
-            set => _dateOfBirth = value;
-            get => _dateOfBirth.Date;
+            //set => _dateOfBirth = value;
+            //get => _dateOfBirth.Date;
+            get;
+            set;
         }
 
         [DisplayName("Податковий номер")]
         [Required]
-        public ulong TaxNumber { get; init; }
+        public long TaxNumber { get; init; }
 
         [DisplayName("Адреса")]
         public string Address { get; set; }

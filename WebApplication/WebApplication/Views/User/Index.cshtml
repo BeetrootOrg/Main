@@ -8,7 +8,7 @@
 <h1>View</h1>
 
 <p>
-    <a asp-action="Create">Додати інформацію про позивача або відповідача</a>
+    <a asp-action="Create">Додати інформацію</a>  про позивача або відповідача
 </p>
 <table class="table">
     <thead>
@@ -17,10 +17,10 @@
                 @Html.DisplayNameFor(model => model.FullName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TaxNumber)
+                @Html.DisplayNameFor(model => model.DateOfBirth)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateOfBirth)
+                @Html.DisplayNameFor(model => model.TaxNumber)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Address)
@@ -32,29 +32,30 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TaxNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfBirth)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.ActionLink("Змінити", "Edit", new { item.Id }) |
-                @Html.ActionLink("Деталі", "Details", new { item.Id }) |
-                @Html.ActionLink("Видалити", "Delete", new { item.Id })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfBirth)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TaxNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.ActionLink("Змінити", "Edit", new { item.Id }) |
+                    @Html.ActionLink("Деталі", "Details", new { item.Id }) |
+                    @Html.ActionLink("Видалити", "Delete", new { item.Id })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -13,10 +13,7 @@ namespace WebApplication.Controllers
 {
     public class StatementController : Controller
     {
-
-
-
-        
+               
         private static readonly IList<Statement> _statements  = new List<Statement>(); 
 
         private static readonly IList<Court> _courts = new List<Court>
@@ -58,9 +55,7 @@ namespace WebApplication.Controllers
             {
                 users.Add(new SelectListItem { Value = item.Id.ToString(), Text = item.FullName });
  
-            }
-
- 
+            } 
 
             IList<SelectListItem> courts = new List<SelectListItem>();
 

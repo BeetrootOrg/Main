@@ -10,7 +10,7 @@ namespace WebApplication.Controllers
     {
         public ActionResult Index() => View();
 
-        private static readonly string Directory = Path.GetTempPath();
+        public static readonly string Directory = Path.GetTempPath();
 
         [HttpGet("{filename}")]
         public async Task<IActionResult> GetFile(string filename)

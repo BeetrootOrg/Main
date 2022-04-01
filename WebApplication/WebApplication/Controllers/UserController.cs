@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+
 using WebApplication.Models;
 using static WebApplication.Services.WorkingWithUserRepository;
 
@@ -6,17 +8,17 @@ namespace WebApplication.Controllers
 {
     public class UserController : Controller
     {
-        IUserRepository userRepo;
+       private readonly IUserRepository userRepoContext;
        public UserController(IUserRepository r)
        {
-           userRepo = r;
+           userRepoContext = r;
        }
 
         // GET: UserController
         public ActionResult Index()
         {
             //return View(Utility._usersContext);
-            return View(userRepo.GetUsers());
+            return View(userRepoContext.GetUsers());
         }
 
         // GET: UserController/Details/5
@@ -24,7 +26,7 @@ namespace WebApplication.Controllers
         {
 
             //return View(Utility.GetUserById(Utility._usersContext, id));
-            return View(userRepo.Get(id));
+            return View(userRepoContext.Get(id));
         }
 
         // GET: UserController/Create
@@ -36,14 +38,11 @@ namespace WebApplication.Controllers
         // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([FromForm] User user)
+        public ActionResult Create(User user)
         {
             try
             {
-                //user.Id = Utility._usersContext.Count + 1;
-                //Utility._usersContext.Add(user);
-                //Create();
-                userRepo.Create(user);
+                userRepoContext.Create(user);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -55,22 +54,23 @@ namespace WebApplication.Controllers
         // GET: UserController/Edit/5
         public ActionResult Edit(int id)
         {
-            //var user = _users.First(user => user.Id == id);
-            return View(userRepo.Get(id));
+ //           var user = Utility._usersContext.First(user => user.Id == id);
+            return View(userRepoContext.Get(id));
+            //return View(user);
 
         }
 
         // POST: UserController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, [FromForm] User user)
+        public ActionResult Edit(int id, User user)
         {
             try
             {
                 //Utility._usersContext.RemoveAt(id - 1);
-                user.Id = id;
+  //              user.Id = id;
                 //Utility._usersContext.Add(user);
-                userRepo.Update(user);
+                userRepoContext.Update(user);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -83,20 +83,20 @@ namespace WebApplication.Controllers
         public ActionResult Delete(int id)
         {
             
-            // var user = _users.First(user => user.Id == id);
+            //var user = Utility._usersContext.First(user => user.Id == id);
             //return View(Utility.GetUserById(Utility._usersContext, id));
-            return View(userRepo.GetUsers());
+            return View(userRepoContext.Get(id));
         }
 
         // POST: UserController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, [FromForm] User user)
+        public ActionResult Delete(int id,User user)
         {
             try
             {
                 //Utility._usersContext.RemoveAt(id - 1);
-                userRepo.Delete(id);
+                userRepoContext.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
             catch

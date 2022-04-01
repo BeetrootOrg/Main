@@ -23,7 +23,7 @@ namespace WebApplication.Controllers
             new User
             {
                 Id = 1,
-                FistName="Петро",
+                FirstName="Петро",
                 Patronymic="Петрович",
                 LastName="Ковальский",
                 TaxNumber=1234567890,
@@ -34,7 +34,7 @@ namespace WebApplication.Controllers
             new User
             {
                 Id = 2,
-                FistName="Іван",
+                FirstName="Іван",
                 Patronymic="Іванович",
                 LastName="Іванов",
                 TaxNumber=1231237890,

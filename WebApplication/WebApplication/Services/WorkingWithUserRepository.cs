@@ -45,13 +45,8 @@ namespace WebApplication.Services
                 using (IDbConnection db = new SqlConnection(connectionString))
                 {
                     var sqlQuery = "INSERT INTO Users (FirstName,Patronymic,LastName,DateOfBirth,TaxNumber,Address,Email) " +
-                        "VALUES(@FirstName, @Patronymic,@LastName,@DateOfBirth,@TaxNumber,@Address,@Email)";
-                    db.Execute(sqlQuery, user);
-
-                    // если мы хотим получить id добавленного пользователя
-                    //var sqlQuery = "INSERT INTO Users (Name, Age) VALUES(@Name, @Age); SELECT CAST(SCOPE_IDENTITY() as int)";
-                    //int? userId = db.Query<int>(sqlQuery, user).FirstOrDefault();
-                    //user.Id = userId.Value;
+                       "VALUES(@FirstName, @Patronymic,@LastName,@DateOfBirth,@TaxNumber,@Address,@Email)";
+                    db.Execute(sqlQuery,user);
                 }
             }
 
@@ -60,7 +55,7 @@ namespace WebApplication.Services
                 using (IDbConnection db = new SqlConnection(connectionString))
                 {
                     var sqlQuery = "UPDATE Users SET FirstName = @FirstName, Patronymic = @Patronymic," +
-                        " LastName=@LastName, DateOfBirth=@DateOfBirth, TaxNumber=@TaxNumber, Address=@Address, Email=@Email," +
+                        " LastName=@LastName, DateOfBirth=@DateOfBirth, TaxNumber=@TaxNumber, Address=@Address, Email=@Email" +
                         " WHERE Id = @Id";
                     db.Execute(sqlQuery, user);
                 }
