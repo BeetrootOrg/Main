@@ -7,15 +7,15 @@ using WebApplication.Models;
 
 namespace WebApplication.Services
 {
-    public class WorkingWithUserRepository
+    public class WorkingWithUser
     {
         public interface IUserRepository
         {
-            void Create(User user);
-            void Delete(int id);
-            User Get(int id);
-            List<User> GetUsers();
-            void Update(User user);
+            void CreateUser(User user);
+            void DeleteUser(int id);
+            User GetUser(int id);
+            List<User> GetUsersList();
+            void UpdateUser(User user);
         }
         public class UserRepository : IUserRepository
         {
@@ -24,33 +24,30 @@ namespace WebApplication.Services
             {
                 connectionString = conn;
             }
-            public List<User> GetUsers()
+            public List<User> GetUsersList()
             {
                 using (IDbConnection db = new SqlConnection(connectionString))
                 {
                     return db.Query<User>("SELECT * FROM Users").ToList();
                 }
             }
-
-            public User Get(int id)
+            public User GetUser(int id)
             {
                 using (IDbConnection db = new SqlConnection(connectionString))
                 {
                     return db.Query<User>("SELECT * FROM Users WHERE Id = @id", new { id }).FirstOrDefault();
                 }
             }
-
-            public void Create(User user)
+            public void CreateUser(User user)
             {
                 using (IDbConnection db = new SqlConnection(connectionString))
                 {
                     var sqlQuery = "INSERT INTO Users (FirstName,Patronymic,LastName,DateOfBirth,TaxNumber,Address,Email) " +
                        "VALUES(@FirstName, @Patronymic,@LastName,@DateOfBirth,@TaxNumber,@Address,@Email)";
-                    db.Execute(sqlQuery,user);
+                    db.Execute(sqlQuery, user);
                 }
             }
-
-            public void Update(User user)
+            public void UpdateUser(User user)
             {
                 using (IDbConnection db = new SqlConnection(connectionString))
                 {
@@ -60,8 +57,7 @@ namespace WebApplication.Services
                     db.Execute(sqlQuery, user);
                 }
             }
-
-            public void Delete(int id)
+            public void DeleteUser(int id)
             {
                 using IDbConnection db = new SqlConnection(connectionString);
                 var sqlQuery = "DELETE FROM Users WHERE Id = @id";

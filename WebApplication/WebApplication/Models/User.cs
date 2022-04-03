@@ -6,7 +6,6 @@ namespace WebApplication.Models
 {
     public class User
     {
-        //private DateTime _dateOfBirth;
         public int Id { get; set; }
 
         [DisplayName("Прізвище")]
@@ -18,19 +17,12 @@ namespace WebApplication.Models
         [DisplayName("По батькові")]
         public string Patronymic { get; set; }
 
-
         [DisplayName("Прізвище ім'я по батькові")]
         public string FullName => $"{LastName} {FirstName} {Patronymic}";
 
         [DisplayName("Дата народження")]
         [DataType(DataType.Date)]
-        public DateTime DateOfBirth
-        {
-            //set => _dateOfBirth = value;
-            //get => _dateOfBirth.Date;
-            get;
-            set;
-        }
+        public DateTime DateOfBirth { get; set; }
 
         [DisplayName("Податковий номер")]
         [Required]
@@ -41,8 +33,5 @@ namespace WebApplication.Models
 
         [DisplayName("Електронна пошта")]
         public string Email { get; set; }
-
     }
-
-
 }

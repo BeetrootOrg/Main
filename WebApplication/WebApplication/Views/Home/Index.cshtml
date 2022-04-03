@@ -1,13 +1,19 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Головна";
 }
+<div class="row">
 
-<div class="text-center">
-    <h1 class="display-4">Доброго дня</h1>
+    <div class="col">
+        <div class="text-center">
+            <h4>Доброго дня</h4>
+        </div>
+        <div class="text-left">
+            <p>Сайт створено в якості дипломного проекту <a href="https://beetroot.academy/"> Beetroot academy</a>, курс С# розробка, студент Данілін В.С. </p>
+            <p>За допомогою даного ресурсу, ви зможете згенерувати деякі документи. Для цього необхідно зробити три кроки.</p>
+            <p>1. Заповнити інформацію про себе (позивача) <a asp-area="" asp-controller="User" asp-action="Index">за посиланням</a>. </p>
+            <p>2. Заповнити інформацію про іншу сторону (відповідача) <a asp-area="" asp-controller="User" asp-action="Index">за посиланням</a>. </p>
+            <p>3. Перейти <a asp-area="" asp-controller="Statement" asp-action="Create">за посиланням</a> та натисниту кнопку Згенерувати.</p>
+        </div>
+    </div>
 
-    <p>Сайт створено в якості дипломного проекту <a href="https://beetroot.academy/"> Beetroot academy</a>, курс С# розробка, студент Данілін В.С. </p>
-    <p>За допомогою даного ресурсу, ви зможете згенерувати позоявну заяву про розірвання шлюбу. Для цього необхідно зробити три кроки.</p>
-    <p>1. Заповнити інформацію про себе (позивача). </p>
-    <p>2. Заповнити інформацію про іншу сторону (відповідача). Для додавання є спеціальна форма, яка <a asp-area="" asp-controller="User" asp-action="Index">доступна за посиланням</a>. </p>
-    <p>3. Перейти за <a asp-area="" asp-controller="Statement" asp-action="Create">посиланням</a> та натисниту кнопку Згенерувати.</p>        
 </div>

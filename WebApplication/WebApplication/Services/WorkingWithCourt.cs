@@ -7,12 +7,12 @@ using WebApplication.Models;
 
 namespace WebApplication.Services
 {
-    public class WorkingWithCourtRepository
+    public class WorkingWithCourt
     {
         public interface ICourtRepository
         {
-            Court Get(int id);
-            List<Court> GetCourts();
+            Court GetCourt(int id);
+            List<Court> GetCourtsList();
         }
         public class CourtRepository : ICourtRepository
         {
@@ -21,14 +21,14 @@ namespace WebApplication.Services
             {
                 connectionString = conn;
             }
-            public List<Court> GetCourts()
+            public List<Court> GetCourtsList()
             {
                 using (IDbConnection db = new SqlConnection(connectionString))
                 {
                     return db.Query<Court>("SELECT * FROM Courts").ToList();
                 }
             }
-            public Court Get(int id)
+            public Court GetCourt(int id)
             {
                 using (IDbConnection db = new SqlConnection(connectionString))
                 {

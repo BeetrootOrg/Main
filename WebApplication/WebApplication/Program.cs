@@ -1,21 +1,17 @@
-using MediatR;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using System.Data;
-using WebApplication.Controllers;
 using WebApplication.Services;
-using static WebApplication.Services.WorkingWithCourtRepository;
-using static WebApplication.Services.WorkingWithUserRepository;
+using static WebApplication.Services.WorkingWithCourt;
+using static WebApplication.Services.WorkingWithStatement;
+using static WebApplication.Services.WorkingWithUser;
 
 var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRouting(x => x.LowercaseUrls = true);
-builder.Services.AddMediatR(typeof(UserController).Assembly);
+//builder.Services.AddMediatR(typeof(UserController).Assembly);
 
 builder.Services.Configure<ConnectConfiguration>(builder.Configuration);
 //builder.Services.AddTransient<IDbConnection>(sp =>
@@ -26,8 +22,8 @@ builder.Services.Configure<ConnectConfiguration>(builder.Configuration);
 
 string connectionString = "Server=localhost;Database=DocumentsDB;Trusted_Connection=True;TrustServerCertificate=True";
 builder.Services.AddTransient<IUserRepository, UserRepository>(provider => new UserRepository(connectionString));
-builder.Services.AddSingleton<ICourtRepository, CourtRepository>(provider => new CourtRepository(connectionString));
-
+builder.Services.AddTransient<ICourtRepository, CourtRepository>(provider => new CourtRepository(connectionString));
+builder.Services.AddTransient<INewStatement, NewStatement>(provider => new NewStatement(connectionString));
 
 var app = builder.Build();
 

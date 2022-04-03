@@ -8,8 +8,6 @@ namespace WebApplication.Controllers
     [Route("api/files")]
     public class FilesController : Controller
     {
-        public ActionResult Index() => View();
-
         public static readonly string Directory = Path.GetTempPath();
 
         [HttpGet("{filename}")]
