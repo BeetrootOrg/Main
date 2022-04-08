@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace WebApplication.Models2
+﻿
+namespace WebApplication.Models
 {
     public partial class Order
     {

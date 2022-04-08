@@ -1,14 +1,9 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Database;
-using WebApplication.Models2;
+using WebApplication.Models;
 
 
 
@@ -20,15 +15,9 @@ namespace WebApplication.Controllers
 
 
 
-        private readonly OrderDbContext2 _context;
-        //static object options = new DbContextOptionsBuilder<OrderDbContext2>()
-        //       .UseSqlServer("Server=localhost;Database=NewBookLibraryDB;Trusted_Connection=True;")
-        //       .Options;
-
-        //private readonly OrderDbContext2 _context= new OrderDbContext2((global::Microsoft.EntityFrameworkCore.DbContextOptions<global::WebApplication.Database.OrderDbContext2>)options);
-
-
-        public OrdersController(OrderDbContext2 context)
+        private readonly OrderDbContext _context;
+  
+        public OrdersController(OrderDbContext context)
         {
             _context = context;
         }
@@ -70,13 +59,7 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Flash,Customer,Ord,Steel,Surface,Thickness,Qty,Bending,Dimension1,Dimension2,Note,Manager,Operator,Modified")] Order order)
         {
-            //if (ModelState.IsValid)
-            //{
-            //    _context.Add(order);
-            //    await _context.SaveChangesAsync();
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //return View(order);
+
             try
             {
                 if (ModelState.IsValid)

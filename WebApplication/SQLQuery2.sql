@@ -1,1 +1,0 @@
-select * from OrderDB.dbo.Orders
