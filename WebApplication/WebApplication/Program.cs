@@ -1,5 +1,6 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 using WebApplication.Database;
 
 var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
@@ -13,8 +14,12 @@ builder.Services.AddControllersWithViews();
 //{
 //builder.Services.AddControllers();
 
+//builder.Services.AddDbContext<OrderDbContext>(
+//        options => options.UseSqlServer(("Server=AMIGA\\SQLEXPRESS;Database=OrderDB;Trusted_Connection=True;")));
+
 builder.Services.AddDbContext<OrderDbContext>(
-        options => options.UseSqlServer(("Server=AMIGA\\SQLEXPRESS;Database=OrderDB;Trusted_Connection=True;")));
+        options => options.UseSqlServer(builder.Configuration.GetConnectionString("OrderDatabase")));
+
 //}
 //builder.Services.AddDbContext<OrderDbContext>(sp => new SqlConnection("Server=AMIGA\\SQLEXPRESS;Database=OrderDB;Trusted_Connection=True;"));
 
