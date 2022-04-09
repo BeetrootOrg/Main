@@ -1,4 +1,5 @@
 ﻿using BLL.Services.Interfaces;
+using DLL.Context;
 using DLL.Entites.Base;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models.Base;
@@ -9,7 +10,8 @@ namespace MagicShop.Controllers
     public class BaseWeaponController : GenericController<BaseWeapon,BaseWeaponModel>
     {
         private readonly IWeaponService _weaponService;
-        public BaseWeaponController(ICrudService<BaseWeapon, BaseWeaponModel> crudService, IWeaponService weaponService) : base(crudService)
+        public BaseWeaponController(ICrudService<BaseWeapon, BaseWeaponModel> crudService, IWeaponService weaponService)
+            : base(crudService)
         {
             _weaponService = weaponService;
         }

@@ -25,10 +25,11 @@ namespace BLL.Repository.Implementation
         {
             return await _set.FirstAsync(x => x.Id == id);
         }
-        public async Task Create(TEntity entities)
+        public async Task<TEntity> Create(TEntity entity)
         {
-           await _set.AddAsync(entities);
+           var a = await _set.AddAsync(entity);
            await _dbContext.SaveChangesAsync();
+           return a.Entity;
         }
         public async Task Edit(TEntity entity)
         {

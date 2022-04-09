@@ -4,7 +4,7 @@
     {
         Task<List<TEntity>> GetAll();
         Task<TEntity> Get(int id);
-        Task Create(TEntity entities);
+        Task<TEntity> Create(TEntity entities);
         Task Edit(TEntity entities);
         Task Delete(int id);
     }
