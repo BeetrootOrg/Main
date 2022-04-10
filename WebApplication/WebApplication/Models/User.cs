@@ -6,6 +6,8 @@ namespace WebApplication.Models
 {
     public class User
     {
+        private DateTime _dateOfBirth;
+
         public int Id { get; set; }
 
         [DisplayName("Прізвище")]
@@ -22,7 +24,11 @@ namespace WebApplication.Models
 
         [DisplayName("Дата народження")]
         [DataType(DataType.Date)]
-        public DateTime DateOfBirth { get; set; }
+        public DateTime DateOfBirth
+        {
+            get => _dateOfBirth;
+            set => _dateOfBirth = value;
+        }
 
         [DisplayName("Податковий номер")]
         [Required]
