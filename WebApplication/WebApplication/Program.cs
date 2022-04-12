@@ -2,16 +2,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebApplication.Services;
-using static WebApplication.Services.WorkingWithCourt;
-using static WebApplication.Services.WorkingWithStatement;
-using static WebApplication.Services.WorkingWithUser;
 
 var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRouting(x => x.LowercaseUrls = true);
-//builder.Services.AddMediatR(typeof(UserController).Assembly);
+
 
 builder.Services.Configure<ConnectConfiguration>(builder.Configuration);
 //builder.Services.AddTransient<IDbConnection>(sp =>
@@ -27,7 +23,6 @@ builder.Services.AddTransient<INewStatement, NewStatement>(provider => new NewSt
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

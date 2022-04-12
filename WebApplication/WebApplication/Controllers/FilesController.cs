@@ -8,12 +8,12 @@ namespace WebApplication.Controllers
     [Route("api/files")]
     public class FilesController : Controller
     {
-        public static readonly string Directory = Path.GetTempPath();
+        public static readonly string directory = Path.GetTempPath();
 
         [HttpGet("{filename}")]
         public async Task<IActionResult> GetFile(string filename)
         {
-            string fullPath = Path.Combine(Directory, filename);
+            string fullPath = Path.Combine(directory, filename);
 
             if (!IOFile.Exists(fullPath))
             {

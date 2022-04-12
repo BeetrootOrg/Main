@@ -39,6 +39,26 @@ BEGIN
     )
 END
 
+GO
+
+IF (NOT EXISTS (SELECT * 
+                 FROM INFORMATION_SCHEMA.TABLES 
+                 WHERE TABLE_SCHEMA = 'dbo' 
+                 AND  TABLE_NAME = 'StatementKinds'))
+BEGIN
+    CREATE TABLE DocumentsDB.dbo.StatementKinds
+    (
+      Id INT IDENTITY(1, 1) NOT NULL PRIMARY KEY,
+      Type VARCHAR(100),
+      Name VARCHAR(100)
+    )
+END
+
+INSERT INTO DocumentsDB.dbo.StatementKinds
+	VALUES ('divorce','Позовна заява про розлучення'),
+		('courtorder','Судовий наказ'),
+		('moneyclaim','Позовна заява про стягнення заборгованості')
+
 INSERT INTO DocumentsDB.dbo.Courts
 	VALUES ('Київський районний суд міста Одеси','65080, м. Одеса, вул. Варненська, 3-б'),
 		('Малиновський районний суд міста Одеси','65033, м. Одеса, вул. Василя Стуса, 1а'),

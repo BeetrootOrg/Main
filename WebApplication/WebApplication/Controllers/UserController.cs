@@ -1,20 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApplication.Models;
-using static WebApplication.Services.WorkingWithUser;
+using WebApplication.Services;
 
 namespace WebApplication.Controllers
 {
     public class UserController : Controller
     {
-        IUserRepository userRepoContext;
-        public UserController(IUserRepository r) => userRepoContext = r;
+        private readonly IUserRepository _userRepoContext;
+        public UserController(IUserRepository userRepoContext) => _userRepoContext = userRepoContext;
         public ActionResult Index()
         {
-            return View(userRepoContext.GetUsersList());
+            return View(_userRepoContext.GetUsersList());
         }
         public ActionResult Details(int id)
         {
-            return View(userRepoContext.GetUser(id));
+            return View(_userRepoContext.GetUser(id));
         }
         public ActionResult Create()
         {
@@ -25,38 +25,24 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(User user)
         {
-            try
-            {
-                userRepoContext.CreateUser(user);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            _userRepoContext.CreateUser(user);
+            return RedirectToAction(nameof(Index));
         }
         public ActionResult Edit(int id)
         {
-            return View(userRepoContext.GetUser(id));
+            return View(_userRepoContext.GetUser(id));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, User user)
         {
-            try
-            {
-                userRepoContext.UpdateUser(user);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            _userRepoContext.UpdateUser(user);
+            return RedirectToAction(nameof(Index));
         }
         public ActionResult Delete(int id)
         {
-            return View(userRepoContext.GetUser(id));
+            return View(_userRepoContext.GetUser(id));
         }
 
         [HttpPost]
@@ -65,7 +51,7 @@ namespace WebApplication.Controllers
         {
             try
             {
-                userRepoContext.DeleteUser(id);
+                _userRepoContext.DeleteUser(id);
                 return RedirectToAction(nameof(Index));
             }
             catch
