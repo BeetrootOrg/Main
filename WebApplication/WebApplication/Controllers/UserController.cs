@@ -10,11 +10,11 @@ namespace WebApplication.Controllers
         public UserController(IUserRepository userRepoContext) => _userRepoContext = userRepoContext;
         public ActionResult Index()
         {
-            return View(_userRepoContext.GetUsersList());
+            return View(_userRepoContext.GetUsersListAsync().Result);
         }
         public ActionResult Details(int id)
         {
-            return View(_userRepoContext.GetUser(id));
+            return View(_userRepoContext.GetUserAsync(id).Result);
         }
         public ActionResult Create()
         {
@@ -25,24 +25,24 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(User user)
         {
-            _userRepoContext.CreateUser(user);
+            _userRepoContext.CreateUserAsync(user);
             return RedirectToAction(nameof(Index));
         }
         public ActionResult Edit(int id)
         {
-            return View(_userRepoContext.GetUser(id));
+            return View(_userRepoContext.GetUserAsync(id).Result);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, User user)
         {
-            _userRepoContext.UpdateUser(user);
+            _userRepoContext.UpdateUserAsync(user);
             return RedirectToAction(nameof(Index));
         }
         public ActionResult Delete(int id)
         {
-            return View(_userRepoContext.GetUser(id));
+            return View(_userRepoContext.GetUserAsync(id).Result);
         }
 
         [HttpPost]
@@ -51,7 +51,7 @@ namespace WebApplication.Controllers
         {
             try
             {
-                _userRepoContext.DeleteUser(id);
+                _userRepoContext.DeleteUserAsync(id);
                 return RedirectToAction(nameof(Index));
             }
             catch

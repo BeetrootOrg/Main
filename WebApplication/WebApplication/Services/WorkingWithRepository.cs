@@ -8,13 +8,15 @@ using WebApplication.Models;
 using Spire.Doc;
 using System.Reflection;
 using System;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace WebApplication.Services
 {
     public interface ICourtRepository
     {
-        Court GetCourt(int id);
-        List<Court> GetCourtsList();
+        Task<Court> GetCourtAsync(int id, CancellationToken cancellationToken = default);
+        Task<List<Court>> GetCourtsListAsync(CancellationToken cancellationToken = default);
     }
     public class CourtRepository : ICourtRepository
     {
@@ -23,25 +25,26 @@ namespace WebApplication.Services
         {
             _connectionString = connectionString;
         }
-        public List<Court> GetCourtsList()
+        public async Task<List<Court>> GetCourtsListAsync(CancellationToken cancellationToken = default)
         {
             using IDbConnection db = new SqlConnection(_connectionString);
-            return db.Query<Court>("SELECT * FROM Courts").ToList();
+            var result = db.Query<Court>("SELECT * FROM Courts").ToList();
+            return await Task.FromResult(result);
         }
-        public Court GetCourt(int id)
+        public async Task<Court> GetCourtAsync(int id, CancellationToken cancellationToken = default)
         {
             using IDbConnection db = new SqlConnection(_connectionString);
-            return db.Query<Court>("SELECT * FROM Courts WHERE Id = @id", new { id }).FirstOrDefault();
+            var result = db.Query<Court>("SELECT * FROM Courts WHERE Id = @id", new { id }).FirstOrDefault();
+            return await Task.FromResult(result);
         }
     }
     public interface INewStatement
     {
         Statement CreateStatement(User plaintiff, User defendant, StatementKind statementType, Court court);
-        StatementKind GetStatemenKind(int id);
-        List<StatementKind> GetAllStatementKinds();
+        Task<StatementKind> GetStatemenKindAsync(int id, CancellationToken cancellationToken = default);
+        Task<List<StatementKind>> GetAllStatementKindsAsync(CancellationToken cancellationToken = default);
         string EditTemplateForDownloading(Statement statement);
     }
-
     public class NewStatement : INewStatement
     {
         private static int _statementsCounter;
@@ -62,96 +65,97 @@ namespace WebApplication.Services
                 Court = court,
                 DateOfCreation = DateTime.Now,
             };
-            return statement;
+            var result = statement;
+            return result;
         }
-        public StatementKind GetStatemenKind(int id)
-        {
-            using (IDbConnection db = new SqlConnection(_connectionString))
-            {
-                return db.Query<StatementKind>("SELECT * FROM StatementKinds WHERE Id = @id", new { id }).FirstOrDefault();
-            }
-        }
-        public List<StatementKind> GetAllStatementKinds()
+        public async Task<StatementKind> GetStatemenKindAsync(int id, CancellationToken cancellationToken = default)
         {
             using IDbConnection db = new SqlConnection(_connectionString);
-            return db.Query<StatementKind>("SELECT * FROM StatementKinds").ToList();
+            var result = db.Query<StatementKind>("SELECT * FROM StatementKinds WHERE Id = @id", new { id }).FirstOrDefault();
+            return await Task.FromResult(result);
+        }
+        public async Task<List<StatementKind>> GetAllStatementKindsAsync(CancellationToken cancellationToken = default)
+        {
+            using IDbConnection db = new SqlConnection(_connectionString);
+            var result = db.Query<StatementKind>("SELECT * FROM StatementKinds").ToList();
+            return await Task.FromResult(result);
         }
         public string EditTemplateForDownloading(Statement statement)
         {
             User Plantiff = statement.Plaintiff;
             User Defendant = statement.Defendant;
             StatementKind statementKind = statement.StatementKind;
-
             using Document doc = new();
             doc.LoadFromFile($"Files/{statementKind.Type}.docx");
-
             ReplaceTextInDocument(doc, "statement", statement);
             ReplaceTextInDocument(doc, "Plantiff", Plantiff);
             ReplaceTextInDocument(doc, "Defendant", Defendant);
-
             Guid guid = Guid.NewGuid();
-
             string fileName = $"{guid}.docx";
             string directory = Path.GetTempPath();
             doc.SaveToFile($"{directory}{fileName}", FileFormat.Docx2013);
-
             return fileName;
         }
-        public void ReplaceTextInDocument(Document doc, string sourseName, object o)
+        public void ReplaceTextInDocument(Document doc, string sourсeName, object obj)
         {
-            Type type = o.GetType();
+            Type type = obj.GetType();
             foreach (PropertyInfo prop in type.GetProperties())
             {
-                var value = prop.GetValue(o);
+                var value = prop.GetValue(obj);
                 var replaceText = value is DateTime dt
                     ? dt.ToString("d")
                     : value.ToString();
-                doc.Replace($"[{sourseName}.{prop.Name}]", replaceText, false, true);
+                doc.Replace($"[{sourсeName}.{prop.Name}]", replaceText, false, true);
             }
         }
     }
     public interface IUserRepository
     {
-        void CreateUser(User user);
-        void DeleteUser(int id);
-        User GetUser(int id);
-        List<User> GetUsersList();
-        void UpdateUser(User user);
+        Task CreateUserAsync(User user, CancellationToken cancellationToken = default);
+        Task DeleteUserAsync(int id, CancellationToken cancellationToken = default);
+        Task<User> GetUserAsync(int id, CancellationToken cancellationToken = default);
+        Task<List<User>> GetUsersListAsync(CancellationToken cancellationToken = default);
+        Task UpdateUserAsync(User user, CancellationToken cancellationToken = default);
     }
     public class UserRepository : IUserRepository
     {
         private readonly string _connectionString;
         public UserRepository(string connectionString) => _connectionString = connectionString;
-        public List<User> GetUsersList()
+        public async Task<List<User>> GetUsersListAsync(CancellationToken cancellationToken = default)
         {
             using IDbConnection db = new SqlConnection(_connectionString);
-            return db.Query<User>("SELECT * FROM Users").ToList();
+            var result = db.Query<User>("SELECT * FROM Users").ToList();
+            return await Task.FromResult(result);
         }
-        public User GetUser(int id)
+        public async Task<User> GetUserAsync(int id, CancellationToken cancellationToken = default)
         {
             using IDbConnection db = new SqlConnection(_connectionString);
-            return db.Query<User>("SELECT * FROM Users WHERE Id = @id", new { id }).FirstOrDefault();
+            var result = db.Query<User>("SELECT * FROM Users WHERE Id = @id", new { id }).FirstOrDefault();
+            return await Task.FromResult(result);
         }
-        public void CreateUser(User user)
+        public async Task CreateUserAsync(User user, CancellationToken cancellationToken = default)
         {
             using IDbConnection db = new SqlConnection(_connectionString);
             var sqlQuery = "INSERT INTO Users (FirstName,Patronymic,LastName,DateOfBirth,TaxNumber,Address,Email) " +
                "VALUES(@FirstName, @Patronymic,@LastName,@DateOfBirth,@TaxNumber,@Address,@Email)";
             db.Execute(sqlQuery, user);
+            await Task.CompletedTask;
         }
-        public void UpdateUser(User user)
+        public async Task UpdateUserAsync(User user, CancellationToken cancellationToken = default)
         {
             using IDbConnection db = new SqlConnection(_connectionString);
             var sqlQuery = "UPDATE Users SET FirstName = @FirstName, Patronymic = @Patronymic," +
                 " LastName=@LastName, DateOfBirth=@DateOfBirth, TaxNumber=@TaxNumber, Address=@Address, Email=@Email" +
                 " WHERE Id = @Id";
             db.Execute(sqlQuery, user);
+            await Task.CompletedTask;
         }
-        public void DeleteUser(int id)
+        public async Task DeleteUserAsync(int id, CancellationToken cancellationToken = default)
         {
             using IDbConnection db = new SqlConnection(_connectionString);
             var sqlQuery = "DELETE FROM Users WHERE Id = @id";
             db.Execute(sqlQuery, new { id });
+            await Task.CompletedTask;
         }
     }
 

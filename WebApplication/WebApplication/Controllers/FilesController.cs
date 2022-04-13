@@ -13,6 +13,7 @@ namespace WebApplication.Controllers
         [HttpGet("{filename}")]
         public async Task<IActionResult> GetFile(string filename)
         {
+            
             string fullPath = Path.Combine(directory, filename);
 
             if (!IOFile.Exists(fullPath))

@@ -3,6 +3,9 @@ using WebApplication.Models;
 using WebApplication.ViewModels;
 using System.Collections.Generic;
 using WebApplication.Services;
+using System.Threading.Tasks;
+using System;
+using System.Data.SqlClient;
 
 namespace WebApplication.Controllers
 {
@@ -17,36 +20,57 @@ namespace WebApplication.Controllers
             _courtRepoContext = courtRepoContext;
             _statementRepoContext = statementRepoContext;
         }
-        public ActionResult Create()
+        public async Task<ActionResult> CreateAsync()
         {
-            List<User> users = _userRepoContext.GetUsersList();
-            List<Court> courts = _courtRepoContext.GetCourtsList();
-            List<StatementKind> statementTypes = _statementRepoContext.GetAllStatementKinds();
-            IndexViewModel ivm = new() { Users = users, Courts = courts, StatementKinds = statementTypes };
-            return View(ivm);
+            try
+            {
+                var userRepoTask = _userRepoContext.GetUsersListAsync();
+                var courtRepoTask = _courtRepoContext.GetCourtsListAsync();
+                var statementKindTask = _statementRepoContext.GetAllStatementKindsAsync();
+                await Task.WhenAll(userRepoTask, courtRepoTask, statementKindTask);
+                List<User> users = userRepoTask.Result;
+                List<Court> courts = courtRepoTask.Result;
+                List<StatementKind> statementTypes = statementKindTask.Result;
+
+                IndexViewModel ivm = new() { Users = users, Courts = courts, StatementKinds = statementTypes };
+                return View(ivm);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new
+                {
+                    Trouble = $"{ex.Message}. Please try refresh page." +
+                    " If you see this warning again - contact site administrator by email vladimir.danilin@gmail.com"
+                });
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(int plaintiff, int defendant, int kind, int court)
+        public async Task<ActionResult> Create(int plaintiff, int defendant, int kind, int court)
         {
             try
             {
-                User plaintiffInfo = _userRepoContext.GetUser(plaintiff);
-                User defendantInfo = _userRepoContext.GetUser(defendant);
-                StatementKind statementKindInfo = _statementRepoContext.GetStatemenKind(kind);
-                Court courtInfo = _courtRepoContext.GetCourt(court);
+                var plaintiffTask = _userRepoContext.GetUserAsync(plaintiff);
+                var defendantTask = _userRepoContext.GetUserAsync(defendant);
+                var statementKindTask = _statementRepoContext.GetStatemenKindAsync(kind);
+                var courtInfoTask = _courtRepoContext.GetCourtAsync(court);
+                User plaintiffInfo = plaintiffTask.Result;
+                User defendantInfo = defendantTask.Result;
+                StatementKind statementKindInfo = statementKindTask.Result;
+                Court courtInfo = courtInfoTask.Result;
+                await Task.WhenAll(plaintiffTask, defendantTask, statementKindTask, courtInfoTask);
                 Statement newStatement = _statementRepoContext.CreateStatement(plaintiffInfo, defendantInfo, statementKindInfo, courtInfo);
                 string filename = _statementRepoContext.EditTemplateForDownloading(newStatement);
                 return LocalRedirect($"/api/files/{filename}");
             }
-            catch
+            catch (Exception ex)
             {
-                List<User> users = _userRepoContext.GetUsersList();
-                List<Court> courts = _courtRepoContext.GetCourtsList();
-                List<StatementKind> statementTypes = _statementRepoContext.GetAllStatementKinds();
-                IndexViewModel ivm = new() { Users = users, Courts = courts, StatementKinds = statementTypes };
-                return View(ivm);
+                return NotFound(new
+                {
+                    Trouble = $"{ex.Message}. Please try refresh page." +
+                    " If you see this warning again - contact site administrator by email vladimir.danilin@gmail.com"
+                });
             }
         }
     }
