@@ -3,8 +3,8 @@ using BLL.Repository.Interfaces;
 using BLL.Services.Implementation;
 using BLL.Services.Interfaces;
 using DLL.Context;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -25,6 +25,15 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddMemoryCache();
 // Add services to the container.
+//string connection = Configuration.GetConnectionString("DefaultConnection");
+//builder.Services.AddDbContext<ArmoryDbContext>(options => options.UseSqlServer(connection));
+
+// установка конфигурации подключения
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options => //CookieAuthenticationOptions
+                {
+        options.LoginPath = new PathString("/Account/Login");
+    });
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -49,7 +58,8 @@ app.UseStaticFiles(new StaticFileOptions()
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseAuthentication();    // аутентификация
+app.UseAuthorization();     // авторизация
 
 app.MapControllerRoute(
     name: "default",
