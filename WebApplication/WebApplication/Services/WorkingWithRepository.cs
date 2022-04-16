@@ -17,6 +17,7 @@ namespace WebApplication.Services
     {
         Task<Court> GetCourtAsync(int id, CancellationToken cancellationToken = default);
         Task<List<Court>> GetCourtsListAsync(CancellationToken cancellationToken = default);
+
     }
     public class CourtRepository : ICourtRepository
     {
@@ -25,18 +26,19 @@ namespace WebApplication.Services
         {
             _connectionString = connectionString;
         }
-        public async Task<List<Court>> GetCourtsListAsync(CancellationToken cancellationToken = default)
-        {
-            using IDbConnection db = new SqlConnection(_connectionString);
-            var result = db.Query<Court>("SELECT * FROM Courts").ToList();
-            return await Task.FromResult(result);
-        }
         public async Task<Court> GetCourtAsync(int id, CancellationToken cancellationToken = default)
         {
             using IDbConnection db = new SqlConnection(_connectionString);
             var result = db.Query<Court>("SELECT * FROM Courts WHERE Id = @id", new { id }).FirstOrDefault();
             return await Task.FromResult(result);
         }
+        public async Task<List<Court>> GetCourtsListAsync(CancellationToken cancellationToken = default)
+        {
+            using IDbConnection db = new SqlConnection(_connectionString);
+            var result = db.Query<Court>("SELECT * FROM Courts").ToList();
+            return await Task.FromResult(result);
+        }
+
     }
     public interface INewStatement
     {
@@ -49,7 +51,7 @@ namespace WebApplication.Services
     {
         private static int _statementsCounter;
         private string _connectionString;
-        public NewStatement(string connectionString)
+        public NewStatement(string connectionString="")
         {
             _connectionString = connectionString;
         }
