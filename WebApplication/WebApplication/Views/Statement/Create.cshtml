@@ -1,0 +1,62 @@
+﻿@using WebApplication.ViewModels
+@model IndexViewModel
+
+@{
+    ViewData["Title"] = "Створення документа";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="col-md-8">
+    <h4>Створити документ</h4>
+    <hr />
+    <h6>Для створення документу із форми нижче оберіть позивача, відповідача, тип документа та суд.</h6>
+    <hr />
+    <h6>В разі необхідності додавання іншої особи скористайтеся сторінкою <a asp-area="" asp-controller="User" asp-action="Create"> додавання сторін </a></h6>
+    <form asp-action="Create">
+        <label>Оберіть позивача</label>
+        <br>
+        <select name="plaintiff" class="form-control">
+            @foreach (User user in Model.Users)
+            {
+                <option value="@user.Id">@user.FullName</option>
+            }
+        </select>
+        <br>
+        <label>Оберіть відповідача</label>
+        <br>
+        <select name="defendant" class="form-control">
+            @foreach (User user in Model.Users)
+            {
+                <option value="@user.Id">@user.FullName</option>
+            }
+        </select>
+        <br>
+        <label>Оберіть тип документа</label>
+        <br>
+        <select name="kind" class="form-control">
+            @foreach (StatementKind statementKind in Model.StatementKinds)
+            {
+                <option value="@statementKind.Id">@statementKind.Name</option>
+            }
+        </select>
+        <br>
+        <label>Оберіть суд</label>
+        <br>
+        <select name="court" class="form-control">
+            @foreach (Court court in Model.Courts)
+            {
+                <option value="@court.Id">@court.Name</option>
+            }
+        </select>
+        <br>
+        <input type="submit" value="Створити" />
+    </form>
+</div>
+<div>
+    <a asp-action="Index">На головну</a>
+</div>
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+}
