@@ -88,7 +88,9 @@ namespace WebApplication.Services
             User Defendant = statement.Defendant;
             StatementKind statementKind = statement.StatementKind;
             using Document doc = new();
-            doc.LoadFromFile($"Files/{statementKind.Type}.docx");
+            var fullFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Files",$"{statementKind.Type}.docx");
+            //doc.LoadFromFile($"Files/{statementKind.Type}.docx");
+            doc.LoadFromFile(fullFilePath);
             ReplaceTextInDocument(doc, "statement", statement);
             ReplaceTextInDocument(doc, "Plantiff", Plantiff);
             ReplaceTextInDocument(doc, "Defendant", Defendant);
@@ -98,6 +100,7 @@ namespace WebApplication.Services
             doc.SaveToFile($"{directory}{fileName}", FileFormat.Docx2013);
             return fileName;
         }
+
         public void ReplaceTextInDocument(Document doc, string sourсeName, object obj)
         {
             Type type = obj.GetType();

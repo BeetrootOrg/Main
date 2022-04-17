@@ -72,3 +72,5 @@ INSERT INTO DocumentsDB.dbo.Users
 Select * FROM DocumentsDB.dbo.Users
 
 Select * FROM DocumentsDB.dbo.Courts
+
+Select * FROM DocumentsDB.dbo.StatementKinds

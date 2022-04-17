@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using System.Threading;
 using Shouldly;
 using System.Linq;
+using Spire.Doc;
+using WebApplication.Controllers;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplication.UnitTests
 {
@@ -27,26 +30,32 @@ namespace WebApplication.UnitTests
             _courtRepoMock = new Mock<ICourtRepository>();
             _userRepoMock = new Mock<IUserRepository>();
             _statementMock = new Mock<INewStatement>();
+            var _statementContext = new NewStatement();
             _courtFaker = new Faker<Court>()
-                .RuleFor(x => x.Id, x => x.Random.Int())
+                .RuleFor(x => x.Id, x => x.Random.Int(0))
                 .RuleFor(x => x.Name, x => x.Random.String())
                 .RuleFor(x => x.Adress, x => x.Random.String());
             _userFaker = new Faker<User>()
                 .RuleFor(x => x.FirstName, x => x.Name.FirstName())
                 .RuleFor(x => x.LastName, x => x.Name.LastName())
-                .RuleFor(x => x.Patronymic, x => x.Random.String())
+                .RuleFor(x => x.Patronymic, x => x.Name.FirstName())
                 .RuleFor(x => x.DateOfBirth, x => x.Date.Past())
-                .RuleFor(x => x.TaxNumber, x => x.Random.Long(1, 9999999999))
+                .RuleFor(x => x.TaxNumber, x => x.Random.Long(1))
                 .RuleFor(x => x.Address, x => x.Address.FullAddress())
-                .RuleFor(x => x.Address, x => x.Internet.Email());
+                .RuleFor(x => x.Email, x => x.Internet.Email());
+            var statementType = new[] { "divorce", "courtorder", "moneyclaim" };
             _statementKindFaker = new Faker<StatementKind>()
-                .RuleFor(x => x.Id, x => x.Random.Int())
-                .RuleFor(x => x.Type, x => x.Random.String())
+                .RuleFor(x => x.Id, x => x.Random.Int(0))
+                .RuleFor(x => x.Type, x => x.PickRandom(statementType))
                 .RuleFor(x => x.Name, x => x.Random.String());
             _statementFaker = new Faker<Statement>()
-                .RuleFor(x => x.Court, x => new Faker<Court>())
-                .RuleFor(x => x.StatementKind, x => new Faker<StatementKind>());
-
+                .RuleFor(x => x.Id, x => x.Random.Int(0))
+                .RuleFor(x => x.Court, x => _courtFaker.Generate())
+                .RuleFor(x => x.Plaintiff, x => _userFaker.Generate())
+                .RuleFor(x => x.Defendant, x => _userFaker.Generate())
+                .RuleFor(x => x.DateOfCreation, x => System.DateTime.Now.Date)
+                .RuleFor(x => x.StatementKind, x => _statementKindFaker.Generate())
+                .RuleFor(x => x.Title, x => x.Random.String());
 
         }
 
@@ -153,14 +162,110 @@ namespace WebApplication.UnitTests
         public void EditTemplateForDownloadingShouldReturnFileName()
         {
             //Arrange
+            var statementContext = new NewStatement();
             var statement = _statementFaker.Generate();
-            var _statementContext = new NewStatement();
 
             //Act
-            var result =  _statementContext.EditTemplateForDownloading(statement);
+            var result = statementContext.EditTemplateForDownloading(statement);
 
             //Assert
             result.ShouldContain("docx");
         }
+
+    }
+    public class UserControllerTest
+    {
+        private readonly Mock<IUserRepository> _userRepoMock;
+
+        private readonly Faker<Court> _courtFaker;
+        private readonly Faker<User> _userFaker;
+        private readonly Faker<StatementKind> _statementKindFaker;
+        private readonly Faker<Statement> _statementFaker;
+
+        public UserControllerTest()
+        {
+             _userRepoMock = new Mock<IUserRepository>();
+             var _statementContext = new NewStatement();
+            _courtFaker = new Faker<Court>()
+                .RuleFor(x => x.Id, x => x.Random.Int(0))
+                .RuleFor(x => x.Name, x => x.Random.String())
+                .RuleFor(x => x.Adress, x => x.Random.String());
+            _userFaker = new Faker<User>()
+                .RuleFor(x => x.FirstName, x => x.Name.FirstName())
+                .RuleFor(x => x.LastName, x => x.Name.LastName())
+                .RuleFor(x => x.Patronymic, x => x.Name.FirstName())
+                .RuleFor(x => x.DateOfBirth, x => x.Date.Past())
+                .RuleFor(x => x.TaxNumber, x => x.Random.Long(1))
+                .RuleFor(x => x.Address, x => x.Address.FullAddress())
+                .RuleFor(x => x.Email, x => x.Internet.Email());
+            var statementType = new[] { "divorce", "courtorder", "moneyclaim" };
+            _statementKindFaker = new Faker<StatementKind>()
+                .RuleFor(x => x.Id, x => x.Random.Int(0))
+                .RuleFor(x => x.Type, x => x.PickRandom(statementType))
+                .RuleFor(x => x.Name, x => x.Random.String());
+            _statementFaker = new Faker<Statement>()
+                .RuleFor(x => x.Id, x => x.Random.Int(0))
+                .RuleFor(x => x.Court, x => _courtFaker.Generate())
+                .RuleFor(x => x.Plaintiff, x => _userFaker.Generate())
+                .RuleFor(x => x.Defendant, x => _userFaker.Generate())
+                .RuleFor(x => x.DateOfCreation, x => System.DateTime.Now.Date)
+                .RuleFor(x => x.StatementKind, x => _statementKindFaker.Generate())
+                .RuleFor(x => x.Title, x => x.Random.String());
+        }
+
+        [Fact]
+        public void IndexShoulReturnsUsersList()
+        {
+            // Arrange
+            var userFirst = _userFaker.Generate();
+            var usersList = new List<User>
+            {
+            _userFaker.Generate(),
+            userFirst,
+            _userFaker.Generate()
+            };
+
+            _userRepoMock.Setup(x => x.GetUsersListAsync(CancellationToken.None))
+                    .Returns(Task.FromResult(usersList));
+
+            var controller = new UserController(_userRepoMock.Object);
+
+            // Act
+            var result = controller.Index();
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<IEnumerable<User>>(viewResult.Model);
+            model.Count().ShouldBe(3);
+            model.ElementAt(1).ShouldBe(userFirst);
+        }
+
+        [Fact]
+        public void DetailsShoulReturnUserFromList()
+        {
+            // Arrange
+            var userTest = _userFaker.Generate();
+            var usersList = new List<User>
+            {
+            _userFaker.Generate(),
+            userTest,
+            _userFaker.Generate()
+            };
+
+            _userRepoMock.Setup(x => x.GetUserAsync(userTest.Id, CancellationToken.None))
+                    .Returns(Task.FromResult(userTest));
+
+            var controller = new UserController(_userRepoMock.Object);
+
+            // Act
+            var result = controller.Details(userTest.Id);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<User>(viewResult.Model);
+            model.ShouldBe(userTest);
+            model.ShouldBe(usersList[1]);
+        }
+
     }
 }
