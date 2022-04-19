@@ -1,11 +1,6 @@
 ﻿using BLL.Repository.Interfaces;
 using BLL.Services.Interfaces;
 using DLL.Entites.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Services.Implementation
 {

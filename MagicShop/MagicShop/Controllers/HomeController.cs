@@ -2,22 +2,28 @@
 using Microsoft.AspNetCore.Mvc;
 using NftMarket.Models;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace MagicShop.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
-        [Authorize]
         public IActionResult Index()
         {
             return View();
+        }
+
+        [Authorize(Roles = "admin, user")]
+        public IActionResult CheckAuth()
+        {
+            string role = User.FindFirst(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).Value;
+            return Content($"ваша роль: {role}");
+        }
+
+        [Authorize(Roles = "admin")]
+        public IActionResult About()
+        {
+            return Content("Вход только для администратора");
         }
 
         public IActionResult Privacy()

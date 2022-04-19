@@ -1,14 +1,24 @@
 ﻿using BLL.Services.Interfaces;
+using DAL.Entites;
+using DLL.Entites.Base;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Shared.Models;
+using Shared.Models.Base;
+using System.Security.Claims;
 
 namespace MagicShop.Controllers
 {
     public class GenericController<TEntity, TModel> : Controller
+        where TEntity : BaseEntity
+        where TModel : BaseEntityModel
     {
         private readonly ICrudService<TEntity, TModel> _crudService;
-        public GenericController(ICrudService<TEntity, TModel> crudService)
+        private readonly IMemoryCache _cache;
+        public GenericController(ICrudService<TEntity, TModel> crudService, IMemoryCache cache)
         {
             _crudService = crudService;
+            _cache = cache;
         }
 
         [HttpGet("getAll")]
@@ -94,5 +104,27 @@ namespace MagicShop.Controllers
             }
         }
 
+        [HttpGet("addToCart/{id}")]
+        public async Task<IActionResult> AddToCart(int id)
+        {
+            var entity = await _crudService.GetById(id);
+
+            if (entity != null)
+            {
+                GetCart().AddItem(entity);
+            }
+            return Ok();
+        }
+        public CartModel GetCart()
+        {
+            _cache.TryGetValue(
+                User.Claims.FirstOrDefault(x => x.Type == ClaimsIdentity.DefaultNameClaimType)?.Value,
+                out CartModel cart);
+            if (cart == null)
+            {
+                cart = new CartModel();
+            }
+            return cart;
+        }
     }
 }

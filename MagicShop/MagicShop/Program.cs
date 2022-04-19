@@ -24,16 +24,13 @@ builder.Services.AddScoped(typeof(ICrudService<,>), typeof(CrudService<,>));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddMemoryCache();
-// Add services to the container.
-//string connection = Configuration.GetConnectionString("DefaultConnection");
-//builder.Services.AddDbContext<ArmoryDbContext>(options => options.UseSqlServer(connection));
 
 // установка конфигурации подключения
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options => //CookieAuthenticationOptions
                 {
-        options.LoginPath = new PathString("/Account/Login");
-    });
+                    options.LoginPath = new PathString("/Account/Login");
+                });
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

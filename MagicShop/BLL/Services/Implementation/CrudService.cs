@@ -3,11 +3,13 @@ using BLL.Repository.Interfaces;
 using BLL.Services.Interfaces;
 using DLL.Entites.Base;
 using Microsoft.Extensions.Caching.Memory;
+using Shared.Models.Base;
 
 namespace BLL.Services.Implementation
 {
     public class CrudService<TEntity, TModel> : ICrudService<TEntity, TModel>
         where TEntity : BaseEntity
+        where TModel : BaseEntityModel
     {
         private readonly IGenericRepository<TEntity> _repository;
         private readonly IMapper _maper;

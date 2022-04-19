@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Shared.Models.Base;
 
 namespace BLL.Services.Interfaces
 {
     public interface ICrudService<TEntity, TModel>
+        where TModel : BaseEntityModel
     {
         Task<List<TModel>> GetAll();
         Task<TModel> GetById(int id);

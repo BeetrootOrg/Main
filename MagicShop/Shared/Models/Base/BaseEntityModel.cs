@@ -13,5 +13,6 @@ namespace Shared.Models.Base
         public uint CriticalDamage { get; set; }
         public uint Speed { get; set; }
         public Rarity Rarity { get; set; }
+        public int Price { get; set; }
     }
 }
