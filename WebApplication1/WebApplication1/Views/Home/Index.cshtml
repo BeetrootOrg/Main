@@ -1,0 +1,24 @@
+﻿@model WebApplication1.Models.SearchQuery;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+    <h1>Fabulous movie searcher!</h1>
+    <div class="description">
+        <p>Find the movie by title:</p>
+    </div>
+    <form id="search-movie" asp-action="SearchResults">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <span class="search-field">
+            <input type="text" asp-for="Query" />
+            <span asp-validation-for="Query" class="text-danger"></span>
+        </span>
+        <input type="submit" />
+    </form>
+</div>
+@section Scripts {
+        @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+}

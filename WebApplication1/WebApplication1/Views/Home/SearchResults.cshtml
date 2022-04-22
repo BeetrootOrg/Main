@@ -1,0 +1,78 @@
+﻿@model WebApplication1.Models.SearchQuery;
+@using DM.MovieApi;
+@using DM.MovieApi.MovieDb.Movies
+@using DM.MovieApi.ApiResponse;
+@using DM.MovieApi.MovieDb.Genres;
+@using System.Text.RegularExpressions;
+
+@{
+    ViewData["Title"] = "Search Results";
+}
+
+<div class="container content">
+    <h1>Fabulous movie searcher!</h1>
+    <div class="description">
+        <p>Find the movie by title:</p>
+    </div>
+    <form id="search-movie" asp-action="SearchResults">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <span class="search-field">
+            <input type="text" asp-for="Query" />
+            <span asp-validation-for="Query" class="text-danger"></span>
+        </span>
+        <input type="submit" />
+    </form>
+    <div class="result">
+        @if (ViewBag.Response.Count > 0)
+        {
+            foreach (MovieInfo info in ViewBag.Response)
+            {
+                <div class="movie-row">
+                    <div class="title-col">
+                        <span class="image">
+                            @if (string.IsNullOrEmpty(info.PosterPath))
+                            {
+                                <img src="https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.jpg" alt="@info.Title" />
+                            }
+                            else
+                            {
+                                <img src="https://image.tmdb.org/t/p/w500/@info.PosterPath" alt="@info.Title" />
+                            }
+                        </span>
+                        <span class="title">@info.Title</span>
+                        @{
+                            var genreName = string.Join(", ", info.Genres.Select(w => w.Name));
+                        }
+                        <span class="genres"><b>Genres:</b> @genreName</span>
+                    </div>
+                    <span class="overview">
+                        @if (info.Overview.Length != 0)
+                        {
+                            <p>@info.Overview</p>
+                        }
+                        else
+                        {
+                            <p>No Description.</p>
+                        }
+                    </span>
+                    @if (info.VoteAverage > 0)
+                    {
+                    <div class="vote">
+                        <span class="vote-chart" style="background: conic-gradient(darkred @(info.VoteAverage * 10)%, #ffffff 0)"></span>
+                        <span class="vote-num">@info.VoteAverage</span>
+                    </div>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <span class="no-data">Sorry, there are no results for your request.</span>
+        }
+    </div>
+</div>
+@section Scripts {
+        @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+}
