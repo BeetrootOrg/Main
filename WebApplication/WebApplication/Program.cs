@@ -1,7 +1,7 @@
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Configuration;
 using WebApplication.Database;
+using WebApplication.Services;
+using WebApplication.Services.Interfaces;
 
 var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
 
@@ -10,6 +10,8 @@ builder.Services.AddMvc();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<OrderDbContext>(
         options => options.UseSqlServer(builder.Configuration.GetConnectionString("OrderDatabase")));
+builder.Services.AddTransient<IShowPdf, ShowPdf>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
