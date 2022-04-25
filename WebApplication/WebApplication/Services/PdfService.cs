@@ -9,15 +9,19 @@ using WebApplication.Services.Interfaces;
 
 namespace WebApplication.Services
 {
-    public class ShowPdf:IShowPdf
+    public class PdfService : IPdfService
     {
-        public FileStreamResult CreatePdf(long id, OrderDbContext _context)
+        private OrderDbContext _context;
+        public PdfService(OrderDbContext context)
+        {
+            _context = context;
+        }
+
+        public FileStreamResult CreatePdf(long id)
         {
             Order ord = (Order)_context.Orders
                 .Where(x => x.Id == id)
                 .FirstOrDefault();
-            string manag = (ord.Manager).ToString();
-            string oper = (ord.Operator).ToString();
             PdfDocument pdf = new PdfDocument();
             PdfPageBase page = pdf.Pages.Add();
             PdfPen pen = new PdfPen(PdfBrushes.Red, 0.5f);
@@ -37,8 +41,7 @@ namespace WebApplication.Services
             page.Canvas.DrawString(("эл. носитель: " + (ord.Flash)), fnt3, new PdfSolidBrush(Color.Black), 300, 200);
             page.Canvas.DrawString(("материал: " + (ord.Steel)), fnt3, new PdfSolidBrush(Color.Black), 0, 230);
             page.Canvas.DrawString(("чистота обработки: " + (ord.Surface).ToString()), fnt3, new PdfSolidBrush(Color.Black), 300, 230);
-            page.Canvas.DrawString(("размеры: " + (ord.Dimension1).ToString() + "мм × " + (ord.Dimension2).ToString() + "мм × " + (ord.Thickness).ToString() + "мм"), fnt3, new PdfSolidBrush(Color.Black), 100, 260);
-          
+            page.Canvas.DrawString(("размеры: " + (ord.Dimension1).ToString() + "мм × " + (ord.Dimension2).ToString() + "мм × " + (ord.Thickness).ToString() + "мм"), fnt3, new PdfSolidBrush(Color.Black), 100, 260);  
             page.Canvas.DrawString(("количество: " + (ord.Qty).ToString() + " шт"), fnt3, new PdfSolidBrush(Color.Black), 180, 290);
             string bend;
             if (ord.Bending != null)

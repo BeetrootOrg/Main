@@ -11,20 +11,18 @@ namespace WebApplication.Controllers
     public class OrdersController : Controller
     {
         private readonly OrderDbContext _context;
-        private readonly IShowPdf _showPdf;
-        public OrdersController(OrderDbContext context, IShowPdf showPdf)
+        private readonly IPdfService _showPdf;
+        public OrdersController(OrderDbContext context, IPdfService showPdf)
         {
             _context = context;
             _showPdf = showPdf;
         }
 
-        // GET: Orders
         public async Task<IActionResult> Index()
         {
             return View(await _context.Orders.ToListAsync());
         }
 
-        // GET: Orders/Details/5
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
@@ -42,36 +40,31 @@ namespace WebApplication.Controllers
             return View(order);
         }
 
-        // GET: Orders/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Orders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Flash,Customer,Ord,Steel,Surface,Thickness,Qty,Bending,Dimension1,Dimension2,Note,Manager,Operator,Modified")] Order order)
         {
-
             try
             {
                 if (ModelState.IsValid)
                 {
                     _context.Orders.Add(order);
-                    _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
                     return RedirectToAction("Index");
                 }
             }
-            catch (DataException /* dex */)
+            catch (DataException)
             {
-                //Log the error (uncomment dex variable name and add a line here to write a log.
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
             return View(order);
         }
 
-        // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -87,7 +80,6 @@ namespace WebApplication.Controllers
             return View(order);
         }
 
-        // POST: Orders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public  async Task<IActionResult> Edit(long id, [Bind("Id,Flash,Customer,Ord,Steel,Surface,Thickness,Qty,Bending,Dimension1,Dimension2,Note,Manager,Operator,Modified")] Order order)
@@ -120,7 +112,6 @@ namespace WebApplication.Controllers
             return View(order);
         }
 
-        // GET: Orders/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -137,7 +128,6 @@ namespace WebApplication.Controllers
             return View(order);
         }
 
-        // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
@@ -153,8 +143,8 @@ namespace WebApplication.Controllers
             return _context.Orders.Any(e => e.Id == id);
         }
         public IActionResult CreatePdf(long id)
-            {
-            return _showPdf.CreatePdf(id, _context);
-            }
+        {
+            return _showPdf.CreatePdf(id);
+        }
     }
 }
