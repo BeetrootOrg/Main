@@ -1,6 +1,7 @@
 ﻿using BLL.Services.Interfaces;
 using DLL.Entites.Base;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Shared.Models;
 
 namespace MagicShop.Controllers
@@ -8,7 +9,7 @@ namespace MagicShop.Controllers
     [Route("armor")]
     public class ArmorController : GenericController<Armor, ArmorModel>
     {
-        public ArmorController(ICrudService<Armor, ArmorModel> crudService) : base(crudService)
+        public ArmorController(ICrudService<Armor, ArmorModel> crudService, ICartService cartService) : base(crudService, cartService)
         {
         }
     }

@@ -1,6 +1,7 @@
 ﻿using BLL.Services.Interfaces;
 using DLL.Entites.Base;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Shared.Models.Base;
 
 namespace MagicShop.Controllers
@@ -9,8 +10,8 @@ namespace MagicShop.Controllers
     public class BaseWeaponController : GenericController<BaseWeapon,BaseWeaponModel>
     {
         private readonly IWeaponService _weaponService;
-        public BaseWeaponController(ICrudService<BaseWeapon, BaseWeaponModel> crudService, IWeaponService weaponService)
-            : base(crudService)
+        public BaseWeaponController(ICrudService<BaseWeapon, BaseWeaponModel> crudService, IWeaponService weaponService, ICartService cartService) 
+            : base(crudService, cartService)
         {
             _weaponService = weaponService;
         }

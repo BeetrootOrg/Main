@@ -1,6 +1,7 @@
 ﻿using BLL.Services.Interfaces;
 using DLL.Entites;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Shared.Models;
 
 namespace MagicShop.Controllers
@@ -8,7 +9,7 @@ namespace MagicShop.Controllers
     [Route("range-weapon")]
     public class RangeWeaponController : GenericController<RangeWeapon, RangeWeaponModel>
     {
-        public RangeWeaponController(ICrudService<RangeWeapon, RangeWeaponModel> crudService) : base(crudService)
+        public RangeWeaponController(ICrudService<RangeWeapon, RangeWeaponModel> crudService, ICartService cartService) : base(crudService, cartService)
         {
         }
     }

@@ -18,11 +18,11 @@ builder.Services.AddTransient<IArmorRepository, ArmorRepository>();
 builder.Services.AddTransient<IArmorService, ArmorService>();
 builder.Services.AddTransient<IAccessoriesRepository, AccessoriesRepository>();
 builder.Services.AddTransient<IAccessoriesService, AccessoriesService>();
+builder.Services.AddTransient<ICartService, CartService>();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(ICrudService<,>), typeof(CrudService<,>));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
 builder.Services.AddMemoryCache();
 
 // установка конфигурации подключения

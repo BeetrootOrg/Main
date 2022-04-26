@@ -1,6 +1,7 @@
 ﻿using BLL.Services.Interfaces;
 using DLL.Entites;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Shared.Models;
 
 namespace MagicShop.Controllers
@@ -9,7 +10,7 @@ namespace MagicShop.Controllers
 
     public class MeleeWeaponController : GenericController<MeleeWeapon, MeleeWeaponModel>
     {
-        public MeleeWeaponController(ICrudService<MeleeWeapon, MeleeWeaponModel> crudService) : base(crudService)
+        public MeleeWeaponController(ICrudService<MeleeWeapon, MeleeWeaponModel> crudService, ICartService cartService) : base(crudService, cartService)
         {
         }
     }

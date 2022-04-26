@@ -1,39 +1,83 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BLL.Services.Interfaces;
+using DLL.Entites.Base;
+using Microsoft.AspNetCore.Mvc;
+using Shared.Models.Base;
 
 namespace MagicShop.Controllers
 {
-    public class CartController : Controller
+    [Route("Cart")]
+    public class CartController<TEntity, TModel> : Controller
+        where TEntity : BaseEntity
+        where TModel : BaseEntityModel
     {
-        private IGameRepository repository;
-        public CartController(IGameRepository repo)
+        private readonly ICrudService<TEntity, TModel> _crudService;
+        private readonly ICartService _cartService;
+
+        public CartController(ICrudService<TEntity, TModel> crudService, ICartService cartService)
         {
-            repository = repo;
+            _cartService = cartService;
+            _crudService = crudService;
+        }
+        [HttpGet("Index")]
+        public IActionResult Index()
+        {
+            return View();
         }
 
-        public RedirectToRouteResult AddToCart(int gameId, string returnUrl)
-        {
-            Game game = repository.Games
-                .FirstOrDefault(g => g.GameId == gameId);
 
-            if (game != null)
+        [HttpGet("addToCart/{id}")]
+        public async Task<IActionResult> AddToCart(int id)
+        {
+            var entity = await _crudService.GetById(id);
+
+            if (entity != null)
             {
-                GetCart().AddItem(game, 1);
+                try
+                {
+                    _cartService.AddToCart(User, entity);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    return RedirectToAction("Register", "Account");
+                }
             }
-            return RedirectToAction("Index", new { returnUrl });
+            return RedirectToAction("Index");
         }
-
-        public RedirectToRouteResult RemoveFromCart(int gameId, string returnUrl)
+        [HttpGet("remove/{id}")]
+        public async Task<IActionResult> RemoveCart(int id)
         {
-            Game game = repository.Games
-                .FirstOrDefault(g => g.GameId == gameId);
+            var entity = await _crudService.GetById(id);
 
-            if (game != null)
+            if (entity != null)
             {
-                GetCart().RemoveLine(game);
+                try
+                {
+                    _cartService.AddToCart(User, entity);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    return RedirectToAction("Register", "Account");
+                }
             }
-            return RedirectToAction("Index", new { returnUrl });
+            return RedirectToAction("Index");
         }
+        [HttpGet("remove/{id}")]
+        public IActionResult ClearCart(int id)
+        {
+            var entity = _crudService.GetById(id);
 
-       
+            if (entity != null)
+            {
+                try
+                {
+                    _cartService.ClearCart(User);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    return RedirectToAction("Register", "Account");
+                }
+            }
+            return RedirectToAction("Index");
+        }
     }
 }

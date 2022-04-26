@@ -5,110 +5,210 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Range</h1>
+<div class="video">
+            @*<video class="video__media" src="~/images/fon2.mp4" autoplay muted loop asp-append-version="true"></video>*@
+        </div>
+<link rel="stylesheet" href="~/css/Product.css" asp-append-version="true" />
+	
+<h1>ARMOR</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.RangeWeaponType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WeaponType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Damage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DamageType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HandWeaponType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Strength)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Agility)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Endurance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Intelligence)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CriticalDamage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Speed)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Rarity)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
+    <section class="main-content">
+		<div class="container">
+			<div class="row">
+                
+
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RangeWeaponType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WeaponType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Damage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DamageType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HandWeaponType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Strength)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Agility)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Endurance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Intelligence)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CriticalDamage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Speed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rarity)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "getRangeWeapon", "Weapon",  new {  id=item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+				<div class="col-lg-4 col-sm-6 mb-3">
+					<div class="product-card">
+						<div class="product-thumb">
+							<a href="#"><img src="~/images/Armor1.jpg" alt=""></a>
+						</div>
+						<div class="product-details">
+                                       
+							<h4><a href="#"> @Html.DisplayFor(modelItem => item.Name) </a></h4>
+                           
+
+                                @if (true)
+                            {
+
+                                <p>
+                                    @if (item.RangeWeaponType > 0)
+                                    {
+                                        
+                                    <span>
+                                        Range Weapon Type:
+                                    </span> 
+                                    <span>
+                                        @Html.DisplayFor(modelItem => item.RangeWeaponType)
+                                    </span>}
+                                    @*@if (item.Protection > 0)
+                                    {
+                                    <span>
+                                        Protection:
+                                    </span> 
+                                    <span>
+                                        @Html.DisplayFor(modelItem => item.Protection)
+                                    </span>}*@
+                                    @if (item.Strength > 0)
+                                    {
+                                    <span>
+                                        Strength:
+                                    </span> 
+                                    <span>
+                                        @Html.DisplayFor(modelItem => item.Strength)
+                                    </span>}
+                                    @if (item.Agility > 0)
+                                    {
+                                    <span>
+                                        Agility:
+                                    </span> 
+                                    <span>
+                                        @Html.DisplayFor(modelItem => item.Agility)
+                                    </span>}
+                                    @if (item.Endurance > 0)
+                                    {
+                                    <span>
+                                        Endurance:
+                                    </span> 
+                                    <span>
+                                        @Html.DisplayFor(modelItem => item.Endurance)
+                                    </span>}
+                                    @if (item.Intelligence > 0)
+                                    {
+                                    <span>
+                                        Intelligence:
+                                    </span> 
+                                    <span>
+                                        @Html.DisplayFor(modelItem => item.Intelligence)
+                                    </span>}
+                                    @if (item.CriticalDamage > 0)
+                                    {
+                                    <span>
+                                        Critical Damage:
+                                    </span> 
+                                    <span>
+                                        @Html.DisplayFor(modelItem => item.CriticalDamage)
+                                    </span>}
+                                  @*  @if (item.Speed > 0)
+                                    {
+                                    <span>
+                                        Speed:
+                                    </span> 
+                                    <span>
+                                        @Html.DisplayFor(modelItem => item.Speed)
+                                    </span>}
+                                    @if (item.PhysicalRezist > 0)
+                                    {
+                                    <span>
+                                        Physical Rezist:
+                                    </span> 
+                                    <span>
+                                        @Html.DisplayFor(modelItem => item.PhysicalRezist)
+                                    </span>}
+                                    @if (item.MagicRezist > 0)
+                                    {
+                                    <span>
+                                        Magic Rezist:
+                                    </span> 
+                                    <span>
+                                        @Html.DisplayFor(modelItem => item.MagicRezist)
+                                    </span>}
+                                    @if (item.FireRezist > 0)
+                                    {
+                                    <span>
+                                        Fire Rezist:
+                                    </span> 
+                                    <span>
+                                        @Html.DisplayFor(modelItem => item.FireRezist)
+                                    </span>}
+                                    @if (item.IceRezist > 0)
+                                    {
+                                    <span>
+                                        Ice Rezist:
+                                    </span> 
+                                    <span>
+                                        @Html.DisplayFor(modelItem => item.IceRezist)
+                                    </span>}
+                                    @if (item.PoisonRezist > 0)
+                                    {
+                                    <span>
+                                        Poison Rezist:
+                                    </span> 
+                                    <span>
+                                        @Html.DisplayFor(modelItem => item.PoisonRezist)
+                                    </span>}*@
+
+                                
+                                </p>
+                                int i = (int) item.Rarity;
+                                switch (i)
+                                {
+                                    case 1:
+                                     <span>
+                                    Rarity:
+                                </span> 
+                                <span class="sp1" style = "background-color: grey; border-radius: 6px">
+                                    @Html.DisplayFor(modelItem => item.Rarity)
+                                </span>
+                                        break;
+                                     case 2:
+                                     <span>
+                                    Rarity:
+                                </span> 
+                                <span class="sp1" style = "background-color: green; border-radius: 6px">
+                                    @Html.DisplayFor(modelItem => item.Rarity)
+                                </span>
+                                        break;
+                                     case 3:
+                                     <span>
+                                    Rarity:
+                                </span> 
+                                <span class="sp1" style = "background-color: blue; border-radius: 6px">
+                                    @Html.DisplayFor(modelItem => item.Rarity)
+                                </span>
+                                        break;
+                                     case 4:
+                                     <span>
+                                    Rarity:
+                                </span> 
+                                <span class="sp1" style = "background-color: purple; border-radius: 6px">
+                                    @Html.DisplayFor(modelItem => item.Rarity)
+                                </span>
+                                        break;
+                                     case 5:
+                                     <span>
+                                    Rarity:
+                                </span> 
+                                <span class="sp1" style = "background-color: yellow; border-radius: 6px">
+                                    @Html.DisplayFor(modelItem => item.Rarity)
+                                </span>
+                                        break;
+                                }
+                            }
+                            <p class="card-text">
+                                
+                                 @*@Html.ActionLink("Edit", "Edit", "armor" ,new {  id=item.Id  }) |
+                                @Html.ActionLink("Details", "Details" , "armor", new {  id=item.Id  }) |
+                                @Html.ActionLink("Delete", "delete", "armor", new {  id=item.Id  })*@</p>
+							<div class="product-bottom-details d-flex justify-content-between">
+								<div class="product-price">
+									<small>$230.99</small> $99
+								</div>
+								<div class="product-links">
+									<a href="#"><i class="fas fa-shopping-cart"></i></a>
+									<a href="#"><i class="far fa-heart"></i></a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+                
+}    
+		    </div>
+		</div>
+	</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
