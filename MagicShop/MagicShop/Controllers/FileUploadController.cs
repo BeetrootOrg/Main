@@ -7,13 +7,13 @@ using Shared.Models.Base;
 namespace MagicShop.Controllers
 {
     [Route("file")]
-    public class FileUploadAppController : Controller
+    public class FileUploadController : Controller
     {
         ArmoryDbContext _dbContext;
         IWebHostEnvironment _appEnvironment;
         IMapper _autoMapper;
 
-        public FileUploadAppController(IWebHostEnvironment appEnvironment, ArmoryDbContext dbContext, IMapper autoMapper)
+        public FileUploadController(IWebHostEnvironment appEnvironment, ArmoryDbContext dbContext, IMapper autoMapper)
         {
             _dbContext = dbContext;
             _appEnvironment = appEnvironment;

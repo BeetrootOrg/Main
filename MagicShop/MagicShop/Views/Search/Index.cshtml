@@ -4,6 +4,10 @@
             @*<video class="video__media" src="~/images/fon2.mp4" autoplay muted loop asp-append-version="true"></video>*@
         </div>
 <link rel="stylesheet" href="~/css/Product.css" asp-append-version="true" />
+    <section class="main-content">
+		<div class="container">
+			<div class="row">
+                
 @foreach (var item in Model) {
 				<div class="col-lg-4 col-sm-6 mb-3">
 					<div class="product-card">
@@ -22,7 +26,7 @@
                                 int i = (int) item.Rarity;
                                 switch (i)
                                 {
-                                    case 1:
+                                    case 0:
                                      <span>
                                     Rarity:
                                 </span> 
@@ -30,7 +34,7 @@
                                     @Html.DisplayFor(modelItem => item.Rarity)
                                 </span>
                                         break;
-                                     case 2:
+                                     case 1:
                                      <span>
                                     Rarity:
                                 </span> 
@@ -38,7 +42,7 @@
                                     @Html.DisplayFor(modelItem => item.Rarity)
                                 </span>
                                         break;
-                                     case 3:
+                                     case 2:
                                      <span>
                                     Rarity:
                                 </span> 
@@ -46,7 +50,7 @@
                                     @Html.DisplayFor(modelItem => item.Rarity)
                                 </span>
                                         break;
-                                     case 4:
+                                     case 3:
                                      <span>
                                     Rarity:
                                 </span> 
@@ -54,7 +58,7 @@
                                     @Html.DisplayFor(modelItem => item.Rarity)
                                 </span>
                                         break;
-                                     case 5:
+                                     case 4:
                                      <span>
                                     Rarity:
                                 </span> 

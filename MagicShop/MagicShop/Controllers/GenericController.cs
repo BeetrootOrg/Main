@@ -99,8 +99,61 @@ namespace MagicShop.Controllers
                 return View();
             }
         }
+        [HttpGet("addToCart/{id}")]
+        public async Task<IActionResult> AddToCart(int id)
+        {
+            var entity = await _crudService.GetById(id);
 
-       
+            if (entity != null)
+            {
+                try
+                {
+                    _cartService.AddToCart(User, entity);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    return RedirectToAction("Register", "Account");
+                }
+            }
+            return RedirectToAction("Index");
+        }
+        [HttpGet("remove/{id}")]
+        public async Task<IActionResult> RemoveCart(int id)
+        {
+            var entity = await _crudService.GetById(id);
+
+            if (entity != null)
+            {
+                try
+                {
+                    _cartService.AddToCart(User, entity);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    return RedirectToAction("Register", "Account");
+                }
+            }
+            return RedirectToAction("Index");
+        }
+        [HttpGet("remove/{id}")]
+        public IActionResult ClearCart(int id)
+        {
+            var entity = _crudService.GetById(id);
+
+            if (entity != null)
+            {
+                try
+                {
+                    _cartService.ClearCart(User);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    return RedirectToAction("Register", "Account");
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
 
     }
 }

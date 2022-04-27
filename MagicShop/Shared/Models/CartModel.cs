@@ -31,7 +31,7 @@ namespace Shared.Models
             _cartCollection.Clear();
         }
 
-        public IEnumerable<BaseEntityModel> Lines
+        public IEnumerable<BaseEntityModel> GetItems
         {
             get { return _cartCollection; }
         }
