@@ -18,6 +18,7 @@ builder.Services.AddTransient<IArmorRepository, ArmorRepository>();
 builder.Services.AddTransient<IArmorService, ArmorService>();
 builder.Services.AddTransient<IAccessoriesRepository, AccessoriesRepository>();
 builder.Services.AddTransient<IAccessoriesService, AccessoriesService>();
+builder.Services.AddTransient<ISearchService, SearchService>();
 builder.Services.AddTransient<ICartService, CartService>();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

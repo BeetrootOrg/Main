@@ -5,7 +5,7 @@ using Shared.Models.Base;
 
 namespace MagicShop.Controllers
 {
-    [Route("Cart")]
+    [Route("cart")]
     public class CartController<TEntity, TModel> : Controller
         where TEntity : BaseEntity
         where TModel : BaseEntityModel
@@ -18,12 +18,12 @@ namespace MagicShop.Controllers
             _cartService = cartService;
             _crudService = crudService;
         }
-        [HttpGet("Index")]
-        public IActionResult Index()
+
+        [HttpGet("check")]
+        public IActionResult Check()
         {
             return View();
         }
-
 
         [HttpGet("addToCart/{id}")]
         public async Task<IActionResult> AddToCart(int id)

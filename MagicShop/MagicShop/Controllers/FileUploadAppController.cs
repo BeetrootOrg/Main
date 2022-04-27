@@ -7,7 +7,6 @@ using Shared.Models.Base;
 namespace MagicShop.Controllers
 {
     [Route("file")]
-
     public class FileUploadAppController : Controller
     {
         ArmoryDbContext _dbContext;
@@ -21,7 +20,6 @@ namespace MagicShop.Controllers
             _autoMapper = autoMapper;
         }
         [HttpGet("getFile")]
-
         public IActionResult Index()
         {
             var files = _dbContext.Files.ToList();
