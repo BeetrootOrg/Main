@@ -5,6 +5,7 @@ using Shared.Models.Base;
 
 namespace MagicShop.Controllers
 {
+    [Route("generic")]
     public class GenericController<TEntity, TModel> : Controller
         where TEntity : BaseEntity
         where TModel : BaseEntityModel
@@ -117,8 +118,8 @@ namespace MagicShop.Controllers
             }
             return RedirectToAction("Index");
         }
-        [HttpGet("remove/{id}")]
-        public async Task<IActionResult> RemoveCart(int id)
+        [HttpGet("removeFromCart/{id}")]
+        public async Task<IActionResult> RemoveFromCart(int id)
         {
             var entity = await _crudService.GetById(id);
 
@@ -126,34 +127,15 @@ namespace MagicShop.Controllers
             {
                 try
                 {
-                    _cartService.AddToCart(User, entity);
+                    _cartService.RemoveFromCart(User, entity);
                 }
                 catch (UnauthorizedAccessException)
                 {
                     return RedirectToAction("Register", "Account");
                 }
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Check", "Cart");
         }
-        [HttpGet("remove/{id}")]
-        public IActionResult ClearCart(int id)
-        {
-            var entity = _crudService.GetById(id);
-
-            if (entity != null)
-            {
-                try
-                {
-                    _cartService.ClearCart(User);
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    return RedirectToAction("Register", "Account");
-                }
-            }
-            return RedirectToAction("Index");
-        }
-
 
     }
 }

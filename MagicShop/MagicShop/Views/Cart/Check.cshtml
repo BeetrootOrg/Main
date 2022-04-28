@@ -27,6 +27,12 @@
                                             <div class="cart_item_title">Price</div>
                                             <div class="cart_item_text">₹@item.Price</div>
                                         </div>
+                                        <div class="cart_buttons">
+                                                @Html.ActionLink("Remove", "RemoveFromCart",
+                                                item.GetType().Name.Replace("Model", ""),
+                                                new {  id=item.Id  },
+                                                new { @class = "btn btn-info"})
+                                        </div>
                                     </div>
                                 </li>
                             </ul>
@@ -39,9 +45,13 @@
                         <div class="order_total_amount">₹@Model.ComputeTotalValue()</div>
                     </div>
                 </div>
-                <div class="cart_buttons"> <button type="button" class="button cart_button_clear">Continue Shopping</button> <button type="button" class="button cart_button_checkout">Add to Cart</button> </div>
-                <div class="cart_buttons"> <button type="button" class="button cart_button_clear">Continue Shopping</button> <button type="button" class="button cart_button_checkout">Remove Cart</button> </div>
-                <div class="cart_buttons"> <button type="button" class="button cart_button_clear">Continue Shopping</button> <button type="button" class="button cart_button_checkout">Clear Cart</button> </div>
+
+                 <a class="btn btn-info  btn-secondary btn-lg login-registr-button"asp-controller="Home" asp-action="Index">Continue Shopping</a>
+
+                <div class="cart_buttons">
+                    <a type="button" class="btn btn-info button cart_button_checkout" asp-controller="Cart" asp-action="Clear">Clear Cart</a>
+                </div>
+
             </div>
         </div>
     </div>

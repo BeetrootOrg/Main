@@ -195,10 +195,17 @@
                                 @Html.ActionLink("Delete", "delete", "armor", new {  id=item.Id  })*@</p>
 							<div class="product-bottom-details d-flex justify-content-between">
 								<div class="product-price">
-									<small>$230.99</small> $99
+                                    <p>@Html.DisplayFor(modelItem => item.Price)$</p>
 								</div>
-								<div class="product-links">
-									<a href="#"><i class="fas fa-shopping-cart"></i></a>
+                                @using (Html.BeginForm("addToCart", "MagicWeapon", FormMethod.Get ,new { Id = item.Id}))
+                                {
+                                    <div class="pull-right">
+                                        @Html.HiddenFor(x => item.Id)
+                                        <input type="submit" class="btn btn-success" value="Добавить в корзину" />
+                                    </div>
+                                }
+							<div class="product-links">
+									<a href="addToCart/@item.Id"><i class="fas fa-shopping-cart"></i></a>
 									<a href="#"><i class="far fa-heart"></i></a>
 								</div>
 							</div>

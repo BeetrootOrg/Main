@@ -8,7 +8,7 @@ namespace BLL.Services.Interfaces
     {
         void AddToCart(ClaimsPrincipal user, BaseEntityModel entityModel);
         void ClearCart(ClaimsPrincipal user);
-        void RemoveCart(ClaimsPrincipal user, BaseEntityModel entityModel);
+        void RemoveFromCart(ClaimsPrincipal user, BaseEntityModel entityModel);
         CartModel GetCart(ClaimsPrincipal user);
     }
 }

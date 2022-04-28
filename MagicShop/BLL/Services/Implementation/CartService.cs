@@ -31,7 +31,7 @@ namespace BLL.Services.Implementation
             _cache.Set(key, cart);
         }
 
-        public void RemoveCart(ClaimsPrincipal user, BaseEntityModel entityModel)
+        public void RemoveFromCart(ClaimsPrincipal user, BaseEntityModel entityModel)
         {
             var cart = GetCart(user);
             cart.RemoveItem(entityModel);

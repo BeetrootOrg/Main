@@ -26,5 +26,21 @@ namespace MagicShop.Controllers
             return View(cart);
         }
 
+        [HttpGet("clear")]
+        public IActionResult Clear()
+        {
+            try
+            {
+                _cartService.ClearCart(User);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return RedirectToAction("Register", "Account");
+            }
+
+            return RedirectToAction("Check");
+        }
+
+
     }
 }
