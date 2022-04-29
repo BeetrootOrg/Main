@@ -5,7 +5,7 @@ namespace WebApplication.Database
 {
     public partial class OrderDbContext: DbContext
     {
-        public OrderDbContext()
+        public OrderDbContext(DbContextOptions options)
         {
         }
 
