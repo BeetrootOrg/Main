@@ -9,6 +9,8 @@ using Moq;
 using WebApplication.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.InMemory;
+using Microsoft.Data.Sqlite;
 
 namespace WebApplicationTests
 {
@@ -46,18 +48,23 @@ namespace WebApplicationTests
             {
             };
 
-            var optionsBuilder = new DbContextOptionsBuilder();
-            optionsBuilder.UseSqlServer("Server=AMIGA\\SQLEXPRESS;Database=OrderDB;Trusted_Connection=True;");
-               
-            OrderDbContext fakeContext = new OrderDbContext(optionsBuilder.Options);
+            var connectionStringBuilder =
+                new SqliteConnectionStringBuilder { DataSource = ":memory:" };
+            var connection = new SqliteConnection(connectionStringBuilder.ToString());
+
+            var options = new DbContextOptionsBuilder<OrderDbContext>()
+                .UseInMemoryDatabase((Guid.NewGuid().ToString()))
+                .Options;
+
+            OrderDbContext fakeContext = new OrderDbContext(options);
+
+            var set = new Mock<DbSet<Order>>();
+            set.Object.AddRange(ord);
 
             fakeContext.Orders.Add(ord);
-            //fakeContext.SaveChanges();
+            fakeContext.SaveChanges();
 
 
-            //var mock = new Mock<Order>();
-            //mock.Setup(a => a.GetComputerList()).Returns(new List<Computer>() { new Computer() });
-            //mock.Setup(a => a.OrderDbContext     GetComputerList()).Returns(new List<Computer>() { new Computer() });
             OrdersController controller = new OrdersController(fakeContext, new PdfService(fakeContext));
 
             //Act
