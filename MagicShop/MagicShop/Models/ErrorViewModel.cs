@@ -1,4 +1,4 @@
-namespace NftMarket.Models
+namespace MagicShop.Models
 {
     public class ErrorViewModel
     {

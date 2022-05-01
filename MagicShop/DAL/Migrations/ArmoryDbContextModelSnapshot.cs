@@ -13,6 +13,7 @@ namespace DAL.Migrations
     [DbContext(typeof(ArmoryDbContext))]
     partial class ArmoryDbContextModelSnapshot : ModelSnapshot
     {
+
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618

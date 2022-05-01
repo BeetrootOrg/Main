@@ -11,6 +11,7 @@ namespace DLL.Context
         public ArmoryDbContext(DbContextOptions<ArmoryDbContext> options) :base (options)
         {
             Database.EnsureCreated();
+          
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
@@ -20,7 +21,7 @@ namespace DLL.Context
         public DbSet<MagicWeapon> MagicWeapon { get; set; }
         public DbSet<RangeWeapon> RangeWeapon { get; set; }
         public DbSet<MeleeWeapon> MeleeWeapon { get; set; }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             string adminRoleName = "admin";

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NftMarket.Models;
+using MagicShop.Models;
 using System.Diagnostics;
 using System.Security.Claims;
 
