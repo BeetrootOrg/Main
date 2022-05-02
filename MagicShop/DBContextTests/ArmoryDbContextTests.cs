@@ -7,12 +7,12 @@ using Xunit;
 
 namespace DBContextTests
 {
-    public class UnitTest1
+    public class ArmoryDbContextTests
     {
         private readonly DbContextOptions<ArmoryDbContext> _options;
         private  const string _testName = "Test";
 
-        public UnitTest1()
+        public ArmoryDbContextTests()
         {
             _options = new DbContextOptionsBuilder<ArmoryDbContext>()
            .UseInMemoryDatabase(databaseName: "ArmoryDataBase")
@@ -104,7 +104,7 @@ namespace DBContextTests
             using (var context = new ArmoryDbContext(_options))
             {
                 context.Armor.Add(testEntity);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 context.Armor.Add(testEntity2);
 
                 //assert
@@ -223,7 +223,7 @@ namespace DBContextTests
             using (var context = new ArmoryDbContext(_options))
             {
                 context.Accessories.Add(testEntity);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 context.Accessories.Add(testEntity2);
 
                 //assert
@@ -335,7 +335,7 @@ namespace DBContextTests
             using (var context = new ArmoryDbContext(_options))
             {
                 context.MagicWeapon.Add(testEntity);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 context.MagicWeapon.Add(testEntity2);
 
                 //assert
@@ -445,7 +445,7 @@ namespace DBContextTests
             using (var context = new ArmoryDbContext(_options))
             {
                 context.RangeWeapon.Add(testEntity);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 context.RangeWeapon.Add(testEntity2);
 
                 //assert
@@ -555,7 +555,7 @@ namespace DBContextTests
             using (var context = new ArmoryDbContext(_options))
             {
                 context.MeleeWeapon.Add(testEntity);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 context.MeleeWeapon.Add(testEntity2);
 
                 //assert

@@ -14,10 +14,6 @@ builder.Services.AddDbContext<ArmoryDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddTransient<IWeaponRepository, WeaponRepository>();
 builder.Services.AddTransient<IWeaponService, WeaponService>();
-builder.Services.AddTransient<IArmorRepository, ArmorRepository>();
-builder.Services.AddTransient<IArmorService, ArmorService>();
-builder.Services.AddTransient<IAccessoriesRepository, AccessoriesRepository>();
-builder.Services.AddTransient<IAccessoriesService, AccessoriesService>();
 builder.Services.AddTransient<ISearchService, SearchService>();
 builder.Services.AddTransient<ICartService, CartService>();
 

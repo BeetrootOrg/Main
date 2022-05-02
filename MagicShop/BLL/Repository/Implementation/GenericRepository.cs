@@ -45,6 +45,7 @@ namespace BLL.Repository.Implementation
              TEntity entityDel = await _set.FirstAsync(x => x.Id == id);
             if (entityDel != null)
             {
+                _dbContext.Attach(entityDel);
                 _dbContext.Remove(entityDel);
                 await _dbContext.SaveChangesAsync();
             }
