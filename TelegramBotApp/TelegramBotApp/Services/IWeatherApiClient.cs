@@ -6,9 +6,9 @@ namespace TelegramBotApp.Services
 {
     public interface IWeatherApiClient
     {
-        Task<IEnumerable<Location>> GetLocationsByQuery(string query,
-            CancellationToken cancellationToken = default);
+        //Task<IEnumerable<Location>> GetLocationsByQuery(string query,
+        //    CancellationToken cancellationToken = default);
 
-        Task<WeatherInfo> GetWeatherByWoeid(int woeid, CancellationToken cancellationToken = default);
+        Task<WeatherInfo> GetCurrentWeatherByLocation(string location, CancellationToken cancellationToken = default);
     }
 }

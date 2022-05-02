@@ -14,6 +14,7 @@ namespace BeetrootTgBot
 {
     public class Startup
     {
+        private readonly string _apiKey = "92a14d87197459ca657a1a1176d75dac";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -39,12 +40,12 @@ namespace BeetrootTgBot
                 }
             };
 
-            services.AddHttpClient("weatherapi", client =>
+            services.AddHttpClient("OpenWeatherMap", client =>
             {
-                client.BaseAddress = new Uri("https://www.metaweather.com");
+                client.BaseAddress = new Uri("https://api.openweathermap.org");
                 client.Timeout = TimeSpan.FromSeconds(10);
             })
-                .AddTypedClient<IWeatherApiClient>(client => new WeatherApiClient(client, settings));
+                .AddTypedClient<IWeatherApiClient>(client => new WeatherApiClient(client, settings, _apiKey));
 
             services.AddHttpClient("tgclient")
                 .AddTypedClient<ITelegramBotClient>(client =>
