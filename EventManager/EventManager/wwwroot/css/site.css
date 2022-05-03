@@ -1,0 +1,43 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+.myButton {
+    box-shadow: inset 28px 0px 14px -3px #f2fadc;
+    background: linear-gradient(to bottom, #dbe6c4 5%, #9ba892 100%);
+    background-color: #dbe6c4;
+    border-radius: 20px;
+    border: 1px solid #b2b8ad;
+    display: inline-block;
+    cursor: pointer;
+    color: #757d6f;
+    font-family: Arial;
+    font-size: 15px;
+    padding: 4px 24px;
+    text-decoration: none;
+    text-shadow: 0px 1px 6px #ced9bf;
+}
+
+    .myButton:hover {
+        background: linear-gradient(to bottom, #9ba892 5%, #dbe6c4 100%);
+        background-color: #9ba892;
+    }
+
+    .myButton:active {
+        position: relative;
+        top: 1px;
+    }
