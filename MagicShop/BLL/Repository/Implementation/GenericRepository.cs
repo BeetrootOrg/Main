@@ -18,7 +18,7 @@ namespace BLL.Repository.Implementation
 
         public async  Task<List<TEntity>> GetAll()
         {
-            return await _set.ToListAsync<TEntity>();
+            return await _set.ToListAsync();
 
         }
         public async Task<TEntity> Get(int id)

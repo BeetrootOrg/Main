@@ -25,7 +25,7 @@ namespace DBContextTests
         public async Task AddArmor_Success()
         {
             // arrange
-            int testId = 12345;
+            int testId = 4521899;
             var testEntity = new DLL.Entites.Base.Armor
             {
                 Id = testId,
@@ -54,7 +54,7 @@ namespace DBContextTests
         public async Task UpdateArmor_Success()
         {
             // arrange
-            int testId = 12346;
+            int testId = 547899;
             string updatedName = "Testing";
             var testEntity = new DLL.Entites.Base.Armor
             {
@@ -88,7 +88,7 @@ namespace DBContextTests
         public async Task Armor_CantAddSameId()
         {
             // arrange
-            int testId = 12349;
+            int testId = 123411239;
             var testEntity = new DLL.Entites.Base.Armor
             {
                 Id = testId,
@@ -116,7 +116,7 @@ namespace DBContextTests
         public async Task DeletArmor_Success()
         {
             // arrange
-            int testId = 123499;
+            int testId = 537468698;
             var testEntity = new DLL.Entites.Base.Armor
             {
                 Id = testId,
@@ -146,7 +146,7 @@ namespace DBContextTests
         public async Task AddAccessories_Success()
         {
             // arrange
-            int testId = 12347;
+            int testId = 243561236;
             var testEntity = new DLL.Entites.Accessories
             {
                 Id = testId,
@@ -174,7 +174,7 @@ namespace DBContextTests
         public async Task UpdateAccessories_Success()
         {
             // arrange
-            int testId = 12346;
+            int testId = 3546;
             string updatedName = "Testing";
             var testEntity = new DLL.Entites.Accessories
             {
@@ -207,7 +207,7 @@ namespace DBContextTests
         public async Task Accessories_CantAddSameId()
         {
             // arrange
-            int testId = 12349;
+            int testId = 4565478;
             var testEntity = new DLL.Entites.Accessories
             {
                 Id = testId,
@@ -234,7 +234,7 @@ namespace DBContextTests
         public async Task DeletAccessories_Success()
         {
             // arrange
-            int testId = 123499;
+            int testId = 1213153499;
             var testEntity = new DLL.Entites.Accessories
             {
                 Id = testId,
@@ -261,7 +261,7 @@ namespace DBContextTests
         public async Task AddMagicWeapon_Success()
         {
             // arrange
-            int testId = 12348;
+            int testId = 1212435348;
             var testEntity = new DLL.Entites.MagicWeapon
             {
                 Id = testId,
@@ -288,7 +288,7 @@ namespace DBContextTests
         public async Task UpdateMagicWeapon_Success()
         {
             // arrange
-            int testId = 12346;
+            int testId = 1212566346;
             string updatedName = "Testing";
             var testEntity = new DLL.Entites.MagicWeapon
             {
@@ -320,7 +320,7 @@ namespace DBContextTests
         public async Task MagicWeapon_CantAddSameId()
         {
             // arrange
-            int testId = 12349;
+            int testId = 1236565749;
             var testEntity = new DLL.Entites.MagicWeapon
             {
                 Id = testId,
@@ -346,7 +346,7 @@ namespace DBContextTests
         public async Task DeletMagicWeapon_Success()
         {
             // arrange
-            int testId = 123499;
+            int testId = 1232341499;
             var testEntity = new DLL.Entites.MagicWeapon
             {
                 Id = testId,
@@ -372,7 +372,7 @@ namespace DBContextTests
         public async Task AddRangeWeapon_Success()
         {
             // arrange
-            int testId = 12345;
+            int testId = 12342445;
             var testEntity = new DLL.Entites.RangeWeapon
             {
                 Id = testId,
@@ -388,7 +388,7 @@ namespace DBContextTests
                 context.RangeWeapon.Add(testEntity);
                 context.SaveChanges();
 
-                var result = await context.Armor.FirstOrDefaultAsync(x => x.Id == testId);
+                var result = await context.RangeWeapon.FirstOrDefaultAsync(x => x.Id == testId);
                 var actualResult = testEntity;
                 //assert
                 Assert.Equal(testId, result?.Id);
@@ -399,7 +399,7 @@ namespace DBContextTests
         public async Task UpdateRangeWeapon_Success()
         {
             // arrange
-            int testId = 12346;
+            int testId = 1234456;
             string updatedName = "Testing";
             var testEntity = new DLL.Entites.RangeWeapon
             {
@@ -430,7 +430,7 @@ namespace DBContextTests
         public async Task RangeWeapon_CantAddSameId()
         {
             // arrange
-            int testId = 12349;
+            int testId = 12678349;
             var testEntity = new DLL.Entites.RangeWeapon
             {
                 Id = testId,
@@ -456,7 +456,7 @@ namespace DBContextTests
         public async Task DeletRangeWeapon_Success()
         {
             // arrange
-            int testId = 123499;
+            int testId = 1234457699;
             var testEntity = new DLL.Entites.RangeWeapon
             {
                 Id = testId,
@@ -482,7 +482,7 @@ namespace DBContextTests
         public async Task AddMelleWeapon_Success()
         {
             // arrange
-            int testId = 12345;
+            int testId = 12343565;
             var testEntity = new DLL.Entites.MeleeWeapon
             {
                 Id = testId,
@@ -498,7 +498,7 @@ namespace DBContextTests
                 context.MeleeWeapon.Add(testEntity);
                 context.SaveChanges();
 
-                var result = await context.Armor.FirstOrDefaultAsync(x => x.Id == testId);
+                var result = await context.MeleeWeapon.FirstOrDefaultAsync(x => x.Id == testId);
                 var actualResult = testEntity;
                 //assert
                 Assert.Equal(testId, result?.Id);
@@ -509,7 +509,7 @@ namespace DBContextTests
         public async Task UpdateMeleeWeapon_Success()
         {
             // arrange
-            int testId = 12346;
+            int testId = 121424346;
             string updatedName = "Testing";
             var testEntity = new DLL.Entites.MeleeWeapon
             {
@@ -540,7 +540,7 @@ namespace DBContextTests
         public async Task MeleeWeapon_CantAddSameId()
         {
             // arrange
-            int testId = 12349;
+            int testId = 1231149;
             var testEntity = new DLL.Entites.MeleeWeapon
             {
                 Id = testId,
@@ -566,7 +566,7 @@ namespace DBContextTests
         public async Task DeletMeleeWeapon_Success()
         {
             // arrange
-            int testId = 123499;
+            int testId = 123234499;
             var testEntity = new DLL.Entites.MeleeWeapon
             {
                 Id = testId,
