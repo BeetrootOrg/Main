@@ -7,12 +7,12 @@ namespace EventManager.Controllers
 {
     public class EventsController : Controller
     {
-        public static readonly IEnumerable<Event> _events = new List<Event>
+        private static readonly IEnumerable<Event> _events = new List<Event>
         {
             new Event
             {
                 Id = 1,
-                EventName = "Support Ukraine",
+                EventName = "Help Earth",
                 LocationId = 1,
             }
 
