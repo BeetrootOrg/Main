@@ -38,12 +38,11 @@ namespace TelegramBotApp.Services
                 var location = update.Message.Text;
 
                 var weatherInfo = await _weatherApiClient.GetCurrentWeatherByLocation(location, cancellationToken);
-                var weather = weatherInfo?.WeatherResponse?.FirstOrDefault();
 
-                if (weather != null)
+                if (weatherInfo != null)
                 {
-                    await _telegramBotClient.SendTextMessageAsync(update.Message.Chat.Id, $"Weather in {weather.Name} is between {weather.Main.TempMin} and {weather.Main.TempMax}" +
-                        $", current temp {weather.Main.Temp}", cancellationToken: cancellationToken);
+                    await _telegramBotClient.SendTextMessageAsync(update.Message.Chat.Id, $"Weather in {weatherInfo.Name}, {weatherInfo.Sys.Country} is between {weatherInfo.Main.TempMin} and {weatherInfo.Main.TempMax}" +
+                        $", current temp {weatherInfo.Main.Temp}", cancellationToken: cancellationToken);
 
                     return;
                 }

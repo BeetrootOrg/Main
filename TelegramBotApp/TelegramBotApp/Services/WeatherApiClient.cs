@@ -8,10 +8,10 @@ using TelegramBotApp.Model;
 
 namespace TelegramBotApp.Services
 {
-    public class WeatherInfo 
-    {
-        public IEnumerable<WeatherResponseModel> WeatherResponse { get; set; }
-    }
+    //public class WeatherInfo 
+    //{
+    //    public IEnumerable<WeatherResponseModel> WeatherResponse { get; set; }
+    //}
 
 
     public class WeatherApiClient : IWeatherApiClient
@@ -43,7 +43,7 @@ namespace TelegramBotApp.Services
              return result;
          }*/
 
-        public async Task<WeatherInfo> GetCurrentWeatherByLocation(string location, CancellationToken cancellationToken = default)
+        public async Task<WeatherResponseModel> GetCurrentWeatherByLocation(string location, CancellationToken cancellationToken = default)
         {
             var response = await _client.GetAsync($"/data/2.5/weather?q={location}&appid={_apiKey}&units=metric", cancellationToken);
 
@@ -53,7 +53,7 @@ namespace TelegramBotApp.Services
             }
 
             var content = await response.Content.ReadAsStringAsync(cancellationToken);
-            var result = JsonConvert.DeserializeObject<WeatherInfo>(content, _settings);
+            var result = JsonConvert.DeserializeObject<WeatherResponseModel>(content, _settings);
 
             return result;
         }
