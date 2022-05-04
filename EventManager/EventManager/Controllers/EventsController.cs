@@ -14,6 +14,7 @@ namespace EventManager.Controllers
                 Id = 1,
                 EventName = "Help Earth",
                 LocationId = 1,
+
             }
 
         };
