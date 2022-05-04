@@ -14,7 +14,7 @@ builder.Services.Configure<EventConfiguration>(builder.Configuration);
 
 builder.Services.AddDbContext<EventDBContext>((sp, options) =>
 {
-    var configuration = sp.GetRequiredService<IOptionsMonitor<EventDBContext>>();
+    var configuration = sp.GetRequiredService<IOptionsMonitor<EventConfiguration>>();
     options.UseSqlServer(configuration.CurrentValue.EventDBConnectionStrings);
 });
 
