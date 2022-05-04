@@ -1,0 +1,106 @@
+﻿
+.product-card {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.06);
+    transition: all .3s;
+    display: inline-block
+}
+
+    .product-card:hover {
+        box-shadow: 0 14px 30px -15px rgba(0, 0, 0, 0.75);
+    }
+
+.product-thumb a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    padding: 20px;
+}
+
+.product-thumb img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.product-details {
+    padding: 20px;
+}
+
+    .product-details h4 a {
+        font-weight: 500;
+        display: block;
+        height: 60px;
+        overflow: hidden;
+        text-decoration: none;
+    }
+
+    .product-details .card-text {
+        font-size: 15px;
+        margin-bottom: 20px;
+        color: #999;
+        height: 44px;
+        overflow: hidden;
+    }
+
+.product-bottom-details {
+    overflow: hidden;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.product-price {
+    font-size: 18px;
+    color: #ee6e73;
+    font-weight: 600;
+}
+
+    .product-price small {
+        color: #ccc;
+        font-weight: 400;
+        text-decoration: line-through;
+        margin-right: 5px;
+    }
+
+.product-links a {
+    font-size: 20px;
+    margin-left: 10px;
+}
+/* Carousel */
+.my-carousel {
+    padding: 0;
+}
+
+    .my-carousel .carousel-item {
+        display: flex;
+        max-height: 500px;
+    }
+
+        .my-carousel .carousel-item img {
+            object-fit: cover;
+        }
+/* Carousel */
+/*Pupap*/
+
+.tooltip {
+    border-bottom: 1px dotted black;
+}
+
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 120px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        /* Position the tooltip */
+        position: absolute;
+        z-index: 1;
+        top: 100%;
+        left: 50%;
+        margin-left: -60px;
+    }
+
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+    }

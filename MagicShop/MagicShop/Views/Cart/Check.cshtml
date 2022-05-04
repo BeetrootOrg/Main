@@ -1,0 +1,61 @@
+﻿@model Shared.Models.CartModel
+
+
+<link rel="stylesheet" href="~/css/Cart.css" asp-append-version="true" />
+<div class="cart_section">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+                <div class="cart_title">Shopping Cart<small> (@Model.GetItems.Count() item in your cart) </small></div>
+                @foreach (var item in Model.GetItems)
+                {
+                    <div class="cart_container">
+                        <div class="cart_items">
+                            <ul class="cart_list">
+                                <li class="cart_item clearfix">
+                                    <div class="cart_item_image"><img src="@item." alt=""></div>
+                                    <div class="cart_item_info d-flex flex-md-row flex-column justify-content-between">
+                                        <div class="cart_item_name cart_info_col">
+                                            <div class="cart_item_title">Name</div>
+                                            <div class="cart_item_text">@item.Name</div>
+                                        </div>
+                                        <div class="cart_item_color cart_info_col">
+                                            <div class="cart_item_title">Rarity</div>
+                                            <div class="cart_item_text">@item.Rarity</div>
+                                        </div>
+                                        <div class="cart_item_price cart_info_col">
+                                            <div class="cart_item_title">Price</div>
+                                            <div class="cart_item_text">₹@item.Price</div>
+                                        </div>
+                                        <div class="cart_buttons">
+                                                @Html.ActionLink("Remove", "RemoveFromCart",
+                                                item.GetType().Name.Replace("Model", ""),
+                                                new {  id=item.Id  },
+                                                new { @class = "btn btn-info"})
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                }
+                <div class="order_total">
+                    <div class="order_total_content text-md-right">
+                        <div class="order_total_title">Order Total:</div>
+                        <div class="order_total_amount">₹@Model.ComputeTotalValue()</div>
+                    </div>
+                </div>
+
+                 <a class="btn btn-info  btn-secondary btn-lg login-registr-button"asp-controller="Home" asp-action="Index">Continue Shopping</a>
+
+                <div class="cart_buttons">
+                    <a type="button" class="btn btn-info button cart_button_checkout" asp-controller="Cart" asp-action="Clear">Clear Cart</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

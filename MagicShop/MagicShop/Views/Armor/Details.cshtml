@@ -1,0 +1,120 @@
+﻿@model Shared.Models.ArmorModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Armor</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ArmorMaterialType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ArmorMaterialType)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ArmorType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ArmorType)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Protection)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Protection)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PhysicalRezist)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PhysicalRezist)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MagicRezist)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MagicRezist)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FireRezist)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FireRezist)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IceRezist)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IceRezist)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PoisonRezist)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PoisonRezist)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Strength)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Strength)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Agility)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Agility)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Endurance)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Endurance)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Intelligence)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Intelligence)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CriticalDamage)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CriticalDamage)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Speed)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Speed)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Rarity)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Rarity)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

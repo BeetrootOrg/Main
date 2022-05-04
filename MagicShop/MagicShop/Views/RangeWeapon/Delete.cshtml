@@ -1,0 +1,104 @@
+﻿@model Shared.Models.RangeWeaponModel
+
+@{
+    ViewData["Title"] = "DeleteRange";
+}
+
+<h1>DeleteRange</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>RangeWeapon</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RangeWeaponType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RangeWeaponType)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.WeaponType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.WeaponType)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Damage)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Damage)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DamageType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DamageType)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.HandWeaponType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.HandWeaponType)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Strength)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Strength)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Agility)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Agility)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Endurance)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Endurance)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Intelligence)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Intelligence)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CriticalDamage)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CriticalDamage)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Speed)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Speed)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Rarity)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Rarity)
+        </dd>
+    </dl>
+    
+    <form asp-action="DeleteRange">
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
