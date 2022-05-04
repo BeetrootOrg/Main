@@ -9,11 +9,9 @@ namespace EventManager.Models
         {
             Events = new HashSet<Event>();
         }
-
         public int Id { get; set; }
         public string LocationAddress { get; set; }
         public int PersonsId { get; set; }
-
         public virtual Person Persons { get; set; }
         public virtual ICollection<Event> Events { get; set; }
     }
