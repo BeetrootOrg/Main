@@ -1,5 +1,6 @@
 using EventCreator;
 using EventCreator.Database;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.Configure<EventConfiguration>(builder.Configuration);
 
-builder.Services.AddDbContext<EventDBContext>((sp, options) =>
+builder.Services.AddDbContext<EventsDBContext>((sp, options) =>
 {
     var configuration = sp.GetRequiredService<IOptionsMonitor<EventConfiguration>>();
     options.UseSqlServer(configuration.CurrentValue.EventDBConnectionStrings);

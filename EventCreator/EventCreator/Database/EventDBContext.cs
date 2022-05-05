@@ -1,42 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using EventCreator.Models;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace EventCreator.Database
 {
-    public partial class EventDBContext : DbContext
+    public partial class EventsDBContext : DbContext
     {
-        public EventDBContext()
+        public EventsDBContext()
         {
         }
 
-        public EventDBContext(DbContextOptions<EventDBContext> options)
+        public EventsDBContext(DbContextOptions<EventsDBContext> options)
             : base(options)
         {
         }
 
-        public virtual DbSet<EventData> EventData { get; set; } = null!;
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=localhost;Database=EventDB;Trusted_Connection=True;");
-            }
-        }
-
-        internal void EventDBConnectionStrings(SqlServerDbContextOptionsBuilder obj)
-        {
-            
-        }
+        public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<Location> Locations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<EventData>(entity =>
+            modelBuilder.Entity<Event>(entity =>
             {
                 entity.Property(e => e.EventDescription)
                     .HasMaxLength(1000)
@@ -45,7 +28,15 @@ namespace EventCreator.Database
                 entity.Property(e => e.EventName)
                     .HasMaxLength(255)
                     .IsUnicode(false);
+
+                entity.HasOne(e => e.Location)
+                    .WithMany(l => l.Events)
+                    .HasForeignKey(x => x.LocationId);
             });
+
+            modelBuilder.Entity<Location>(entity => entity.Property(x => x.Name)
+                .HasMaxLength(1000)
+                .IsUnicode(false));
 
             OnModelCreatingPartial(modelBuilder);
         }
