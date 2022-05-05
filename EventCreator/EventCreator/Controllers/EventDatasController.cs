@@ -2,6 +2,7 @@
 using EventCreator.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,16 +11,6 @@ namespace EventCreator.Controllers
 {
     public class EventDatasController : Controller
     {
-        private static readonly IEnumerable<EventData> events = new List<EventData>
-        {
-            new EventData
-            {
-                Id = 1,
-                EventDescription = "Wow awesome!",
-                EventName = "Best event",
-                PeopleJoined= 5,
-            }
-        };
         // GET: HomeController1
         private readonly EventDBContext _events;
 
@@ -28,9 +19,9 @@ namespace EventCreator.Controllers
             _events = events;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(events);
+            return View(await _events.EventData.ToListAsync());
         }
         public ActionResult Create()
         {
@@ -56,50 +47,52 @@ namespace EventCreator.Controllers
         }
 
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-
-
-
-        public ActionResult Edit(int id)
+        [HttpGet]
+        public async Task<IActionResult> Edit(int? id)
         {
-            return View();
+            if (id != null)
+            {
+                EventData eventD = await _events.EventData.FirstOrDefaultAsync(p => p.Id == id);
+                if (eventD != null)
+                    return View(eventD);
+            }
+            return NotFound();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(EventData eventD)
+        {
+            _events.EventData.Update(eventD);
+            await _events.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        [HttpGet]
+        [ActionName("Delete")]
+        public async Task<IActionResult> ConfirmDelete(int? id)
         {
-            try
+            if (id != null)
             {
-                return RedirectToAction(nameof(Index));
+                EventData evenD = await _events.EventData.FirstOrDefaultAsync(p => p.Id == id);
+                if (evenD != null)
+                    return View(evenD);
             }
-            catch
-            {
-                return View();
-            }
+            return NotFound();
         }
 
-
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> Delete(int? id)
         {
-            try
+            if (id != null)
             {
-                return RedirectToAction(nameof(Index));
+                EventData user = await _events.EventData.FirstOrDefaultAsync(p => p.Id == id);
+                if (user != null)
+                {
+                    _events.EventData.Remove(user);
+                    await _events.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return NotFound();
         }
 
         public override bool Equals(object obj)

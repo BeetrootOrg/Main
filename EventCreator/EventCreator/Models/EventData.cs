@@ -14,4 +14,5 @@ namespace EventCreator.Models
         public string? EventDescription { get; set; }
         public int? PeopleJoined { get; set; }
     }
+
 }
