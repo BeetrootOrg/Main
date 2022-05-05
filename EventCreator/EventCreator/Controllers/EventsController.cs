@@ -61,8 +61,8 @@ namespace EventCreator.Controllers
         [HttpGet]
         public async Task<IActionResult> ConfirmDelete(int id)
         {
-            Event evenD = await _events.Events.FirstOrDefaultAsync(p => p.Id == id);
-            return evenD != null ? View(evenD) : NotFound();
+            Event events = await _events.Events.FirstOrDefaultAsync(p => p.Id == id);
+            return events != null ? View(events) : NotFound();
         }
 
         [HttpPost]
