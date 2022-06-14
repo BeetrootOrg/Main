@@ -1,0 +1,48 @@
+body {
+	background-color: rgb(14, 248, 6);
+	margin: 5px 200px;
+	font-size: 24px;
+	font-weight: 60;
+}
+
+h1 {
+    transform: scale(1, -1);
+    color: #ff0000;
+    -moz-transform: scale(1, -1);
+    -webkit-transform: scale(1, -1);
+    -o-transform: scale(1, -1);
+    -ms-transform: scale(1, -1);
+    transform: scale(1, -1);
+}
+
+p {
+    transform: scale(-1, 1);
+    color: #ff00ea;
+    -moz-transform: scale(-1, 1);
+    -webkit-transform: scale(-1, 1);
+    -o-transform: scale(-1, 1);
+    -ms-transform: scale(-1, 1);
+    transform: scale(-1, 1);
+}
+
+a {
+	text-decoration: none;
+	color: rgb(30, 33, 201);
+	
+}
+
+.mainText{
+    color: #eeff00;
+   text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+   transform: rotate(-90deg);
+}
+
+.footer {
+	position: sticky;
+	padding-bottom: 0%;
+	padding: 20px;
+	bottom: 0;
+	height: 40px;
+	width: 100%;
+}
+

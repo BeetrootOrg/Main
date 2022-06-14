@@ -1,0 +1,46 @@
+body {
+	background-color: rgb(241, 220, 189);
+	margin: 5px 200px;
+	font-size: 24px;
+	font-weight: 60;
+}
+
+h1 {
+	font-weight: 900;
+}
+
+p {
+	color: cadetblue;
+}
+
+a {
+	text-decoration: none;
+	color: rgb(30, 33, 201);
+	
+	
+}
+
+.about-me {
+	font-size: 24px;
+	font-weight: 60;
+	color: rgb(22, 37, 63);
+	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+}
+
+.footer {
+	position: sticky;
+	padding-bottom: 0%;
+	padding: 20px;
+	bottom: 0;
+	height: 40px;
+	width: 100%;
+}
+
+.photo
+{
+	background-size: 150px;
+  	background-repeat: round;
+	background-image: url("assets\photo_2021-10-24_11-23-51.png");	
+}
+
